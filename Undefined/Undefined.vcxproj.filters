@@ -18,8 +18,23 @@
     <ClCompile Include="source\src\main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="source\src\singleton.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
+    <Library Include="external\libs\imgui.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\include\wrapper_glfw.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="source\src\wrapper_glfw.cpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="source\include\singleton.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
