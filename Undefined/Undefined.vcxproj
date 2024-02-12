@@ -72,9 +72,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>external/include;source/include;$(IncludePath)</IncludePath>
+    <LibraryPath>external/libs/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>external/include;source/include;$(IncludePath)</IncludePath>
+    <LibraryPath>external/libs/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,6 +113,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +130,8 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,15 +143,23 @@
   <ItemGroup>
     <ClCompile Include="source\src\main.cpp" />
     <ClCompile Include="source\src\singleton.cpp" />
+    <ClCompile Include="source\src\wrapper_glfw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
     <Library Include="external\libs\imgui.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external\include\glfw\glfw3.h" />
+    <ClInclude Include="external\include\glfw\glfw3native.h" />
+    <ClInclude Include="external\include\imgui\imconfig.h" />
+    <ClInclude Include="external\include\imgui\imgui.h" />
+    <ClInclude Include="external\include\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="external\include\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="external\include\imgui\imgui_internal.h" />
+    <ClInclude Include="external\include\imgui\imstb_textedit.h" />
     <ClInclude Include="source\include\singleton.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
-    <ClInclude Include="source\src\wrapper_glfw.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

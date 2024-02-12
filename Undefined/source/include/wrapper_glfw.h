@@ -1,6 +1,6 @@
 #pragma once
 
-#include "glfw/glfw3.h"
+#include <glfw/glfw3.h>
 
 class WrapperGLFW
 {
@@ -12,13 +12,13 @@ public:
 
     void SetupWindow();
 
-    void GetFramebufferSize(int &display_width, int &display_height);
+    void GetFramebufferSize(int &displayWidth, int &displayHeight);
 
     GLFWwindow* GetWindowVar();
 
-    void SwapBuffers();
+    bool IsWindowOpen();
 
-    bool WindowShouldClose();
+    void SwapBuffers();
 
 private:
     GLFWwindow* window;

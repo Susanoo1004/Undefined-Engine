@@ -1,3 +1,3 @@
 #include "singleton.h"
 
-WrapperGLFW* wrapperGLFW;
+WrapperGLFW* Singleton::wrapperGLFW = nullptr;

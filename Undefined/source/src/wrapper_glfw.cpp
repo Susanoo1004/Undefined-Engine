@@ -53,7 +53,7 @@ void WrapperGLFW::SwapBuffers()
     glfwPollEvents();
 }
 
-bool WrapperGLFW::WindowShouldClose()
+bool WrapperGLFW::IsWindowOpen()
 {
     return !glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS;
 }

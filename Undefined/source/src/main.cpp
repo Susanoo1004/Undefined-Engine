@@ -2,6 +2,9 @@
 
 int main()
 {
+    Singleton::wrapperGLFW = new WrapperGLFW();
+
+    WrapperGLFW g;
 
     if (!Singleton::wrapperGLFW->SetupGlfw())
         return 1;
@@ -35,7 +38,7 @@ int main()
 
     // app.Init();
 
-    while (Singleton::wrapperGLFW->WindowShouldClose())
+    while (Singleton::wrapperGLFW->IsWindowOpen())
     {
 
         // app.StartImGuiFrame();
