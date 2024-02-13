@@ -150,9 +150,28 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
+<<<<<<< Updated upstream
     <Library Include="external\libs\imgui.lib" />
   </ItemGroup>
   <ItemGroup>
+=======
+    <Library Include="external\libs\imguid.lib" />
+    <Library Include="external\libs\toolboxMoteur.lib" />
+    <Library Include="external\libs\toolboxMoteurd.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="external\include\Toolbox\calc.h" />
+    <ClInclude Include="external\include\Toolbox\Matrix.h" />
+    <ClInclude Include="external\include\Toolbox\Matrix2x2.h" />
+    <ClInclude Include="external\include\Toolbox\Matrix3x3.h" />
+    <ClInclude Include="external\include\Toolbox\Matrix4x4.h" />
+    <ClInclude Include="external\include\Toolbox\Quaternion.h" />
+    <ClInclude Include="external\include\Toolbox\Vector.h" />
+    <ClInclude Include="external\include\Toolbox\Vector2.h" />
+    <ClInclude Include="external\include\Toolbox\Vector3.h" />
+    <ClInclude Include="external\include\Toolbox\Vector4.h" />
+    <ClInclude Include="source\include\application.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
     <ClInclude Include="external\include\glfw\glfw3native.h" />

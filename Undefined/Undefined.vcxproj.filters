@@ -36,7 +36,13 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
+<<<<<<< Updated upstream
     <Library Include="external\libs\imgui.lib" />
+=======
+    <Library Include="external\libs\imguid.lib" />
+    <Library Include="external\libs\toolboxMoteur.lib" />
+    <Library Include="external\libs\toolboxMoteurd.lib" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\include\wrapper_glfw.h">
@@ -81,5 +87,41 @@
     <ClInclude Include="external\include\glad\glad.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="source\include\application.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\calc.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Matrix.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Matrix2x2.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Matrix3x3.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Matrix4x4.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Quaternion.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Vector.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Vector2.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Vector3.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="external\include\Toolbox\Vector4.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+>>>>>>> Stashed changes
   </ItemGroup>
 </Project>
