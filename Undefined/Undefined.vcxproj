@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="source\src\RHI_debug.cpp" />
     <ClCompile Include="source\src\main.cpp" />
@@ -150,9 +151,10 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
-    <Library Include="external\libs\imgui.lib" />
+    <Library Include="external\libs\imguid.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
     <ClInclude Include="external\include\glfw\glfw3native.h" />

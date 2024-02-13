@@ -33,10 +33,13 @@
     <ClCompile Include="source\src\RHI_debug.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="source\src\application.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
-    <Library Include="external\libs\imgui.lib" />
+    <Library Include="external\libs\imguid.lib" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\include\wrapper_glfw.h">
@@ -79,6 +82,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="external\include\glad\glad.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="source\include\application.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
