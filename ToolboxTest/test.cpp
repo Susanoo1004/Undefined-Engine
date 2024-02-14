@@ -7,6 +7,8 @@
 #include <Toolbox/Vector4.h>
 #include <Toolbox/Vector3.h>
 #include <Toolbox/Vector2.h>
+#include <Toolbox/calc.h>
+
 
 #define PI 3.141592653589793f
 
@@ -908,7 +910,141 @@ TEST(Quaternion, operatorEqual) {
 
 #pragma region Matrix2x2
 
+TEST(Matrix2x2, constructor) {
+	Matrix2x2 testMat = Matrix2x2();
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testMat[i][j], 0);
 
+	testMat = Matrix2x2(5);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testMat[i][j], 5);
+
+	testMat = Matrix2x2(Vector2(1, 2), Vector2(3, 4));
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testMat[i][j], i * 2 + j + 1);
+
+	testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testMat[i][j], i * 2 + j + 1);
+
+	Matrix2x2 testCopy(testMat);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testCopy[i][j], testMat[i][j]);
+
+	testMat = Matrix2x2::Identity();
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testMat[i][j], i == j ? 1 : 0);
+}
+
+TEST(Matrix2x2Function, isDiagonal) {
+	EXPECT_TRUE(Matrix2x2().IsDiagonal());
+	EXPECT_FALSE(Matrix2x2(5).IsDiagonal());
+	Matrix2x2 testMat = Matrix2x2(
+		1, 0,
+		0, 5
+	);
+	EXPECT_TRUE(testMat.IsDiagonal());
+}
+
+TEST(Matrix2x2Function, isIdentity) {
+	Matrix2x2 testMat = Matrix2x2(
+		1, 0, 
+		0, 1
+	);
+	EXPECT_TRUE(testMat.IsIdentity());
+	EXPECT_TRUE(Matrix2x2::Identity().IsIdentity());
+	EXPECT_FALSE(Matrix2x2().IsIdentity());
+	EXPECT_FALSE(Matrix2x2(5).IsIdentity());
+	testMat = Matrix2x2(
+		1, 0,
+		0, 5
+	);
+	EXPECT_FALSE(testMat.IsIdentity());
+}
+
+TEST(Matrix2x2Function, isNull) {
+	Matrix2x2 testMat = Matrix2x2(
+		0, 0,
+		0, 0
+	);
+	EXPECT_TRUE(testMat.IsNull());
+	EXPECT_TRUE(Matrix2x2().IsNull());
+	EXPECT_FALSE(Matrix2x2(5).IsNull());
+	testMat = Matrix2x2(
+		1, 0,
+		0, 5
+	);
+	EXPECT_FALSE(testMat.IsNull());
+}
+
+TEST(Matrix2x2Function, isSymmetric) {
+	Matrix2x2 testMat = Matrix2x2(
+		1, 0,
+		0, 1
+	);
+	EXPECT_TRUE(testMat.IsSymmetric());
+	EXPECT_TRUE(Matrix2x2().IsSymmetric());
+	EXPECT_TRUE(Matrix2x2(5).IsSymmetric());
+	testMat = Matrix2x2(
+		1, 0,
+		0, 5
+	);
+	EXPECT_TRUE(testMat.IsSymmetric());
+	testMat = Matrix2x2(
+		1, 2,
+		0, 5
+	);
+	EXPECT_FALSE(testMat.IsSymmetric());
+	testMat = Matrix2x2(
+		0, 2,
+		0, 0
+	);
+	EXPECT_FALSE(testMat.IsSymmetric());
+	testMat = Matrix2x2(
+		0, 2,
+		2, 0
+	);
+	EXPECT_TRUE(testMat.IsSymmetric());
+}
+
+TEST(Matrix2x2Function, isAntisymmetric) {
+	Matrix2x2 testMat = Matrix2x2(
+		1, 0,
+		0, 1
+	);
+	EXPECT_TRUE(testMat.IsAntisymmetric());
+	EXPECT_TRUE(Matrix2x2().IsAntisymmetric());
+	EXPECT_FALSE(Matrix2x2(5).IsAntisymmetric());
+	testMat = Matrix2x2(
+		1, 0,
+		0, 5
+	);
+	EXPECT_TRUE(testMat.IsAntisymmetric());
+	testMat = Matrix2x2(
+		1, 2,
+		0, 5
+	);
+	EXPECT_FALSE(testMat.IsAntisymmetric());
+	testMat = Matrix2x2(
+		0, 2,
+		0, 0
+	);
+	EXPECT_FALSE(testMat.IsAntisymmetric());
+	testMat = Matrix2x2(
+		1, 2,
+		-2, 5
+	);
+	EXPECT_TRUE(testMat.IsAntisymmetric());
+}
 
 #pragma endregion
 
@@ -1023,6 +1159,12 @@ TEST(Matrix3x3Function, isSymmetric) {
 		0, 0, 0
 	);
 	EXPECT_FALSE(testMat.IsSymmetric());
+	testMat = Matrix3x3(
+		0, 2, 3,
+		2, 0, 0,
+		3, 0, 0
+	);
+	EXPECT_TRUE(testMat.IsSymmetric());
 }
 
 TEST(Matrix3x3Function, isAntisymmetric) {
