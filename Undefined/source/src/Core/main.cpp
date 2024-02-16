@@ -1,8 +1,12 @@
+#include <glad/glad.h>
+
+#include "application.h"
 #include "singleton.h"
-#include "glad/glad.h"
 
 int main()
 {
+    Application app;
+
     Singleton::Init();
 
     if (!Singleton::wrapperGLFW->SetupGlfw())
@@ -14,7 +18,7 @@ int main()
 
     Singleton::wrapperGLFW->SetupWindow();
 
-    Singleton::wrapperRHI->WrapperInit(0.03f, 0.7f, 1.f);
+    Singleton::wrapperRHI->WrapperInit();
 
     // glfwSetCursorPosCallback(window, MouseCallback);
 
@@ -22,10 +26,10 @@ int main()
 
     // const unsigned int width = app.ScreenWidth;
     // const unsigned int height = app.ScreenHeight;
- 
+
     Singleton::wrapperRHI->debug.DebugInit();
 
-    // app.Init();
+    app.Init();
 
     // ////  Let the window open until we press escape or the window should close
     while (Singleton::wrapperGLFW->IsWindowOpen())
@@ -38,7 +42,7 @@ int main()
 
         // app.GetCamera().ProcessInput(window);
 
-        // app.Update();
+        app.Update();
 
         // Rendering 
         // app.Render(window);

@@ -8,6 +8,7 @@
     <ClCompile Include="source\src\wrapper_glfw.cpp" />
     <ClCompile Include="source\src\wrapper_RHI.cpp" />
     <ClCompile Include="source\src\camera.cpp" />
+    <ClCompile Include="source\src\application.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\toolbox\calc.h" />
