@@ -945,7 +945,7 @@ TEST(Matrix2x2, constructor) {
 			EXPECT_EQ(testMat[i][j], i == j ? 1 : 0);
 }
 
-TEST(Matrix2x2Function, isDiagonal) {
+TEST(Matrix2x2BooleanFunc, isDiagonal) {
 	EXPECT_TRUE(Matrix2x2().IsDiagonal());
 	EXPECT_FALSE(Matrix2x2(5).IsDiagonal());
 	Matrix2x2 testMat = Matrix2x2(
@@ -955,9 +955,9 @@ TEST(Matrix2x2Function, isDiagonal) {
 	EXPECT_TRUE(testMat.IsDiagonal());
 }
 
-TEST(Matrix2x2Function, isIdentity) {
+TEST(Matrix2x2BooleanFunc, isIdentity) {
 	Matrix2x2 testMat = Matrix2x2(
-		1, 0, 
+		1, 0,
 		0, 1
 	);
 	EXPECT_TRUE(testMat.IsIdentity());
@@ -971,7 +971,7 @@ TEST(Matrix2x2Function, isIdentity) {
 	EXPECT_FALSE(testMat.IsIdentity());
 }
 
-TEST(Matrix2x2Function, isNull) {
+TEST(Matrix2x2BooleanFunc, isNull) {
 	Matrix2x2 testMat = Matrix2x2(
 		0, 0,
 		0, 0
@@ -986,7 +986,7 @@ TEST(Matrix2x2Function, isNull) {
 	EXPECT_FALSE(testMat.IsNull());
 }
 
-TEST(Matrix2x2Function, isSymmetric) {
+TEST(Matrix2x2BooleanFunc, isSymmetric) {
 	Matrix2x2 testMat = Matrix2x2(
 		1, 0,
 		0, 1
@@ -1016,22 +1016,22 @@ TEST(Matrix2x2Function, isSymmetric) {
 	EXPECT_TRUE(testMat.IsSymmetric());
 }
 
-TEST(Matrix2x2Function, isAntisymmetric) {
+TEST(Matrix2x2BooleanFunc, isAntisymmetric) {
 	Matrix2x2 testMat = Matrix2x2(
 		1, 0,
 		0, 1
 	);
-	EXPECT_TRUE(testMat.IsAntisymmetric());
+	EXPECT_FALSE(testMat.IsAntisymmetric()); 
 	EXPECT_TRUE(Matrix2x2().IsAntisymmetric());
 	EXPECT_FALSE(Matrix2x2(5).IsAntisymmetric());
 	testMat = Matrix2x2(
-		1, 0,
-		0, 5
+		0, 1,
+		-1, 0
 	);
 	EXPECT_TRUE(testMat.IsAntisymmetric());
 	testMat = Matrix2x2(
-		1, 2,
-		0, 5
+		0, 2,
+		2, 0
 	);
 	EXPECT_FALSE(testMat.IsAntisymmetric());
 	testMat = Matrix2x2(
@@ -1040,10 +1040,77 @@ TEST(Matrix2x2Function, isAntisymmetric) {
 	);
 	EXPECT_FALSE(testMat.IsAntisymmetric());
 	testMat = Matrix2x2(
-		1, 2,
-		-2, 5
+		0, 2,
+		-2, 0
 	);
 	EXPECT_TRUE(testMat.IsAntisymmetric());
+}
+
+TEST(Matrix2x2Function, Diagonal) {
+	Matrix2x2 testMat = Matrix2x2(
+		1, 0,
+		0, 1
+	);
+	EXPECT_FLOAT_EQ(testMat.Diagonal().x, 1.f);
+	EXPECT_FLOAT_EQ(testMat.Diagonal().y, 1.f);
+	testMat = Matrix2x2(
+		1, 0,
+		0, 4
+	);
+	EXPECT_FLOAT_EQ(testMat.Diagonal().x, 1.f);
+	EXPECT_FLOAT_EQ(testMat.Diagonal().y, 4.f);
+	testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	EXPECT_FLOAT_EQ(testMat.Diagonal().x, 1.f);
+	EXPECT_FLOAT_EQ(testMat.Diagonal().y, 4.f);
+	testMat = Matrix2x2(
+		-1, 2,
+		3, -4
+	);
+	EXPECT_FLOAT_EQ(testMat.Diagonal().x, -1.f);
+	EXPECT_FLOAT_EQ(testMat.Diagonal().y, -4.f);
+}
+
+TEST(Matrix2x2Function, Trace) {
+	Matrix2x2 testMat = Matrix2x2(
+		1, 0,
+		0, 1
+	);
+	EXPECT_FLOAT_EQ(testMat.Trace(), 2.f);
+	testMat = Matrix2x2(
+		1, 0,
+		0, 4
+	);
+	EXPECT_FLOAT_EQ(testMat.Trace(), 5.f);
+	testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	EXPECT_FLOAT_EQ(testMat.Trace(), 5.f);
+	testMat = Matrix2x2(
+		-1, 2,
+		3, -4
+	);
+	EXPECT_FLOAT_EQ(testMat.Trace(), -5.f);
+}
+
+TEST(Matrix2x2Function, SubMatrix) {
+	Matrix2x2 testMat = Matrix2x2::Identity();
+	Matrix2x2 subMat = testMat.SubMatrix(0, 0, 2, 2);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(subMat[i][j], testMat[i][j]);
+
+	testMat = Matrix2x2(
+		1.f, 2.f,
+		3.f, 4.f
+	);
+	subMat = testMat.SubMatrix(0, 0, 2, 2);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(subMat[i][j], testMat[i][j]);
 }
 
 #pragma endregion
@@ -1086,7 +1153,7 @@ TEST(Matrix3x3, constructor) {
 			EXPECT_EQ(testMat[i][j], i == j ? 1 : 0);
 }
 
-TEST(Matrix3x3Function, isDiagonal) {
+TEST(Matrix3x3BooleanFunc, isDiagonal) {
 	EXPECT_TRUE(Matrix3x3().IsDiagonal());
 	EXPECT_FALSE(Matrix3x3(5).IsDiagonal());
 	Matrix3x3 testMat = Matrix3x3(
@@ -1097,7 +1164,7 @@ TEST(Matrix3x3Function, isDiagonal) {
 	EXPECT_TRUE(testMat.IsDiagonal());
 }
 
-TEST(Matrix3x3Function, isIdentity) {
+TEST(Matrix3x3BooleanFunc, isIdentity) {
 	Matrix3x3 testMat = Matrix3x3(
 		1, 0, 0,
 		0, 1, 0,
@@ -1115,7 +1182,7 @@ TEST(Matrix3x3Function, isIdentity) {
 	EXPECT_FALSE(testMat.IsIdentity());
 }
 
-TEST(Matrix3x3Function, isNull) {
+TEST(Matrix3x3BooleanFunc, isNull) {
 	Matrix3x3 testMat = Matrix3x3(
 		0, 0, 0,
 		0, 0, 0,
@@ -1132,7 +1199,7 @@ TEST(Matrix3x3Function, isNull) {
 	EXPECT_FALSE(testMat.IsNull());
 }
 
-TEST(Matrix3x3Function, isSymmetric) {
+TEST(Matrix3x3BooleanFunc, isSymmetric) {
 	Matrix3x3 testMat = Matrix3x3(
 		1, 0, 0,
 		0, 1, 0,
@@ -1167,25 +1234,19 @@ TEST(Matrix3x3Function, isSymmetric) {
 	EXPECT_TRUE(testMat.IsSymmetric());
 }
 
-TEST(Matrix3x3Function, isAntisymmetric) {
+TEST(Matrix3x3BooleanFunc, isAntisymmetric) {
 	Matrix3x3 testMat = Matrix3x3(
 		1, 0, 0,
 		0, 1, 0,
 		0, 0, 1
 	);
-	EXPECT_TRUE(testMat.IsAntisymmetric());
+	EXPECT_FALSE(testMat.IsAntisymmetric());
 	EXPECT_TRUE(Matrix3x3().IsAntisymmetric());
 	EXPECT_FALSE(Matrix3x3(5).IsAntisymmetric());
 	testMat = Matrix3x3(
-		1, 0, 0,
-		0, 5, 0,
-		0, 0, 9
-	);
-	EXPECT_TRUE(testMat.IsAntisymmetric());
-	testMat = Matrix3x3(
 		1, 2, 3,
-		0, 5, 0,
-		0, 0, 9
+		-2, 5, 0,
+		-3, 0, 9
 	);
 	EXPECT_FALSE(testMat.IsAntisymmetric());
 	testMat = Matrix3x3(
@@ -1195,13 +1256,12 @@ TEST(Matrix3x3Function, isAntisymmetric) {
 	);
 	EXPECT_FALSE(testMat.IsAntisymmetric());
 	testMat = Matrix3x3(
-		1, 2, 3,
-		-2, 5, 6,
-		-3, -6, 9
+		0, 2, 3,
+		-2, 0, 6,
+		-3, -6, 0
 	);
 	EXPECT_TRUE(testMat.IsAntisymmetric());
 }
-
 
 TEST(Matrix3x3Function, Diagonal) {
 	Matrix3x3 testMat = Matrix3x3(
@@ -1220,6 +1280,229 @@ TEST(Matrix3x3Function, Diagonal) {
 	EXPECT_EQ(testMat.Diagonal().x, 1);
 	EXPECT_EQ(testMat.Diagonal().y, 5);
 	EXPECT_EQ(testMat.Diagonal().z, 9);
+}
+
+TEST(Matrix3x3Function, Trace) {
+	Matrix3x3 testMat = Matrix3x3(
+		1, 0, 0,
+		0, 1, 0,
+		0, 0, 1
+	);
+	EXPECT_FLOAT_EQ(testMat.Trace(), 3);
+	testMat = Matrix3x3(
+		1, 2, 3,
+		0, 5, 0,
+		0, 0, 9
+	);
+	EXPECT_FLOAT_EQ(testMat.Trace(), 15);
+}
+
+TEST(Matrix3x3Function, SubMat) {
+
+	Matrix3x3 testMat = Matrix3x3::Identity();
+	Matrix3x3 subMat = testMat.SubMatrix(0, 0, 2, 2);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(subMat[i][j], testMat[i][j]);
+
+	testMat = Matrix3x3(
+		1.f, 2.f, 3.f,
+		4.f, 5.f, 6.f,
+		7.f, 8.f, 9.f
+	);
+	subMat = testMat.SubMatrix(0, 0, 2, 2);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(subMat[i][j], testMat[i][j]);
+}
+
+TEST(Matrix3x3Function, Determinant) {
+
+	Matrix3x3 testMat = Matrix3x3::Identity();
+	EXPECT_FLOAT_EQ(testMat.Determinant(), 1);
+
+	testMat = Matrix3x3(
+		1.f, 2.f, 3.f,
+		4.f, 5.f, 6.f,
+		7.f, 8.f, 9.f
+	);
+	EXPECT_FLOAT_EQ(testMat.Determinant(), 0);
+
+	testMat = Matrix3x3(
+		10.f, 32.f, 34.f,
+		4.f, 51.f, 6.f,
+		65.f, 84.f, 87.f
+	);
+	EXPECT_FLOAT_EQ(testMat.Determinant(), -60612);
+}
+
+TEST(Matrix3x3Function, LoadIdentity) {
+
+	Matrix3x3 testMat = Matrix3x3(
+		1.f, 2.f, 3.f,
+		4.f, 5.f, 6.f,
+		7.f, 8.f, 9.f
+	);
+	EXPECT_FALSE(testMat.IsIdentity());
+	testMat.LoadIdentity();
+	EXPECT_TRUE(testMat.IsIdentity());
+}
+
+TEST(Matrix3x3Function, Transpose) {
+
+	Matrix3x3 testMat = Matrix3x3::Identity();
+	Matrix3x3 testMatTranspose = testMat;
+	testMatTranspose.Transpose();
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+
+	testMat = Matrix3x3(
+		1.f, 2.f, 3.f,
+		4.f, 5.f, 6.f,
+		7.f, 8.f, 9.f
+	);
+	testMatTranspose = testMat;
+	testMatTranspose.Transpose();
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+
+	testMat = Matrix3x3::Identity();
+	testMatTranspose = Matrix3x3::Transpose(testMat);
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+
+	testMat = Matrix3x3(
+		1.f, 2.f, 3.f,
+		4.f, 5.f, 6.f,
+		7.f, 8.f, 9.f
+	);
+	testMatTranspose = Matrix3x3::Transpose(testMat);
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+}
+
+TEST(Matrix3x3, operator) {
+	Matrix3x3 testMat = Matrix3x3(
+		1, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	Matrix3x3 resultMat = Matrix3x3(
+		-1, -2, -3,
+		-4, -5, -6,
+		-7, -8, -9
+	);
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(-testMat[i][j], resultMat[i][j]);
+
+	Matrix3x3 testMat2 = Matrix3x3(
+		1, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	resultMat = Matrix3x3(
+		2, 4, 6,
+		8, 10, 12,
+		14, 16, 18
+	);
+	Matrix3x3 testMat3 = testMat + testMat2;
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	resultMat = Matrix3x3();
+	testMat3 = testMat - testMat2;
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	testMat3 = testMat * 2.f;
+	resultMat = Matrix3x3(
+		2, 4, 6,
+		8, 10, 12,
+		14, 16, 18
+	);
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	testMat3 = testMat * testMat;
+	resultMat = Matrix3x3(
+		30, 36, 42,
+		66, 81, 96,
+		102, 126, 150
+	);
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+}
+
+TEST(Matrix3x3, operatorEqual) {
+	Matrix3x3 testMat = Matrix3x3(
+		1, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	Matrix3x3 testMat2 = Matrix3x3(
+		1, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	Matrix3x3 resultMat = Matrix3x3(
+		2, 4, 6,
+		8, 10, 12,
+		14, 16, 18
+	);
+	testMat += testMat2;
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+
+	testMat = Matrix3x3(
+		1, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	resultMat = Matrix3x3();
+	testMat -= testMat2;
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+
+	testMat = Matrix3x3(
+		1, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	resultMat = Matrix3x3(
+		2, 4, 6,
+		8, 10, 12,
+		14, 16, 18
+	);
+	testMat *= 2.f;
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+
+	testMat = Matrix3x3(
+		1, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	testMat *= testMat;
+	resultMat = Matrix3x3(
+		30, 36, 42,
+		66, 81, 96,
+		102, 126, 150
+	);
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
 }
 
 #pragma endregion
@@ -1264,7 +1547,6 @@ TEST(Matrix4x4, constructor) {
 			EXPECT_EQ(testMat[i][j], i == j ? 1 : 0);
 }
 
-
 TEST(Matrix4x4, booleanFunc) {
 	EXPECT_TRUE(Matrix4x4().IsDiagonal());
 	EXPECT_TRUE(Matrix4x4::Identity().IsDiagonal());
@@ -1280,7 +1562,11 @@ TEST(Matrix4x4, booleanFunc) {
 	EXPECT_FALSE(testMat.IsSymmetric());
 
 	EXPECT_FALSE(Matrix4x4::Identity().IsAntisymmetric());
-	testMat = Matrix4x4(Vector4(0, 2, 3, 4), Vector4(-2, 0, 1, 1), Vector4(-3, -1, 0, 1), Vector4(-4, -1, -1, 0));
+	testMat = Matrix4x4(
+		Vector4(0, 2, 3, 4),
+		Vector4(-2, 0, 1, 1),
+		Vector4(-3, -1, 0, 1),
+		Vector4(-4, -1, -1, 0));
 	EXPECT_TRUE(testMat.IsAntisymmetric());
 }
 
@@ -1369,7 +1655,6 @@ TEST(Matrix4x4, LoadIdentity) {
 
 }
 
-
 TEST(Matrix4x4, transpose) {
 
 	Matrix4x4 testMat = Matrix4x4::Identity();
@@ -1446,10 +1731,10 @@ TEST(Matrix4x4, rotationMatrix) {
 	/*
 		Matrix4x4 rotationMat = Matrix4x4::RotationMatrix3D(PI/2, { 0,0,1 });
 		std::cout << rotationMat << std::endl;
-		// EXPECT_EQ(rotationMat[1][1], 0);
-		// EXPECT_EQ(rotationMat[1][2], -1);
-		// EXPECT_EQ(rotationMat[2][1], 1);
-		// EXPECT_EQ(rotationMat[2][2], 0);
+		// EXPECT_FLOAT_EQ(rotationMat[1][1], 0);
+		// EXPECT_FLOAT_EQ(rotationMat[1][2], -1);
+		// EXPECT_FLOAT_EQ(rotationMat[2][1], 1);
+		// EXPECT_FLOAT_EQ(rotationMat[2][2], 0);
 
 	*/
 }
@@ -1457,10 +1742,10 @@ TEST(Matrix4x4, rotationMatrix) {
 TEST(Matrix4x4, scalingMatrix) {
 
 	Matrix4x4 scalingMat = Matrix4x4::ScalingMatrix3D({ 1,2,3 });
-	EXPECT_EQ(scalingMat[0][0], 1);
-	EXPECT_EQ(scalingMat[1][1], 2);
-	EXPECT_EQ(scalingMat[2][2], 3);
-	EXPECT_EQ(scalingMat[2][3], 0);
+	EXPECT_FLOAT_EQ(scalingMat[0][0], 1);
+	EXPECT_FLOAT_EQ(scalingMat[1][1], 2);
+	EXPECT_FLOAT_EQ(scalingMat[2][2], 3);
+	EXPECT_FLOAT_EQ(scalingMat[2][3], 0);
 
 }
 
@@ -1469,10 +1754,10 @@ TEST(Matrix4x4, toQuaternion) {
 	Matrix4x4 testMat = Matrix4x4::Identity();
 	Quaternion quat = testMat.ToQuaternion();
 
-	EXPECT_EQ(quat.imaginary.x, 0);
-	EXPECT_EQ(quat.imaginary.y, 0);
-	EXPECT_EQ(quat.imaginary.z, 0);
-	EXPECT_EQ(quat.real, 1);
+	EXPECT_FLOAT_EQ(quat.imaginary.x, 0);
+	EXPECT_FLOAT_EQ(quat.imaginary.y, 0);
+	EXPECT_FLOAT_EQ(quat.imaginary.z, 0);
+	EXPECT_FLOAT_EQ(quat.real, 1);
 
 
 	testMat = Matrix4x4(
@@ -1482,12 +1767,160 @@ TEST(Matrix4x4, toQuaternion) {
 		13.f, 14.f, 15.f, 16.f
 	);
 	quat = testMat.ToQuaternion();
-	std::cout << quat << std::endl;
-	EXPECT_EQ(quat.imaginary.x, 0.34);
-	//EXPECT_EQ(quat.imaginary.y, -0.69);
-	//EXPECT_EQ(quat.imaginary.z, 0.34);
-	//EXPECT_EQ(quat.real, 2.18);
+	EXPECT_FLOAT_EQ(quat.imaginary.x, 0.3441236f);
+	EXPECT_FLOAT_EQ(quat.imaginary.y, -0.6882472f);
+	EXPECT_FLOAT_EQ(quat.imaginary.z, 0.3441236f);
+	EXPECT_FLOAT_EQ(quat.real, 2.1794496f);
+}
 
+TEST(Matrix4x4, operator) {
+	Matrix4x4 testMat = Matrix4x4(
+		1,  2,  3,  4,
+		5,  6,  7,  8,
+		9,  10, 11, 12,
+		13, 14, 15, 16
+	);
+	Matrix4x4 resultMat = Matrix4x4(
+		-1,  -2,  -3,  -4,
+		-5,  -6,  -7,  -8,
+		-9,  -10, -11, -12,
+		-13, -14, -15, -16
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(-testMat[i][j], resultMat[i][j]);
+
+	Matrix4x4 testMat2 = Matrix4x4(
+		1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, 11, 12,
+		13, 14, 15, 16
+	);
+	resultMat = Matrix4x4(
+		2, 4, 6, 8,
+		10, 12, 14, 16,
+		18, 20, 22, 24,
+		26, 28, 30, 32
+	);
+	Matrix4x4 testMat3 = testMat + testMat2;
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	resultMat = Matrix4x4(
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0
+	);
+	testMat3 = testMat - testMat2;
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	testMat3 = testMat * 2.f;
+	resultMat = Matrix4x4(
+		2, 4, 6, 8,
+		10, 12, 14, 16,
+		18, 20, 22, 24,
+		26, 28, 30, 32
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	Vector4 testVec = { 1,2,3,4 };
+	Vector4 testVec2 = testMat * testVec;
+	Vector4 resultVec = { 10,52,126,232 };
+	for (size_t i = 0; i < 4; i++)
+		EXPECT_FLOAT_EQ(testVec2[i], resultVec[i]);
+	
+	testMat3 = testMat * testMat;
+	resultMat = Matrix4x4(
+		90, 100, 110, 120,
+		202, 228, 254, 280,
+		314, 356, 398, 440,
+		426, 484, 542, 600
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+}
+
+TEST(Matrix4x4, operatorEqual) {
+	Matrix4x4 testMat = Matrix4x4(
+		1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, 11, 12,
+		13, 14, 15, 16
+	);
+	Matrix4x4 testMat2 = Matrix4x4(
+		1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, 11, 12,
+		13, 14, 15, 16
+	);
+	Matrix4x4 resultMat = Matrix4x4(
+		2, 4, 6, 8,
+		10, 12, 14, 16,
+		18, 20, 22, 24,
+		26, 28, 30, 32
+	);
+	testMat += testMat2;
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+	
+	testMat = Matrix4x4(
+		1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, 11, 12,
+		13, 14, 15, 16
+	);
+	resultMat = Matrix4x4(
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0
+	);
+	testMat -= testMat2;
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+	
+	testMat = Matrix4x4(
+		1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, 11, 12,
+		13, 14, 15, 16
+	);
+	resultMat = Matrix4x4(
+		2, 4, 6, 8,
+		10, 12, 14, 16,
+		18, 20, 22, 24,
+		26, 28, 30, 32
+	);
+	testMat *= 2.f;
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+
+	testMat = Matrix4x4(
+		1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, 11, 12,
+		13, 14, 15, 16
+	);
+	testMat *= testMat;
+	resultMat = Matrix4x4(
+		90, 100, 110, 120,
+		202, 228, 254, 280,
+		314, 356, 398, 440,
+		426, 484, 542, 600
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
 }
 
 #pragma endregion
