@@ -63,7 +63,6 @@ void Camera::ProcessInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
         Eye += cameraSpeed * LookAt;
-        std::cout << "aaaaaa" << std::endl;
     }   
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         Eye -= cameraSpeed * LookAt;

@@ -9,7 +9,9 @@
     <ClCompile Include="source\src\Resources\resource.cpp" />
     <ClCompile Include="source\src\Wrapper\wrapper_glfw.cpp" />
     <ClCompile Include="source\src\Wrapper\wrapper_RHI.cpp" />
-    <ClCompile Include="source\src\Debug\RHI_debug.cpp" />
+    <ClCompile Include="source\src\engine_debug\RHI_debug.cpp" />
+    <ClCompile Include="source\src\Resources\texture.cpp" />
+    <ClCompile Include="external\src\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\toolbox\calc.h" />
@@ -38,6 +40,13 @@
     <ClInclude Include="source\include\wrapper_RHI.h" />
     <ClInclude Include="source\include\camera.h" />
     <ClInclude Include="source\include\Debug\RHI_debug.h" />
+    <ClInclude Include="source\include\Resources\resource.h" />
+    <ClInclude Include="source\include\Resources\texture.h" />
+    <ClInclude Include="source\include\engine_debug\RHI_debug.h" />
+    <ClInclude Include="source\include\Renderer\camera.h" />
+    <ClInclude Include="source\include\Wrapper\wrapper_glfw.h" />
+    <ClInclude Include="source\include\Wrapper\wrapper_RHI.h" />
+    <ClInclude Include="external\include\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

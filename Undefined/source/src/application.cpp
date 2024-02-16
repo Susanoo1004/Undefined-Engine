@@ -66,6 +66,10 @@ void Application::Init()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    if (shaderProgram)
+    {
+        glUseProgram(shaderProgram);
+    }
 
     InitQuad();
 }
