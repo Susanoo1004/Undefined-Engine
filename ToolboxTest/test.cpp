@@ -1226,6 +1226,268 @@ TEST(Matrix3x3Function, Diagonal) {
 
 #pragma region Matrix4x4
 
+TEST(Matrix4x4, constructor) {
+	Matrix4x4 testMat = Matrix4x4();
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMat[i][j], 0);
 
+	testMat = Matrix4x4(5);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMat[i][j], 5);
+
+	testMat = Matrix4x4(Vector4(1, 2, 3, 4), Vector4(5, 6, 7, 8), Vector4(9, 10, 11, 12), Vector4(13, 14, 15, 16));
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMat[i][j], i * 4 + j + 1);
+
+	testMat = Matrix4x4(
+		1.f, 2.f, 3.f, 4.f,
+		5.f, 6.f, 7.f, 8.f,
+		9.f, 10.f, 11.f, 12.f,
+		13.f, 14.f, 15.f, 16.f
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMat[i][j], i * 4 + j + 1);
+
+
+	Matrix4x4 testCopy = Matrix4x4(testMat);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testCopy[i][j], testMat[i][j]);
+
+	testMat = Matrix4x4::Identity();
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMat[i][j], i == j ? 1 : 0);
+}
+
+
+TEST(Matrix4x4, booleanFunc) {
+	EXPECT_TRUE(Matrix4x4().IsDiagonal());
+	EXPECT_TRUE(Matrix4x4::Identity().IsDiagonal());
+
+	EXPECT_TRUE(Matrix4x4::Identity().IsIdentity());
+	EXPECT_FALSE(Matrix4x4().IsIdentity());
+
+	EXPECT_FALSE(Matrix4x4::Identity().IsNull());
+	EXPECT_TRUE(Matrix4x4().IsNull());
+
+	EXPECT_TRUE(Matrix4x4::Identity().IsSymmetric());
+	Matrix4x4 testMat = Matrix4x4(Vector4(1, 2, 3, 4), Vector4(5, 6, 7, 8), Vector4(9, 10, 11, 12), Vector4(13, 14, 15, 16));
+	EXPECT_FALSE(testMat.IsSymmetric());
+
+	EXPECT_FALSE(Matrix4x4::Identity().IsAntisymmetric());
+	testMat = Matrix4x4(Vector4(0, 2, 3, 4), Vector4(-2, 0, 1, 1), Vector4(-3, -1, 0, 1), Vector4(-4, -1, -1, 0));
+	EXPECT_TRUE(testMat.IsAntisymmetric());
+}
+
+TEST(Matrix4x4, diagonal) {
+
+	Matrix4x4 testMat = Matrix4x4::Identity();
+	EXPECT_EQ(testMat.Diagonal().x, 1);
+	EXPECT_EQ(testMat.Diagonal().y, 1);
+	EXPECT_EQ(testMat.Diagonal().z, 1);
+	EXPECT_EQ(testMat.Diagonal().w, 1);
+
+	testMat = Matrix4x4(
+		1.f, 2.f, 3.f, 4.f,
+		5.f, 6.f, 7.f, 8.f,
+		9.f, 10.f, 11.f, 12.f,
+		13.f, 14.f, 15.f, 16.f
+	);
+	EXPECT_EQ(testMat.Diagonal().x, 1);
+	EXPECT_EQ(testMat.Diagonal().y, 6);
+	EXPECT_EQ(testMat.Diagonal().z, 11);
+	EXPECT_EQ(testMat.Diagonal().w, 16);
+}
+
+TEST(Matrix4x4, trace) {
+
+	Matrix4x4 testMat = Matrix4x4::Identity();
+	EXPECT_EQ(testMat.Trace(), 4);
+
+	testMat = Matrix4x4(
+		1.f, 2.f, 3.f, 4.f,
+		5.f, 6.f, 7.f, 8.f,
+		9.f, 10.f, 11.f, 12.f,
+		13.f, 14.f, 15.f, 16.f
+	);
+	EXPECT_EQ(testMat.Trace(), 34);
+
+}
+
+TEST(Matrix4x4, subMat) {
+
+	Matrix4x4 testMat = Matrix4x4::Identity();
+	Matrix4x4 subMat = testMat.SubMatrix(0, 0, 2, 2);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(subMat[i][j], testMat[i][j]);
+
+	testMat = Matrix4x4(
+		1.f, 2.f, 3.f, 4.f,
+		5.f, 6.f, 7.f, 8.f,
+		9.f, 10.f, 11.f, 12.f,
+		13.f, 14.f, 15.f, 16.f
+	);
+	subMat = testMat.SubMatrix(0, 0, 2, 2);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(subMat[i][j], testMat[i][j]);
+
+}
+
+TEST(Matrix4x4, determinant) {
+
+	Matrix4x4 testMat = Matrix4x4::Identity();
+	EXPECT_EQ(testMat.Determinant(), 1);
+
+	testMat = Matrix4x4(
+		5.f, 2.f, 1.f, 6.f,
+		3.f, 8.f, 7.f, 0.f,
+		0.f, 5.f, 0.f, 2.f,
+		6.f, 4.f, 6.f, 0.f
+	);
+	EXPECT_EQ(testMat.Determinant(), 496);
+
+}
+
+TEST(Matrix4x4, LoadIdentity) {
+
+	Matrix4x4 testMat = Matrix4x4(
+		5.f, 2.f, 1.f, 6.f,
+		3.f, 8.f, 7.f, 0.f,
+		0.f, 5.f, 0.f, 2.f,
+		6.f, 4.f, 6.f, 0.f
+	);
+	EXPECT_FALSE(testMat.IsIdentity());
+	testMat.LoadIdentity();
+	EXPECT_TRUE(testMat.IsIdentity());
+
+}
+
+
+TEST(Matrix4x4, transpose) {
+
+	Matrix4x4 testMat = Matrix4x4::Identity();
+	Matrix4x4 testMatTranspose = testMat;
+	testMatTranspose.Transpose();
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+
+	testMat = Matrix4x4(
+		1.f, 2.f, 3.f, 4.f,
+		5.f, 6.f, 7.f, 8.f,
+		9.f, 10.f, 11.f, 12.f,
+		13.f, 14.f, 15.f, 16.f
+	);
+	testMatTranspose = testMat;
+	testMatTranspose.Transpose();
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+
+	testMat = Matrix4x4::Identity();
+	testMatTranspose = Matrix4x4::Transpose(testMat);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+
+	testMat = Matrix4x4(
+		1.f, 2.f, 3.f, 4.f,
+		5.f, 6.f, 7.f, 8.f,
+		9.f, 10.f, 11.f, 12.f,
+		13.f, 14.f, 15.f, 16.f
+	);
+	testMatTranspose = Matrix4x4::Transpose(testMat);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+}
+
+TEST(Matrix4x4, augment) {
+
+
+
+
+}
+
+TEST(Matrix4x4, gaussJordan) {
+
+
+
+
+}
+
+TEST(Matrix4x4, inverse) {
+
+
+
+
+}
+
+TEST(Matrix4x4, translationMatrix) {
+
+	Matrix4x4 translationMat = Matrix4x4::TranslationMatrix3D({ 1,2,3 });
+
+	EXPECT_EQ(translationMat[0][3], 1);
+	EXPECT_EQ(translationMat[1][3], 2);
+	EXPECT_EQ(translationMat[2][3], 3);
+	EXPECT_EQ(translationMat[2][1], 0);
+
+}
+
+TEST(Matrix4x4, rotationMatrix) {
+
+	/*
+		Matrix4x4 rotationMat = Matrix4x4::RotationMatrix3D(PI/2, { 0,0,1 });
+		std::cout << rotationMat << std::endl;
+		// EXPECT_EQ(rotationMat[1][1], 0);
+		// EXPECT_EQ(rotationMat[1][2], -1);
+		// EXPECT_EQ(rotationMat[2][1], 1);
+		// EXPECT_EQ(rotationMat[2][2], 0);
+
+	*/
+}
+
+TEST(Matrix4x4, scalingMatrix) {
+
+	Matrix4x4 scalingMat = Matrix4x4::ScalingMatrix3D({ 1,2,3 });
+	EXPECT_EQ(scalingMat[0][0], 1);
+	EXPECT_EQ(scalingMat[1][1], 2);
+	EXPECT_EQ(scalingMat[2][2], 3);
+	EXPECT_EQ(scalingMat[2][3], 0);
+
+}
+
+TEST(Matrix4x4, toQuaternion) {
+
+	Matrix4x4 testMat = Matrix4x4::Identity();
+	Quaternion quat = testMat.ToQuaternion();
+
+	EXPECT_EQ(quat.imaginary.x, 0);
+	EXPECT_EQ(quat.imaginary.y, 0);
+	EXPECT_EQ(quat.imaginary.z, 0);
+	EXPECT_EQ(quat.real, 1);
+
+
+	testMat = Matrix4x4(
+		1.f, 2.f, 3.f, 4.f,
+		5.f, 6.f, 7.f, 8.f,
+		9.f, 10.f, 11.f, 12.f,
+		13.f, 14.f, 15.f, 16.f
+	);
+	quat = testMat.ToQuaternion();
+	std::cout << quat << std::endl;
+	EXPECT_EQ(quat.imaginary.x, 0.34);
+	//EXPECT_EQ(quat.imaginary.y, -0.69);
+	//EXPECT_EQ(quat.imaginary.z, 0.34);
+	//EXPECT_EQ(quat.real, 2.18);
+
+}
 
 #pragma endregion

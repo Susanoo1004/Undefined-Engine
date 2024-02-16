@@ -45,13 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
-<<<<<<< Updated upstream
-    <Library Include="external\libs\imgui.lib" />
-=======
     <Library Include="external\libs\imguid.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\include\wrapper_glfw.h">
