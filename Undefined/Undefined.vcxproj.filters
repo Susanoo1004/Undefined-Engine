@@ -33,6 +33,15 @@
     <ClCompile Include="source\src\RHI_debug.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
+=======
+    <ClCompile Include="source\src\application.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\src\camera.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
@@ -92,6 +101,7 @@
     <ClInclude Include="source\include\application.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
     <ClInclude Include="external\include\Toolbox\calc.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -120,6 +130,11 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="external\include\Toolbox\Vector4.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+>>>>>>> Stashed changes
+=======
+    <ClInclude Include="source\include\camera.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
 >>>>>>> Stashed changes
