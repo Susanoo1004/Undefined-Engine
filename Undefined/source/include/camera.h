@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Matrix4x4.h"
+#include "toolbox/Matrix4x4.h"
 #include "Vector3.h"
 
 class Camera

@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="external\src\glad\glad.c" />
+    <ClCompile Include="source\src\camera.cpp" />
     <ClCompile Include="source\src\RHI_debug.cpp" />
     <ClCompile Include="source\src\main.cpp" />
     <ClCompile Include="source\src\singleton.cpp" />
@@ -155,16 +156,16 @@
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="external\include\Toolbox\calc.h" />
-    <ClInclude Include="external\include\Toolbox\Matrix.h" />
-    <ClInclude Include="external\include\Toolbox\Matrix2x2.h" />
-    <ClInclude Include="external\include\Toolbox\Matrix3x3.h" />
-    <ClInclude Include="external\include\Toolbox\Matrix4x4.h" />
-    <ClInclude Include="external\include\Toolbox\Quaternion.h" />
-    <ClInclude Include="external\include\Toolbox\Vector.h" />
-    <ClInclude Include="external\include\Toolbox\Vector2.h" />
-    <ClInclude Include="external\include\Toolbox\Vector3.h" />
-    <ClInclude Include="external\include\Toolbox\Vector4.h" />
+    <ClInclude Include="external\include\toolbox\calc.h" />
+    <ClInclude Include="external\include\toolbox\Matrix.h" />
+    <ClInclude Include="external\include\toolbox\Matrix2x2.h" />
+    <ClInclude Include="external\include\toolbox\Matrix3x3.h" />
+    <ClInclude Include="external\include\toolbox\Matrix4x4.h" />
+    <ClInclude Include="external\include\toolbox\Quaternion.h" />
+    <ClInclude Include="external\include\toolbox\Vector.h" />
+    <ClInclude Include="external\include\toolbox\Vector2.h" />
+    <ClInclude Include="external\include\toolbox\Vector3.h" />
+    <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="external\include\imgui\imgui_internal.h" />
     <ClInclude Include="external\include\imgui\imstb_textedit.h" />
     <ClInclude Include="external\include\KHR\khrplatform.h" />
+    <ClInclude Include="source\include\camera.h" />
     <ClInclude Include="source\include\RHI_debug.h" />
     <ClInclude Include="source\include\singleton.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
