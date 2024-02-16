@@ -1,6 +1,6 @@
 #pragma once
 
-#include "camera.h"
+#include "renderer/camera.h"
 
 class Application
 {

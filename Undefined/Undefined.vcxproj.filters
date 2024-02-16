@@ -2,13 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="external\src\glad\glad.c" />
-    <ClCompile Include="source\src\RHI_debug.cpp" />
-    <ClCompile Include="source\src\main.cpp" />
     <ClCompile Include="source\src\singleton.cpp" />
-    <ClCompile Include="source\src\wrapper_glfw.cpp" />
-    <ClCompile Include="source\src\wrapper_RHI.cpp" />
-    <ClCompile Include="source\src\camera.cpp" />
     <ClCompile Include="source\src\application.cpp" />
+    <ClCompile Include="source\src\Core\main.cpp" />
+    <ClCompile Include="source\src\Renderer\camera.cpp" />
+    <ClCompile Include="source\src\Resources\resource.cpp" />
+    <ClCompile Include="source\src\Wrapper\wrapper_glfw.cpp" />
+    <ClCompile Include="source\src\Wrapper\wrapper_RHI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\toolbox\calc.h" />
@@ -32,7 +32,6 @@
     <ClInclude Include="external\include\imgui\imgui_internal.h" />
     <ClInclude Include="external\include\imgui\imstb_textedit.h" />
     <ClInclude Include="external\include\KHR\khrplatform.h" />
-    <ClInclude Include="source\include\RHI_debug.h" />
     <ClInclude Include="source\include\singleton.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />

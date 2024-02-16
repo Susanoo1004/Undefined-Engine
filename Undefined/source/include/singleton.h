@@ -1,7 +1,7 @@
 #pragma once
 
-#include "wrapper_glfw.h"
-#include "wrapper_RHI.h"
+#include "Wrapper/wrapper_glfw.h"
+#include "Wrapper/wrapper_RHI.h"
 
 class Singleton
 {
