@@ -141,11 +141,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-<<<<<<< Updated upstream
-=======
-    <ClCompile Include="source\src\camera.cpp" />
-    <ClCompile Include="source\src\application.cpp" />
->>>>>>> Stashed changes
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="source\src\RHI_debug.cpp" />
     <ClCompile Include="source\src\main.cpp" />
@@ -160,7 +155,6 @@
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< Updated upstream
     <ClInclude Include="external\include\Toolbox\calc.h" />
     <ClInclude Include="external\include\Toolbox\Matrix.h" />
     <ClInclude Include="external\include\Toolbox\Matrix2x2.h" />
@@ -171,9 +165,6 @@
     <ClInclude Include="external\include\Toolbox\Vector2.h" />
     <ClInclude Include="external\include\Toolbox\Vector3.h" />
     <ClInclude Include="external\include\Toolbox\Vector4.h" />
-=======
-    <ClInclude Include="source\include\camera.h" />
->>>>>>> Stashed changes
     <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
