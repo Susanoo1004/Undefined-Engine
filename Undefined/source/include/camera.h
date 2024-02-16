@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "toolbox/Matrix4x4.h"
-#include "Vector3.h"
+#include "toolbox/Vector3.h"
 
 class Camera
 {
@@ -35,12 +35,12 @@ public:
     bool IsMouseForCam;
 
 private:
-    Matrix4x4 m_VP;
+    Matrix4x4 mVP;
 
-    Matrix4x4 View;
-    Matrix4x4 Perspective;
+    Matrix4x4 mView;
+    Matrix4x4 mPerspective;
 
-    float Width;
-    float Height;
+    float mWidth;
+    float mHeight;
 };
 

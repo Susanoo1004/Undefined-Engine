@@ -1,17 +1,18 @@
 #include "camera.h"
 
 #include <numbers>
+#include <iostream>
 
 #define PI std::numbers::pi_v<float>
 
 Camera::Camera(float width, float height)
-    : Width(width), Height(height)
+    : mWidth(width), mHeight(height)
 {
     Eye = Vector3(0, 0, -1);
     LookAt = Vector3(0, 0, 1);
     Up = Vector3(0, 1, 0);
 
-    Perspective = ProjectionMatrix(PI / 2, Width / Height, 0.1f, 20.0f);
+    mPerspective = ProjectionMatrix(PI / 2, mWidth / mHeight, 0.1f, 20.0f);
 }
 
 Matrix4x4 Camera::ProjectionMatrix(float fovY, float aspect, float far, float near)
@@ -47,20 +48,23 @@ Matrix4x4 Camera::ViewMatrix(const Vector3& up, const Vector3& eye, const Vector
 
 const Matrix4x4& Camera::GetVP()
 {
-    return m_VP;
+    return mVP;
 }
 
 void Camera::Update()
 {
-    View = ViewMatrix(Up, Eye, Eye + LookAt);
-    m_VP = Perspective * View;
+    mView = ViewMatrix(Up, Eye, Eye + LookAt);
+    mVP = mPerspective * mView;
 }
 
 void Camera::ProcessInput(GLFWwindow* window)
 {
     const float cameraSpeed = 0.05f; // adjust accordingly
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
         Eye += cameraSpeed * LookAt;
+        std::cout << "aaaaaa" << std::endl;
+    }   
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         Eye -= cameraSpeed * LookAt;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
