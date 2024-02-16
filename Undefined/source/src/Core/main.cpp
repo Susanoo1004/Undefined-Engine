@@ -40,8 +40,6 @@ int main()
         // ////  Imgui stuff here is called from the main program loop and called from the window loop itself when the window is closed and the window 
         // app.ShowImGuiControls();
 
-        // app.GetCamera().ProcessInput(window);
-
         app.Update();
 
         // Rendering 

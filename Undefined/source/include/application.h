@@ -12,7 +12,7 @@ public:
 
 	void InitQuad();
 
-	// Camera cam;
+	Camera cam;
 
 private:
 	unsigned int quadVAO, quadVBO, quadEBO;

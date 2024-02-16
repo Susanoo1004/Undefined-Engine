@@ -3,11 +3,17 @@
 #include <glad/glad.h>
 #include <iostream>
 
+#include "singleton.h"
+
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+
+"uniform mat4 model;\n"
+"uniform mat4 vp;\n"
+
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = vp * model * vec4(aPos, 1.0f);\n"
 "}\0";
 const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
@@ -17,7 +23,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "}\n\0";
 
 
-Application::Application()
+Application::Application() : cam(800,600)
 {
 }
 
@@ -66,9 +72,15 @@ void Application::Init()
 
 void Application::Update()
 {
+    cam.ProcessInput(Singleton::wrapperGLFW->GetWindowVar());
+    cam.Update();
+
+    // modify the camera via the shader
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "vp"), 1, true, &cam.GetVP()[0].x);
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, true, &Matrix4x4::Identity()[0].x);
+    
     glUseProgram(shaderProgram);
     glBindVertexArray(quadVAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 

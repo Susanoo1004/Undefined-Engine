@@ -146,6 +146,7 @@
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="source\src\Core\main.cpp" />
+    <ClCompile Include="source\src\Debug\RHI_debug.cpp" />
     <ClCompile Include="source\src\Renderer\camera.cpp" />
     <ClCompile Include="source\src\Resources\resource.cpp" />
     <ClCompile Include="source\src\singleton.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="external\include\imgui\imstb_textedit.h" />
     <ClInclude Include="external\include\KHR\khrplatform.h" />
     <ClInclude Include="source\include\camera.h" />
+    <ClInclude Include="source\include\Debug\RHI_debug.h" />
     <ClInclude Include="source\include\singleton.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />

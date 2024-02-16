@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include "RHI_debug.h"
+#include "Debug/RHI_debug.h"
 
 class WrapperRHI
 {
