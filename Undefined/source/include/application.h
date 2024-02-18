@@ -12,11 +12,13 @@ public:
 	void Update();
 
 	void InitQuad();
+	void InitVikingRoom();
+	void Draw();
 
 	Camera cam;
 
 private:
-	unsigned int quadVAO, quadVBO, quadEBO;
+	unsigned int VAO, VBO, EBO;
 	unsigned int vertexShader, fragmentShader, shaderProgram;
 };
 

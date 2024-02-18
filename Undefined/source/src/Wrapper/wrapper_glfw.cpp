@@ -32,9 +32,6 @@ void WrapperGLFW::SetupWindow()
     // gladLoadGL();
 
     glfwSwapInterval(1); // Enable vsync
-
-    // glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-    // glEnable(GL_DEPTH_TEST);
 }
 
 void WrapperGLFW::GetFramebufferSize(int& display_width, int& display_height)

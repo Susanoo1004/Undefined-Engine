@@ -13,6 +13,7 @@
     <ClCompile Include="source\src\Resources\texture.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
     <ClCompile Include="source\src\Manager\resource_manager.cpp" />
+    <ClCompile Include="source\src\Resources\model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\toolbox\calc.h" />
@@ -49,11 +50,16 @@
     <ClInclude Include="source\include\Wrapper\wrapper_RHI.h" />
     <ClInclude Include="external\include\stb_image\stb_image.h" />
     <ClInclude Include="source\include\Manager\resource_manager.h" />
+    <ClInclude Include="source\include\Resources\model.h" />
+    <ClInclude Include="source\include\TOSORT\vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
     <Library Include="external\libs\imguid.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="source\include\TOSORT\base_shader.vs" />
   </ItemGroup>
 </Project>

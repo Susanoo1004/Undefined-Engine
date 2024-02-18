@@ -149,6 +149,7 @@
     <ClCompile Include="source\src\engine_debug\RHI_debug.cpp" />
     <ClCompile Include="source\src\Manager\resource_manager.cpp" />
     <ClCompile Include="source\src\Renderer\camera.cpp" />
+    <ClCompile Include="source\src\Resources\model.cpp" />
     <ClCompile Include="source\src\Resources\resource.cpp" />
     <ClCompile Include="source\src\Resources\texture.cpp" />
     <ClCompile Include="source\src\singleton.cpp" />
@@ -189,13 +190,18 @@
     <ClInclude Include="source\include\engine_debug\RHI_debug.h" />
     <ClInclude Include="source\include\Manager\resource_manager.h" />
     <ClInclude Include="source\include\Renderer\camera.h" />
+    <ClInclude Include="source\include\Resources\model.h" />
     <ClInclude Include="source\include\Resources\resource.h" />
     <ClInclude Include="source\include\Resources\texture.h" />
     <ClInclude Include="source\include\singleton.h" />
+    <ClInclude Include="source\include\TOSORT\vertex.h" />
     <ClInclude Include="source\include\Wrapper\wrapper_glfw.h" />
     <ClInclude Include="source\include\Wrapper\wrapper_RHI.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="source\include\TOSORT\base_shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
