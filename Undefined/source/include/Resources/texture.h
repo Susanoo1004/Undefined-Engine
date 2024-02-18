@@ -7,7 +7,7 @@ public:
 	Texture(const char* filepath);
 	~Texture();
 
-	unsigned int GetID();
+	const unsigned int GetID();
 
 private:
 	unsigned int mID;

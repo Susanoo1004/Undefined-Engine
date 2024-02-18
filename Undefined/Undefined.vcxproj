@@ -147,6 +147,7 @@
     <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="source\src\Core\main.cpp" />
     <ClCompile Include="source\src\engine_debug\RHI_debug.cpp" />
+    <ClCompile Include="source\src\Manager\resource_manager.cpp" />
     <ClCompile Include="source\src\Renderer\camera.cpp" />
     <ClCompile Include="source\src\Resources\resource.cpp" />
     <ClCompile Include="source\src\Resources\texture.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="source\include\camera.h" />
     <ClInclude Include="source\include\Debug\RHI_debug.h" />
     <ClInclude Include="source\include\engine_debug\RHI_debug.h" />
+    <ClInclude Include="source\include\Manager\resource_manager.h" />
     <ClInclude Include="source\include\Renderer\camera.h" />
     <ClInclude Include="source\include\Resources\resource.h" />
     <ClInclude Include="source\include\Resources\texture.h" />

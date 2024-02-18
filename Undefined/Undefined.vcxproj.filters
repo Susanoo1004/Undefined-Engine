@@ -12,6 +12,7 @@
     <ClCompile Include="source\src\engine_debug\RHI_debug.cpp" />
     <ClCompile Include="source\src\Resources\texture.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\Manager\resource_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\toolbox\calc.h" />
@@ -47,6 +48,7 @@
     <ClInclude Include="source\include\Wrapper\wrapper_glfw.h" />
     <ClInclude Include="source\include\Wrapper\wrapper_RHI.h" />
     <ClInclude Include="external\include\stb_image\stb_image.h" />
+    <ClInclude Include="source\include\Manager\resource_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

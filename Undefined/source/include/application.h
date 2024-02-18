@@ -1,6 +1,7 @@
 #pragma once
 
 #include "renderer/camera.h"
+#include "Resources/texture.h"
 
 class Application
 {
