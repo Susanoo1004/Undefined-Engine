@@ -1773,6 +1773,44 @@ TEST(Matrix4x4, toQuaternion) {
 	EXPECT_FLOAT_EQ(quat.real, 2.1794496f);
 }
 
+TEST(Matrix4x4, ViewMatrix) {
+
+	Matrix4x4 testMat = Matrix4x4::Identity();
+
+	// glm View Matrix Camera:(4,3,3), looks:(0,0,0), head:(0,1,0)
+	Matrix4x4 resultMat = Matrix4x4(
+		0.6f, -0.411597f, 0.685994f, 0.f,
+		0.f, 0.857493f, 0.514496f, 0.f,
+		-0.8f, -0.308697f, 0.514496f, 0.f,
+		-0.f, -0.f, -5.83095f, 1.f
+	);
+	resultMat.Transpose();
+
+	Matrix4x4::ViewMatrix({ 4,3,3 }, { 0,0,0 }, { 0,1,0 }, testMat);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_NEAR(testMat[i][j], resultMat[i][j], 0.00001f);
+}
+
+TEST(Matrix4x4, ProjectionMatrix) {
+
+	Matrix4x4 testMat = Matrix4x4::Identity();
+
+	// glm View Matrix Camera:(4,3,3), looks:(0,0,0), head:(0,1,0)
+	Matrix4x4 resultMat = Matrix4x4(
+		0.75f, 0.f, 0.f, 0.f,
+		0.f, 1.f, 0.f, 0.f,
+		0.f, 0.f, -1.002f, -1.f,
+		0.f, 0.f, -0.2002f, 0.f
+	);
+	resultMat.Transpose();
+
+	Matrix4x4::ProjectionMatrix(PI / 2.f, 4.0f / 3.0f, 0.1f, 100.0f, testMat);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_NEAR(testMat[i][j], resultMat[i][j], 0.00001f);
+}
+
 TEST(Matrix4x4, operator) {
 	Matrix4x4 testMat = Matrix4x4(
 		1,  2,  3,  4,
