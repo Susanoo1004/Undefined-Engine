@@ -18,7 +18,7 @@ public:
 	Camera cam;
 
 private:
-	unsigned int VAO, VBO, EBO;
-	unsigned int vertexShader, fragmentShader, shaderProgram;
+	unsigned int VAO, VBO, EBO = 0;
+	unsigned int vertexShader, fragmentShader, shaderProgram = 0;
 };
 

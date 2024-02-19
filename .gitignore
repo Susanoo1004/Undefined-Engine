@@ -437,3 +437,4 @@ FodyWeavers.xsd
 
 !libs
 !**/**/**/engine_debug
+!assets
