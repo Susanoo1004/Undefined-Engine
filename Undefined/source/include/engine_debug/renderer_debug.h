@@ -1,8 +1,8 @@
 #pragma once
 
-#include "glad/glad.h"
+#include <glad/glad.h>
 
-class RHIDebug
+class RendererDebug
 {
 public:
 	void DebugInit();

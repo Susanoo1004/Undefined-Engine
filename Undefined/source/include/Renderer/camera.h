@@ -19,20 +19,20 @@ public:
 
     void Update();
 
-    void ProcessInput(GLFWwindow* window);
+    void ProcessInput(GLFWwindow* mWindow);
 
-    Vector3 Eye;
-    Vector3 LookAt;
-    Vector3 Up;
+    Vector3 eye;
+    Vector3 lookAt;
+    Vector3 up;
 
-    float Yaw;
-    float Pitch;
+    float yaw;
+    float pitch;
 
-    bool FirstMouse;
-    float LastX;
-    float LastY;
+    bool firstMouse;
+    float lastX;
+    float lastY;
 
-    bool IsMouseForCam;
+    bool isMouseForCam;
 
 private:
     Matrix4x4 mVP;

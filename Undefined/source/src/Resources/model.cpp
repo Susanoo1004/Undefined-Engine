@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 
-#include "Resources/model.h"
+#include "resources/model.h"
 
 Model::Model()
 {
@@ -17,19 +17,18 @@ Model::Model(const std::string& filepath)
 
 Model::~Model()
 {
-	glDeleteBuffers(1, &m_VBO);
-	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteBuffers(1, &mVBO);
+	glDeleteVertexArrays(1, &mVAO);
 }
 
 void Model::Draw()
 {
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(mVAO);
 	glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
 }
 
 void Model::LoadOBJ(const std::string& filepath)
 {
-
 	vertexBuffer.clear();
 	indexBuffer.clear();
 
@@ -70,41 +69,43 @@ void Model::LoadOBJ(const std::string& filepath)
 		{
 			int count = 0;
 			while (line >> word)
+			{
 				count++;
+			}
 			std::stringstream line(currentLine);
 			line >> word >> word;
 
 			IndexVertex indexVertex = { 0,0,0 };
-			sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex.PosIndex, &indexVertex.TexIndex, &indexVertex.NormalIndex);
+			sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex.posIndex, &indexVertex.texIndex, &indexVertex.normalIndex);
 			indexBuffer.push_back(indexVertex);
 
 			Vertex vertex;
-			vertex.Position = positions[indexVertex.PosIndex - 1];
-			vertex.TextureUV = textureUvs[indexVertex.TexIndex - 1];
-			vertex.Normal = normals[indexVertex.NormalIndex - 1];
+			vertex.position = positions[indexVertex.posIndex - 1];
+			vertex.textureUV = textureUvs[indexVertex.texIndex - 1];
+			vertex.normal = normals[indexVertex.normalIndex - 1];
 			vertexBuffer.push_back(vertex);
 
 			line >> word;
 			IndexVertex indexVertex2 = { 0,0,0 };
-			sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex2.PosIndex, &indexVertex2.TexIndex, &indexVertex2.NormalIndex);
+			sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex2.posIndex, &indexVertex2.texIndex, &indexVertex2.normalIndex);
 			indexBuffer.push_back(indexVertex2);
 
-			vertex.Position = positions[indexVertex2.PosIndex - 1];
-			vertex.TextureUV = textureUvs[indexVertex2.TexIndex - 1];
-			vertex.Normal = normals[indexVertex2.NormalIndex - 1];
+			vertex.position = positions[indexVertex2.posIndex - 1];
+			vertex.textureUV = textureUvs[indexVertex2.texIndex - 1];
+			vertex.normal = normals[indexVertex2.normalIndex - 1];
 			vertexBuffer.push_back(vertex);
 
 			for (size_t i = 2; i < count; i++)
 			{
 				line >> word;
 				IndexVertex indexVertex_i = { 0,0,0 };
-				sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex_i.PosIndex, &indexVertex_i.TexIndex, &indexVertex_i.NormalIndex);
+				sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex_i.posIndex, &indexVertex_i.texIndex, &indexVertex_i.normalIndex);
 				indexBuffer.push_back(indexVertex_i);
 
 				Vertex vertex;
-				vertex.Position = positions[indexVertex_i.PosIndex - 1];
-				vertex.TextureUV = textureUvs[indexVertex_i.TexIndex - 1];
-				vertex.Normal = normals[indexVertex_i.NormalIndex - 1];
+				vertex.position = positions[indexVertex_i.posIndex - 1];
+				vertex.textureUV = textureUvs[indexVertex_i.texIndex - 1];
+				vertex.normal = normals[indexVertex_i.normalIndex - 1];
 				vertexBuffer.push_back(vertex);
 
 				if (i + 1 == count)
@@ -124,21 +125,21 @@ void Model::LoadOBJ(const std::string& filepath)
 
 void Model::SetOpenGL()
 {
-	glGenBuffers(1, &m_VBO);
-	glGenVertexArrays(1, &m_VAO);
+	glGenBuffers(1, &mVBO);
+	glGenVertexArrays(1, &mVAO);
 
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(mVAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 	glBufferData(GL_ARRAY_BUFFER, vertexBuffer.size() * sizeof(Vertex),
 		vertexBuffer.data(), GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Position));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextureUV));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureUV));
 	glEnableVertexAttribArray(2);
 }

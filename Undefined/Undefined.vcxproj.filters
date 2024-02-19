@@ -2,43 +2,21 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="external\src\glad\glad.c" />
-    <ClCompile Include="source\src\singleton.cpp" />
-    <ClCompile Include="source\src\application.cpp" />
-    <ClCompile Include="source\src\Core\main.cpp" />
-    <ClCompile Include="source\src\Renderer\camera.cpp" />
-    <ClCompile Include="source\src\Resources\resource.cpp" />
-    <ClCompile Include="source\src\Wrapper\wrapper_glfw.cpp" />
-    <ClCompile Include="source\src\Wrapper\wrapper_RHI.cpp" />
-    <ClCompile Include="source\src\engine_debug\RHI_debug.cpp" />
-    <ClCompile Include="source\src\Resources\texture.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
-    <ClCompile Include="source\src\Manager\resource_manager.cpp" />
-    <ClCompile Include="source\src\Resources\model.cpp" />
+    <ClCompile Include="source\src\application.cpp" />
+    <ClCompile Include="source\src\core\main.cpp" />
+    <ClCompile Include="source\src\engine_debug\renderer_debug.cpp" />
+    <ClCompile Include="source\src\manager\resource_manager.cpp" />
+    <ClCompile Include="source\src\renderer\camera.cpp" />
+    <ClCompile Include="source\src\resources\model.cpp" />
+    <ClCompile Include="source\src\resources\resource.cpp" />
+    <ClCompile Include="source\src\resources\texture.cpp" />
+    <ClCompile Include="source\src\singleton.cpp" />
+    <ClCompile Include="source\src\wrapper\window_manager.cpp" />
+    <ClCompile Include="source\src\wrapper\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <ClCompile Include="source\src\main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\src\singleton.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\src\wrapper_glfw.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="external\src\glad\glad.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\src\wrapper_RHI.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\src\RHI_debug.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\src\application.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-=======
+    <ClInclude Include="external\include\stb_image\stb_image.h" />
     <ClInclude Include="external\include\toolbox\calc.h" />
     <ClInclude Include="external\include\toolbox\Matrix.h" />
     <ClInclude Include="external\include\toolbox\Matrix2x2.h" />
@@ -60,80 +38,24 @@
     <ClInclude Include="external\include\imgui\imgui_internal.h" />
     <ClInclude Include="external\include\imgui\imstb_textedit.h" />
     <ClInclude Include="external\include\KHR\khrplatform.h" />
+    <ClInclude Include="source\include\Debug\RHI_debug.h" />
+    <ClInclude Include="source\include\engine_debug\renderer_debug.h" />
+    <ClInclude Include="source\include\manager\resource_manager.h" />
+    <ClInclude Include="source\include\renderer\camera.h" />
+    <ClInclude Include="source\include\resources\model.h" />
+    <ClInclude Include="source\include\resources\resource.h" />
+    <ClInclude Include="source\include\resources\texture.h" />
     <ClInclude Include="source\include\singleton.h" />
+    <ClInclude Include="source\include\TOSORT\vertex.h" />
+    <ClInclude Include="source\include\wrapper\window_manager.h" />
+    <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
-    <ClInclude Include="source\include\camera.h" />
-    <ClInclude Include="source\include\Debug\RHI_debug.h" />
-    <ClInclude Include="source\include\Resources\resource.h" />
-    <ClInclude Include="source\include\Resources\texture.h" />
-    <ClInclude Include="source\include\engine_debug\RHI_debug.h" />
-    <ClInclude Include="source\include\Renderer\camera.h" />
-    <ClInclude Include="source\include\Wrapper\wrapper_glfw.h" />
-    <ClInclude Include="source\include\Wrapper\wrapper_RHI.h" />
-    <ClInclude Include="external\include\stb_image\stb_image.h" />
-    <ClInclude Include="source\include\Manager\resource_manager.h" />
-    <ClInclude Include="source\include\Resources\model.h" />
-    <ClInclude Include="source\include\TOSORT\vertex.h" />
->>>>>>> dev
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
     <Library Include="external\libs\imguid.lib" />
-<<<<<<< HEAD
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="source\include\wrapper_glfw.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="source\include\singleton.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\glfw\glfw3.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\glfw\glfw3native.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\imgui\imconfig.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\imgui\imgui.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\imgui\imgui_impl_glfw.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\imgui\imgui_impl_opengl3.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\imgui\imgui_internal.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\imgui\imstb_textedit.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="source\include\wrapper_RHI.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="source\include\RHI_debug.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\KHR\khrplatform.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="external\include\glad\glad.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="source\include\application.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-=======
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="source\include\TOSORT\base_shader.vs" />
->>>>>>> dev
   </ItemGroup>
 </Project>

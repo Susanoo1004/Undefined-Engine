@@ -8,9 +8,9 @@
 Camera::Camera(float width, float height)
     : mWidth(width), mHeight(height)
 {
-    Eye = Vector3(0, 0, -1);
-    LookAt = Vector3(0, 0, 1);
-    Up = Vector3(0, 1, 0);
+    eye = Vector3(0, 0, -1);
+    lookAt = Vector3(0, 0, 1);
+    up = Vector3(0, 1, 0);
 
     mPerspective = ProjectionMatrix(PI / 2, mWidth / mHeight, 0.1f, 20.0f);
 }
@@ -53,27 +53,40 @@ const Matrix4x4& Camera::GetVP()
 
 void Camera::Update()
 {
-    mView = ViewMatrix(Up, Eye, Eye + LookAt);
+    mView = ViewMatrix(up, eye, eye + lookAt);
     mVP = mPerspective * mView;
 }
 
-void Camera::ProcessInput(GLFWwindow* window)
+void Camera::ProcessInput(GLFWwindow* mWindow)
 {
     const float cameraSpeed = 0.05f; // adjust accordingly
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+
+    if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
     {
-        Eye += cameraSpeed * LookAt;
+        eye += cameraSpeed * lookAt;
     }   
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        Eye -= cameraSpeed * LookAt;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        Eye -= Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        Eye += Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-        IsMouseForCam = !IsMouseForCam;
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        Eye.y += cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        Eye.y -= cameraSpeed;
+    if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        eye -= cameraSpeed * lookAt;
+    }
+    if (glfwGetKey(mWindow, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        eye -= Vector3::Cross(lookAt, up).Normalized() * cameraSpeed;
+    }
+    if (glfwGetKey(mWindow, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        eye += Vector3::Cross(lookAt, up).Normalized() * cameraSpeed;
+    }
+    if (glfwGetKey(mWindow, GLFW_KEY_K) == GLFW_PRESS || glfwGetKey(mWindow, GLFW_KEY_L) == GLFW_PRESS)
+    {
+        isMouseForCam = !isMouseForCam;
+    }
+    if (glfwGetKey(mWindow, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        eye.y += cameraSpeed;
+    }
+    if (glfwGetKey(mWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    {
+        eye.y -= cameraSpeed;
+    }
 }
