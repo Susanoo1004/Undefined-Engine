@@ -59,7 +59,4 @@
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="source\include\TOSORT\base_shader.vs" />
-  </ItemGroup>
 </Project>

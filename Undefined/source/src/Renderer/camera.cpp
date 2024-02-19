@@ -5,6 +5,8 @@
 
 #define PI std::numbers::pi_v<float>
 
+Camera* Camera::sCamPtr;
+
 Camera::Camera(float width, float height)
     : mWidth(width), mHeight(height)
 {
@@ -13,6 +15,8 @@ Camera::Camera(float width, float height)
     Up = Vector3(0, 1, 0);
 
     mPerspective = ProjectionMatrix(PI / 2, mWidth / mHeight, 0.1f, 20.0f);
+
+    sCamPtr = this;
 }
 
 Matrix4x4 Camera::ProjectionMatrix(float fovY, float aspect, float far, float near)
@@ -76,4 +80,52 @@ void Camera::ProcessInput(GLFWwindow* window)
         Eye.y += cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         Eye.y -= cameraSpeed;
+
+}
+
+void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
+    if (sCamPtr->IsMouseForCam)
+    {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    else
+    {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        return;
+    }
+    if (sCamPtr->FirstMouse)
+    {
+        sCamPtr->LastX = xpos;
+        sCamPtr->LastY = ypos;
+        sCamPtr->FirstMouse = false;
+    }
+
+    float xoffset = xpos - sCamPtr->LastX;
+    float yoffset = sCamPtr->LastY - ypos;
+    sCamPtr->LastX = xpos;
+    sCamPtr->LastY = ypos;
+
+    float sensitivity = 0.05f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    sCamPtr->Yaw += xoffset;
+    sCamPtr->Pitch += yoffset;
+
+    if (sCamPtr->Pitch > 89.0f)
+        sCamPtr->Pitch = 89.0f;
+    if (sCamPtr->Pitch < -89.0f)
+        sCamPtr->Pitch = -89.0f;
+
+    std::cout << "scamptr : " << sCamPtr->Yaw << " ; " << sCamPtr->Pitch << std::endl;
+
+    Vector3 direction;
+    direction.x = cosf((sCamPtr->Yaw * (PI / 180.f))) * cosf((sCamPtr->Pitch * (PI / 180.f)));
+    direction.y = sinf((sCamPtr->Pitch * (PI / 180.f)));
+    direction.z = sinf((sCamPtr->Yaw * (PI / 180.f))) * cosf((sCamPtr->Pitch * (PI / 180.f)));
+    sCamPtr->LookAt = direction.Normalized();
 }

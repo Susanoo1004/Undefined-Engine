@@ -200,9 +200,6 @@
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="source\include\TOSORT\base_shader.vs" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

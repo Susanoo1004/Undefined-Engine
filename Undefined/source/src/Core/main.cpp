@@ -20,8 +20,8 @@ int main()
 
     Singleton::wrapperRHI->WrapperInit();
 
-    // glfwSetCursorPosCallback(window, MouseCallback);
-
+    Singleton::wrapperGLFW->SetCursorPosCallback(Singleton::wrapperGLFW->GetWindowVar(), Camera::MouseCallback);
+  
     // app.SetupImGui(window);
 
     // const unsigned int width = app.ScreenWidth;

@@ -54,3 +54,8 @@ bool WrapperGLFW::IsWindowOpen()
 {
     return !glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS;
 }
+
+void WrapperGLFW::SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback)
+{
+    glfwSetCursorPosCallback(window, callback);
+}
