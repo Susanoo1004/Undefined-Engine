@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>external/include;source/include;$(IncludePath)</IncludePath>
+    <IncludePath>external/include;$(IncludePath)</IncludePath>
     <LibraryPath>external/libs/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -112,13 +112,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>source/include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>toolboxMoteurd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,7 +129,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
     </ClCompile>
@@ -138,22 +138,48 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>toolboxMoteur.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="external\src\glad\glad.c" />
-    <ClCompile Include="source\src\RHI_debug.cpp" />
-    <ClCompile Include="source\src\main.cpp" />
+    <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\application.cpp" />
+    <ClCompile Include="source\src\Core\main.cpp" />
+    <ClCompile Include="source\src\engine_debug\RHI_debug.cpp" />
+    <ClCompile Include="source\src\Manager\resource_manager.cpp" />
+    <ClCompile Include="source\src\Renderer\camera.cpp" />
+    <ClCompile Include="source\src\Resources\model.cpp" />
+    <ClCompile Include="source\src\Resources\resource.cpp" />
+    <ClCompile Include="source\src\Resources\texture.cpp" />
     <ClCompile Include="source\src\singleton.cpp" />
-    <ClCompile Include="source\src\wrapper_glfw.cpp" />
-    <ClCompile Include="source\src\wrapper_RHI.cpp" />
+    <ClCompile Include="source\src\Wrapper\wrapper_glfw.cpp" />
+    <ClCompile Include="source\src\Wrapper\wrapper_RHI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
     <Library Include="external\libs\imguid.lib" />
+<<<<<<< HEAD
   </ItemGroup>
   <ItemGroup>
+=======
+    <Library Include="external\libs\toolboxMoteur.lib" />
+    <Library Include="external\libs\toolboxMoteurd.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="external\include\stb_image\stb_image.h" />
+    <ClInclude Include="external\include\toolbox\calc.h" />
+    <ClInclude Include="external\include\toolbox\Matrix.h" />
+    <ClInclude Include="external\include\toolbox\Matrix2x2.h" />
+    <ClInclude Include="external\include\toolbox\Matrix3x3.h" />
+    <ClInclude Include="external\include\toolbox\Matrix4x4.h" />
+    <ClInclude Include="external\include\toolbox\Quaternion.h" />
+    <ClInclude Include="external\include\toolbox\Vector.h" />
+    <ClInclude Include="external\include\toolbox\Vector2.h" />
+    <ClInclude Include="external\include\toolbox\Vector3.h" />
+    <ClInclude Include="external\include\toolbox\Vector4.h" />
+>>>>>>> dev
     <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
@@ -165,10 +191,23 @@
     <ClInclude Include="external\include\imgui\imgui_internal.h" />
     <ClInclude Include="external\include\imgui\imstb_textedit.h" />
     <ClInclude Include="external\include\KHR\khrplatform.h" />
-    <ClInclude Include="source\include\RHI_debug.h" />
+    <ClInclude Include="source\include\camera.h" />
+    <ClInclude Include="source\include\Debug\RHI_debug.h" />
+    <ClInclude Include="source\include\engine_debug\RHI_debug.h" />
+    <ClInclude Include="source\include\Manager\resource_manager.h" />
+    <ClInclude Include="source\include\Renderer\camera.h" />
+    <ClInclude Include="source\include\Resources\model.h" />
+    <ClInclude Include="source\include\Resources\resource.h" />
+    <ClInclude Include="source\include\Resources\texture.h" />
     <ClInclude Include="source\include\singleton.h" />
+    <ClInclude Include="source\include\TOSORT\vertex.h" />
+    <ClInclude Include="source\include\Wrapper\wrapper_glfw.h" />
+    <ClInclude Include="source\include\Wrapper\wrapper_RHI.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="source\include\TOSORT\base_shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
