@@ -142,7 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
     <ClCompile Include="source\src\application.cpp" />
@@ -160,10 +159,6 @@
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
     <Library Include="external\libs\imguid.lib" />
-<<<<<<< HEAD
-  </ItemGroup>
-  <ItemGroup>
-=======
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
@@ -179,7 +174,6 @@
     <ClInclude Include="external\include\toolbox\Vector2.h" />
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
->>>>>>> dev
     <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
@@ -205,9 +199,6 @@
     <ClInclude Include="source\include\Wrapper\wrapper_RHI.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="source\include\TOSORT\base_shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
