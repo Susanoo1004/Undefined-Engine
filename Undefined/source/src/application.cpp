@@ -8,89 +8,19 @@
 #include "resources/model.h"
 #include "resources/resource_manager.h"
 
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"layout (location = 1) in vec3 aNormal;\n"
-"layout (location = 2) in vec2 aTexCoord;\n"
-
-"uniform mat4 model;\n"
-"uniform mat4 vp;\n"
-
-"out vec3 Normal;\n"
-"out vec2 TexCoord;\n"
-"out vec3 FragPos;\n"
-
-"void main()\n"
-"{\n"
-"   FragPos = vec3(model * vec4(aPos, 1.0f));\n"
-"   Normal = aNormal;\n"
-"   TexCoord = aTexCoord;\n"
-
-"   gl_Position = vp * model * vec4(FragPos, 1.0);"
-"}\n\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-
-"in vec2 TexCoord;\n"
-"in vec3 Normal;\n"
-
-"uniform sampler2D texture1;\n"
-
-"void main()\n"
-"{\n"
-"   FragColor = texture(texture1, TexCoord);\n"
-"}\n\0";
-
-
 Application::Application() : cam(800,600)
 {
 }
 
 void Application::Init()
 {
+    baseShader = Shader("source/shader_code/base_shader.vs", "source/shader_code/base_shader.fs");
+
     ResourceManager::resourceManager.Create<Texture>("assets/container.jpg");
 
-    mVertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(mVertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(mVertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(mVertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
+    if (baseShader.ID)
     {
-        glGetShaderInfoLog(mVertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // fragment shader
-    mFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(mFragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(mFragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(mFragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(mFragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // link shaders
-    mShaderProgram = glCreateProgram();
-    glAttachShader(mShaderProgram, mVertexShader);
-    glAttachShader(mShaderProgram, mFragmentShader);
-    glLinkProgram(mShaderProgram);
-    // check for linking errors
-    glGetProgramiv(mShaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(mShaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    glDeleteShader(mVertexShader);
-    glDeleteShader(mFragmentShader);
-
-    if (mShaderProgram)
-    {
-        glUseProgram(mShaderProgram);
+        baseShader.Use();
     }
 
     InitVikingRoom();
@@ -106,11 +36,12 @@ void Application::Update()
     cam.ProcessInput(Singleton::windowManager->GetWindowVar());
     cam.Update();
 
-    // modify the camera via the shader
-    glUniformMatrix4fv(glGetUniformLocation(mShaderProgram, "vp"), 1, true, &cam.GetVP()[0].x);
-    glUniformMatrix4fv(glGetUniformLocation(mShaderProgram, "model"), 1, true, &Matrix4x4::Identity()[0].x);
+    // modify the camera in the shader
+    baseShader.Use();
+    baseShader.SetMat4("vp", cam.GetVP());
+    baseShader.SetMat4("model", Matrix4x4::Identity());
     
-    glUseProgram(mShaderProgram);
+    baseShader.Use();
     Draw();
 }
 

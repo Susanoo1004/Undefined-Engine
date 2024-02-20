@@ -14,6 +14,7 @@
     <ClCompile Include="source\src\singleton.cpp" />
     <ClCompile Include="source\src\wrapper\window_manager.cpp" />
     <ClCompile Include="source\src\wrapper\renderer.cpp" />
+    <ClCompile Include="source\src\resources\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -50,6 +51,7 @@
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
+    <ClInclude Include="source\include\resources\shader.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

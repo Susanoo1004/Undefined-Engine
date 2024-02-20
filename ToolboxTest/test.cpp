@@ -63,7 +63,7 @@ TEST(Vector2Function, Normalized) {
 	EXPECT_FLOAT_EQ(Vector2(0, 0).Normalized().y, 0);
 }
 
-TEST(Vector2Function, normal) {
+TEST(Vector2Function, Normal) {
 	EXPECT_FLOAT_EQ(Vector2(1, 0).normal().x, 0);
 	EXPECT_FLOAT_EQ(Vector2(1, 0).normal().y, -1);
 }

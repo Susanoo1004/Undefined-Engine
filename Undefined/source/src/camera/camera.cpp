@@ -138,8 +138,6 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
         sCamPtr->Pitch = -89.0f;
     }
 
-    std::cout << "scamptr : " << sCamPtr->Yaw << " ; " << sCamPtr->Pitch << std::endl;
-
     Vector3 direction;
     direction.x = cosf((sCamPtr->Yaw * (PI / 180.f))) * cosf((sCamPtr->Pitch * (PI / 180.f)));
     direction.y = sinf((sCamPtr->Pitch * (PI / 180.f)));

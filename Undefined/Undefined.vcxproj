@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="source\src\core\main.cpp" />
     <ClCompile Include="source\src\engine_debug\renderer_debug.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="external\include\toolbox\Vector2.h" />
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
+    <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
