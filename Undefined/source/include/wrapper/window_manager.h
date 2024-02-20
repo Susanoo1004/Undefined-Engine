@@ -5,7 +5,10 @@
 class WindowManager
 {
 public:
-	
+    
+    WindowManager();
+    ~WindowManager();
+
     bool SetupGlfw();
 
     void CreateWindow(int width, int height);

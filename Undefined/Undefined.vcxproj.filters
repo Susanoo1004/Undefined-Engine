@@ -15,6 +15,8 @@
     <ClCompile Include="source\src\wrapper\window_manager.cpp" />
     <ClCompile Include="source\src\wrapper\renderer.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
+    <ClCompile Include="source\src\logger\logger.cpp" />
+    <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -52,6 +54,8 @@
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
     <ClInclude Include="source\include\resources\shader.h" />
+    <ClInclude Include="source\include\logger\logger.h" />
+    <ClInclude Include="external\include\memory_leak\memory_leak_detector.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

@@ -2,9 +2,12 @@
 
 #include "application.h"
 #include "singleton.h"
+#include <memory_leak/memory_leak_detector.h>
+
 
 int main()
 {
+    MemoryLeakDetector memory;
     Application app;
 
     Singleton::Init();
@@ -37,6 +40,7 @@ int main()
     app.Init();
 
     // ////  Let the window open until we press escape or the window should close
+
     while (Singleton::windowManager->IsWindowOpen())
     {
 

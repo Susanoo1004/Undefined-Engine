@@ -5,7 +5,6 @@
 #include <cassert>
 
 #include "resources/resource.h"
-#include "utils.h"
 
 template<class T>
 concept Type = std::is_base_of<Resource, T>::value;

@@ -7,7 +7,6 @@ void Renderer::Init(float redBaseColor, float greenBaseColor, float blueBaseColo
 	gladLoadGL();
 	glClearColor(redBaseColor, greenBaseColor, blueBaseColor, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-
 }
 
 void Renderer::SetClearColor(GLbitfield)

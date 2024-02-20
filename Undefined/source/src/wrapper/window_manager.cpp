@@ -2,6 +2,16 @@
 
 #include <iostream>
 
+WindowManager::WindowManager()
+{
+    mWindow = NULL;
+}
+
+WindowManager::~WindowManager()
+{
+    delete mWindow;
+}
+
 bool WindowManager::SetupGlfw()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
