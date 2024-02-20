@@ -3,7 +3,7 @@
 #include <vector>
 #include <glad/glad.h>
 
-#include "Resources/resource.h"
+#include "resources/resource.h"
 #include "TOSORT/Vertex.h"
 
 class Model : public Resource
@@ -21,5 +21,5 @@ public:
 	std::vector<IndexVertex> indexBuffer;
 
 private:
-	unsigned int m_VAO, m_VBO, m_EBO;
+	unsigned int mVAO, mVBO, mEBO;
 };

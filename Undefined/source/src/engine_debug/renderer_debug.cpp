@@ -1,8 +1,8 @@
-#include "engine_debug/RHI_debug.h"
+#include "engine_debug/renderer_debug.h"
 
 #include <iostream>
 
-void RHIDebug::DebugInit()
+void RendererDebug::DebugInit()
 {
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);

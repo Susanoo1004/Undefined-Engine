@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 
-#include "engine_debug/RHI_debug.h"
+#include "engine_debug/renderer_debug.h"
 
-class WrapperRHI
+class Renderer
 {
 public:
 	void WrapperInit(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
@@ -14,7 +14,7 @@ public:
 	//Texture
 	void BindTexture(unsigned int ID);
 
-	RHIDebug debug;
+	RendererDebug debug;
 private:
 };
 

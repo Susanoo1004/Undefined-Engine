@@ -9,16 +9,21 @@ int main()
 
     Singleton::Init();
 
-    if (!Singleton::wrapperGLFW->SetupGlfw())
+    if (!Singleton::windowManager->SetupGlfw())
+    {
         return 1;
+    }
 
-    Singleton::wrapperGLFW->CreateWindow(800, 600);
-    if (Singleton::wrapperGLFW->GetWindowVar() == nullptr)
+    Singleton::windowManager->CreateWindow(800, 600);
+
+    if (Singleton::windowManager->GetWindowVar() == nullptr)
+    {
         return 1;
+    }
 
-    Singleton::wrapperGLFW->SetupWindow();
+    Singleton::windowManager->SetupWindow();
 
-    Singleton::wrapperRHI->WrapperInit();
+    Singleton::renderer->WrapperInit();
 
     Singleton::wrapperGLFW->SetCursorPosCallback(Singleton::wrapperGLFW->GetWindowVar(), Camera::MouseCallback);
   
@@ -27,12 +32,12 @@ int main()
     // const unsigned int width = app.ScreenWidth;
     // const unsigned int height = app.ScreenHeight;
 
-    Singleton::wrapperRHI->debug.DebugInit();
+    Singleton::renderer->debug.DebugInit();
 
     app.Init();
 
     // ////  Let the window open until we press escape or the window should close
-    while (Singleton::wrapperGLFW->IsWindowOpen())
+    while (Singleton::windowManager->IsWindowOpen())
     {
 
         // app.StartImGuiFrame();
@@ -45,8 +50,8 @@ int main()
         // Rendering 
         // app.Render(window);
 
-        Singleton::wrapperGLFW->SwapBuffers();
-        Singleton::wrapperRHI->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Singleton::windowManager->SwapBuffers();
+        Singleton::renderer->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     Singleton::Destroy();

@@ -2,7 +2,7 @@
 
 #include <glfw/glfw3.h>
 
-class WrapperGLFW
+class WindowManager
 {
 public:
 	
@@ -24,5 +24,5 @@ public:
 
 
 private:
-    GLFWwindow* window;
+    GLFWwindow* mWindow;
 };

@@ -63,9 +63,9 @@ TEST(Vector2Function, Normalized) {
 	EXPECT_FLOAT_EQ(Vector2(0, 0).Normalized().y, 0);
 }
 
-TEST(Vector2Function, Normal) {
-	EXPECT_FLOAT_EQ(Vector2(1, 0).Normal().x, 0);
-	EXPECT_FLOAT_EQ(Vector2(1, 0).Normal().y, -1);
+TEST(Vector2Function, normal) {
+	EXPECT_FLOAT_EQ(Vector2(1, 0).normal().x, 0);
+	EXPECT_FLOAT_EQ(Vector2(1, 0).normal().y, -1);
 }
 
 TEST(Vector2Function, DotProduct) {

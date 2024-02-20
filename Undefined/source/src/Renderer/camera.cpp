@@ -10,9 +10,9 @@ Camera* Camera::sCamPtr;
 Camera::Camera(float width, float height)
     : mWidth(width), mHeight(height)
 {
-    Eye = Vector3(0, 0, -1);
-    LookAt = Vector3(0, 0, 1);
-    Up = Vector3(0, 1, 0);
+    eye = Vector3(0, 0, -1);
+    lookAt = Vector3(0, 0, 1);
+    up = Vector3(0, 1, 0);
 
     mPerspective = ProjectionMatrix(PI / 2, mWidth / mHeight, 0.1f, 20.0f);
 
@@ -57,16 +57,17 @@ const Matrix4x4& Camera::GetVP()
 
 void Camera::Update()
 {
-    mView = ViewMatrix(Up, Eye, Eye + LookAt);
+    mView = ViewMatrix(up, eye, eye + lookAt);
     mVP = mPerspective * mView;
 }
 
-void Camera::ProcessInput(GLFWwindow* window)
+void Camera::ProcessInput(GLFWwindow* mWindow)
 {
     const float cameraSpeed = 0.05f; // adjust accordingly
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+
+    if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
     {
-        Eye += cameraSpeed * LookAt;
+        eye += cameraSpeed * lookAt;
     }   
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         Eye -= cameraSpeed * LookAt;
