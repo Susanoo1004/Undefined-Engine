@@ -58,7 +58,8 @@ int main()
         Singleton::renderer->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    Singleton::Destroy();
 
+    Singleton::Destroy();
+    Logger::Stop();
     return 0;
 }

@@ -178,6 +178,7 @@
     <ClInclude Include="external\include\toolbox\Vector2.h" />
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
+    <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\logger\logger.h" />
     <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\application.h" />

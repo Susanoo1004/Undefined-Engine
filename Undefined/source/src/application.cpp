@@ -40,7 +40,9 @@ void Application::Update()
     baseShader.Use();
     baseShader.SetMat4("vp", cam.GetVP());
     baseShader.SetMat4("model", Matrix4x4::Identity());
-    
+
+    Logger::Debug("ROXANE {}", 16);
+
     baseShader.Use();
     Draw();
 }

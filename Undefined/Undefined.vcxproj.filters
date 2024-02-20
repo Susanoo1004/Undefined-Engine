@@ -56,6 +56,7 @@
     <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\logger\logger.h" />
     <ClInclude Include="external\include\memory_leak\memory_leak_detector.h" />
+    <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
