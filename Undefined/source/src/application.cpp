@@ -22,7 +22,7 @@ const char* vertexShaderSource = "#version 330 core\n"
 
 "void main()\n"
 "{\n"
-"   FragPos = vec3(vp * model * vec4(aPos, 1.0f));\n"
+"   FragPos = vec3(model * vec4(aPos, 1.0f));\n"
 "   Normal = aNormal;\n"
 "   TexCoord = aTexCoord;\n"
 
