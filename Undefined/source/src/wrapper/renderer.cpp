@@ -8,7 +8,7 @@ void Renderer::Init(float redBaseColor, float greenBaseColor, float blueBaseColo
 
 }
 
-void Renderer::SetClearColor(GLbitfield mask)
+void Renderer::SetClearColor(GLbitfield)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

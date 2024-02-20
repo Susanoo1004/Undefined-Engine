@@ -25,7 +25,7 @@ public:
     Vector3 LookAt;
     Vector3 Up;
 
-    float Yaw = -90f;
+    float Yaw = -90.f;
     float Pitch = 0.f;
 
     float LastX;

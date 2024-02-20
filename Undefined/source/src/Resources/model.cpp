@@ -24,7 +24,7 @@ Model::~Model()
 void Model::Draw()
 {
 	glBindVertexArray(mVAO);
-	glDrawArrays(GL_TRIANGLES, 0, vertexBuffer.size());
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertexBuffer.size());
 }
 
 void Model::LoadOBJ(const std::string& filepath)
