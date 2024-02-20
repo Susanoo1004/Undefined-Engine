@@ -61,26 +61,26 @@ void Camera::Update()
     mVP = mPerspective * mView;
 }
 
-void Camera::ProcessInput(GLFWwindow* mWindow)
+void Camera::ProcessInput(GLFWwindow* window)
 {
     const float cameraSpeed = 0.05f; // adjust accordingly
 
-    if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
         eye += cameraSpeed * lookAt;
     }   
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        Eye -= cameraSpeed * LookAt;
+        eye -= cameraSpeed * lookAt;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        Eye -= Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
+        eye -= Vector3::Cross(lookAt, up).Normalized() * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        Eye += Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
+        eye += Vector3::Cross(lookAt, up).Normalized() * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-        IsMouseForCam = !IsMouseForCam;
+        isMouseForCam = !isMouseForCam;
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        Eye.y += cameraSpeed;
+        eye.y += cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        Eye.y -= cameraSpeed;
+        eye.y -= cameraSpeed;
 
 }
 
@@ -89,7 +89,7 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
-    if (sCamPtr->IsMouseForCam)
+    if (sCamPtr->isMouseForCam)
     {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
@@ -98,35 +98,35 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         return;
     }
-    if (sCamPtr->FirstMouse)
+    if (sCamPtr->firstMouse)
     {
-        sCamPtr->LastX = xpos;
-        sCamPtr->LastY = ypos;
-        sCamPtr->FirstMouse = false;
+        sCamPtr->lastX = xpos;
+        sCamPtr->lastY = ypos;
+        sCamPtr->firstMouse = false;
     }
 
-    float xoffset = xpos - sCamPtr->LastX;
-    float yoffset = sCamPtr->LastY - ypos;
-    sCamPtr->LastX = xpos;
-    sCamPtr->LastY = ypos;
+    float xoffset = xpos - sCamPtr->lastX;
+    float yoffset = sCamPtr->lastY - ypos;
+    sCamPtr->lastX = xpos;
+    sCamPtr->lastY = ypos;
 
     float sensitivity = 0.05f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
-    sCamPtr->Yaw += xoffset;
-    sCamPtr->Pitch += yoffset;
+    sCamPtr->yaw += xoffset;
+    sCamPtr->pitch += yoffset;
 
-    if (sCamPtr->Pitch > 89.0f)
-        sCamPtr->Pitch = 89.0f;
-    if (sCamPtr->Pitch < -89.0f)
-        sCamPtr->Pitch = -89.0f;
+    if (sCamPtr->pitch > 89.0f)
+        sCamPtr->pitch = 89.0f;
+    if (sCamPtr->pitch < -89.0f)
+        sCamPtr->pitch = -89.0f;
 
-    std::cout << "scamptr : " << sCamPtr->Yaw << " ; " << sCamPtr->Pitch << std::endl;
+    std::cout << "scamptr : " << sCamPtr->yaw << " ; " << sCamPtr->pitch << std::endl;
 
     Vector3 direction;
-    direction.x = cosf((sCamPtr->Yaw * (PI / 180.f))) * cosf((sCamPtr->Pitch * (PI / 180.f)));
-    direction.y = sinf((sCamPtr->Pitch * (PI / 180.f)));
-    direction.z = sinf((sCamPtr->Yaw * (PI / 180.f))) * cosf((sCamPtr->Pitch * (PI / 180.f)));
-    sCamPtr->LookAt = direction.Normalized();
+    direction.x = cosf((sCamPtr->yaw * (PI / 180.f))) * cosf((sCamPtr->pitch * (PI / 180.f)));
+    direction.y = sinf((sCamPtr->pitch * (PI / 180.f)));
+    direction.z = sinf((sCamPtr->yaw * (PI / 180.f))) * cosf((sCamPtr->pitch * (PI / 180.f)));
+    sCamPtr->lookAt = direction.Normalized();
 }

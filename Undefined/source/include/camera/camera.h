@@ -20,7 +20,6 @@ public:
     void Update();
 
     void ProcessInput(GLFWwindow* window);
-    static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
     Vector3 eye;
     Vector3 lookAt;
@@ -45,6 +44,8 @@ private:
     float mHeight;
 
 public:
+    static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
+
     static Camera* sCamPtr;
 };
 

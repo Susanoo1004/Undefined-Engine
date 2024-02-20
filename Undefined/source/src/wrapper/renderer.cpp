@@ -1,6 +1,6 @@
 #include "wrapper/renderer.h"
 
-void Renderer::WrapperInit(float redBaseColor, float greenBaseColor, float blueBaseColor)
+void Renderer::Init(float redBaseColor, float greenBaseColor, float blueBaseColor)
 {
 	gladLoadGL();
 	glClearColor(redBaseColor, greenBaseColor, blueBaseColor, 1.0f);

@@ -23,9 +23,9 @@ int main()
 
     Singleton::windowManager->SetupWindow();
 
-    Singleton::renderer->WrapperInit();
+    Singleton::renderer->Init();
 
-    Singleton::wrapperGLFW->SetCursorPosCallback(Singleton::wrapperGLFW->GetWindowVar(), Camera::MouseCallback);
+    Singleton::windowManager->SetCursorPosCallback(Singleton::windowManager->GetWindowVar(), Camera::MouseCallback);
   
     // app.SetupImGui(window);
 

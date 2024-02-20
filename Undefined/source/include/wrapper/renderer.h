@@ -7,7 +7,7 @@
 class Renderer
 {
 public:
-	void WrapperInit(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
+	void Init(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
 
 	void SetClearColor(GLbitfield mask);
 	
