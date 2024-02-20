@@ -36,6 +36,7 @@ public:
 	{
 		return dynamic_cast<T*>(mResources.find(name)->second);
 	}
+
 	void Unload(const std::string& name);
 
 private:

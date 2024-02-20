@@ -169,7 +169,7 @@ void Application::InitVikingRoom()
     glBindVertexArray(mVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBufferData(GL_ARRAY_BUFFER, model->vertexBuffer.size() * sizeof(Vertex),
+    glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (model->vertexBuffer.size() * sizeof(Vertex)),
         model->vertexBuffer.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
@@ -186,5 +186,5 @@ void Application::InitVikingRoom()
 void Application::Draw()
 {
     glBindVertexArray(mVAO);
-    glDrawArrays(GL_TRIANGLES, 0, ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->vertexBuffer.size());
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->vertexBuffer.size());
 }
