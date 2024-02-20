@@ -6,7 +6,7 @@
 #include "singleton.h"
 #include "resources/texture.h"
 #include "resources/model.h"
-#include "manager/resource_manager.h"
+#include "resources/resource_manager.h"
 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"

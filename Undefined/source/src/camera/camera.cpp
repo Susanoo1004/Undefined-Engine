@@ -1,4 +1,4 @@
-#include "Renderer/camera.h"
+#include "camera/camera.h"
 
 #include <numbers>
 #include <iostream>
@@ -70,17 +70,29 @@ void Camera::ProcessInput(GLFWwindow* window)
         eye += cameraSpeed * lookAt;
     }   
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
         eye -= cameraSpeed * lookAt;
+    }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
         eye -= Vector3::Cross(lookAt, up).Normalized() * cameraSpeed;
+    }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
         eye += Vector3::Cross(lookAt, up).Normalized() * cameraSpeed;
+    }
     if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+    {
         isMouseForCam = !isMouseForCam;
+    }
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
         eye.y += cameraSpeed;
+    }
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    {
         eye.y -= cameraSpeed;
+    }
 
 }
 
@@ -118,9 +130,13 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     sCamPtr->pitch += yoffset;
 
     if (sCamPtr->pitch > 89.0f)
+    {
         sCamPtr->pitch = 89.0f;
+    }
     if (sCamPtr->pitch < -89.0f)
+    {
         sCamPtr->pitch = -89.0f;
+    }
 
     std::cout << "scamptr : " << sCamPtr->yaw << " ; " << sCamPtr->pitch << std::endl;
 

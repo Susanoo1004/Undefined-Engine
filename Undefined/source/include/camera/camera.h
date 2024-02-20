@@ -25,8 +25,8 @@ public:
     Vector3 lookAt;
     Vector3 up;
 
-    float yaw;
-    float pitch;
+    float yaw = -90.f;
+    float pitch = 0.f;
 
     bool firstMouse;
     float lastX;

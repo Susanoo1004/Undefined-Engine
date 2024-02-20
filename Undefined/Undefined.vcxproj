@@ -147,7 +147,7 @@
     <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="source\src\core\main.cpp" />
     <ClCompile Include="source\src\engine_debug\renderer_debug.cpp" />
-    <ClCompile Include="source\src\manager\resource_manager.cpp" />
+    <ClCompile Include="source\src\resources\resource_manager.cpp" />
     <ClCompile Include="source\src\camera\camera.cpp" />
     <ClCompile Include="source\src\resources\model.cpp" />
     <ClCompile Include="source\src\resources\resource.cpp" />
@@ -187,13 +187,12 @@
     <ClInclude Include="external\include\KHR\khrplatform.h" />
     <ClInclude Include="source\include\Debug\RHI_debug.h" />
     <ClInclude Include="source\include\engine_debug\renderer_debug.h" />
-    <ClInclude Include="source\include\manager\resource_manager.h" />
+    <ClInclude Include="source\include\resources\resource_manager.h" />
     <ClInclude Include="source\include\camera\camera.h" />
     <ClInclude Include="source\include\resources\model.h" />
     <ClInclude Include="source\include\resources\resource.h" />
     <ClInclude Include="source\include\resources\texture.h" />
     <ClInclude Include="source\include\singleton.h" />
-    <ClInclude Include="source\include\TOSORT\vertex.h" />
     <ClInclude Include="source\include\wrapper\window_manager.h" />
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
