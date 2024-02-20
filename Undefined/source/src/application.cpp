@@ -31,7 +31,7 @@ void Application::Update()
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
+    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("viking_room.png")->GetID());
 
     cam.ProcessInput(Singleton::windowManager->GetWindowVar());
     cam.Update();
@@ -86,13 +86,11 @@ void Application::InitQuad()
 
 void Application::InitVikingRoom()
 {
+    ResourceManager::resourceManager.Create<Texture>("viking_room.png", "assets/viking_room.png");
 
-    ResourceManager::resourceManager.Create<Texture>("assets/viking_room.png");
+    ResourceManager::resourceManager.Create<Model>("viking_room.obj", "assets/viking_room.obj");
 
-    ResourceManager::resourceManager.Create<Model>("assets/viking_room.obj");
-
-
-    Model* model = ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj");
+    std::shared_ptr<Model> model = ResourceManager::resourceManager.Get<Model>("viking_room.obj");
 
     glGenBuffers(1, &mVBO);
     glGenVertexArrays(1, &mVAO);
@@ -117,5 +115,5 @@ void Application::InitVikingRoom()
 void Application::Draw()
 {
     glBindVertexArray(mVAO);
-    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->vertexBuffer.size());
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("viking_room.obj")->vertexBuffer.size());
 }
