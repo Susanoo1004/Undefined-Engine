@@ -189,8 +189,8 @@ TEST(Vector2Function, Normalized) {
 }
 
 TEST(Vector2Function, Normal) {
-	EXPECT_FLOAT_EQ(Vector2(1, 0).normal().x, 0);
-	EXPECT_FLOAT_EQ(Vector2(1, 0).normal().y, -1);
+	EXPECT_FLOAT_EQ(Vector2(1, 0).Normal().x, 0);
+	EXPECT_FLOAT_EQ(Vector2(1, 0).Normal().y, -1);
 }
 
 TEST(Vector2Function, DotProduct) {
