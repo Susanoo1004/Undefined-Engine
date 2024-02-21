@@ -17,6 +17,7 @@
     <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\logger\logger.cpp" />
     <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
+    <ClCompile Include="source\src\service_locator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -57,6 +58,8 @@
     <ClInclude Include="source\include\logger\logger.h" />
     <ClInclude Include="external\include\memory_leak\memory_leak_detector.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\service_locator.h" />
+    <ClInclude Include="source\include\wrapper\service_type.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

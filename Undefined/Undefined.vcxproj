@@ -145,6 +145,7 @@
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\service_locator.cpp" />
     <ClCompile Include="source\src\logger\logger.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\application.cpp" />
@@ -179,6 +180,8 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\wrapper\service_type.h" />
+    <ClInclude Include="source\include\service_locator.h" />
     <ClInclude Include="source\include\logger\logger.h" />
     <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\application.h" />
