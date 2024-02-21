@@ -1,4 +1,4 @@
-#include "Resources/texture.h"
+#include "resources/texture.h"
 
 #include <stb_image/stb_image.h>
 #include <glad/glad.h>
@@ -18,11 +18,17 @@ Texture::Texture(const char* filepath)
 		GLenum format = 0;
 
 		if (channelCount == 1)
+		{
 			format = GL_RED;
+		}
 		else if (channelCount == 3)
+		{
 			format = GL_RGB;
+		}
 		else if (channelCount == 4)
+		{
 			format = GL_RGBA;
+		}
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

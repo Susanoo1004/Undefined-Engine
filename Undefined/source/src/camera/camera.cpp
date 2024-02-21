@@ -1,4 +1,4 @@
-#include "Renderer/camera.h"
+#include "camera/camera.h"
 
 #include <numbers>
 #include <iostream>
@@ -64,22 +64,35 @@ void Camera::Update()
 void Camera::ProcessInput(GLFWwindow* window)
 {
     const float cameraSpeed = 0.05f; // adjust accordingly
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
         Eye += cameraSpeed * LookAt;
     }   
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
         Eye -= cameraSpeed * LookAt;
+    }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
         Eye -= Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
+    }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
         Eye += Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
+    }
     if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+    {
         IsMouseForCam = !IsMouseForCam;
+    }
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
         Eye.y += cameraSpeed;
+    }
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    {
         Eye.y -= cameraSpeed;
+    }
 
 }
 
@@ -97,11 +110,11 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         return;
     }
-    if (sCamPtr->FirstMouse)
+    if (sCamPtr->IsFirstMouse)
     {
         sCamPtr->LastX = xpos;
         sCamPtr->LastY = ypos;
-        sCamPtr->FirstMouse = false;
+        sCamPtr->IsFirstMouse = false;
     }
 
     float xoffset = xpos - sCamPtr->LastX;
@@ -117,11 +130,13 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     sCamPtr->Pitch += yoffset;
 
     if (sCamPtr->Pitch > 89.0f)
+    {
         sCamPtr->Pitch = 89.0f;
+    }
     if (sCamPtr->Pitch < -89.0f)
+    {
         sCamPtr->Pitch = -89.0f;
-
-    std::cout << "scamptr : " << sCamPtr->Yaw << " ; " << sCamPtr->Pitch << std::endl;
+    }
 
     Vector3 direction;
     direction.x = cosf((sCamPtr->Yaw * (PI / 180.f))) * cosf((sCamPtr->Pitch * (PI / 180.f)));

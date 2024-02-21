@@ -1,16 +1,16 @@
 #include "singleton.h"
 
-WrapperGLFW* Singleton::wrapperGLFW;
-WrapperRHI* Singleton::wrapperRHI;
+WindowManager* Singleton::windowManager;
+Renderer* Singleton::renderer;
 
 void Singleton::Init()
 {
-	wrapperGLFW = new WrapperGLFW();
-	wrapperRHI = new WrapperRHI();
+	windowManager = new WindowManager();
+	renderer = new Renderer();
 }
 
 void Singleton::Destroy()
 {
-	delete wrapperGLFW;
-	delete wrapperRHI;
+	delete windowManager;
+	delete renderer;
 }

@@ -37,7 +37,7 @@ public:
 	/// @brief Returns the normal vector to this one.
 	/// @return A vector with the same length but a normal direction.
 	[[nodiscard]]
-	Vector2 Normal() const;
+	Vector2 normal() const;
 	/// @brief Returns the dot product of this Vector2 with 'other'.
 	[[nodiscard]]
 	float Dot(const Vector2 other) const;

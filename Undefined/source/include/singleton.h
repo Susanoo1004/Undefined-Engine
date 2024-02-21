@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Wrapper/wrapper_glfw.h"
-#include "Wrapper/wrapper_RHI.h"
+#include "wrapper/window_manager.h"
+#include "wrapper/renderer.h"
 
 class Singleton
 {
@@ -9,6 +9,6 @@ public:
 	static void Init();
 	static void Destroy();
 
-	static WrapperGLFW* wrapperGLFW;
-	static WrapperRHI* wrapperRHI;
+	static WindowManager* windowManager;
+	static Renderer* renderer;
 };

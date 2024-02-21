@@ -2,10 +2,13 @@
 
 #include <glfw/glfw3.h>
 
-class WrapperGLFW
+class WindowManager
 {
 public:
-	
+    
+    WindowManager();
+    ~WindowManager();
+
     bool SetupGlfw();
 
     void CreateWindow(int width, int height);
@@ -24,5 +27,5 @@ public:
 
 
 private:
-    GLFWwindow* window;
+    GLFWwindow* mWindow;
 };

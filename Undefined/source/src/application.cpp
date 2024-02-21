@@ -4,44 +4,9 @@
 #include <iostream>
 
 #include "singleton.h"
-#include "Resources/texture.h"
-#include "Resources/model.h"
-#include "Manager/resource_manager.h"
-
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"layout (location = 1) in vec3 aNormal;\n"
-"layout (location = 2) in vec2 aTexCoord;\n"
-
-"uniform mat4 model;\n"
-"uniform mat4 vp;\n"
-
-"out vec3 Normal;\n"
-"out vec2 TexCoord;\n"
-"out vec3 FragPos;\n"
-
-"void main()\n"
-"{\n"
-"   FragPos = vec3(vp * model * vec4(aPos, 1.0f));\n"
-"   Normal = aNormal;\n"
-"   TexCoord = aTexCoord;\n"
-
-"   gl_Position = vp * model * vec4(FragPos, 1.0);"
-"}\n\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-
-"in vec2 TexCoord;\n"
-"in vec3 Normal;\n"
-
-"uniform sampler2D texture1;\n"
-
-"void main()\n"
-"{\n"
-"   FragColor = texture(texture1, TexCoord);\n"
-"}\n\0";
-
+#include "resources/texture.h"
+#include "resources/model.h"
+#include "resources/resource_manager.h"
 
 Application::Application() : cam(800,600)
 {
@@ -49,48 +14,13 @@ Application::Application() : cam(800,600)
 
 void Application::Init()
 {
+    baseShader = Shader("source/shader_code/base_shader.vs", "source/shader_code/base_shader.fs");
+
     ResourceManager::resourceManager.Create<Texture>("assets/container.jpg");
 
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
+    if (baseShader.ID)
     {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // fragment shader
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // link shaders
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    if (shaderProgram)
-    {
-        glUseProgram(shaderProgram);
+        baseShader.Use();
     }
 
     InitVikingRoom();
@@ -101,16 +31,19 @@ void Application::Update()
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
+    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("viking_room.png")->GetID());
 
-    cam.ProcessInput(Singleton::wrapperGLFW->GetWindowVar());
+    cam.ProcessInput(Singleton::windowManager->GetWindowVar());
     cam.Update();
 
-    // modify the camera via the shader
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "vp"), 1, true, &cam.GetVP()[0].x);
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, true, &Matrix4x4::Identity()[0].x);
-    
-    glUseProgram(shaderProgram);
+    // modify the camera in the shader
+    baseShader.Use();
+    baseShader.SetMat4("vp", cam.GetVP());
+    baseShader.SetMat4("model", Matrix4x4::Identity());
+
+    Logger::Debug("Debug {}", 20);
+
+    baseShader.Use();
     Draw();
 }
 
@@ -124,21 +57,22 @@ void Application::InitQuad()
         -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
     };
 
-    unsigned int indices[] = {  // note that we start from 0!
+    unsigned int indices[] = 
+    {  // note that we start from 0!
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
     };
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    glGenVertexArrays(1, &mVAO);
+    glGenBuffers(1, &mVBO);
+    glGenBuffers(1, &mEBO);
 
-    glBindVertexArray(VAO);
+    glBindVertexArray(mVAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
 
     // position attribute
@@ -154,36 +88,34 @@ void Application::InitQuad()
 
 void Application::InitVikingRoom()
 {
+    ResourceManager::resourceManager.Create<Texture>("viking_room.png", "assets/viking_room.png");
 
-    ResourceManager::resourceManager.Create<Texture>("assets/viking_room.png");
+    ResourceManager::resourceManager.Create<Model>("viking_room.obj", "assets/viking_room.obj");
 
-    ResourceManager::resourceManager.Create<Model>("assets/viking_room.obj");
+    std::shared_ptr<Model> model = ResourceManager::resourceManager.Get<Model>("viking_room.obj");
 
+    glGenBuffers(1, &mVBO);
+    glGenVertexArrays(1, &mVAO);
 
-    Model* model = ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj");
+    glBindVertexArray(mVAO);
 
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, model->vertexBuffer.size() * sizeof(Vertex),
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+    glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (model->vertexBuffer.size() * sizeof(Vertex)),
         model->vertexBuffer.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Position));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(1);
 
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextureUV));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureUV));
     glEnableVertexAttribArray(2);
 
 }
 
 void Application::Draw()
 {
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->vertexBuffer.size());
+    glBindVertexArray(mVAO);
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("viking_room.obj")->vertexBuffer.size());
 }

@@ -20,22 +20,19 @@ public:
     void Update();
 
     void ProcessInput(GLFWwindow* window);
-    static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
     Vector3 Eye;
     Vector3 LookAt;
     Vector3 Up;
 
-    float Yaw = 0.f;
+    float Yaw = -90.f;
     float Pitch = 0.f;
 
-    bool FirstMouse;
     float LastX;
     float LastY;
 
-    bool IsMouseForCam = false;
-
-    static Camera* sCamPtr;
+    bool IsFirstMouse;
+    bool IsMouseForCam;
 
 private:
     Matrix4x4 mVP;
@@ -45,5 +42,10 @@ private:
 
     float mWidth;
     float mHeight;
+
+public:
+    static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
+
+    static Camera* sCamPtr;
 };
 

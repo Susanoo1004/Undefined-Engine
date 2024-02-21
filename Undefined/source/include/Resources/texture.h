@@ -1,5 +1,6 @@
 #pragma once
-#include "Resources/resource.h"
+
+#include "resources/resource.h"
 
 class Texture : public Resource
 {

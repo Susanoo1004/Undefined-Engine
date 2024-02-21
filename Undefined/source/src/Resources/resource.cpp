@@ -1,4 +1,4 @@
-#include "Resources/resource.h"
+#include "resources/resource.h"
 
 Resource::Resource()
 {
