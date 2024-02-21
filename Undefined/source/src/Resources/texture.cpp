@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <iostream>
 
+#include "logger/logger.h"
+
 Texture::Texture(const char* filepath)
 {
 	glGenTextures(1, &mID);
@@ -40,7 +42,7 @@ Texture::Texture(const char* filepath)
 	}
 	else
 	{
-		std::cout << "Failed to load " << filepath << " texture" << std::endl;
+		Logger::Warning("Failed to load {} texture", filepath);
 	}
 
 	stbi_image_free((void*)data);

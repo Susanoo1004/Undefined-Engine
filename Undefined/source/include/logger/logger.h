@@ -14,19 +14,20 @@
 
 #define ANSI_RESET          "\x1b[0m"
 
-
 class Logger
 {
-private:
-	static inline std::fstream m_File;
+public:
+	Logger();
+	~Logger();
 
+private:
 	enum class LogLevel
 	{
-		Debug,
-		Info,
-		Warning,
-		Error,
-		FatalError,
+		DEBUG,
+		INFO,
+		WARNING,
+		ERROR,
+		FATALERROR,
 	};
 
 	struct LogEntry
@@ -36,38 +37,23 @@ private:
 		std::chrono::system_clock::time_point TimeOffset;
 	};
 
-	static void Start();
-	static void PrintEntry(LogEntry entry);
-
-	static inline bool isRunning = true;
-	static inline std::condition_variable sleep;
-
-	static inline TsQueue<LogEntry> EntryList;
-	static inline std::thread thread = std::thread(&Logger::Start);
-
 public:
-	Logger();
-	~Logger();
-	
 	static void Stop();
-
-	static void CreateDebugFile(std::string path, std::string name);
-	static void SetupLogEntry(LogLevel level, std::string log);
 
 	template<class... Types>
 	static void Debug(std::string string, Types... args)
 	{
 		std::string log = std::vformat(string, std::make_format_args(args...));
 
-		SetupLogEntry(LogLevel::Debug, log);
+		SetupLogEntry(LogLevel::DEBUG, log);
 	}
 
 	template<class... Types>
-	static void Log(std::string string, Types... args)
+	static void Info(std::string string, Types... args)
 	{
 		std::string log = std::vformat(string, std::make_format_args(args...));
 
-		SetupLogEntry(LogLevel::Info, log);
+		SetupLogEntry(LogLevel::INFO, log);
 	}
 
 	template<class... Types>
@@ -75,7 +61,7 @@ public:
 	{
 		std::string log = std::vformat(string, std::make_format_args(args...));
 
-		SetupLogEntry(LogLevel::Warning, log);
+		SetupLogEntry(LogLevel::WARNING, log);
 	}
 
 	template<class... Types>
@@ -83,14 +69,30 @@ public:
 	{
 		std::string log = std::vformat(string, std::make_format_args(args...));
 
-		SetupLogEntry(LogLevel::Error, log);
+		SetupLogEntry(LogLevel::ERROR, log);
 	}
 
 	template<class... Types>
 	static void FatalError(std::string string, Types... args)
 	{
 		std::string log = std::vformat(string, std::make_format_args(args...));
-		
-		SetupLogEntry(LogLevel::FatalError, log);
+
+		SetupLogEntry(LogLevel::FATALERROR, log);
 	}
+
+private:
+	static std::string CurrentDateTime();
+	static void CreateDebugFile(std::string path, std::string name);
+	static void SetupLogEntry(LogLevel level, std::string log);
+
+	static inline std::fstream mFile;
+
+	static void Start();
+	static void PrintEntry(LogEntry entry);
+
+	static inline bool IsRunning = true;
+	static inline std::condition_variable Sleep;
+
+	static inline std::thread Thread = std::thread(&Logger::Start);
+	static inline TsQueue<LogEntry> EntryList;
 };

@@ -1,13 +1,17 @@
+#include "resources/model.h"
+
 #include <fstream>
 #include <string>
 #include <sstream>
 
+#include "logger/logger.h"
 #include <glad/glad.h>
-
-#include "resources/model.h"
 
 Model::Model()
 {
+	mVBO = 0;
+	mVAO = 0;
+	mEBO = 0;
 }
 
 Model::Model(const std::string& filepath)
@@ -34,7 +38,10 @@ void Model::LoadOBJ(const std::string& filepath)
 
 	std::ifstream file(filepath);
 
-	// ASSERT(file.good());
+	if (file.fail())
+	{
+		Logger::Warning("Model could not be loaded. filepath : {}", filepath);
+	}
 
 	std::string currentLine;
 	std::string word;
@@ -72,8 +79,8 @@ void Model::LoadOBJ(const std::string& filepath)
 			{
 				count++;
 			}
-			std::stringstream line(currentLine);
-			line >> word >> word;
+			std::stringstream newLine(currentLine);
+			newLine >> word >> word;
 
 			IndexVertex indexVertex = { 0,0,0 };
 			sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex.posIndex, &indexVertex.texIndex, &indexVertex.normalIndex);
@@ -85,7 +92,7 @@ void Model::LoadOBJ(const std::string& filepath)
 			vertex.normal = normals[indexVertex.normalIndex - 1];
 			vertexBuffer.push_back(vertex);
 
-			line >> word;
+			newLine >> word;
 			IndexVertex indexVertex2 = { 0,0,0 };
 			sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex2.posIndex, &indexVertex2.texIndex, &indexVertex2.normalIndex);
 			indexBuffer.push_back(indexVertex2);
@@ -97,16 +104,16 @@ void Model::LoadOBJ(const std::string& filepath)
 
 			for (size_t i = 2; i < count; i++)
 			{
-				line >> word;
+				newLine >> word;
 				IndexVertex indexVertex_i = { 0,0,0 };
 				sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex_i.posIndex, &indexVertex_i.texIndex, &indexVertex_i.normalIndex);
 				indexBuffer.push_back(indexVertex_i);
 
-				Vertex vertex;
-				vertex.position = positions[indexVertex_i.posIndex - 1];
-				vertex.textureUV = textureUvs[indexVertex_i.texIndex - 1];
-				vertex.normal = normals[indexVertex_i.normalIndex - 1];
-				vertexBuffer.push_back(vertex);
+				Vertex newVertex;
+				newVertex.position = positions[indexVertex_i.posIndex - 1];
+				newVertex.textureUV = textureUvs[indexVertex_i.texIndex - 1];
+				newVertex.normal = normals[indexVertex_i.normalIndex - 1];
+				vertexBuffer.push_back(newVertex);
 
 				if (i + 1 == count)
 				{

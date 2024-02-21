@@ -3,7 +3,7 @@
 #include "application.h"
 #include "singleton.h"
 #include <memory_leak/memory_leak_detector.h>
-
+#include "Resources/resource_manager.h"
 
 int main()
 {
@@ -58,8 +58,8 @@ int main()
         Singleton::renderer->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-
     Singleton::Destroy();
+    ResourceManager::UnloadAll();
     Logger::Stop();
     return 0;
 }

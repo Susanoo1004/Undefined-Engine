@@ -4,7 +4,19 @@
 #include <mutex>
 #include <Windows.h>
 
-std::string currentDateTime() {
+#undef ERROR
+
+Logger::Logger()
+{
+    CreateDebugFile(std::string("../log/"), CurrentDateTime());
+}
+Logger::~Logger()
+{
+    mFile.close();
+}
+
+std::string Logger::CurrentDateTime()
+{
     std::time_t t = std::time(nullptr);
 
     std::tm now;
@@ -13,15 +25,6 @@ std::string currentDateTime() {
     char buffer[128];
     strftime(buffer, sizeof(buffer), "%Y-%m-%dT%H-%M-%S", &now);
     return buffer;
-}
-
-Logger::Logger()
-{
-    CreateDebugFile(std::string("../log/"), currentDateTime());
-}
-Logger::~Logger()
-{
-    m_File.close();
 }
 
 void Logger::CreateDebugFile(std::string path, std::string name)
@@ -33,10 +36,9 @@ void Logger::CreateDebugFile(std::string path, std::string name)
     {
         std::filesystem::create_directory(path);
 
-        std::cout << "Directory " << path << " created" << std::endl;
+        Logger::Info("Directory {} created", path);
     }
 
-    
     for ([[maybe_unused]]auto& p : std::filesystem::directory_iterator(path))
         ++fileCount;
 
@@ -49,11 +51,15 @@ void Logger::CreateDebugFile(std::string path, std::string name)
         }
     }
 
-    m_File.open(filename, std::fstream::out);
-    if (m_File.is_open())
-        std::cout << "File " << filename << " created" << std::endl;
+    mFile.open(filename, std::fstream::out);
+    if (mFile.is_open())
+    {
+        Logger::Info("File {} created", filename.string());
+    }
     else
-        std::cout << "File " << filename << " could not be created" << std::endl;
+    {
+        Logger::Warning("File {} could not be created", filename.string());
+    }
 }
 
 void Logger::SetupLogEntry(LogLevel level, std::string log)
@@ -62,18 +68,18 @@ void Logger::SetupLogEntry(LogLevel level, std::string log)
     entry.Level = level;
     entry.Log = log;
     EntryList.Push(entry);
-    sleep.notify_one();
+    Sleep.notify_one();
 }
 
 void Logger::Start()
 {
     std::mutex mutex;
-    (void)SetThreadDescription(thread.native_handle(), L"Logger Thread");
+    (void)SetThreadDescription(Thread.native_handle(), L"Logger Thread");
 
     std::unique_lock lock(mutex);
-    while (isRunning)
+    while (IsRunning)
     {
-        sleep.wait(lock, [] {return (!EntryList.Empty() || !isRunning); });
+        Sleep.wait(lock, [] {return (!EntryList.Empty() || !IsRunning); });
 
         while (!EntryList.Empty())
         {
@@ -91,29 +97,27 @@ void Logger::PrintEntry(LogEntry entry)
 
     switch (entry.Level)
     {
-    case LogLevel::Debug:
+    case LogLevel::DEBUG:
         color = ANSI_COLOR_GRAY;
         log = "[DEBUG] " + log;
         break;
 
-    case LogLevel::Info:
+    case LogLevel::INFO:
         color = ANSI_RESET;
         log = "[INFO] " + log;
         break;
 
-    case LogLevel::Warning:
-
+    case LogLevel::WARNING:
         color = ANSI_COLOR_YELLOW;
         log = "[WARNING] " + log;
         break;
 
-    case LogLevel::Error:
-
+    case LogLevel::ERROR:
         color = ANSI_COLOR_RED;
         log = "[ERROR] " + log;
         break;
 
-    case LogLevel::FatalError:
+    case LogLevel::FATALERROR:
         color = ANSI_COLOR_RED ANSI_STYLE_BOLD;
         log = "[FATAL ERROR] " + log;
         break;
@@ -121,19 +125,19 @@ void Logger::PrintEntry(LogEntry entry)
 
     std::cout << color << log << ANSI_RESET;
     
-    if (m_File.is_open())
+    if (mFile.is_open())
     {
-        m_File << log;
+        mFile << log;
     }
 }
 
 void Logger::Stop()
 {
-    isRunning = false;
-    sleep.notify_one();
+    IsRunning = false;
+    Sleep.notify_one();
 
-    if (thread.joinable())
+    if (Thread.joinable())
     {
-        thread.join();
+        Thread.join();
     }
 }
