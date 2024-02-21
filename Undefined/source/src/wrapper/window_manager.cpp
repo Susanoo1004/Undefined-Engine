@@ -2,6 +2,16 @@
 
 #include <iostream>
 
+WindowManager::WindowManager()
+{
+    mWindow = NULL;
+}
+
+WindowManager::~WindowManager()
+{
+    delete mWindow;
+}
+
 bool WindowManager::SetupGlfw()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -46,13 +56,18 @@ GLFWwindow* WindowManager::GetWindowVar()
     return mWindow;
 }
 
+bool WindowManager::IsWindowOpen()
+{
+    return !glfwWindowShouldClose(mWindow) && glfwGetKey(mWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS;
+}
+
 void WindowManager::SwapBuffers()
 {
     glfwSwapBuffers(mWindow);
     glfwPollEvents();
 }
 
-bool WindowManager::IsWindowOpen()
+void WindowManager::SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback)
 {
-    return !glfwWindowShouldClose(mWindow) && glfwGetKey(mWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS;
+    glfwSetCursorPosCallback(window, callback);
 }

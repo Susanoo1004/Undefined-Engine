@@ -2,9 +2,12 @@
 
 #include "application.h"
 #include "singleton.h"
+#include <memory_leak/memory_leak_detector.h>
+
 
 int main()
 {
+    MemoryLeakDetector memory;
     Application app;
 
     Singleton::Init();
@@ -23,10 +26,10 @@ int main()
 
     Singleton::windowManager->SetupWindow();
 
-    Singleton::renderer->WrapperInit();
+    Singleton::renderer->Init();
 
-    // glfwSetCursorPosCallback(window, MouseCallback);
-
+    Singleton::windowManager->SetCursorPosCallback(Singleton::windowManager->GetWindowVar(), Camera::MouseCallback);
+  
     // app.SetupImGui(window);
 
     // const unsigned int width = app.ScreenWidth;
@@ -37,6 +40,7 @@ int main()
     app.Init();
 
     // ////  Let the window open until we press escape or the window should close
+
     while (Singleton::windowManager->IsWindowOpen())
     {
 
@@ -54,7 +58,8 @@ int main()
         Singleton::renderer->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    Singleton::Destroy();
 
+    Singleton::Destroy();
+    Logger::Stop();
     return 0;
 }

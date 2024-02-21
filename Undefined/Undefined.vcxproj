@@ -108,7 +108,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -143,12 +143,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="external\src\glad\glad.c" />
+    <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\logger\logger.cpp" />
+    <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="source\src\core\main.cpp" />
     <ClCompile Include="source\src\engine_debug\renderer_debug.cpp" />
-    <ClCompile Include="source\src\manager\resource_manager.cpp" />
-    <ClCompile Include="source\src\renderer\camera.cpp" />
+    <ClCompile Include="source\src\resources\resource_manager.cpp" />
+    <ClCompile Include="source\src\camera\camera.cpp" />
     <ClCompile Include="source\src\resources\model.cpp" />
     <ClCompile Include="source\src\resources\resource.cpp" />
     <ClCompile Include="source\src\resources\texture.cpp" />
@@ -163,6 +166,7 @@
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external\include\memory_leak\memory_leak_detector.h" />
     <ClInclude Include="external\include\stb_image\stb_image.h" />
     <ClInclude Include="external\include\toolbox\calc.h" />
     <ClInclude Include="external\include\toolbox\Matrix.h" />
@@ -174,6 +178,9 @@
     <ClInclude Include="external\include\toolbox\Vector2.h" />
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
+    <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\logger\logger.h" />
+    <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
@@ -187,13 +194,12 @@
     <ClInclude Include="external\include\KHR\khrplatform.h" />
     <ClInclude Include="source\include\Debug\RHI_debug.h" />
     <ClInclude Include="source\include\engine_debug\renderer_debug.h" />
-    <ClInclude Include="source\include\manager\resource_manager.h" />
-    <ClInclude Include="source\include\renderer\camera.h" />
+    <ClInclude Include="source\include\resources\resource_manager.h" />
+    <ClInclude Include="source\include\camera\camera.h" />
     <ClInclude Include="source\include\resources\model.h" />
     <ClInclude Include="source\include\resources\resource.h" />
     <ClInclude Include="source\include\resources\texture.h" />
     <ClInclude Include="source\include\singleton.h" />
-    <ClInclude Include="source\include\TOSORT\vertex.h" />
     <ClInclude Include="source\include\wrapper\window_manager.h" />
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />

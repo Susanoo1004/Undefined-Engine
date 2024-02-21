@@ -5,7 +5,10 @@
 class WindowManager
 {
 public:
-	
+    
+    WindowManager();
+    ~WindowManager();
+
     bool SetupGlfw();
 
     void CreateWindow(int width, int height);
@@ -19,6 +22,9 @@ public:
     bool IsWindowOpen();
 
     void SwapBuffers();
+
+    void SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
+
 
 private:
     GLFWwindow* mWindow;

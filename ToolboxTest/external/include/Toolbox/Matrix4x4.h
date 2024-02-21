@@ -65,20 +65,12 @@ public:
     Matrix4x4& LoadIdentity();
     /// @brief Switches the matrix by its diagonal elements.
     Matrix4x4& Transpose();
-    /// @brief Adds the given matrix to the right of this one.
-    Matrix Augmented(const Matrix4x4& other);
-    Matrix4x4& GaussJordan();
     Matrix4x4& Inverse();
 
     /// @brief Switches the given matrix by its diagonal elements.
     [[nodiscard]]
     static Matrix4x4 Transpose(const Matrix4x4& matrix);
     /// @brief Adds the 'm2' to the right of 'm1'.
-    [[nodiscard]]
-    static Matrix Augmented(const Matrix4x4& m1, const Matrix4x4& m2);
-    /// @brief Computes the Gauss-Jordan pivot.
-    [[nodiscard]]
-    static Matrix4x4 GaussJordan(const Matrix4x4& matrix);
     /// @brief Computes the inverse of the given matrix using the Gauss-Jordan pivot.
     [[nodiscard]]
     static Matrix4x4 Inverse(const Matrix4x4& matrix);
@@ -141,7 +133,7 @@ public:
     [[nodiscard]]
     Quaternion ToQuaternion() const;
 
-    static void ViewMatrix(const Vector3& eye, const Vector3& center, const Vector3& up, Matrix4x4& result);
+    static void ViewMatrix(const Vector3& Eye, const Vector3& center, const Vector3& Up, Matrix4x4& result);
     static void ProjectionMatrix(const float fovY, const float aspectRatio, const float zNear, const float zFar, Matrix4x4& result);
 
     [[nodiscard]]

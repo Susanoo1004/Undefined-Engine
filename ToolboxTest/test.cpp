@@ -1,5 +1,6 @@
 #include "pch.h"
 
+#include <Toolbox/calc.h>
 #include <Toolbox/Matrix4x4.h>
 #include <Toolbox/Matrix3x3.h>
 #include <Toolbox/Matrix2x2.h>
@@ -11,6 +12,130 @@
 
 
 #define PI 3.141592653589793f
+
+#pragma region calc
+
+TEST(Calc, const) {
+	EXPECT_FLOAT_EQ(calc::Gravity, 9.80665f);
+	EXPECT_NEAR(calc::Zero, 0, 0.000001f);
+}
+
+TEST(Calc, Sign) {
+	EXPECT_EQ(calc::Sign(45), 1);
+	EXPECT_EQ(calc::Sign(-45), -1);
+	EXPECT_EQ(calc::Sign(0), 0);
+}
+
+TEST(Calc, Approach) {
+	float testFloat = 5.3f;
+	calc::Approach(testFloat, 5, 0.3f);
+	EXPECT_FLOAT_EQ(testFloat, 5);
+
+	testFloat = 5.3f;
+	calc::Approach(testFloat, 5, 0.1f);
+	EXPECT_FLOAT_EQ(testFloat, 5.2f);
+	calc::Approach(testFloat, 5, 0.1f);
+	EXPECT_FLOAT_EQ(testFloat, 5.1f);
+	calc::Approach(testFloat, 5, 0.1f);
+	EXPECT_FLOAT_EQ(testFloat, 5.f);
+	calc::Approach(testFloat, 5, 0.1f);
+	EXPECT_FLOAT_EQ(testFloat, 5.f);
+
+	testFloat = 4.3f;
+	calc::Approach(testFloat, 5, 0.5f);
+	EXPECT_FLOAT_EQ(testFloat, 4.8f);
+	calc::Approach(testFloat, 5, 0.5f);
+	EXPECT_FLOAT_EQ(testFloat, 5.f);
+}
+
+TEST(Calc, Lerp2) {
+	Vector2 x = Vector2(1, 0);
+	Vector2 y = Vector2(0, 1);
+
+	Vector2 lerped = calc::Lerp(x, y, 0.f);
+	EXPECT_FLOAT_EQ(lerped.x, 1);
+	EXPECT_FLOAT_EQ(lerped.y, 0);
+
+	lerped = calc::Lerp(x, y, 1.f);
+	EXPECT_FLOAT_EQ(lerped.x, 0);
+	EXPECT_FLOAT_EQ(lerped.y, 1);
+
+	lerped = calc::Lerp(x, y, 0.5f);
+	EXPECT_FLOAT_EQ(lerped.x, 0.5f);
+	EXPECT_FLOAT_EQ(lerped.y, 0.5f);
+}
+
+TEST(Calc, Lerp3) {
+	Vector3 x = Vector3(1, 0, 0);
+	Vector3 y = Vector3(0, 1, 0);
+	Vector3 z = Vector3(0, 0, 1);
+
+	Vector3 lerped = calc::Lerp(x, y, 0.f);
+	EXPECT_FLOAT_EQ(lerped.x, 1);
+	EXPECT_FLOAT_EQ(lerped.y, 0);
+	EXPECT_FLOAT_EQ(lerped.z, 0);
+
+	lerped = calc::Lerp(x, y, 1.f);
+	EXPECT_FLOAT_EQ(lerped.x, 0.f);
+	EXPECT_FLOAT_EQ(lerped.y, 1.f);
+	EXPECT_FLOAT_EQ(lerped.z, 0.f);
+
+	lerped = calc::Lerp(x, y, 0.5f);
+	EXPECT_FLOAT_EQ(lerped.x, 0.5f);
+	EXPECT_FLOAT_EQ(lerped.y, 0.5f);
+	EXPECT_FLOAT_EQ(lerped.z, 0.f);
+
+	lerped = calc::Lerp(x, z, 0.5f);
+	EXPECT_FLOAT_EQ(lerped.x, 0.5f);
+	EXPECT_FLOAT_EQ(lerped.y, 0.f);
+	EXPECT_FLOAT_EQ(lerped.z, 0.5f);
+}
+
+TEST(Calc, IsZero) {
+	EXPECT_TRUE(calc::IsZero(0));
+	EXPECT_TRUE(calc::IsZero(calc::Zero));
+	EXPECT_TRUE(calc::IsZero(0.000001f));
+	EXPECT_TRUE(calc::IsZero(0.00000001f));
+	EXPECT_TRUE(calc::IsZero(-0.000001f));
+	EXPECT_FALSE(calc::IsZero(5531));
+}
+
+TEST(Calc, Nullify) {
+	float testFloat = 15;
+	EXPECT_FALSE(calc::Nullify(testFloat));
+	EXPECT_FLOAT_EQ(testFloat, 15);
+
+	testFloat = 0.0000000001f;
+	EXPECT_TRUE(calc::Nullify(testFloat));
+	EXPECT_FLOAT_EQ(testFloat, 0);
+
+}
+
+TEST(Calc, Round4) {
+	Vector4 testVec = Vector4(1.1f, 2.3f, 3.7, 4.8f);
+	Vector4 testVec2 = calc::Round(testVec);
+	EXPECT_FLOAT_EQ(testVec2.x, 1);
+	EXPECT_FLOAT_EQ(testVec2.y, 2);
+	EXPECT_FLOAT_EQ(testVec2.z, 4);
+	EXPECT_FLOAT_EQ(testVec2.w, 5);
+}
+
+TEST(Calc, Round3) {
+	Vector3 testVec = Vector3(1.1f, 2.3f, 3.7);
+	Vector3 testVec2 = calc::Round(testVec);
+	EXPECT_FLOAT_EQ(testVec2.x, 1);
+	EXPECT_FLOAT_EQ(testVec2.y, 2);
+	EXPECT_FLOAT_EQ(testVec2.z, 4);
+}
+
+TEST(Calc, Round2) {
+	Vector2 testVec = Vector2(1.1f, 2.6f);
+	Vector2 testVec2 = calc::Round(testVec);
+	EXPECT_FLOAT_EQ(testVec2.x, 1);
+	EXPECT_FLOAT_EQ(testVec2.y, 3);
+}
+
+#pragma endregion
 
 #pragma region Vector2
 
@@ -63,9 +188,9 @@ TEST(Vector2Function, Normalized) {
 	EXPECT_FLOAT_EQ(Vector2(0, 0).Normalized().y, 0);
 }
 
-TEST(Vector2Function, normal) {
-	EXPECT_FLOAT_EQ(Vector2(1, 0).normal().x, 0);
-	EXPECT_FLOAT_EQ(Vector2(1, 0).normal().y, -1);
+TEST(Vector2Function, Normal) {
+	EXPECT_FLOAT_EQ(Vector2(1, 0).Normal().x, 0);
+	EXPECT_FLOAT_EQ(Vector2(1, 0).Normal().y, -1);
 }
 
 TEST(Vector2Function, DotProduct) {
@@ -229,7 +354,6 @@ TEST(Vector3, Constructor) {
 	EXPECT_FLOAT_EQ(Vector3(Vector3(0, 0, 0), Vector3(1, 2, 3)).z, 3);
 }
 
-
 TEST(Vector3Function, Norm) {
 	EXPECT_FLOAT_EQ(Vector3(3, 4, 0).Norm(), 5);
 	EXPECT_FLOAT_EQ(Vector3(0, 0, 0).Norm(), 0);
@@ -239,7 +363,6 @@ TEST(Vector3Function, Norm) {
 	EXPECT_FLOAT_EQ(Vector3(0, 0, 0).SquaredNorm(), 0);
 	EXPECT_FLOAT_EQ(Vector3(-1, -1, -1).SquaredNorm(), 3);
 }
-
 
 TEST(Vector3Function, Normalized) {
 	EXPECT_FLOAT_EQ(Vector3(0, 5, 0).Normalized().x, 0);
@@ -319,16 +442,13 @@ TEST(Vector3Function, Angle) {
 }
 
 TEST(Vector3Function, Rotate) {
-	EXPECT_TRUE(false);
-	/*
 	EXPECT_FLOAT_EQ(Vector3(1, 0, 0).Rotate(0, Vector3(0, 0, 1)).x, 1);
 	EXPECT_FLOAT_EQ(Vector3(1, 0, 0).Rotate(0, Vector3(0, 0, 1)).y, 0);
 	EXPECT_FLOAT_EQ(Vector3(1, 0, 0).Rotate(0, Vector3(0, 0, 1)).z, 0);
 
-	EXPECT_FLOAT_EQ(Vector3(1, 0, 0).Rotate(PI / 2.f, Vector3(0, 0, 1)).x, 0);
-	EXPECT_FLOAT_EQ(Vector3(1, 0, 0).Rotate(PI / 2.f, Vector3(0, 0, 1)).y, 1);
-	EXPECT_FLOAT_EQ(Vector3(1, 0, 0).Rotate(PI / 2.f, Vector3(0, 0, 1)).z, 0);
-	*/
+	EXPECT_NEAR(Vector3(1, 0, 0).Rotate(PI / 2.f, Vector3(0, 0, 1)).x, 0, 0.0000001f);
+	EXPECT_NEAR(Vector3(1, 0, 0).Rotate(PI / 2.f, Vector3(0, 0, 1)).y, 1, 0.0000001f);
+	EXPECT_NEAR(Vector3(1, 0, 0).Rotate(PI / 2.f, Vector3(0, 0, 1)).z, 0, 0.0000001f);
 }
 
 TEST(Vector3, operator) {
@@ -364,7 +484,6 @@ TEST(Vector3, operator) {
 	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / 2.f).y, 1.f);
 	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / 2.f).z, 3.f / 2.f);
 }
-
 
 TEST(Vector3, operatorEqual) {
 	Vector3 test = Vector3(1, 2, 3);
@@ -414,7 +533,6 @@ TEST(Vector3, operatorEqual) {
 	EXPECT_FLOAT_EQ((test /= 2.f).z, 3.f / 2.f);
 }
 
-
 TEST(Vector3, operatorComparison) {
 	EXPECT_TRUE(Vector3(1, 2, 3) == Vector3(1, 2, 3));
 	EXPECT_TRUE(!(Vector3(1, 2, 3) == Vector3(1, 5, 3)));
@@ -436,7 +554,6 @@ TEST(Vector3, operatorComparison) {
 	EXPECT_TRUE(Vector3(2, 2, 3) >= Vector3(2, 2, 3));
 	EXPECT_TRUE(!(Vector3(1, 1, 1) >= Vector3(1, 2, 3)));
 }
-
 
 #pragma endregion
 
@@ -742,12 +859,11 @@ TEST(QuaternionFunction, Inverse) {
 	EXPECT_FLOAT_EQ(Quaternion(0, 1, 0, 1).Inverse().imaginary.y, -0.5f);
 	EXPECT_FLOAT_EQ(Quaternion(0, 1, 0, 1).Inverse().imaginary.z, 0.f);
 	EXPECT_FLOAT_EQ(Quaternion(0, 1, 0, 1).Inverse().real, 0.5f);
-	/*
+	
 	EXPECT_FLOAT_EQ(Quaternion(0, 0, 0, 0).Inverse().imaginary.x, 0.f);
 	EXPECT_FLOAT_EQ(Quaternion(0, 0, 0, 0).Inverse().imaginary.y, 0.f);
 	EXPECT_FLOAT_EQ(Quaternion(0, 0, 0, 0).Inverse().imaginary.z, 0.f);
 	EXPECT_FLOAT_EQ(Quaternion(0, 0, 0, 0).Inverse().real, 0.f);
-	*/
 }
 
 TEST(QuaternionFunction, GetRQ) {
@@ -770,7 +886,7 @@ TEST(QuaternionFunction, GetRQ) {
 	EXPECT_FLOAT_EQ(Quaternion::GetRQ(axis, rot).imaginary.x, 0.f);
 	EXPECT_FLOAT_EQ(Quaternion::GetRQ(axis, rot).imaginary.y, 1.f);
 	EXPECT_FLOAT_EQ(Quaternion::GetRQ(axis, rot).imaginary.z, 0.f);
-	EXPECT_FLOAT_EQ(Quaternion::GetRQ(axis, rot).real, 0.f);
+	EXPECT_NEAR(Quaternion::GetRQ(axis, rot).real, 0.f, 0.0000001f);
 
 	axis = Vector3(0, 1, 0);
 	rot = -PI / 2.f;
@@ -787,30 +903,89 @@ TEST(QuaternionFunction, GetRQ) {
 	EXPECT_FLOAT_EQ(Quaternion::GetRQ(axis, rot).real, 0.70710677f);
 }
 
-TEST(QuaternionFunction, ToMatrix) {
-
-}
-
 TEST(QuaternionFunction, Rotate) {
+	Quaternion testQuat = Quaternion(1, 0, 0, 0);
+	Vector3 axis = Vector3(0, 0, 1);
+	float angle = PI / 2.f;
 
+	Vector3 testVec = testQuat.Rotate(axis, angle);
+	EXPECT_FLOAT_EQ(testVec.x, 0);
+	EXPECT_FLOAT_EQ(testVec.y, 1);
+	EXPECT_FLOAT_EQ(testVec.z, 0);
+	testVec = Quaternion::Rotate(testQuat, axis, angle);
+	EXPECT_FLOAT_EQ(testVec.x, 0);
+	EXPECT_FLOAT_EQ(testVec.y, 1);
+	EXPECT_FLOAT_EQ(testVec.z, 0);
+	testVec = testQuat.Rotate(Quaternion::GetRQ(axis, angle));
+	EXPECT_FLOAT_EQ(testVec.x, 0);
+	EXPECT_FLOAT_EQ(testVec.y, 1);
+	EXPECT_FLOAT_EQ(testVec.z, 0);
+	testVec = Quaternion::Rotate(testQuat, Quaternion::GetRQ(axis, angle));
+	EXPECT_FLOAT_EQ(testVec.x, 0);
+	EXPECT_FLOAT_EQ(testVec.y, 1);
+	EXPECT_FLOAT_EQ(testVec.z, 0);
 }
 
 TEST(QuaternionFunction, ToRotationMatrix) {
+	Matrix4x4 testMat = Quaternion(1, 0, 0, 1).Normalized().ToRotationMatrix();
+	Matrix4x4 resultMat = Matrix4x4(
+		1.f, 0.f, 0.f, 0.f,
+		0.f, 0.f, -1.f, 0.f,
+		0.f, 1.f, 0.f, 0.f,
+		0.f, 0.f, 0.f, 1.f
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_NEAR(testMat[i][j], resultMat[i][j], 0.000001f);
 
+	testMat = Quaternion(0, 1, 0, 1).Normalized().ToRotationMatrix();
+	resultMat = Matrix4x4(
+		0.f, 0.f, 1.f, 0.f,
+		0.f, 1.f, 0.f, 0.f,
+		-1.f, 0.f, 0.f, 0.f,
+		0.f, 0.f, 0.f, 1.f
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_NEAR(testMat[i][j], resultMat[i][j], 0.000001f);
+
+	testMat = Quaternion(0, 0, 1, 1).Normalized().ToRotationMatrix();
+	resultMat = Matrix4x4(
+		0.f, -1.f, 0.f, 0.f,
+		1.f, 0.f, 0.f, 0.f,
+		0.f, 0.f, 1.f, 0.f,
+		0.f, 0.f, 0.f, 1.f
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_NEAR(testMat[i][j], resultMat[i][j], 0.000001f);
 }
 
 TEST(QuaternionFunction, SLerp) {
+	Quaternion testQuat1 = Quaternion(1, 0, 0, 1).Normalized();
+	Quaternion testQuat2 = Quaternion(0, 0, 1, 1).Normalized();
 
+	Quaternion testQuat3 = Quaternion::SLerp(testQuat1, testQuat2, 0.f);
+	EXPECT_FLOAT_EQ(testQuat3.imaginary.x, testQuat1.imaginary.x);
+	EXPECT_FLOAT_EQ(testQuat3.imaginary.y, testQuat1.imaginary.y);
+	EXPECT_FLOAT_EQ(testQuat3.imaginary.z, testQuat1.imaginary.z);
+	EXPECT_FLOAT_EQ(testQuat3.real, testQuat1.real);
+
+	testQuat3 = Quaternion::SLerp(testQuat1, testQuat2, 1.f);
+	EXPECT_FLOAT_EQ(testQuat3.imaginary.x, testQuat2.imaginary.x);
+	EXPECT_FLOAT_EQ(testQuat3.imaginary.y, testQuat2.imaginary.y);
+	EXPECT_FLOAT_EQ(testQuat3.imaginary.z, testQuat2.imaginary.z);
+	EXPECT_FLOAT_EQ(testQuat3.real, testQuat2.real);
+
+	Quaternion resultQuat = Quaternion(0.40820718726260213f, 0, 0.40820718726260213f, 0.8164143745252043f);
+	testQuat3 = Quaternion::SLerp(testQuat1, testQuat2, 0.5f).Normalized();
+	EXPECT_NEAR(testQuat3.imaginary.x, resultQuat.imaginary.x, 0.0001f);
+	EXPECT_NEAR(testQuat3.imaginary.y, resultQuat.imaginary.y, 0.0001f);
+	EXPECT_NEAR(testQuat3.imaginary.z, resultQuat.imaginary.z, 0.0001f);
+	EXPECT_NEAR(testQuat3.real, resultQuat.real, 0.0001f);
 }
 
 TEST(Quaternion, operator) {
-	/*
-	EXPECT_EQ(Quaternion(1, 2, 3, 4)[0], 1);
-	EXPECT_EQ(Quaternion(1, 2, 3, 4)[1], 2);
-	EXPECT_EQ(Quaternion(1, 2, 3, 4)[2], 3);
-	EXPECT_EQ(Quaternion(1, 2, 3, 4)[3], 4);
-	*/
-
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) + Quaternion(1, 2, 3, 4)).imaginary.x, 2);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) + Quaternion(1, 2, 3, 4)).imaginary.y, 4);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) + Quaternion(1, 2, 3, 4)).imaginary.z, 6);
@@ -825,85 +1000,70 @@ TEST(Quaternion, operator) {
 	EXPECT_FLOAT_EQ(-Quaternion(1, 2, 3, 4).imaginary.y, -2);
 	EXPECT_FLOAT_EQ(-Quaternion(1, 2, 3, 4).imaginary.z, -3);
 	EXPECT_FLOAT_EQ(-Quaternion(1, 2, 3, 4).real, -4);
-
-	// TODO: actual Math instead of copy-paste
-	/*
-	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * Quaternion(1, 2, 3, 4)).imaginary.x, 1);
-	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * Quaternion(1, 2, 3, 4)).imaginary.y, 4);
-	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * Quaternion(1, 2, 3, 4)).imaginary.z, 9);
-	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * Quaternion(1, 2, 3, 4)).real, 16);
+	
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * Quaternion(1, 2, 3, 4)).imaginary.x, 8);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * Quaternion(1, 2, 3, 4)).imaginary.y, 16);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * Quaternion(1, 2, 3, 4)).imaginary.z, 24);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * Quaternion(1, 2, 3, 4)).real, 2);
 
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * 4).imaginary.x, 4);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * 4).imaginary.y, 8);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * 4).imaginary.z, 12);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) * 4).real, 16);
 
-	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / Quaternion(1, 2, 3, 4)).imaginary.x, 1);
-	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / Quaternion(1, 2, 3, 4)).imaginary.y, 1);
-	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / Quaternion(1, 2, 3, 4)).imaginary.z, 1);
+	EXPECT_NEAR((Quaternion(1, 2, 3, 4) / Quaternion(1, 2, 3, 4)).imaginary.x, 0, 0.000001f);
+	EXPECT_NEAR((Quaternion(1, 2, 3, 4) / Quaternion(1, 2, 3, 4)).imaginary.y, 0, 0.000001f);
+	EXPECT_NEAR((Quaternion(1, 2, 3, 4) / Quaternion(1, 2, 3, 4)).imaginary.z, 0, 0.000001f);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / Quaternion(1, 2, 3, 4)).real, 1);
 
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 2.f).imaginary.x, 1.f / 2.f);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 2.f).imaginary.y, 1.f);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 2.f).imaginary.z, 3.f / 2.f);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 2.f).real, 2.f);
-	*/
 }
 
 TEST(Quaternion, operatorEqual) {
 	Quaternion test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test += Quaternion(1, 2, 3, 4)).imaginary.x, 2);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test += Quaternion(1, 2, 3, 4)).imaginary.y, 4);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test += Quaternion(1, 2, 3, 4)).imaginary.z, 6);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test += Quaternion(1, 2, 3, 4)).real, 8);
+	test += Quaternion(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ(test.imaginary.x, 2);
+	EXPECT_FLOAT_EQ(test.imaginary.y, 4);
+	EXPECT_FLOAT_EQ(test.imaginary.z, 6);
+	EXPECT_FLOAT_EQ(test.real, 8);
 
 	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test -= Quaternion(1, 2, 3, 4)).imaginary.x, 0);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test -= Quaternion(1, 2, 3, 4)).imaginary.y, 0);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test -= Quaternion(1, 2, 3, 4)).imaginary.z, 0);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test -= Quaternion(1, 2, 3, 4)).real, 0);
+	test -= Quaternion(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ(test.imaginary.x, 0);
+	EXPECT_FLOAT_EQ(test.imaginary.y, 0);
+	EXPECT_FLOAT_EQ(test.imaginary.z, 0);
+	EXPECT_FLOAT_EQ(test.real, 0);
 
 	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test *= Quaternion(1, 2, 3, 4)).imaginary.x, 1);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test *= Quaternion(1, 2, 3, 4)).imaginary.y, 4);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test *= Quaternion(1, 2, 3, 4)).imaginary.z, 9);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test *= Quaternion(1, 2, 3, 4)).real, 16);
+	test *= Quaternion(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ(test.imaginary.x, 8);
+	EXPECT_FLOAT_EQ(test.imaginary.y, 16);
+	EXPECT_FLOAT_EQ(test.imaginary.z, 24);
+	EXPECT_FLOAT_EQ(test.real, 2);
 
 	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test *= 4).imaginary.x, 4);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test *= 4).imaginary.y, 8);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test *= 4).imaginary.z, 12);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test *= 4).real, 16);
+	test *= 4;
+	EXPECT_FLOAT_EQ(test.imaginary.x, 4);
+	EXPECT_FLOAT_EQ(test.imaginary.y, 8);
+	EXPECT_FLOAT_EQ(test.imaginary.z, 12);
+	EXPECT_FLOAT_EQ(test.real, 16);
 
 	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test /= Quaternion(1, 2, 3, 4)).imaginary.x, 1);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test /= Quaternion(1, 2, 3, 4)).imaginary.y, 1);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test /= Quaternion(1, 2, 3, 4)).imaginary.z, 1);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test /= Quaternion(1, 2, 3, 4)).real, 1);
+	test /= Quaternion(1, 2, 3, 4);
+	EXPECT_NEAR(test.imaginary.x, 0, 0.0000001f);
+	EXPECT_NEAR(test.imaginary.y, 0, 0.0000001f);
+	EXPECT_NEAR(test.imaginary.z, 0, 0.0000001f);
+	EXPECT_FLOAT_EQ(test.real, 1);
 
 	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test /= 2.f).imaginary.x, 1.f / 2.f);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test /= 2.f).imaginary.y, 1.f);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test /= 2.f).imaginary.z, 3.f / 2.f);
-	test = Quaternion(1, 2, 3, 4);
-	EXPECT_FLOAT_EQ((test /= 2.f).real, 2.f);
+	test /= 2.f;
+	EXPECT_FLOAT_EQ(test.imaginary.x, 1.f / 2.f);
+	EXPECT_FLOAT_EQ(test.imaginary.y, 1.f);
+	EXPECT_FLOAT_EQ(test.imaginary.z, 3.f / 2.f);
+	EXPECT_FLOAT_EQ(test.real, 2.f);
 }
 
 #pragma endregion
@@ -1111,6 +1271,197 @@ TEST(Matrix2x2Function, SubMatrix) {
 	for (size_t i = 0; i < 2; i++)
 		for (size_t j = 0; j < 2; j++)
 			EXPECT_EQ(subMat[i][j], testMat[i][j]);
+}
+
+TEST(Matrix2x2Function, Determinant) {
+
+	Matrix2x2 testMat = Matrix2x2::Identity();
+	EXPECT_FLOAT_EQ(testMat.Determinant(), 1);
+
+	testMat = Matrix2x2(
+		1.f, 2.f,
+		3.f, 4.f
+	);
+	EXPECT_FLOAT_EQ(testMat.Determinant(), -2);
+
+	testMat = Matrix2x2(
+		10.f, 32.f,
+		34.f, 4.f
+	);
+	EXPECT_FLOAT_EQ(testMat.Determinant(), -1048);
+}
+
+TEST(Matrix2x2Function, LoadIdentity) {
+
+	Matrix2x2 testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	Matrix2x2 identityMat = Matrix2x2::Identity();
+	testMat.LoadIdentity();
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testMat[i][j], identityMat[i][j]);
+}
+
+TEST(Matrix2x2Function, Transpose) {
+
+	Matrix2x2 testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+
+	testMat.Transpose();
+	Matrix2x2 resultMat = Matrix2x2(
+		1, 3,
+		2, 4
+	);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testMat[i][j], resultMat[i][j]);
+
+	testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	Matrix2x2 testMat2 = Matrix2x2::Transpose(testMat);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_EQ(testMat2[i][j], resultMat[i][j]);
+}
+
+TEST(Matrix2x2Function, Inverse) {
+	Matrix2x2 testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	testMat.Inverse();
+	Matrix2x2 resultMat = Matrix2x2(
+		-2.f, 1.f,
+		3.f / 2.f, -1.f / 2.f
+	);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_NEAR(testMat[i][j], resultMat[i][j], 0.00001f);
+
+	testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	Matrix2x2 testMat2 = Matrix2x2::Inverse(testMat);
+
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_NEAR(testMat2[i][j], resultMat[i][j], 0.000001f);
+}
+
+
+
+
+TEST(Matrix2x2, operator) {
+	Matrix2x2 testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	Matrix2x2 resultMat = Matrix2x2(
+		-1, -2,
+		-3, -4
+	);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(-testMat[i][j], resultMat[i][j]);
+
+	Matrix2x2 testMat2 = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	resultMat = Matrix2x2(
+		2, 4,
+		6, 8
+	);
+	Matrix2x2 testMat3 = testMat + testMat2;
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	resultMat = Matrix2x2();
+	testMat3 = testMat - testMat2;
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	testMat3 = testMat * 2.f;
+	resultMat = Matrix2x2(
+		2, 4,
+		6, 8
+	);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+
+	testMat3 = testMat * testMat;
+	resultMat = Matrix2x2(
+		7, 10,
+		15, 22
+	);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(testMat3[i][j], resultMat[i][j]);
+}
+
+TEST(Matrix2x2, operatorEqual) {
+	Matrix2x2 testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	Matrix2x2 testMat2 = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	Matrix2x2 resultMat = Matrix2x2(
+		2, 4,
+		6, 8
+	);
+	testMat += testMat2;
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+
+	testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	resultMat = Matrix2x2();
+	testMat -= testMat2;
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+
+	testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	resultMat = Matrix2x2(
+		2, 4,
+		6, 8
+	);
+	testMat *= 2.f;
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
+
+	testMat = Matrix2x2(
+		1, 2,
+		3, 4
+	);
+	testMat *= testMat;
+	resultMat = Matrix2x2(
+		7, 10,
+		15, 22
+	);
+	for (size_t i = 0; i < 2; i++)
+		for (size_t j = 0; j < 2; j++)
+			EXPECT_FLOAT_EQ(testMat[i][j], resultMat[i][j]);
 }
 
 #pragma endregion
@@ -1383,6 +1734,34 @@ TEST(Matrix3x3Function, Transpose) {
 	for (size_t i = 0; i < 3; i++)
 		for (size_t j = 0; j < 3; j++)
 			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
+}
+
+TEST(Matrix3x3Function, Inverse) {
+	Matrix3x3 testMat = Matrix3x3(
+		2, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	testMat.Inverse();
+	Matrix3x3 resultMat = Matrix3x3(
+		1.f, -2.f, 1.f,
+		-2.f, 1.f, 0.f,
+		1.f, 2.f / 3.f, -2.f/3.f
+	);
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_NEAR(testMat[i][j], resultMat[i][j], 0.000001f);
+
+	testMat = Matrix3x3(
+		2, 2, 3,
+		4, 5, 6,
+		7, 8, 9
+	);
+	Matrix3x3 testMat2 = Matrix3x3::Inverse(testMat);
+	
+	for (size_t i = 0; i < 3; i++)
+		for (size_t j = 0; j < 3; j++)
+			EXPECT_NEAR(testMat2[i][j], resultMat[i][j], 0.000001f);
 }
 
 TEST(Matrix3x3, operator) {
@@ -1694,24 +2073,35 @@ TEST(Matrix4x4, transpose) {
 			EXPECT_EQ(testMatTranspose[i][j], testMat[j][i]);
 }
 
-TEST(Matrix4x4, augment) {
-
-
-
-
-}
-
-TEST(Matrix4x4, gaussJordan) {
-
-
-
-
-}
-
 TEST(Matrix4x4, inverse) {
+	Matrix4x4 testMat = Matrix4x4(
+		1, 1, 1, 2,
+		1, 1, 2, 1,
+		1, 2, 1, 1,
+		2, 1, 1, 1
+	);
+	testMat.Inverse();
+	Matrix4x4 resultMat = Matrix4x4(
+		-1.f / 5.f, -1.f / 5.f, -1.f / 5.f, 4.f / 5.f,
+		-1.f / 5.f, -1.f / 5.f, 4.f / 5.f, -1.f / 5.f,
+		-1.f / 5.f, 4.f / 5.f, -1.f / 5.f, -1.f / 5.f,
+		4.f / 5.f, -1.f / 5.f, -1.f / 5.f, -1.f / 5.f
+	);
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_NEAR(testMat[i][j], resultMat[i][j], 0.000001f);
 
+	testMat = Matrix4x4(
+		1, 1, 1, 2,
+		1, 1, 2, 1,
+		1, 2, 1, 1,
+		2, 1, 1, 1
+	);
+	Matrix4x4 testMat2 = Matrix4x4::Inverse(testMat);
 
-
+	for (size_t i = 0; i < 4; i++)
+		for (size_t j = 0; j < 4; j++)
+			EXPECT_NEAR(testMat2[i][j], resultMat[i][j], 0.000001f);
 
 }
 
@@ -1727,16 +2117,20 @@ TEST(Matrix4x4, translationMatrix) {
 }
 
 TEST(Matrix4x4, rotationMatrix) {
+	
+		Matrix4x4 rotationMat = Matrix4x4::RotationMatrix3D(PI/2.f, { 0,0,1 });
 
-	/*
-		Matrix4x4 rotationMat = Matrix4x4::RotationMatrix3D(PI/2, { 0,0,1 });
-		std::cout << rotationMat << std::endl;
-		// EXPECT_FLOAT_EQ(rotationMat[1][1], 0);
-		// EXPECT_FLOAT_EQ(rotationMat[1][2], -1);
-		// EXPECT_FLOAT_EQ(rotationMat[2][1], 1);
-		// EXPECT_FLOAT_EQ(rotationMat[2][2], 0);
+		Matrix4x4 resultMat = Matrix4x4(
+			0, -1, 0, 0,
+			1, 0, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+		);
 
-	*/
+		for (size_t i = 0; i < 4; i++)
+			for (size_t j = 0; j < 4; j++)
+				EXPECT_NEAR(rotationMat[i][j], resultMat[i][j], 0.000001f);
+
 }
 
 TEST(Matrix4x4, scalingMatrix) {
@@ -1869,7 +2263,7 @@ TEST(Matrix4x4, operator) {
 
 	Vector4 testVec = { 1,2,3,4 };
 	Vector4 testVec2 = testMat * testVec;
-	Vector4 resultVec = { 10,52,126,232 };
+	Vector4 resultVec = { 30,70,110,150 };
 	for (size_t i = 0; i < 4; i++)
 		EXPECT_FLOAT_EQ(testVec2[i], resultVec[i]);
 	
