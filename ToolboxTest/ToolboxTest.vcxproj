@@ -121,12 +121,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\Toolbox\calc.h" />
-    <ClInclude Include="external\include\Toolbox\Matrix.h" />
     <ClInclude Include="external\include\Toolbox\Matrix2x2.h" />
     <ClInclude Include="external\include\Toolbox\Matrix3x3.h" />
     <ClInclude Include="external\include\Toolbox\Matrix4x4.h" />
     <ClInclude Include="external\include\Toolbox\Quaternion.h" />
-    <ClInclude Include="external\include\Toolbox\Vector.h" />
     <ClInclude Include="external\include\Toolbox\Vector2.h" />
     <ClInclude Include="external\include\Toolbox\Vector3.h" />
     <ClInclude Include="external\include\Toolbox\Vector4.h" />

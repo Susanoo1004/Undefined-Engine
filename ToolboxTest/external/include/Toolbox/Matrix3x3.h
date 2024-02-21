@@ -62,16 +62,11 @@ public:
     Matrix3x3& LoadIdentity();
     /// @brief Switches the matrix by its diagonal elements.
     Matrix3x3& Transpose();
-    /// @brief Adds the given matrix to the right of this one.
-    Matrix Augmented(const Matrix3x3& other);
     Matrix3x3& Inverse();
 
     /// @brief Switches the given matrix by its diagonal elements.
     [[nodiscard]]
     static Matrix3x3 Transpose(const Matrix3x3& matrix);
-    /// @brief Adds the 'm2' to the right of 'm1'.
-    [[nodiscard]]
-    static Matrix Augmented(const Matrix3x3& m1, const Matrix3x3& m2);
     /// @brief Computes the inverse of the given matrix using the Gauss-Jordan pivot.
     [[nodiscard]]
     static Matrix3x3 Inverse(const Matrix3x3& matrix);

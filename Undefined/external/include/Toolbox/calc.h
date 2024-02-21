@@ -14,6 +14,8 @@ namespace calc
     /// @brief The value under which a number is considered zero
     constexpr float Zero = 1e-6f;
 
+    constexpr float pi = 3.1415926535f;
+
     /// <summary>
     /// Returns -1 if x is less than 0, 1 if x is greater than 0
     /// and 0 if x is equal to 0.
