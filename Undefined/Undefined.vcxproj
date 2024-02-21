@@ -156,7 +156,6 @@
     <ClCompile Include="source\src\resources\model.cpp" />
     <ClCompile Include="source\src\resources\resource.cpp" />
     <ClCompile Include="source\src\resources\texture.cpp" />
-    <ClCompile Include="source\src\singleton.cpp" />
     <ClCompile Include="source\src\wrapper\window_manager.cpp" />
     <ClCompile Include="source\src\wrapper\renderer.cpp" />
   </ItemGroup>
@@ -202,7 +201,6 @@
     <ClInclude Include="source\include\resources\model.h" />
     <ClInclude Include="source\include\resources\resource.h" />
     <ClInclude Include="source\include\resources\texture.h" />
-    <ClInclude Include="source\include\singleton.h" />
     <ClInclude Include="source\include\wrapper\window_manager.h" />
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />

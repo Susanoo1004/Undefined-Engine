@@ -5,7 +5,7 @@
 #include <sstream>
 #include <toolbox/Vector3.h>
 
-#include "singleton.h"
+#include "service_locator.h"
 
 Shader::Shader()
 {
@@ -18,52 +18,52 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 void Shader::Use()
 {
-    Singleton::renderer->UseShader(ID);
+    ServiceLocator::Get<Renderer>()->UseShader(ID);
 }
 
 void Shader::UnUse()
 {
-    Singleton::renderer->UnUseShader();
+    ServiceLocator::Get<Renderer>()->UnUseShader();
 }
 
 unsigned int Shader::SetVertexShader(unsigned int vertex, const char* vShaderCode)
 {
-    vertex = Singleton::renderer->SetShader(GL_VERTEX_SHADER, vShaderCode);
+    vertex = ServiceLocator::Get<Renderer>()->SetShader(GL_VERTEX_SHADER, vShaderCode);
 
     return vertex;
 }
 
 unsigned int Shader::SetFragmentShader(unsigned int fragment, const char* fShaderCode)
 {
-    fragment = Singleton::renderer->SetShader(GL_FRAGMENT_SHADER, fShaderCode);
+    fragment = ServiceLocator::Get<Renderer>()->SetShader(GL_FRAGMENT_SHADER, fShaderCode);
 
     return fragment;
 }
 
 void Shader::Link(unsigned int vertex, unsigned int fragment)
 {
-    ID = Singleton::renderer->LinkShader(ID, vertex, fragment);
+    ID = ServiceLocator::Get<Renderer>()->LinkShader(ID, vertex, fragment);
 }
 
 void Shader::SetBool(const std::string& name, bool value) const
 {
-    Singleton::renderer->SetBool(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetBool(ID, name.c_str(), value);
 }
 void Shader::SetInt(const std::string& name, int value) const
 {
-    Singleton::renderer->SetInt(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetInt(ID, name.c_str(), value);
 }
 void Shader::SetFloat(const std::string& name, float value) const
 {
-    Singleton::renderer->SetFloat(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetFloat(ID, name.c_str(), value);
 }
 void Shader::SetVec3(const std::string& name, Vector3 v) const
 {
-    Singleton::renderer->SetVec3(ID, name.c_str(), v);
+    ServiceLocator::Get<Renderer>()->SetVec3(ID, name.c_str(), v);
 }
 void Shader::SetMat4(const std::string& name, Matrix4x4 m) const
 {
-    Singleton::renderer->SetMat4(ID, name.c_str(), m);
+    ServiceLocator::Get<Renderer>()->SetMat4(ID, name.c_str(), m);
 }
 
 void Shader::Load(const char* vertexPath, const char* fragmentPath)
@@ -113,6 +113,6 @@ void Shader::Load(const char* vertexPath, const char* fragmentPath)
     Link(vertex, fragment);
 
     // delete the shaders as they're linked into our program now and no longer necessary
-    Singleton::renderer->DeleteShader(vertex);
-    Singleton::renderer->DeleteShader(fragment);
+    ServiceLocator::Get<Renderer>()->DeleteShader(vertex);
+    ServiceLocator::Get<Renderer>()->DeleteShader(fragment);
 }

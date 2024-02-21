@@ -21,11 +21,11 @@ public:
     template<typename ServiceType>
     static ServiceType* Get()
     {
-        return mServices[typeid(ServiceType).hash_code()];
+        return reinterpret_cast<ServiceType*>(mServices[typeid(ServiceType).hash_code()]);
     }
 
-
     static void CleanServiceLocator();
+
 private:
     static inline std::unordered_map<size_t, ServiceType*> mServices;
 };
