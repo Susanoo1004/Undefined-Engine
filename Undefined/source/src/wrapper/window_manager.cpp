@@ -41,8 +41,6 @@ void WindowManager::SetupWindow()
 {
     glfwMakeContextCurrent(mWindow);
 
-    // gladLoadGL();
-
     glfwSwapInterval(1); // Enable vsync
 }
 
