@@ -112,7 +112,7 @@ TEST(Calc, Nullify) {
 }
 
 TEST(Calc, Round4) {
-	Vector4 testVec = Vector4(1.1f, 2.3f, 3.7, 4.8f);
+	Vector4 testVec = Vector4(1.1f, 2.3f, 3.7f, 4.8f);
 	Vector4 testVec2 = calc::Round(testVec);
 	EXPECT_FLOAT_EQ(testVec2.x, 1);
 	EXPECT_FLOAT_EQ(testVec2.y, 2);
@@ -121,7 +121,7 @@ TEST(Calc, Round4) {
 }
 
 TEST(Calc, Round3) {
-	Vector3 testVec = Vector3(1.1f, 2.3f, 3.7);
+	Vector3 testVec = Vector3(1.1f, 2.3f, 3.7f);
 	Vector3 testVec2 = calc::Round(testVec);
 	EXPECT_FLOAT_EQ(testVec2.x, 1);
 	EXPECT_FLOAT_EQ(testVec2.y, 2);

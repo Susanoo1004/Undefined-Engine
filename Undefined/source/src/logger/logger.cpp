@@ -67,6 +67,7 @@ void Logger::SetupLogEntry(LogLevel level, std::string log)
     LogEntry entry;
     entry.Level = level;
     entry.Log = log;
+    entry.TimeOffset = std::chrono::system_clock::now();
     EntryList.Push(entry);
     Sleep.notify_one();
 }
@@ -94,6 +95,8 @@ void Logger::PrintEntry(LogEntry entry)
 {
     std::string log = entry.Log + '\n';
     const char* color = ANSI_RESET;
+    std::chrono::milliseconds t = std::chrono::duration_cast<std::chrono::milliseconds, long long>(entry.TimeOffset.time_since_epoch());
+    std::string time = std::format("[{:%T}] ", t);
 
     switch (entry.Level)
     {
@@ -123,11 +126,11 @@ void Logger::PrintEntry(LogEntry entry)
         break;
     }
 
-    std::cout << color << log << ANSI_RESET;
+    std::cout << time << color << log << ANSI_RESET;
     
     if (mFile.is_open())
     {
-        mFile << log;
+        mFile << time << log;
     }
 }
 
