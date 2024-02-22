@@ -17,6 +17,8 @@
     <ClCompile Include="source\src\logger\logger.cpp" />
     <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
     <ClCompile Include="source\src\service_locator.cpp" />
+    <ClCompile Include="source\src\wrapper\input_manager.cpp" />
+    <ClCompile Include="source\src\wrapper\key_input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -58,6 +60,8 @@
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\service_locator.h" />
     <ClInclude Include="source\include\wrapper\service_type.h" />
+    <ClInclude Include="source\include\wrapper\input_manager.h" />
+    <ClInclude Include="source\include\wrapper\key_input.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

@@ -2,9 +2,9 @@
 
 #include <unordered_map>
 
-#include "wrapper/service_type.h"
 #include "wrapper/window_manager.h"
 #include "wrapper/renderer.h"
+#include "wrapper/input_manager.h"
 
 class ServiceLocator
 {

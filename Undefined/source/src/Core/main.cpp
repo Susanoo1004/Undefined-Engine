@@ -1,16 +1,18 @@
 #include <glad/glad.h>
+#include <memory_leak/memory_leak_detector.h>
 
 #include "application.h"
 #include "service_locator.h"
-#include <memory_leak/memory_leak_detector.h>
+#include "wrapper/input_manager.h"
 
 
 int main()
 {
+    ServiceLocator::Setup();
+
     MemoryLeakDetector memory;
     Application app;
 
-    ServiceLocator::Setup();
 
     if (!ServiceLocator::Get<WindowManager>()->SetupGlfw())
     {
@@ -30,23 +32,22 @@ int main()
 
     ServiceLocator::Get<WindowManager>()->SetCursorPosCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), Camera::MouseCallback);
 
-    // app.SetupImGui(window);
+    KeyInput::SetupKeyInputs();
 
-    // const unsigned int width = app.ScreenWidth;
-    // const unsigned int height = app.ScreenHeight;
+    // app.SetupImGui(window);
 
     ServiceLocator::Get<Renderer>()->debug.DebugInit();
 
     app.Init();
 
-    // ////  Let the window open until we press escape or the window should close
+    // Let the window open until we press escape or the window should close
 
     while (ServiceLocator::Get<WindowManager>()->IsWindowOpen())
     {
 
         // app.StartImGuiFrame();
 
-        // ////  Imgui stuff here is called from the main program loop and called from the window loop itself when the window is closed and the window 
+        // Imgui stuff here is called from the main program loop and called from the window loop itself when the window is closed and the window 
         // app.ShowImGuiControls();
 
         app.Update();
