@@ -16,6 +16,8 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
+	static void LoadAll(std::string path);
+
 	template<Type T>
 	std::shared_ptr<T> Create(const std::string& name)
 	{

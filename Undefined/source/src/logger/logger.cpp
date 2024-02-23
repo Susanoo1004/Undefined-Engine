@@ -4,6 +4,8 @@
 #include <mutex>
 #include <Windows.h>
 
+#include "memory_leak.h"
+
 #undef ERROR
 
 Logger::Logger()
@@ -74,6 +76,8 @@ void Logger::SetupLogEntry(LogLevel level, std::string log)
 
 void Logger::Start()
 {
+    MemoryLeak::CheckMemoryLeak(true);
+
     std::mutex mutex;
     (void)SetThreadDescription(Thread.native_handle(), L"Logger Thread");
 

@@ -23,7 +23,7 @@ public:
 private:
 	enum class LogLevel
 	{
-		DEBUG,
+		DEBUG = 0,
 		INFO,
 		WARNING,
 		ERROR,

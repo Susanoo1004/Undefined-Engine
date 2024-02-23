@@ -8,8 +8,6 @@
 
 int main()
 {
-    MemoryLeak::CheckMemoryLeak(true);
-
     Application app;
 
     Singleton::Init();
@@ -64,5 +62,6 @@ int main()
     ResourceManager::UnloadAll();
     Logger::Stop();
     MemoryLeak::EndMemoryLeak();
+
     return 0;
 }

@@ -118,7 +118,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteurd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteurd.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>MSVCRT </IgnoreSpecificDefaultLibraries>
     </Link>
@@ -150,6 +150,7 @@
     <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
     <ClCompile Include="source\src\logger\logger.cpp" />
+    <ClCompile Include="source\src\memory_leak.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="source\src\core\main.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\logger\logger.h" />
+    <ClInclude Include="source\include\memory_leak.h" />
     <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
@@ -204,6 +206,7 @@
     <ClInclude Include="source\include\resources\resource.h" />
     <ClInclude Include="source\include\resources\texture.h" />
     <ClInclude Include="source\include\singleton.h" />
+    <ClInclude Include="source\include\utils\flag.h" />
     <ClInclude Include="source\include\wrapper\window_manager.h" />
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
