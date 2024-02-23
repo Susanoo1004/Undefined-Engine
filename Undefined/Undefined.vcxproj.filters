@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="external\src\glad\glad.c" />
@@ -11,13 +11,14 @@
     <ClCompile Include="source\src\resources\model.cpp" />
     <ClCompile Include="source\src\resources\resource.cpp" />
     <ClCompile Include="source\src\resources\texture.cpp" />
-    <ClCompile Include="source\src\singleton.cpp" />
     <ClCompile Include="source\src\wrapper\window_manager.cpp" />
     <ClCompile Include="source\src\wrapper\renderer.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\logger\logger.cpp" />
-    <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
     <ClCompile Include="source\src\memory_leak.cpp" />
+    <ClCompile Include="source\src\service_locator.cpp" />
+    <ClCompile Include="source\src\wrapper\input_manager.cpp" />
+    <ClCompile Include="source\src\wrapper\key_input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -49,17 +50,19 @@
     <ClInclude Include="source\include\resources\model.h" />
     <ClInclude Include="source\include\resources\resource.h" />
     <ClInclude Include="source\include\resources\texture.h" />
-    <ClInclude Include="source\include\singleton.h" />
     <ClInclude Include="source\include\wrapper\window_manager.h" />
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
     <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\logger\logger.h" />
-    <ClInclude Include="external\include\memory_leak\memory_leak_detector.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\memory_leak.h" />
     <ClInclude Include="source\include\utils\flag.h" />
+    <ClInclude Include="source\include\service_locator.h" />
+    <ClInclude Include="source\include\wrapper\service_type.h" />
+    <ClInclude Include="source\include\wrapper\input_manager.h" />
+    <ClInclude Include="source\include\wrapper\key_input.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

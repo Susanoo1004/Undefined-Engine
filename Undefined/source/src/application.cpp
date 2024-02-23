@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <iostream>
 
-#include "singleton.h"
+#include "service_locator.h"
 #include "resources/texture.h"
 #include "resources/model.h"
 #include "resources/resource_manager.h"
@@ -35,7 +35,7 @@ void Application::Update()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
 
-    cam.ProcessInput(Singleton::windowManager->GetWindowVar());
+    cam.ProcessInput(ServiceLocator::Get<WindowManager>()->GetWindowVar());
     cam.Update();
 
     // modify the camera in the shader

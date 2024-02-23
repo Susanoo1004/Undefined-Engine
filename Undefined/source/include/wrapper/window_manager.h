@@ -2,10 +2,11 @@
 
 #include <glfw/glfw3.h>
 
-class WindowManager
+#include "wrapper/service_type.h"
+
+class WindowManager : public ServiceType
 {
 public:
-    
     WindowManager();
     ~WindowManager();
 
@@ -22,9 +23,6 @@ public:
     bool IsWindowOpen();
 
     void SwapBuffers();
-
-    void SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
-
 
 private:
     GLFWwindow* mWindow;

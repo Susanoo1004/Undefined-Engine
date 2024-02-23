@@ -1,52 +1,54 @@
 #include <glad/glad.h>
 
 #include "application.h"
-#include "singleton.h"
 #include "memory_leak.h"
 #include "Resources/resource_manager.h"
 #include "utils/flag.h"
+#include "service_locator.h"
+#include "wrapper/input_manager.h"
 
 int main()
 {
+    ServiceLocator::Setup();
+
     Application app;
 
-    Singleton::Init();
 
-    if (!Singleton::windowManager->SetupGlfw())
+    if (!ServiceLocator::Get<WindowManager>()->SetupGlfw())
     {
         return 1;
     }
 
-    Singleton::windowManager->CreateWindow(800, 600);
+    ServiceLocator::Get<WindowManager>()->CreateWindow(800, 600);
 
-    if (Singleton::windowManager->GetWindowVar() == nullptr)
+    if (ServiceLocator::Get<WindowManager>()->GetWindowVar() == nullptr)
     {
         return 1;
     }
 
-    Singleton::windowManager->SetupWindow();
+    ServiceLocator::Get<WindowManager>()->SetupWindow();
 
-    Singleton::renderer->Init();
+    ServiceLocator::Get<Renderer>()->Init();
 
-    Singleton::windowManager->SetCursorPosCallback(Singleton::windowManager->GetWindowVar(), Camera::MouseCallback);
-  
+    ServiceLocator::Get<InputManager>()->SetCursorPosCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), Camera::MouseCallback);
+
+    KeyInput::SetupKeyInputs();
+
     // app.SetupImGui(window);
 
-    // const unsigned int width = app.ScreenWidth;
-    // const unsigned int height = app.ScreenHeight;
-
-    Singleton::renderer->debug.DebugInit();
+    ServiceLocator::Get<Renderer>()->debug.DebugInit();
 
     app.Init();
 
-    ////// Let the window open until we press escape or the window should close
 
-    while (Singleton::windowManager->IsWindowOpen())
+    // Let the window open until we press escape or the window should close
+
+    while (ServiceLocator::Get<WindowManager>()->IsWindowOpen())
     {
 
         // app.StartImGuiFrame();
 
-        // ////  Imgui stuff here is called from the main program loop and called from the window loop itself when the window is closed and the window 
+        // Imgui stuff here is called from the main program loop and called from the window loop itself when the window is closed and the window 
         // app.ShowImGuiControls();
 
         app.Update();
@@ -54,12 +56,13 @@ int main()
         // Rendering 
         // app.Render(window);
 
-        Singleton::windowManager->SwapBuffers();
-        Singleton::renderer->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        ServiceLocator::Get<WindowManager>()->SwapBuffers();
+        ServiceLocator::Get<Renderer>()->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    Singleton::Destroy();
+    ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
+
     Logger::Stop();
     MemoryLeak::EndMemoryLeak();
 
