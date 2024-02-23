@@ -3,7 +3,7 @@
 #include <numbers>
 #include <iostream>
 
-#include <service_locator.h>
+#include "service_locator.h"
 
 #define PI std::numbers::pi_v<float>
 
@@ -111,11 +111,11 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
 
     if (sCamPtr->IsMouseForCam)
     {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        ServiceLocator::Get<InputManager>()->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     else
     {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        ServiceLocator::Get<InputManager>()->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         return;
     }
     if (sCamPtr->IsFirstMouse)

@@ -22,6 +22,16 @@ void InputManager::CreateKeyInput(std::string keyInputName, std::vector<int> key
 	KeyInputsMap.emplace(keyInputName, keyInput);
 }
 
+void InputManager::SetInputMode(GLFWwindow* window, int mode, int value)
+{
+	glfwSetInputMode(window, mode, value);
+}
+
+void InputManager::SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback)
+{
+	glfwSetCursorPosCallback(window, callback);
+}
+
 std::shared_ptr<KeyInput> InputManager::GetKeyInput(std::string keyInputName)
 {
 	auto&& p = KeyInputsMap.find(keyInputName);

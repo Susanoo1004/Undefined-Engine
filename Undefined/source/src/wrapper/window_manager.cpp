@@ -64,8 +64,3 @@ void WindowManager::SwapBuffers()
     glfwSwapBuffers(mWindow);
     glfwPollEvents();
 }
-
-void WindowManager::SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun Callback)
-{
-    glfwSetCursorPosCallback(window, Callback);
-}

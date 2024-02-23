@@ -24,8 +24,6 @@ public:
 
     void SwapBuffers();
 
-    void SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun Callback);
-
 private:
     GLFWwindow* mWindow;
 };

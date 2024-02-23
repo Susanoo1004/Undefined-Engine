@@ -12,9 +12,13 @@ class InputManager : public ServiceType
 public:
 	InputManager();
 
-	std::unordered_map<std::string, std::shared_ptr<KeyInput>> KeyInputsMap;
-
 	void CreateKeyInput(std::string keyInputName, std::vector<int> keysToMonitor);
 
+	void SetInputMode(GLFWwindow* window, int mode, int value);
+
+	void SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
+
 	std::shared_ptr<KeyInput> GetKeyInput(std::string keyInputName);
+
+	std::unordered_map<std::string, std::shared_ptr<KeyInput>> KeyInputsMap;
 };
