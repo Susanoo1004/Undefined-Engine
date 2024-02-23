@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -150,32 +150,12 @@
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
-    <ClCompile Include="source\src\wrapper\key_input.cpp" />
-    <ClCompile Include="source\src\service_locator.cpp" />
-    <ClCompile Include="source\src\logger\logger.cpp" />
-    <ClCompile Include="source\src\memory_leak.cpp" />
-    <ClCompile Include="source\src\resources\shader.cpp" />
-    <ClCompile Include="source\src\application.cpp" />
-    <ClCompile Include="source\src\core\main.cpp" />
-    <ClCompile Include="source\src\engine_debug\renderer_debug.cpp" />
-    <ClCompile Include="source\src\resources\resource_manager.cpp" />
-    <ClCompile Include="source\src\camera\camera.cpp" />
-    <ClCompile Include="source\src\resources\model.cpp" />
-    <ClCompile Include="source\src\resources\resource.cpp" />
-    <ClCompile Include="source\src\resources\texture.cpp" />
-    <ClCompile Include="source\src\wrapper\input_manager.cpp" />
-    <ClCompile Include="source\src\wrapper\window_manager.cpp" />
-    <ClCompile Include="source\src\wrapper\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="external\libs\glfw3.lib" />
-    <Library Include="external\libs\imguid.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="external\include\memory_leak\memory_leak_detector.h" />
-    <ClInclude Include="external\include\stb_image\stb_image.h" />
     <ClInclude Include="external\include\toolbox\calc.h" />
     <ClInclude Include="external\include\toolbox\Matrix.h" />
     <ClInclude Include="external\include\toolbox\Matrix2x2.h" />
@@ -186,37 +166,16 @@
     <ClInclude Include="external\include\toolbox\Vector2.h" />
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
-    <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
-    <ClInclude Include="source\include\wrapper\key_input.h" />
-    <ClInclude Include="source\include\wrapper\input_manager.h" />
-    <ClInclude Include="source\include\wrapper\service_type.h" />
-    <ClInclude Include="source\include\service_locator.h" />
-    <ClInclude Include="source\include\logger\logger.h" />
-    <ClInclude Include="source\include\memory_leak.h" />
-    <ClInclude Include="source\include\resources\shader.h" />
-    <ClInclude Include="source\include\application.h" />
-    <ClInclude Include="external\include\glad\glad.h" />
-    <ClInclude Include="external\include\glfw\glfw3.h" />
-    <ClInclude Include="external\include\glfw\glfw3native.h" />
-    <ClInclude Include="external\include\imgui\imconfig.h" />
-    <ClInclude Include="external\include\imgui\imgui.h" />
-    <ClInclude Include="external\include\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="external\include\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="external\include\imgui\imgui_internal.h" />
-    <ClInclude Include="external\include\imgui\imstb_textedit.h" />
-    <ClInclude Include="external\include\KHR\khrplatform.h" />
     <ClInclude Include="source\include\Debug\RHI_debug.h" />
-    <ClInclude Include="source\include\engine_debug\renderer_debug.h" />
-    <ClInclude Include="source\include\resources\resource_manager.h" />
-    <ClInclude Include="source\include\camera\camera.h" />
-    <ClInclude Include="source\include\resources\model.h" />
-    <ClInclude Include="source\include\resources\resource.h" />
-    <ClInclude Include="source\include\resources\texture.h" />
-    <ClInclude Include="source\include\utils\flag.h" />
-    <ClInclude Include="source\include\wrapper\window_manager.h" />
-    <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Undefined.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="external\libs\Engine.dll" />
+    <None Include="external\libs\Engine.pdb" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
