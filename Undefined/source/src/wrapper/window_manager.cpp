@@ -10,6 +10,7 @@ WindowManager::WindowManager()
 WindowManager::~WindowManager()
 {
     glfwDestroyWindow(mWindow);
+    glfwTerminate();
 }
 
 bool WindowManager::SetupGlfw()
@@ -41,8 +42,6 @@ void WindowManager::SetupWindow()
 {
     glfwMakeContextCurrent(mWindow);
 
-    // gladLoadGL();
-
     glfwSwapInterval(1); // Enable vsync
 }
 
@@ -65,9 +64,4 @@ void WindowManager::SwapBuffers()
 {
     glfwSwapBuffers(mWindow);
     glfwPollEvents();
-}
-
-void WindowManager::SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback)
-{
-    glfwSetCursorPosCallback(window, callback);
 }

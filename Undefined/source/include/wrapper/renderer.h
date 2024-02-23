@@ -5,8 +5,9 @@
 #include <toolbox/Vector3.h>
 
 #include "engine_debug/renderer_debug.h"
+#include "wrapper/service_type.h"
 
-class Renderer
+class Renderer : public ServiceType
 {
 public:
 	void Init(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);

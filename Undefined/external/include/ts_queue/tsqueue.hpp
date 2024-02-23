@@ -31,10 +31,16 @@ public:
     const T& Back();
 
     /// <summary>
-    /// Pushes a new item on the back of the queue
+    /// Pushes a new item on the back of the queue by copying it
     /// </summary>
     /// <param name="item">Item</param>
     void Push(const T& item);
+
+    /// <summary>
+    /// Pushes a new item on the back of the queue by moving it
+    /// </summary>
+    /// <param name="item">Item</param>
+    void Push(T&& item);
 
     /// <summary>
     /// Checks if the queue is empty
@@ -82,6 +88,13 @@ const T& TsQueue<T>::Back()
 
 template <typename T>
 void TsQueue<T>::Push(const T& item)
+{
+    std::scoped_lock lock(mQueueMutex);
+    mQueue.push(item);
+}
+
+template<typename T>
+void TsQueue<T>::Push(T&& item)
 {
     std::scoped_lock lock(mQueueMutex);
     mQueue.push(std::move(item));

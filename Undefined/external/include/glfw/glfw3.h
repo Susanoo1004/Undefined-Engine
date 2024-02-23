@@ -1961,7 +1961,7 @@ GLFWAPI int glfwGetError(const char** description);
  *
  *  @ingroup init
  */
-GLFWAPI GLFWerrorfun glfwSetErrorCallback(GLFWerrorfun callback);
+GLFWAPI GLFWerrorfun glfwSetErrorCallback(GLFWerrorfun Callback);
 
 /*! @brief Returns the currently connected monitors.
  *
@@ -2242,7 +2242,7 @@ GLFWAPI void* glfwGetMonitorUserPointer(GLFWmonitor* monitor);
  *
  *  @ingroup monitor
  */
-GLFWAPI GLFWmonitorfun glfwSetMonitorCallback(GLFWmonitorfun callback);
+GLFWAPI GLFWmonitorfun glfwSetMonitorCallback(GLFWmonitorfun Callback);
 
 /*! @brief Returns the available video modes for the specified monitor.
  *
@@ -3604,7 +3604,7 @@ GLFWAPI void* glfwGetWindowUserPointer(GLFWwindow* mWindow);
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowposfun glfwSetWindowPosCallback(GLFWwindow* mWindow, GLFWwindowposfun callback);
+GLFWAPI GLFWwindowposfun glfwSetWindowPosCallback(GLFWwindow* mWindow, GLFWwindowposfun Callback);
 
 /*! @brief Sets the size callback for the specified window.
  *
@@ -3636,7 +3636,7 @@ GLFWAPI GLFWwindowposfun glfwSetWindowPosCallback(GLFWwindow* mWindow, GLFWwindo
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowsizefun glfwSetWindowSizeCallback(GLFWwindow* mWindow, GLFWwindowsizefun callback);
+GLFWAPI GLFWwindowsizefun glfwSetWindowSizeCallback(GLFWwindow* mWindow, GLFWwindowsizefun Callback);
 
 /*! @brief Sets the close callback for the specified window.
  *
@@ -3676,7 +3676,7 @@ GLFWAPI GLFWwindowsizefun glfwSetWindowSizeCallback(GLFWwindow* mWindow, GLFWwin
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowclosefun glfwSetWindowCloseCallback(GLFWwindow* mWindow, GLFWwindowclosefun callback);
+GLFWAPI GLFWwindowclosefun glfwSetWindowCloseCallback(GLFWwindow* mWindow, GLFWwindowclosefun Callback);
 
 /*! @brief Sets the refresh callback for the specified window.
  *
@@ -3712,7 +3712,7 @@ GLFWAPI GLFWwindowclosefun glfwSetWindowCloseCallback(GLFWwindow* mWindow, GLFWw
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowrefreshfun glfwSetWindowRefreshCallback(GLFWwindow* mWindow, GLFWwindowrefreshfun callback);
+GLFWAPI GLFWwindowrefreshfun glfwSetWindowRefreshCallback(GLFWwindow* mWindow, GLFWwindowrefreshfun Callback);
 
 /*! @brief Sets the focus callback for the specified window.
  *
@@ -3747,7 +3747,7 @@ GLFWAPI GLFWwindowrefreshfun glfwSetWindowRefreshCallback(GLFWwindow* mWindow, G
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowfocusfun glfwSetWindowFocusCallback(GLFWwindow* mWindow, GLFWwindowfocusfun callback);
+GLFWAPI GLFWwindowfocusfun glfwSetWindowFocusCallback(GLFWwindow* mWindow, GLFWwindowfocusfun Callback);
 
 /*! @brief Sets the iconify callback for the specified window.
  *
@@ -3780,7 +3780,7 @@ GLFWAPI GLFWwindowfocusfun glfwSetWindowFocusCallback(GLFWwindow* mWindow, GLFWw
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowiconifyfun glfwSetWindowIconifyCallback(GLFWwindow* mWindow, GLFWwindowiconifyfun callback);
+GLFWAPI GLFWwindowiconifyfun glfwSetWindowIconifyCallback(GLFWwindow* mWindow, GLFWwindowiconifyfun Callback);
 
 /*! @brief Sets the maximize callback for the specified window.
  *
@@ -3810,7 +3810,7 @@ GLFWAPI GLFWwindowiconifyfun glfwSetWindowIconifyCallback(GLFWwindow* mWindow, G
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowmaximizefun glfwSetWindowMaximizeCallback(GLFWwindow* mWindow, GLFWwindowmaximizefun callback);
+GLFWAPI GLFWwindowmaximizefun glfwSetWindowMaximizeCallback(GLFWwindow* mWindow, GLFWwindowmaximizefun Callback);
 
 /*! @brief Sets the framebuffer resize callback for the specified window.
  *
@@ -3840,7 +3840,7 @@ GLFWAPI GLFWwindowmaximizefun glfwSetWindowMaximizeCallback(GLFWwindow* mWindow,
  *
  *  @ingroup window
  */
-GLFWAPI GLFWframebuffersizefun glfwSetFramebufferSizeCallback(GLFWwindow* mWindow, GLFWframebuffersizefun callback);
+GLFWAPI GLFWframebuffersizefun glfwSetFramebufferSizeCallback(GLFWwindow* mWindow, GLFWframebuffersizefun Callback);
 
 /*! @brief Sets the window content scale callback for the specified window.
  *
@@ -3871,7 +3871,7 @@ GLFWAPI GLFWframebuffersizefun glfwSetFramebufferSizeCallback(GLFWwindow* mWindo
  *
  *  @ingroup window
  */
-GLFWAPI GLFWwindowcontentscalefun glfwSetWindowContentScaleCallback(GLFWwindow* mWindow, GLFWwindowcontentscalefun callback);
+GLFWAPI GLFWwindowcontentscalefun glfwSetWindowContentScaleCallback(GLFWwindow* mWindow, GLFWwindowcontentscalefun Callback);
 
 /*! @brief Processes all pending events.
  *
@@ -4543,7 +4543,7 @@ GLFWAPI void glfwSetCursor(GLFWwindow* mWindow, GLFWcursor* cursor);
  *
  *  @ingroup input
  */
-GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* mWindow, GLFWkeyfun callback);
+GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* mWindow, GLFWkeyfun Callback);
 
 /*! @brief Sets the Unicode character callback.
  *
@@ -4586,7 +4586,7 @@ GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* mWindow, GLFWkeyfun callback);
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow* mWindow, GLFWcharfun callback);
+GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow* mWindow, GLFWcharfun Callback);
 
 /*! @brief Sets the Unicode character with modifiers callback.
  *
@@ -4628,7 +4628,7 @@ GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow* mWindow, GLFWcharfun callbac
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* mWindow, GLFWcharmodsfun callback);
+GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* mWindow, GLFWcharmodsfun Callback);
 
 /*! @brief Sets the mouse button callback.
  *
@@ -4665,7 +4665,7 @@ GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* mWindow, GLFWcharmod
  *
  *  @ingroup input
  */
-GLFWAPI GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* mWindow, GLFWmousebuttonfun callback);
+GLFWAPI GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* mWindow, GLFWmousebuttonfun Callback);
 
 /*! @brief Sets the cursor position callback.
  *
@@ -4697,7 +4697,7 @@ GLFWAPI GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* mWindow, GLFWm
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* mWindow, GLFWcursorposfun callback);
+GLFWAPI GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* mWindow, GLFWcursorposfun Callback);
 
 /*! @brief Sets the cursor enter/leave callback.
  *
@@ -4728,7 +4728,7 @@ GLFWAPI GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* mWindow, GLFWcurso
  *
  *  @ingroup input
  */
-GLFWAPI GLFWcursorenterfun glfwSetCursorEnterCallback(GLFWwindow* mWindow, GLFWcursorenterfun callback);
+GLFWAPI GLFWcursorenterfun glfwSetCursorEnterCallback(GLFWwindow* mWindow, GLFWcursorenterfun Callback);
 
 /*! @brief Sets the scroll callback.
  *
@@ -4762,7 +4762,7 @@ GLFWAPI GLFWcursorenterfun glfwSetCursorEnterCallback(GLFWwindow* mWindow, GLFWc
  *
  *  @ingroup input
  */
-GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow* mWindow, GLFWscrollfun callback);
+GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow* mWindow, GLFWscrollfun Callback);
 
 /*! @brief Sets the path drop callback.
  *
@@ -4799,7 +4799,7 @@ GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow* mWindow, GLFWscrollfun c
  *
  *  @ingroup input
  */
-GLFWAPI GLFWdropfun glfwSetDropCallback(GLFWwindow* mWindow, GLFWdropfun callback);
+GLFWAPI GLFWdropfun glfwSetDropCallback(GLFWwindow* mWindow, GLFWdropfun Callback);
 
 /*! @brief Returns whether the specified joystick is present.
  *
@@ -5140,7 +5140,7 @@ GLFWAPI int glfwJoystickIsGamepad(int jid);
  *
  *  @ingroup input
  */
-GLFWAPI GLFWjoystickfun glfwSetJoystickCallback(GLFWjoystickfun callback);
+GLFWAPI GLFWjoystickfun glfwSetJoystickCallback(GLFWjoystickfun Callback);
 
 /*! @brief Adds the specified SDL_GameControllerDB gamepad mappings.
  *
