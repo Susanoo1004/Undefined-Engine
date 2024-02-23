@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="external\src\glad\glad.c" />
@@ -15,7 +15,7 @@
     <ClCompile Include="source\src\wrapper\renderer.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\logger\logger.cpp" />
-    <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
+    <ClCompile Include="source\src\memory_leak.cpp" />
     <ClCompile Include="source\src\service_locator.cpp" />
     <ClCompile Include="source\src\wrapper\input_manager.cpp" />
     <ClCompile Include="source\src\wrapper\key_input.cpp" />
@@ -56,8 +56,9 @@
     <ClInclude Include="source\include\wrapper_RHI.h" />
     <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\logger\logger.h" />
-    <ClInclude Include="external\include\memory_leak\memory_leak_detector.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\memory_leak.h" />
+    <ClInclude Include="source\include\utils\flag.h" />
     <ClInclude Include="source\include\service_locator.h" />
     <ClInclude Include="source\include\wrapper\service_type.h" />
     <ClInclude Include="source\include\wrapper\input_manager.h" />

@@ -118,9 +118,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteurd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteurd.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <IgnoreSpecificDefaultLibraries>MSVCRT </IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,6 +153,7 @@
     <ClCompile Include="source\src\wrapper\key_input.cpp" />
     <ClCompile Include="source\src\service_locator.cpp" />
     <ClCompile Include="source\src\logger\logger.cpp" />
+    <ClCompile Include="source\src\memory_leak.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\application.cpp" />
     <ClCompile Include="source\src\core\main.cpp" />
@@ -190,6 +192,7 @@
     <ClInclude Include="source\include\wrapper\service_type.h" />
     <ClInclude Include="source\include\service_locator.h" />
     <ClInclude Include="source\include\logger\logger.h" />
+    <ClInclude Include="source\include\memory_leak.h" />
     <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\application.h" />
     <ClInclude Include="external\include\glad\glad.h" />
@@ -209,6 +212,7 @@
     <ClInclude Include="source\include\resources\model.h" />
     <ClInclude Include="source\include\resources\resource.h" />
     <ClInclude Include="source\include\resources\texture.h" />
+    <ClInclude Include="source\include\utils\flag.h" />
     <ClInclude Include="source\include\wrapper\window_manager.h" />
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />

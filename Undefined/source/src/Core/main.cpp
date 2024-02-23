@@ -1,16 +1,16 @@
 #include <glad/glad.h>
-#include <memory_leak/memory_leak_detector.h>
 
 #include "application.h"
+#include "memory_leak.h"
+#include "Resources/resource_manager.h"
+#include "utils/flag.h"
 #include "service_locator.h"
 #include "wrapper/input_manager.h"
-
 
 int main()
 {
     ServiceLocator::Setup();
 
-    MemoryLeakDetector memory;
     Application app;
 
 
@@ -40,6 +40,7 @@ int main()
 
     app.Init();
 
+
     // Let the window open until we press escape or the window should close
 
     while (ServiceLocator::Get<WindowManager>()->IsWindowOpen())
@@ -63,5 +64,7 @@ int main()
     ResourceManager::UnloadAll();
 
     Logger::Stop();
+    MemoryLeak::EndMemoryLeak();
+
     return 0;
 }

@@ -10,6 +10,7 @@ WindowManager::WindowManager()
 WindowManager::~WindowManager()
 {
     glfwDestroyWindow(mWindow);
+    glfwTerminate();
 }
 
 bool WindowManager::SetupGlfw()
