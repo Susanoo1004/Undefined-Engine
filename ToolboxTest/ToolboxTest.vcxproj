@@ -129,11 +129,6 @@
     <ClInclude Include="external\include\Toolbox\Vector3.h" />
     <ClInclude Include="external\include\Toolbox\Vector4.h" />
     <ClInclude Include="include\Toolbox\calc.h" />
-    <ClInclude Include="include\Toolbox\Matrix.h" />
-    <ClInclude Include="include\Toolbox\Matrix2x2.h" />
-    <ClInclude Include="include\Toolbox\Matrix3x3.h" />
-    <ClInclude Include="include\Toolbox\Matrix4x4.h" />
-    <ClInclude Include="include\Toolbox\Quaternion.h" />
     <ClInclude Include="include\Toolbox\Vector.h" />
     <ClInclude Include="include\Toolbox\Vector2.h" />
     <ClInclude Include="include\Toolbox\Vector3.h" />

@@ -60,6 +60,8 @@ int main()
     }
 
     ServiceLocator::CleanServiceLocator();
+    ResourceManager::UnloadAll();
+
     Logger::Stop();
     return 0;
 }

@@ -6,6 +6,7 @@
 #include <toolbox/Vector3.h>
 
 #include "service_locator.h"
+#include "logger/logger.h"
 
 Shader::Shader()
 {
@@ -94,8 +95,9 @@ void Shader::Load(const char* vertexPath, const char* fragmentPath)
     }
     catch (std::ifstream::failure e)
     {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+        Logger::Error("SHADER::FILE_NOT_SUCCESFULLY_READ");
     }
+
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
 

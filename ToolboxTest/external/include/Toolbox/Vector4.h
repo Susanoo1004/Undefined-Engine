@@ -14,10 +14,10 @@ class Vector4
 public:
 	float x, y, z, w;
 
-	static inline Vector4 UnitX() { return Vector4(1.0f, 0.0f, 0.0f, 0.0f); }
-	static inline Vector4 UnitY() { return Vector4(0.0f, 1.0f, 0.0f, 0.0f); }
-	static inline Vector4 UnitZ() { return Vector4(0.0f, 0.0f, 1.0f, 0.0f); }
-	static inline Vector4 UnitW() { return Vector4(0.0f, 0.0f, 0.0f, 1.0f); }
+	static Vector4 UnitX() { return Vector4(1.0f, 0.0f, 0.0f, 0.0f); }
+	static Vector4 UnitY() { return Vector4(0.0f, 1.0f, 0.0f, 0.0f); }
+	static Vector4 UnitZ() { return Vector4(0.0f, 0.0f, 1.0f, 0.0f); }
+	static Vector4 UnitW() { return Vector4(0.0f, 0.0f, 0.0f, 1.0f); }
 
 	Vector4();
 	/// @brief Constructs a Vector4 with all its components set to 'xyzw'.

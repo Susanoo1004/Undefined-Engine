@@ -9,7 +9,7 @@ WindowManager::WindowManager()
 
 WindowManager::~WindowManager()
 {
-    delete mWindow;
+    glfwDestroyWindow(mWindow);
 }
 
 bool WindowManager::SetupGlfw()

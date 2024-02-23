@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include "resources/resource.h"
+#include "logger/logger.h"
 
 template<class T>
 concept Type = std::is_base_of<Resource, T>::value;
@@ -12,7 +13,6 @@ concept Type = std::is_base_of<Resource, T>::value;
 class ResourceManager
 {
 public:
-
 	ResourceManager();
 	~ResourceManager();
 
@@ -28,7 +28,7 @@ public:
 		}
 		mResources.emplace(name, resource);
 
-		std::cout << typeid(T).name() << " " << name << " loaded" << std::endl;
+		Logger::Info("{} {} loaded", typeid(T).name(), name);
 
 		return resource;
 	}
@@ -45,7 +45,7 @@ public:
 		}
 		mResources.emplace(name, resource);
 
-		std::cout << typeid(T).name() << " " << name << " loaded" << std::endl;
+		Logger::Info("{} {} loaded", typeid(T).name(), name);
 
 		return resource;
 	}
@@ -57,20 +57,18 @@ public:
 
 		if (p == mResources.end())
 		{
-			std::cerr << "Resource name incorrect : " << name << std::endl;
-			assert(false);
-			return {};
+			Logger::Warning("Resource name incorrect : {}", name);
 		}
 
 		return std::dynamic_pointer_cast<T>(p->second);
 	}
 
 	void Unload(const std::string& name);
+	static void UnloadAll();
 
 private:
-	void UnloadAll();
 
-	std::unordered_map<std::string, std::shared_ptr<Resource>> mResources;
+	static inline std::unordered_map<std::string, std::shared_ptr<Resource>> mResources;
 
 public:
 	static ResourceManager resourceManager;

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "logger/logger.h"
+
 void Renderer::Init(float redBaseColor, float greenBaseColor, float blueBaseColor)
 {
 	gladLoadGL();
@@ -38,7 +40,7 @@ unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
     if (!success)
     {
         glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER" << ((shaderType == GL_FRAGMENT_SHADER) ? "FRAGMENT" : "VERTEX") << "::COMPILATION_FAILED\n" << infoLog << std::endl;
+        Logger::Error("{} COMPILATION_FAILED {}", ((shaderType == GL_FRAGMENT_SHADER) ? "FRAGMENT" : "VERTEX"), infoLog);
     };
 
     return shader;
@@ -69,7 +71,7 @@ unsigned int Renderer::LinkShader(unsigned int ID, unsigned int vertex, unsigned
     if (!success)
     {
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        Logger::Error("SHADER_LINKING_FAILED {}", infoLog);
         return 0;
     }
 
