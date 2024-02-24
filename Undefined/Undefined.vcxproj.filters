@@ -4,7 +4,6 @@
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
     <ClCompile Include="source\src\application.cpp" />
-    <ClCompile Include="source\src\core\main.cpp" />
     <ClCompile Include="source\src\engine_debug\renderer_debug.cpp" />
     <ClCompile Include="source\src\resources\resource_manager.cpp" />
     <ClCompile Include="source\src\camera\camera.cpp" />

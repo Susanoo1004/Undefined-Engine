@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -73,6 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>external/include;$(IncludePath)</IncludePath>
     <LibraryPath>external/libs/;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Engine\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>external/include;source/include;$(IncludePath)</IncludePath>
@@ -158,7 +159,6 @@
     <ClCompile Include="source\src\memory_leak.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\application.cpp" />
-    <ClCompile Include="source\src\core\main.cpp" />
     <ClCompile Include="source\src\engine_debug\renderer_debug.cpp" />
     <ClCompile Include="source\src\resources\resource_manager.cpp" />
     <ClCompile Include="source\src\camera\camera.cpp" />

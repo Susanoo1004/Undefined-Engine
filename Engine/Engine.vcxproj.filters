@@ -15,14 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\src\core\main.cpp">
+    <ClCompile Include="source\core\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="Undefined.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Undefined.pdb" />
   </ItemGroup>
 </Project>
