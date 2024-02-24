@@ -5,12 +5,12 @@
 #include "wrapper/window_manager.h"
 #include "wrapper/renderer.h"
 #include "wrapper/input_manager.h"
+#include "utils/flag.h"
 
 class ServiceLocator
 {
 public:
-
-    static void Setup();
+    UNDEFINED_ENGINE static void Setup();
 
     template<typename ServiceType>
     static void Provide(ServiceType* p_service)
@@ -24,9 +24,9 @@ public:
         return reinterpret_cast<ServiceType*>(mServices[typeid(ServiceType).hash_code()]);
     }
 
-    static void CleanServiceLocator();
+    UNDEFINED_ENGINE static void CleanServiceLocator();
 
 private:
-    static inline std::unordered_map<size_t, ServiceType*> mServices;
+    UNDEFINED_ENGINE static inline std::unordered_map<size_t, ServiceType*> mServices;
 };
 

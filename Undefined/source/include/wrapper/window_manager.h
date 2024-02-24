@@ -3,8 +3,9 @@
 #include <glfw/glfw3.h>
 
 #include "wrapper/service_type.h"
+#include "utils/flag.h"
 
-class WindowManager : public ServiceType
+class UNDEFINED_ENGINE WindowManager : public ServiceType
 {
 public:
     WindowManager();

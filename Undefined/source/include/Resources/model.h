@@ -6,6 +6,7 @@
 #include <toolbox/Vector2.h>
 
 #include "resources/resource.h"
+#include "utils/flag.h"
 
 struct IndexVertex
 {
@@ -24,13 +25,13 @@ struct Vertex
 class Model : public Resource
 {
 public:
-	Model();
-	Model(const std::string& filepath);
-	~Model();
+	UNDEFINED_ENGINE Model();
+	UNDEFINED_ENGINE Model(const std::string& filepath);
+	UNDEFINED_ENGINE ~Model();
 
-	void Draw();
-	void LoadOBJ(const std::string& filepath);
-	void SetOpenGL();
+	UNDEFINED_ENGINE void Draw();
+	UNDEFINED_ENGINE void LoadOBJ(const std::string& filepath);
+	UNDEFINED_ENGINE void SetOpenGL();
 
 	std::vector<Vertex> vertexBuffer;
 	std::vector<IndexVertex> indexBuffer;

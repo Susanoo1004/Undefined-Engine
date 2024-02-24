@@ -4,15 +4,17 @@
 #include <map>
 #include <vector>
 
+#include "utils/flag.h"
+    
 class KeyInput
 {
 public:
-    KeyInput(std::vector<int> keysToMonitor);
-    ~KeyInput();
+    UNDEFINED_ENGINE KeyInput(std::vector<int> keysToMonitor);
+    UNDEFINED_ENGINE ~KeyInput();
 
-    bool GetIsKeyDown(int key);
-    bool GetIsEnabled();
-    void SetIsEnabled(bool value);
+    UNDEFINED_ENGINE bool GetIsKeyDown(int key);
+    UNDEFINED_ENGINE bool GetIsEnabled();
+    UNDEFINED_ENGINE void SetIsEnabled(bool value);
 
 private:
     void SetIsKeyDown(int key, bool isDown);
@@ -21,10 +23,10 @@ private:
     bool IsEnabled;
 
 public:
-    static void SetupKeyInputs();
+    UNDEFINED_ENGINE static void SetupKeyInputs();
 
 private:
-    static void Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    UNDEFINED_ENGINE static void Callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-    static inline std::vector<KeyInput*> Instances;
+    UNDEFINED_ENGINE static inline std::vector<KeyInput*> Instances;
 };

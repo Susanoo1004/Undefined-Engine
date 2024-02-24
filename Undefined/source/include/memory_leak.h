@@ -2,7 +2,7 @@
 
 #include "utils/flag.h"
 
-class MemoryLeak
+class UNDEFINED_ENGINE MemoryLeak
 {
 public:
 	static void CheckMemoryLeak(bool printResult = false);

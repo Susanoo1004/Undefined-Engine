@@ -3,12 +3,14 @@
 #include <ostream>
 #include <vector>
 
+#include "flag.h"
+
 class Vector;
 class Vector3;
 class Matrix;
 
 /// @brief The Vector2 class represents either a two-dimensional vector or a point.
-class Vector2
+class TOOLBOX Vector2
 {
 public:
 	float x, y;
