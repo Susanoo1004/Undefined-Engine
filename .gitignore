@@ -437,7 +437,6 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,c++
 
 # Ignore our files (*.lib and *.obj)
-!assets
-!external
+!**/assets/**
+!**/external/**
 !source
-!external
