@@ -1,7 +1,9 @@
 #pragma once
 #include <vector>
 
-class Resource
+#include "utils/flag.h"
+
+class UNDEFINED_ENGINE Resource
 {
 public:
 	Resource();

@@ -4,8 +4,9 @@
 #include <toolbox/Matrix4x4.h>
 
 #include "resources/resource.h"
+#include "utils/flag.h"
 
-class Shader : public Resource
+class UNDEFINED_ENGINE Shader : public Resource
 {
 public:
     Shader();

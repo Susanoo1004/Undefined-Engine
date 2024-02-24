@@ -1,8 +1,9 @@
 #pragma once
 
 #include "resources/resource.h"
+#include "utils/flag.h"
 
-class Texture : public Resource
+class UNDEFINED_ENGINE Texture : public Resource
 {
 public:
 	Texture(const char* filepath);

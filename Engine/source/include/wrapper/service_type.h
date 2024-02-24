@@ -1,6 +1,8 @@
 #pragma once
 
-class ServiceType
+#include "utils/flag.h"
+
+class UNDEFINED_ENGINE ServiceType
 {
 
 };

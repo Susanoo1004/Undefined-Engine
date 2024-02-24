@@ -60,7 +60,7 @@ void KeyInput::SetupKeyInputs()
     glfwSetKeyCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), KeyInput::Callback);
 }
 
-void KeyInput::Callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
+void KeyInput::Callback(GLFWwindow*, int key, int, int action, int) 
 {
     for (KeyInput* keyInput : Instances) 
     {

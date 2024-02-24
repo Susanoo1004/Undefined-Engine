@@ -4,19 +4,20 @@
 #include "Resources/texture.h"
 #include "resources/shader.h"
 #include "logger/logger.h"
+#include "utils/flag.h"
 
 class Application
 {
 public:
-	Application();
+	UNDEFINED_ENGINE Application();
 
-	void Init();
-	void Update();
+	UNDEFINED_ENGINE void Init();
+	UNDEFINED_ENGINE void Update();
 
-	void InitQuad();
-	void InitBaseShader();
-	void InitVikingRoom();
-	void Draw();
+	UNDEFINED_ENGINE void InitQuad();
+	UNDEFINED_ENGINE void InitBaseShader();
+	UNDEFINED_ENGINE void InitVikingRoom();
+	UNDEFINED_ENGINE void Draw();
 
 	Camera cam;
 

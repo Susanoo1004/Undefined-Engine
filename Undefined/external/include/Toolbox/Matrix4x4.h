@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Vector4.h"
+#include "flag.h"
 
 class Matrix;
 class Vector;
@@ -12,7 +13,7 @@ class Vector3;
 class Quaternion;
 
 /// @brief The Matrix4x4 class represents a two-dimensional array mainly used for mathematical operations.
-class Matrix4x4
+class TOOLBOX Matrix4x4
 {
 public:
     /// @brief Returns the identity matrix.
@@ -133,7 +134,7 @@ public:
     [[nodiscard]]
     Quaternion ToQuaternion() const;
 
-    static void ViewMatrix(const Vector3& Eye, const Vector3& center, const Vector3& Up, Matrix4x4& result);
+    static void ViewMatrix(const Vector3& eye, const Vector3& center, const Vector3& up, Matrix4x4& result);
     static void ProjectionMatrix(const float fovY, const float aspectRatio, const float zNear, const float zFar, Matrix4x4& result);
 
     [[nodiscard]]

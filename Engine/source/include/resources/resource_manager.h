@@ -6,6 +6,7 @@
 
 #include "resources/resource.h"
 #include "logger/logger.h"
+#include "utils/flag.h"
 
 template<class T>
 concept Type = std::is_base_of<Resource, T>::value;
@@ -13,10 +14,10 @@ concept Type = std::is_base_of<Resource, T>::value;
 class ResourceManager
 {
 public:
-	ResourceManager();
-	~ResourceManager();
+	UNDEFINED_ENGINE ResourceManager();
+	UNDEFINED_ENGINE ~ResourceManager();
 
-	static void LoadAll(std::string path);
+	UNDEFINED_ENGINE static void LoadAll(std::string path);
 
 	template<Type T>
 	std::shared_ptr<T> Create(const std::string& name)
@@ -65,13 +66,12 @@ public:
 		return std::dynamic_pointer_cast<T>(p->second);
 	}
 
-	void Unload(const std::string& name);
-	static void UnloadAll();
+	UNDEFINED_ENGINE void Unload(const std::string& name);
+	UNDEFINED_ENGINE static void UnloadAll();
 
 private:
-
-	static inline std::unordered_map<std::string, std::shared_ptr<Resource>> mResources;
+	UNDEFINED_ENGINE static inline std::unordered_map<std::string, std::shared_ptr<Resource>> mResources;
 
 public:
-	static ResourceManager resourceManager;
+	UNDEFINED_ENGINE static ResourceManager resourceManager;
 };

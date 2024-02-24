@@ -6,19 +6,14 @@
 #include <iostream>
 #include <ts_queue/tsqueue.hpp>
 
-#define ANSI_COLOR_GRAY     "\x1b[38;5;242m"
-#define ANSI_COLOR_YELLOW   "\x1b[33m"
-#define ANSI_COLOR_RED      "\x1b[31m"
+#include "utils/flag.h"
 
-#define ANSI_STYLE_BOLD     "\x1b[1m"
-
-#define ANSI_RESET          "\x1b[0m"
 
 class Logger
 {
 public:
-	Logger();
-	~Logger();
+	UNDEFINED_ENGINE Logger();
+	UNDEFINED_ENGINE ~Logger();
 
 private:
 	enum class LogLevel
@@ -38,7 +33,7 @@ private:
 	};
 
 public:
-	static void Stop();
+	UNDEFINED_ENGINE static void Stop();
 
 	template<class... Types>
 	static void Debug(std::string string, Types... args)
@@ -85,14 +80,14 @@ private:
 	static void CreateDebugFile(std::string path, std::string name);
 	static void SetupLogEntry(LogLevel level, std::string log);
 
-	static inline std::fstream mFile;
+	UNDEFINED_ENGINE static inline std::fstream mFile;
 
 	static void Start();
 	static void PrintEntry(LogEntry entry);
 
-	static inline bool IsRunning = true;
-	static inline std::condition_variable Sleep;
+	UNDEFINED_ENGINE static inline bool IsRunning = true;
+	UNDEFINED_ENGINE static inline std::condition_variable Sleep;
 
-	static inline std::thread Thread = std::thread(&Logger::Start);
-	static inline TsQueue<LogEntry> EntryList;
+	UNDEFINED_ENGINE static inline std::thread Thread = std::thread(&Logger::Start);
+	UNDEFINED_ENGINE static inline TsQueue<LogEntry> EntryList;
 };

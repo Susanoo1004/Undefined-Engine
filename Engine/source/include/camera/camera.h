@@ -5,8 +5,9 @@
 
 #include "toolbox/Matrix4x4.h"
 #include "toolbox/Vector3.h"
+#include "utils/flag.h"
 
-class Camera
+class UNDEFINED_ENGINE Camera
 {
 public:
     Camera(float width, float height);
@@ -19,7 +20,7 @@ public:
 
     void Update();
 
-    void ProcessInput(GLFWwindow* window);
+    void ProcessInput(GLFWwindow*);
 
     Vector3 Eye;
     Vector3 LookAt;
@@ -46,6 +47,5 @@ private:
 public:
     static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
-    static Camera* sCamPtr;
+     static Camera* sCamPtr;
 };
-

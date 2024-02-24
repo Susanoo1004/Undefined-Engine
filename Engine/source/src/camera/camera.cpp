@@ -67,7 +67,7 @@ void Camera::Update()
     mVP = mPerspective * mView;
 }
 
-void Camera::ProcessInput(GLFWwindow* window)
+void Camera::ProcessInput(GLFWwindow*)
 {
     const float cameraSpeed = 0.05f; // adjust accordingly
 

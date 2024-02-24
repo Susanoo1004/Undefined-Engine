@@ -1,16 +1,18 @@
 #pragma once
-#include "Vector3.h"
 
 #include <compare>
 #include <ostream>
 #include <vector>
+
+#include "Vector3.h"
+#include "flag.h"
 
 class Vector;
 class Matrix;
 class Matrix4x4;
 
 /// @brief The Matrix3x3 class represents a two-dimensional array mainly used for mathematical operations.
-class Matrix3x3
+class TOOLBOX Matrix3x3
 {
 public:
     /// @brief Returns the identity matrix.
