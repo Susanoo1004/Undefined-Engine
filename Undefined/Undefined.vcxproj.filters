@@ -18,7 +18,15 @@
     <ClCompile Include="source\src\service_locator.cpp" />
     <ClCompile Include="source\src\wrapper\input_manager.cpp" />
     <ClCompile Include="source\src\wrapper\key_input.cpp" />
-    <ClCompile Include="external\src\memory_leak\memory_leak_detector.cpp" />
+    <ClCompile Include="source\src\interface\interface.cpp" />
+    <ClCompile Include="external\src\imgui\imgui.cpp" />
+    <ClCompile Include="external\src\imgui\imgui_demo.cpp" />
+    <ClCompile Include="external\src\imgui\imgui_draw.cpp" />
+    <ClCompile Include="external\src\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="external\src\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="external\src\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
+    <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -36,12 +44,9 @@
     <ClInclude Include="external\include\glad\glad.h" />
     <ClInclude Include="external\include\glfw\glfw3.h" />
     <ClInclude Include="external\include\glfw\glfw3native.h" />
-    <ClInclude Include="external\include\imgui\imconfig.h" />
     <ClInclude Include="external\include\imgui\imgui.h" />
     <ClInclude Include="external\include\imgui\imgui_impl_glfw.h" />
     <ClInclude Include="external\include\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="external\include\imgui\imgui_internal.h" />
-    <ClInclude Include="external\include\imgui\imstb_textedit.h" />
     <ClInclude Include="external\include\KHR\khrplatform.h" />
     <ClInclude Include="source\include\Debug\RHI_debug.h" />
     <ClInclude Include="source\include\engine_debug\renderer_debug.h" />
@@ -63,11 +68,17 @@
     <ClInclude Include="source\include\wrapper\service_type.h" />
     <ClInclude Include="source\include\wrapper\input_manager.h" />
     <ClInclude Include="source\include\wrapper\key_input.h" />
-    <ClInclude Include="external\include\memory_leak\memory_leak_detector.h" />
+    <ClInclude Include="source\include\interface\interface.h" />
+    <ClInclude Include="external\include\imgui\imgui_stdlib.h" />
+    <ClInclude Include="external\include\imgui\imconfig.h" />
+    <ClInclude Include="external\include\imgui\imgui_internal.h" />
+    <ClInclude Include="external\include\imgui\imstb_textedit.h" />
+    <ClInclude Include="external\include\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="external\include\imgui\imstb_rectpack.h" />
+    <ClInclude Include="external\include\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
-    <Library Include="external\libs\imguid.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>

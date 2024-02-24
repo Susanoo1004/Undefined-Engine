@@ -13,7 +13,6 @@ int main()
 
     Application app;
 
-
     if (!ServiceLocator::Get<WindowManager>()->SetupGlfw())
     {
         return 1;
