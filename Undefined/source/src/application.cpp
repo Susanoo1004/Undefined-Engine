@@ -7,6 +7,7 @@
 #include "resources/texture.h"
 #include "resources/model.h"
 #include "resources/resource_manager.h"
+#include "interface/interface.h"
 
 Application::Application() : cam(800,600)
 {
@@ -14,6 +15,8 @@ Application::Application() : cam(800,600)
 
 void Application::Init()
 {
+    Interface::Init();
+
     baseShader = Shader("source/shader_code/base_shader.vs", "source/shader_code/base_shader.fs");
 
     ResourceManager::LoadAll("assets/");
@@ -30,6 +33,8 @@ void Application::Init()
 
 void Application::Update()
 {
+    Interface::Update();
+
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
     glActiveTexture(GL_TEXTURE0);
