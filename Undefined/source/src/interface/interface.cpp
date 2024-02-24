@@ -33,7 +33,7 @@ void Interface::Update()
 	ImGui::NewFrame();
 
 	ImGui::Begin("Hello");
-	ImGui::Text("kys");
+	ImGui::Text("test");
 
 	ImGui::End();
 
