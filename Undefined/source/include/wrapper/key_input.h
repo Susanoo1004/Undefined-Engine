@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "utils/flag.h"
-    
+
 class KeyInput
 {
 public:

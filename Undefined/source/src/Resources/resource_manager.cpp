@@ -30,7 +30,7 @@ void ResourceManager::LoadAll(std::string path)
 			}
 			mResources.emplace(name, resource);
 
-			Logger::Info("Model {} loaded", name);
+			Logger::Debug("Model {} loaded", name);
 
 		}
 
@@ -45,7 +45,7 @@ void ResourceManager::LoadAll(std::string path)
 			}
 			mResources.emplace(name, resource);
 
-			Logger::Info("Texture {} loaded", name);
+			Logger::Debug("Texture {} loaded", name);
 		}
 	}
 }
@@ -55,14 +55,14 @@ void ResourceManager::Unload(const std::string& name)
 	mResources[name].reset();
 	mResources.erase(name);
 
-	Logger::Info("{} unloaded", name);
+	Logger::Debug("{} unloaded", name);
 }
 
 void ResourceManager::UnloadAll()
 {
 	for (auto&& p : mResources)
 	{
-		Logger::Info("{} {} unloaded", typeid(decltype(*p.second.get())).name(), p.first);
+		Logger::Debug("{} {} unloaded", typeid(decltype(*p.second.get())).name(), p.first);
 	}
 	mResources.clear();
 }

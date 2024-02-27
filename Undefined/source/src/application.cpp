@@ -33,8 +33,6 @@ void Application::Init()
 
 void Application::Update()
 {
-    Interface::Update();
-
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
     glActiveTexture(GL_TEXTURE0);
@@ -50,6 +48,8 @@ void Application::Update()
 
     baseShader.Use();
     Draw();
+
+    Interface::Update();
 }
 
 void Application::InitQuad()

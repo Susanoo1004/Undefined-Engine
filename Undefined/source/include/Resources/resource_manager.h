@@ -31,7 +31,7 @@ public:
 		}
 		mResources.emplace(name, resource);
 
-		Logger::Info("{} {} loaded", typeid(T).name(), name);
+		Logger::Debug("{} {} loaded", typeid(T).name(), name);
 
 		return resource;
 	}
@@ -48,7 +48,7 @@ public:
 		}
 		mResources.emplace(name, resource);
 
-		Logger::Info("{} {} loaded", typeid(T).name(), name);
+		Logger::Debug("{} {} loaded", typeid(T).name(), name);
 
 		return resource;
 	}
