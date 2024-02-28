@@ -161,7 +161,11 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\interface\content_browser.cpp" />
+    <ClCompile Include="source\src\interface\FPSgraph.cpp" />
+    <ClCompile Include="source\src\interface\inspector.cpp" />
     <ClCompile Include="source\src\interface\interface.cpp" />
+    <ClCompile Include="source\src\utils\utils.cpp" />
     <ClCompile Include="source\src\world\component\component.cpp" />
     <ClCompile Include="source\src\world\component\light.cpp" />
     <ClCompile Include="source\src\world\component\skybox.cpp" />
@@ -209,7 +213,11 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\interface\content_browser.h" />
+    <ClInclude Include="source\include\interface\FPSgraph.h" />
+    <ClInclude Include="source\include\interface\inspector.h" />
     <ClInclude Include="source\include\interface\interface.h" />
+    <ClInclude Include="source\include\utils\utils.h" />
     <ClInclude Include="source\include\world\component\component.h" />
     <ClInclude Include="source\include\world\component\light.h" />
     <ClInclude Include="source\include\world\component\skybox.h" />

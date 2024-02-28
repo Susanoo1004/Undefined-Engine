@@ -1,14 +1,11 @@
 #include "interface/interface.h"
+
+#include "utils/utils.h"
 #include "service_locator.h"
 
-
-Interface::~Interface()
-{
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyPlatformWindows();
-    ImGui::DestroyContext();
-}
+#include "interface/FPSgraph.h"
+#include "interface/content_browser.h"
+#include "interface/inspector.h"
 
 void Interface::Init()
 {
@@ -25,6 +22,9 @@ void Interface::Init()
 
     ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<WindowManager>()->GetWindowVar(), true);
     ImGui_ImplOpenGL3_Init(glslVersion);
+
+    ContentBrowser::Init();
+    FPSGraph::Init();
 }
 
 void Interface::NewFrame()
@@ -77,96 +77,27 @@ void Interface::BeginDockSpace()
     ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 }
 
-
-
 void Interface::Update()
 {
     NewFrame();
     BeginDockSpace();
 
-    ContentBrowser();
-    Inspector();
+    FPSGraph::ShowWindow();
+    ContentBrowser::ShowWindow();
+    Inspector::ShowWindow();
 
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
     ImGui::End();
     Render();
 }
 
-
-void Interface::ContentBrowserDirectory(const std::filesystem::path& path)
+void Interface::Delete()
 {
-    bool isDirectory = std::filesystem::is_directory(path);
-    
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanFullWidth | ImGuiTreeNodeFlags_FramePadding;
+    FPSGraph::Delete();
 
-    if (isDirectory)
-    {
-        flags |= ImGuiTreeNodeFlags_None;
-    }
-
-    else
-    {
-        flags |= ImGuiTreeNodeFlags_Leaf;
-    }
-
-    if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
-    {
-        if (ImGui::BeginPopupContextItem())
-        {
-            if (ImGui::Button("Open in explorer"))
-            {
-                std::string explorer = "start explorer /select," + absolute(path).string();
-                system(explorer.c_str());
-            }
-            ImGui::EndPopup();
-        }
-
-        if (isDirectory)
-        {
-            for (const auto& entry : std::filesystem::directory_iterator(path))
-            {
-                ContentBrowserDirectory(entry);
-            }
-        }
-        ImGui::TreePop();
-    }
-
-    else
-    {
-        if (ImGui::BeginPopupContextItem())
-        {
-            if (ImGui::Button("Open in explorer"))
-            {
-                std::string explorer = "start explorer /select," + absolute(path).string();
-                system(explorer.c_str());
-            }
-            ImGui::EndPopup();
-        }
-    }
-}
-
-void Interface::ContentBrowser()
-{
-    ImGui::Begin("Content Browser");
-
-    ImGui::BeginChild("Hierarchy", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 0), ImGuiChildFlags_Border | 
-      ImGuiChildFlags_ResizeX);
-
-    ContentBrowserDirectory("../Editor/assets");
-
-    ImGui::EndChild();
-
-    ImGui::SameLine();
-    ImGui::BeginChild("Repertory", ImVec2(0, 0), ImGuiChildFlags_Border);
-    ImGui::EndChild();
-
-    ImGui::End();
-}
-
-void Interface::Inspector()
-{
-    ImGui::Begin("Inspector");
-
-    ImGui::End();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyPlatformWindows();
+    ImGui::DestroyContext();
 }

@@ -3,16 +3,17 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
+
 #include <filesystem>
+#include <vector>
 
 #include "utils/flag.h"
 
 class UNDEFINED_ENGINE Interface
 {
-public:
-	Interface();
-	~Interface();
+	STATIC_CLASS(Interface)
 
+public:
 	static void Init();
 
 	static void Update();
@@ -20,8 +21,5 @@ public:
 	static void BeginDockSpace();
 	static void Render();
 
-	static void ContentBrowserDirectory(const std::filesystem::path& path);
-
-	static void ContentBrowser();
-	static void Inspector();
+	static void Delete();
 };
