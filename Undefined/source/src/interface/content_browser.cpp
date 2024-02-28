@@ -4,7 +4,8 @@
 
 void ContentBrowser::Init()
 {
-    mPath = "../Editor/assets";
+    mPath = "../Editor";
+    mActualPath = mPath;
 }
 
 void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
@@ -45,6 +46,7 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
 
         if (isDirectory)
         {
+            mActualPath = path;
             for (const auto& entry : std::filesystem::directory_iterator(path))
             {
                 DisplayDirectory(entry);
@@ -67,9 +69,21 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
     }
 }
 
-void ContentBrowser::ShowDirectory()
+void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
 {
-
+    for (const auto& entry : std::filesystem::directory_iterator(actualPath))
+    {
+        //ImGui::ImageButton()
+        ImGui::Text(entry.path().filename().string().c_str());
+        if(ImGui::GetCursorPosX() < ImGui::GetWindowContentRegionMax().x)
+        {
+            ImGui::SameLine();
+        }
+        else
+        {
+            ImGui::NewLine();
+        }
+    }
 }
 
 void ContentBrowser::ShowWindow()
@@ -82,7 +96,7 @@ void ContentBrowser::ShowWindow()
 
     ImGui::SameLine();
     ImGui::BeginChild("Repertory", ImVec2(0, 0), ImGuiChildFlags_Border);
-
+    ShowDirectory(mActualPath);
     ImGui::EndChild();
 
     ImGui::End();

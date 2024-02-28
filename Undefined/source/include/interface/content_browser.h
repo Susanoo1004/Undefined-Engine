@@ -3,16 +3,17 @@
 #include "utils/flag.h"
 #include <filesystem>
 
-class UNDEFINED_ENGINE ContentBrowser
+class ContentBrowser
 {
 	STATIC_CLASS(ContentBrowser)
 
 public:
-	static void Init();
-	static void DisplayDirectory(const std::filesystem::path& path);
-	static void ShowDirectory();
-	static void ShowWindow();
+	UNDEFINED_ENGINE static void Init();
+	UNDEFINED_ENGINE static void DisplayDirectory(const std::filesystem::path& path);
+	UNDEFINED_ENGINE static void ShowDirectory(std::filesystem::path actualPath);
+	UNDEFINED_ENGINE static void ShowWindow();
 	
 private:
 	static inline std::filesystem::path mPath;
+	static inline std::filesystem::path mActualPath;
 };
