@@ -10,6 +10,7 @@ public:
 	~Texture();
 
 	const unsigned int GetID();
+	bool isValid();
 
 private:
 	unsigned int mID;

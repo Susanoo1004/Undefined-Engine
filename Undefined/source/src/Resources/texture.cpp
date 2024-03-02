@@ -57,3 +57,8 @@ const unsigned int Texture::GetID()
 {
 	return mID;
 }
+
+bool Texture::isValid()
+{
+	return (mWidth > 0 && mHeight > 0);
+}

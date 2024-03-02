@@ -32,6 +32,7 @@ public:
 	UNDEFINED_ENGINE void Draw();
 	UNDEFINED_ENGINE void LoadOBJ(const std::string& filepath);
 	UNDEFINED_ENGINE void SetOpenGL();
+	UNDEFINED_ENGINE bool isValid();
 
 	std::vector<Vertex> vertexBuffer;
 	std::vector<IndexVertex> indexBuffer;

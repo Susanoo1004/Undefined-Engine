@@ -17,7 +17,8 @@ void ResourceManager::LoadAll(std::string path)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
-		std::string name = entry.path().string();
+		std::size_t pos = path.find("assets/");
+		std::string name = entry.path().string().substr(pos);
 
 		if (name.ends_with(".obj"))
 		{
@@ -30,7 +31,10 @@ void ResourceManager::LoadAll(std::string path)
 			}
 			mResources.emplace(name, resource);
 
-			Logger::Debug("Model {} loaded", name);
+			if (resource->isValid())
+			{
+				Logger::Debug("Model {} loaded", name);
+			}
 
 		}
 
@@ -44,8 +48,10 @@ void ResourceManager::LoadAll(std::string path)
 				p.first->second.reset();
 			}
 			mResources.emplace(name, resource);
-
-			Logger::Debug("Texture {} loaded", name);
+			if (resource->isValid())
+			{
+				Logger::Debug("Texture {} loaded", name);
+			}
 		}
 	}
 }
@@ -65,4 +71,25 @@ void ResourceManager::UnloadAll()
 		Logger::Debug("{} {} unloaded", typeid(decltype(*p.second.get())).name(), p.first);
 	}
 	mResources.clear();
+}
+
+void ResourceManager::Rename(std::string oldName, std::string newName)
+{
+	auto&& p = mResources.find(oldName);
+
+	if (p != mResources.end())
+	{
+		mResources.emplace(newName, p->second);
+
+		if (p->second->isValid())
+		{
+			Logger::Debug("Resource {} renamed to {}", oldName, newName);
+		}
+
+		mResources.erase(p);
+	}
+	else
+	{
+		Logger::Warning("Resource {} not found", oldName);
+	}
 }

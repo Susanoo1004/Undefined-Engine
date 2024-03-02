@@ -8,4 +8,5 @@ class UNDEFINED_ENGINE Resource
 public:
 	Resource();
 	virtual ~Resource();
+	virtual bool isValid();
 };

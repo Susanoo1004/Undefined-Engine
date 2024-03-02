@@ -2,6 +2,8 @@
 
 #include <imgui/imgui.h>
 
+#include "Resources/resource_manager.h"
+
 void ContentBrowser::Init()
 {
     mPath = "../Editor";
@@ -73,14 +75,18 @@ void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
 {
     for (const auto& entry : std::filesystem::directory_iterator(actualPath))
     {
-        //ImGui::ImageButton()
-        ImGui::Text(entry.path().filename().string().c_str());
-        if(ImGui::GetCursorPosX() < ImGui::GetWindowContentRegionMax().x)
+        ImGui::SameLine();
+        if (ImGui::GetCursorPosX() <= ImGui::GetContentRegionAvail().x * 2)
         {
-            ImGui::SameLine();
+            std::string filename = entry.path().filename().string();
+            ImGui::BeginChild(filename.c_str());
+            ImGui::TextWrapped(filename.c_str());
+            //ImGui::Image(ResourceManager::Get());
+            ImGui::EndChild();
         }
         else
         {
+            ImGui::Dummy(ImVec2(0, 0));
             ImGui::NewLine();
         }
     }

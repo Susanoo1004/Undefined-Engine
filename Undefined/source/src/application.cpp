@@ -20,6 +20,9 @@ void Application::Init()
     baseShader = Shader("source/shader_code/base_shader.vs", "source/shader_code/base_shader.fs");
 
     ResourceManager::LoadAll("assets/");
+    ResourceManager::LoadAll("../Undefined/assets/");
+    ResourceManager::Rename("assets/file.png", "file");
+    ResourceManager::Rename("assets/folder.png", "folder");
 
     //ResourceManager::resourceManager.Create<Texture>("assets/container.jpg");
 
