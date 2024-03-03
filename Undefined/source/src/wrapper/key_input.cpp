@@ -61,7 +61,7 @@ void KeyInput::SetupKeyInputs()
     glfwSetMouseButtonCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), KeyInput::MouseButtonCallback);
 }
 
-void KeyInput::Callback(GLFWwindow*, int key, int, int action, int)
+void KeyInput::Callback(GLFWwindow*, int key, int , int action, int )
 {
     for (KeyInput* keyInput : Instances)
     {
@@ -69,7 +69,7 @@ void KeyInput::Callback(GLFWwindow*, int key, int, int action, int)
     }
 }
 
-void KeyInput::MouseButtonCallback(GLFWwindow*, int button, int action, int)
+void KeyInput::MouseButtonCallback(GLFWwindow*, int button, int action, int )
 {
     for (KeyInput* keyInput : Instances)
     {

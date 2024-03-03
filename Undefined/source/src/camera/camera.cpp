@@ -86,7 +86,7 @@ void Camera::ProcessInput(GLFWwindow*)
     if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_W))
     {
         Eye += cameraSpeed * LookAt;
-    }
+    }   
     if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_S))
     {
         Eye -= cameraSpeed * LookAt;
