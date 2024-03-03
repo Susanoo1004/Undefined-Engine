@@ -30,6 +30,7 @@ void Application::Init()
     }
 
     InitVikingRoom();
+
 }
 
 void Application::Update()

@@ -86,6 +86,8 @@ void Interface::Update()
     ContentBrowser::ShowWindow();
     Inspector::ShowWindow();
 
+    ImGui::ShowDemoWindow();
+
     ImGui::End();
     Render();
 }

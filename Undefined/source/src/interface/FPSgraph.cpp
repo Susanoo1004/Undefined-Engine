@@ -12,6 +12,8 @@ void FPSGraph::Init()
     mLastTotalTime = (float)glfwGetTime();
     mMaxFPS = 200.0f;
     mArraySize = 50;
+    mMinFpsOffset = 5;
+    mArraySizeOffset = 5;
 }
 
 void FPSGraph::ShowWindow()
@@ -21,10 +23,7 @@ void FPSGraph::ShowWindow()
     //Every ImGUI slider 
     ImGui::SliderFloat("Time between updates", &mUpdateTime, 0.0f, 1.0f, "%.2f");
     ImGui::SliderFloat("Max FPS", &mMaxFPS, 0.0f, 300, "%.2f");
-    if (ImGui::SliderInt("Array Size", &mArraySize, 2, 100))
-    {
-        mFrameRateArray.resize(mArraySize);
-    }
+    ImGui::SliderInt("Array Size", &mArraySize, 2, 100);
 
     if (Utils::OnInterval((float)glfwGetTime(), mLastTotalTime, mUpdateTime))
     {
@@ -32,7 +31,16 @@ void FPSGraph::ShowWindow()
 
         //If the array is not full we pushback values instead of going to an index to modify the value so the array fills up and display a correct fps average and not an average with multiple zero's in the array
         if (mFrameRateArray.size() < mArraySize)
+        {
             mFrameRateArray.push_back(lastFPS);
+        }
+
+        //If the array is full we resize it and move the arrayIndex to the arraySize minus an offset to avoid vector out of range fatal error
+        else if (mFrameRateArray.size() > mArraySize)
+        {
+            mFrameRateArray.resize(mArraySize);
+            mArrayIndex = mArraySize - mArraySizeOffset;
+        }
         
         //We check if the ArrayIndex is in the FrameRateArray size so there is no vector out of range because of call stack when we change ArraySize
         if(mArrayIndex <= mFrameRateArray.size())
@@ -47,7 +55,7 @@ void FPSGraph::ShowWindow()
     //Cap the min fps to : current fps + 5
     if (mMaxFPS < Utils::Average(mFrameRateArray))
     {
-        mMaxFPS = Utils::Average(mFrameRateArray) + 5;
+        mMaxFPS = Utils::Average(mFrameRateArray) + mMinFpsOffset;
     }
 
     //Draw FPS Graph
