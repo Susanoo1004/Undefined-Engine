@@ -14,6 +14,7 @@ public:
 	UNDEFINED_ENGINE static void ShowWindow();
 	
 private:
+	static void TextCentered(std::string text);
 	static inline std::filesystem::path mPath;
 	static inline std::filesystem::path mActualPath;
 };

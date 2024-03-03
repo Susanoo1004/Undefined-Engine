@@ -12,7 +12,7 @@ Texture::Texture(const char* filepath)
 	glBindTexture(GL_TEXTURE_2D, mID);
 
 	int channelCount;
-	stbi_set_flip_vertically_on_load(true);
+	//stbi_set_flip_vertically_on_load(true);
 	const unsigned char* data = stbi_load(filepath, &mWidth, &mHeight, &channelCount, 0);
 
 	if (data)
@@ -56,6 +56,16 @@ Texture::~Texture()
 const unsigned int Texture::GetID()
 {
 	return mID;
+}
+
+const unsigned int Texture::GetWidth()
+{
+	return mWidth;
+}
+
+const unsigned int Texture::GetHeight()
+{
+	return mHeight;
 }
 
 bool Texture::isValid()

@@ -3,6 +3,7 @@
 #include <imgui/imgui.h>
 
 #include "Resources/resource_manager.h"
+#include <Resources/texture.h>
 
 void ContentBrowser::Init()
 {
@@ -54,6 +55,7 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
                 DisplayDirectory(entry);
             }
         }
+
         ImGui::TreePop();
     }
 
@@ -71,17 +73,57 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
     }
 }
 
+void ContentBrowser::TextCentered(std::string text)
+{
+    auto windowWidth = ImGui::GetWindowSize().x;
+    auto textWidth = ImGui::CalcTextSize(text.c_str()).x;
+
+    ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+    ImGui::TextWrapped(text.c_str());
+}
+
 void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
 {
+    std::shared_ptr<Texture> file = ResourceManager::resourceManager.Get<Texture>("file");
+    std::shared_ptr<Texture> folder = ResourceManager::resourceManager.Get<Texture>("folder");
+
     for (const auto& entry : std::filesystem::directory_iterator(actualPath))
     {
+
         ImGui::SameLine();
         if (ImGui::GetCursorPosX() <= ImGui::GetContentRegionAvail().x * 2)
         {
+            ImVec2 imageSize;
             std::string filename = entry.path().filename().string();
-            ImGui::BeginChild(filename.c_str());
-            ImGui::TextWrapped(filename.c_str());
-            //ImGui::Image(ResourceManager::Get());
+ 
+
+            if (entry.is_directory())
+            {
+                imageSize = ImVec2(folder->GetWidth(), folder->GetHeight());
+                ImGui::BeginChild(filename.c_str(), ImVec2(imageSize.x + 20, imageSize.y + 40));
+                ImGui::Image((ImTextureID)folder->GetID(), imageSize);
+
+                if (ImGui::IsWindowHovered() && ImGui::IsMouseDoubleClicked(0))
+                {
+                    mActualPath = entry.path();
+                }
+            }
+            else
+            {
+                imageSize = ImVec2(file->GetWidth(), file->GetHeight());
+                ImGui::BeginChild(filename.c_str(), ImVec2(imageSize.x + 20, imageSize.y + 40));
+
+                if (ImGui::BeginDragDropSource())
+                {
+                    //ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+                    ImGui::Text(filename.c_str());
+                    ImGui::EndDragDropSource();
+                }
+
+                ImGui::Image((ImTextureID)file->GetID(), imageSize);
+            }
+
+            TextCentered(filename);
             ImGui::EndChild();
         }
         else
@@ -89,6 +131,8 @@ void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
             ImGui::Dummy(ImVec2(0, 0));
             ImGui::NewLine();
         }
+
+
     }
 }
 

@@ -24,8 +24,6 @@ void Application::Init()
     ResourceManager::Rename("assets/file.png", "file");
     ResourceManager::Rename("assets/folder.png", "folder");
 
-    //ResourceManager::resourceManager.Create<Texture>("assets/container.jpg");
-
     if (baseShader.ID)
     {
         baseShader.Use();
@@ -96,10 +94,6 @@ void Application::InitQuad()
 
 void Application::InitVikingRoom()
 {
-    //ResourceManager::resourceManager.Create<Texture>("viking_room.png", "assets/viking_room.png");
-
-    //ResourceManager::resourceManager.Create<Model>("viking_room.obj", "assets/viking_room.obj");
-
     std::shared_ptr<Model> model = ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj");
 
     glGenBuffers(1, &mVBO);

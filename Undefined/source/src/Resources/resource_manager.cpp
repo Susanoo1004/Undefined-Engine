@@ -18,7 +18,8 @@ void ResourceManager::LoadAll(std::string path)
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
 		std::size_t pos = path.find("assets/");
-		std::string name = entry.path().string().substr(pos);
+		std::string name = entry.path().string();
+		std::string newName = name.substr(pos);
 
 		if (name.ends_with(".obj"))
 		{
@@ -29,11 +30,11 @@ void ResourceManager::LoadAll(std::string path)
 			{
 				p.first->second.reset();
 			}
-			mResources.emplace(name, resource);
+			mResources.emplace(newName, resource);
 
 			if (resource->isValid())
 			{
-				Logger::Debug("Model {} loaded", name);
+				Logger::Debug("Model {} loaded", newName);
 			}
 
 		}
@@ -47,10 +48,10 @@ void ResourceManager::LoadAll(std::string path)
 			{
 				p.first->second.reset();
 			}
-			mResources.emplace(name, resource);
+			mResources.emplace(newName, resource);
 			if (resource->isValid())
 			{
-				Logger::Debug("Texture {} loaded", name);
+				Logger::Debug("Texture {} loaded", newName);
 			}
 		}
 	}
