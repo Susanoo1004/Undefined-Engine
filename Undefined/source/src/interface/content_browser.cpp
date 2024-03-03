@@ -99,7 +99,7 @@ void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
 
             if (entry.is_directory())
             {
-                imageSize = ImVec2(folder->GetWidth(), folder->GetHeight());
+                imageSize = ImVec2((float)folder->GetWidth(), (float)folder->GetHeight());
                 ImGui::BeginChild(filename.c_str(), ImVec2(imageSize.x + 20, imageSize.y + 40));
                 ImGui::Image((ImTextureID)folder->GetID(), imageSize);
 
@@ -110,7 +110,7 @@ void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
             }
             else
             {
-                imageSize = ImVec2(file->GetWidth(), file->GetHeight());
+                imageSize = ImVec2((float)file->GetWidth(), (float)file->GetHeight());
                 ImGui::BeginChild(filename.c_str(), ImVec2(imageSize.x + 20, imageSize.y + 40));
 
                 if (ImGui::BeginDragDropSource())

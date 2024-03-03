@@ -9,7 +9,7 @@
 void FPSGraph::Init()
 {
     mUpdateTime = 0.1f;
-    mLastTotalTime = glfwGetTime();
+    mLastTotalTime = (float)glfwGetTime();
     mMaxFPS = 200.0f;
     mArraySize = 50;
 }
@@ -26,7 +26,7 @@ void FPSGraph::ShowWindow()
         mFrameRateArray.resize(mArraySize);
     }
 
-    if (Utils::OnInterval(glfwGetTime(), mLastTotalTime, mUpdateTime))
+    if (Utils::OnInterval((float)glfwGetTime(), mLastTotalTime, mUpdateTime))
     {
         float lastFPS = 1.0f / ImGui::GetIO().DeltaTime;
 
@@ -38,7 +38,7 @@ void FPSGraph::ShowWindow()
             mFrameRateArray[mArrayIndex] = lastFPS;
 
         mArrayIndex = (mArrayIndex + 1) % mFrameRateArray.size();
-        mLastTotalTime = glfwGetTime();
+        mLastTotalTime = (float)glfwGetTime();
     }
 
     std::string string = "average : " + std::to_string((int)Utils::Average(mFrameRateArray));
