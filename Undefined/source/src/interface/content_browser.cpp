@@ -30,6 +30,7 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
 
     if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
     {
+        //Setup for the drag and drop system
         if (ImGui::BeginDragDropSource())
         {
             //ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
@@ -37,6 +38,7 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
             ImGui::EndDragDropSource();
         }
 
+        //Window that pop when we right click on a file so we can open it in our windows explorer
         if (ImGui::BeginPopupContextItem())
         {
             if (ImGui::Button("Open in explorer"))
@@ -50,6 +52,8 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
         if (isDirectory)
         {
             mActualPath = path;
+
+            //For every folder we call the function to display what's inside
             for (const auto& entry : std::filesystem::directory_iterator(path))
             {
                 DisplayDirectory(entry);
@@ -61,6 +65,7 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
 
     else
     {
+        //Window that pop when we right click on a folder so we can open it in our windows explorer
         if (ImGui::BeginPopupContextItem())
         {
             if (ImGui::Button("Open in explorer"))
@@ -84,25 +89,27 @@ void ContentBrowser::TextCentered(std::string text)
 
 void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
 {
+    //Get the textures for each images we will use
     std::shared_ptr<Texture> file = ResourceManager::resourceManager.Get<Texture>("file");
     std::shared_ptr<Texture> folder = ResourceManager::resourceManager.Get<Texture>("folder");
 
+    // For loop that goes through every file/folder in a path and displays them
     for (const auto& entry : std::filesystem::directory_iterator(actualPath))
     {
-
         ImGui::SameLine();
         if (ImGui::GetCursorPosX() <= ImGui::GetContentRegionAvail().x * 2)
         {
             ImVec2 imageSize;
             std::string filename = entry.path().filename().string();
  
-
+            // Check if directory so it can add a directory image and check if it's clicked
             if (entry.is_directory())
             {
-                imageSize = ImVec2(folder->GetWidth(), folder->GetHeight());
+                imageSize = ImVec2((float)folder->GetWidth(), (float)folder->GetHeight());
                 ImGui::BeginChild(filename.c_str(), ImVec2(imageSize.x + 20, imageSize.y + 40));
                 ImGui::Image((ImTextureID)folder->GetID(), imageSize);
 
+                //If we double click on a folder it shows us what's inside
                 if (ImGui::IsWindowHovered() && ImGui::IsMouseDoubleClicked(0))
                 {
                     mActualPath = entry.path();
@@ -110,9 +117,10 @@ void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
             }
             else
             {
-                imageSize = ImVec2(file->GetWidth(), file->GetHeight());
+                imageSize = ImVec2((float)file->GetWidth(), (float)file->GetHeight());
                 ImGui::BeginChild(filename.c_str(), ImVec2(imageSize.x + 20, imageSize.y + 40));
 
+                //Setup for the drag and drop system (only for the files)
                 if (ImGui::BeginDragDropSource())
                 {
                     //ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
@@ -128,6 +136,7 @@ void ContentBrowser::ShowDirectory(std::filesystem::path actualPath)
         }
         else
         {
+            //Create a dummy if we can't create another child for a file/folder so it creates an empty space and go to a new line
             ImGui::Dummy(ImVec2(0, 0));
             ImGui::NewLine();
         }

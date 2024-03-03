@@ -10,7 +10,10 @@ class FPSGraph
 
 public:
 	UNDEFINED_ENGINE static void Init();
+
+	//Update for the FPS Graph
 	UNDEFINED_ENGINE static void ShowWindow();
+
 	UNDEFINED_ENGINE static void Delete();
 
 private:
