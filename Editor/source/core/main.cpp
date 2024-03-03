@@ -30,7 +30,7 @@ int main()
 
     ServiceLocator::Get<Renderer>()->Init();
 
-    //ServiceLocator::Get<InputManager>()->SetCursorPosCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), Camera::MouseCallback);
+    ServiceLocator::Get<InputManager>()->SetCursorPosCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), Camera::MouseCallback);
 
     KeyInput::SetupKeyInputs();
 
