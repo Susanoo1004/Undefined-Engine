@@ -6,6 +6,7 @@
 #include "utils/flag.h"
 #include "service_locator.h"
 #include "wrapper/input_manager.h"
+#include "interface/interface.h"
 
 int main()
 {
@@ -61,6 +62,7 @@ int main()
 
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
+    Interface::Delete();
 
     Logger::Stop();
     MemoryLeak::EndMemoryLeak();

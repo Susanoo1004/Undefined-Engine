@@ -4,6 +4,19 @@
 #define UNDEFINED_ENGINE __declspec(dllimport)
 #endif
 
+#define STATIC_CLASS(type)              \
+    public:                             \
+    type() = delete;                    \
+    ~type() = delete;                   \
+    DELETE_COPY_MOVE_OPERATIONS(type)   \
+    private:
+
+#define DELETE_COPY_MOVE_OPERATIONS(type)          \
+    type(const type& other) = delete;              \
+    type(type&& other) = delete;                   \
+    type& operator=(const type& other) = delete;   \
+    type& operator=(type&& other) = delete;
+
 //#ifdef _DEBUG
 //	#define _CRTDBG_MAP_ALLOC
 //	#include <stdlib.h>

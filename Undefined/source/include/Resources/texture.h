@@ -10,6 +10,9 @@ public:
 	~Texture();
 
 	const unsigned int GetID();
+	const unsigned int GetWidth();
+	const unsigned int GetHeight();
+	bool isValid();
 
 private:
 	unsigned int mID;

@@ -22,7 +22,7 @@ void RendererDebug::DebugInit()
 
             else
             {
-                Logger::Info("{}", message);
+                Logger::Warning("{}", message);
             }
     },
     nullptr

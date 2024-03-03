@@ -31,7 +31,7 @@ public:
 		}
 		mResources.emplace(name, resource);
 
-		Logger::Info("{} {} loaded", typeid(T).name(), name);
+		Logger::Debug("{} {} loaded", typeid(T).name(), name);
 
 		return resource;
 	}
@@ -48,7 +48,7 @@ public:
 		}
 		mResources.emplace(name, resource);
 
-		Logger::Info("{} {} loaded", typeid(T).name(), name);
+		Logger::Debug("{} {} loaded", typeid(T).name(), name);
 
 		return resource;
 	}
@@ -66,6 +66,7 @@ public:
 		return std::dynamic_pointer_cast<T>(p->second);
 	}
 
+	UNDEFINED_ENGINE static void Rename(std::string oldName, std::string newName);
 	UNDEFINED_ENGINE void Unload(const std::string& name);
 	UNDEFINED_ENGINE static void UnloadAll();
 

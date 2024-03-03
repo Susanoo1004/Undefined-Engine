@@ -47,5 +47,5 @@ private:
 public:
     static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
-     static Camera* sCamPtr;
+    static Camera* sCamPtr;
 };

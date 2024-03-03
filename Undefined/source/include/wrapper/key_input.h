@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "utils/flag.h"
-    
+
 class KeyInput
 {
 public:
@@ -17,7 +17,7 @@ public:
     UNDEFINED_ENGINE void SetIsEnabled(bool value);
 
 private:
-    void SetIsKeyDown(int key, bool isDown);
+    UNDEFINED_ENGINE void SetIsKeyDown(int key, bool isDown);
 
     std::map<int, bool> KeysMap;
     bool IsEnabled;

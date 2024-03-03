@@ -20,8 +20,9 @@ void Application::Init()
     baseShader = Shader("source/shader_code/base_shader.vs", "source/shader_code/base_shader.fs");
 
     ResourceManager::LoadAll("assets/");
-
-    //ResourceManager::resourceManager.Create<Texture>("assets/container.jpg");
+    ResourceManager::LoadAll("../Undefined/assets/");
+    ResourceManager::Rename("assets/file.png", "file");
+    ResourceManager::Rename("assets/folder.png", "folder");
 
     if (baseShader.ID)
     {
@@ -33,8 +34,6 @@ void Application::Init()
 
 void Application::Update()
 {
-    Interface::Update();
-
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
     glActiveTexture(GL_TEXTURE0);
@@ -50,6 +49,8 @@ void Application::Update()
 
     baseShader.Use();
     Draw();
+
+    Interface::Update();
 }
 
 void Application::InitQuad()
@@ -93,10 +94,6 @@ void Application::InitQuad()
 
 void Application::InitVikingRoom()
 {
-    //ResourceManager::resourceManager.Create<Texture>("viking_room.png", "assets/viking_room.png");
-
-    //ResourceManager::resourceManager.Create<Model>("viking_room.obj", "assets/viking_room.obj");
-
     std::shared_ptr<Model> model = ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj");
 
     glGenBuffers(1, &mVBO);
