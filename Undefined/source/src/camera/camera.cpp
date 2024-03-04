@@ -128,6 +128,7 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     else
     {
         inputManager->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        sCamPtr->IsFirstMouse = true;
         return;
     }
     if (sCamPtr->IsFirstMouse)

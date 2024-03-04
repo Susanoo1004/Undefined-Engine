@@ -40,9 +40,7 @@ int main()
 
     app.Init();
 
-
     // Let the window open until we press escape or the window should close
-
     while (ServiceLocator::Get<WindowManager>()->IsWindowOpen())
     {
 
