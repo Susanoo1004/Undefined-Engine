@@ -1,7 +1,7 @@
 #include "resources/resource_manager.h"
+
 #include "Resources/model.h"
 #include "Resources/texture.h"
-
 
 ResourceManager ResourceManager::resourceManager;
 

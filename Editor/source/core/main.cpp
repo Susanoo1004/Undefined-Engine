@@ -19,7 +19,7 @@ int main()
         return 1;
     }
 
-    ServiceLocator::Get<WindowManager>()->CreateWindow(800, 600);
+    ServiceLocator::Get<WindowManager>()->CreateWindow(1200, 800);
 
     if (ServiceLocator::Get<WindowManager>()->GetWindowVar() == nullptr)
     {

@@ -9,6 +9,7 @@
 #include "resources/resource_manager.h"
 #include "interface/interface.h"
 
+
 Application::Application() : cam(800,600)
 {
 }
@@ -17,7 +18,7 @@ void Application::Init()
 {
     Interface::Init();
 
-    baseShader = Shader("source/shader_code/base_shader.vs", "source/shader_code/base_shader.fs");
+    baseShader = Shader("../Undefined/source/shader_code/base_shader.vs", "../Undefined/source/shader_code/base_shader.fs");
 
     ResourceManager::LoadAll("assets/");
     ResourceManager::LoadAll("../Undefined/assets/");
@@ -30,27 +31,8 @@ void Application::Init()
     }
 
     InitVikingRoom();
-}
 
-void Application::Update()
-{
-    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
-
-    cam.ProcessInput(ServiceLocator::Get<WindowManager>()->GetWindowVar());
-    cam.Update();
-
-    // modify the camera in the shader
-    baseShader.Use();
-    baseShader.SetMat4("vp", cam.GetVP());
-    baseShader.SetMat4("model", Matrix4x4::Identity());
-
-    baseShader.Use();
-    Draw();
-
-    Interface::Update();
+    dirLight = DirLight(Vector3(-1.f, -1.f, 1.f), {0.1f,0.1f,0.5f}, BASE_DIFFUSE, BASE_SPECULAR);
 }
 
 void Application::InitQuad()
@@ -114,6 +96,38 @@ void Application::InitVikingRoom()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureUV));
     glEnableVertexAttribArray(2);
 
+}
+
+void Application::Update()
+{
+    t += 0.016f;
+
+    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
+
+    cam.ProcessInput(ServiceLocator::Get<WindowManager>()->GetWindowVar());
+    cam.Update();
+
+    // modify the camera in the shader
+    baseShader.Use();
+    baseShader.SetMat4("vp", cam.GetVP());
+    baseShader.SetVec3("viewPos", cam.Eye);
+
+
+    baseShader.SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(t), Vector3(1.f, 0.f, 0.f), Vector3(1)));
+
+    // TO MOVE TO LIGHTS UPDATE WHEN RESMANAGER WORKS WITH SHADER
+    baseShader.SetVec3("dirLight.direction", dirLight.rot);
+    baseShader.SetVec3("dirLight.ambient", dirLight.ambient);
+    baseShader.SetVec3("dirLight.diffuse", dirLight.diffuse);
+    baseShader.SetVec3("dirLight.specular", dirLight.specular);
+
+    baseShader.Use();
+    Draw();
+
+    Interface::Update();
 }
 
 void Application::Draw()

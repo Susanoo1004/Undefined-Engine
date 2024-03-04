@@ -18,7 +18,7 @@ void Interface::Init()
 
     io.Fonts->AddFontDefault();
 
-    constexpr const char* glslVersion = "#version 330";
+    constexpr const char* glslVersion = "#version 450";
 
     ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<WindowManager>()->GetWindowVar(), true);
     ImGui_ImplOpenGL3_Init(glslVersion);

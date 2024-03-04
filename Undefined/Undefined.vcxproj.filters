@@ -37,6 +37,7 @@
     <ClCompile Include="source\src\interface\FPSgraph.cpp" />
     <ClCompile Include="source\src\interface\content_browser.cpp" />
     <ClCompile Include="source\src\interface\inspector.cpp" />
+    <ClCompile Include="source\src\world\component\dir_light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="source\include\interface\FPSgraph.h" />
     <ClInclude Include="source\include\interface\content_browser.h" />
     <ClInclude Include="source\include\interface\inspector.h" />
+    <ClInclude Include="source\include\world\component\dir_light.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
