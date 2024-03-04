@@ -2,7 +2,6 @@
 #include "Resources/model.h"
 #include "Resources/texture.h"
 
-
 ResourceManager ResourceManager::resourceManager;
 
 ResourceManager::ResourceManager()
@@ -13,11 +12,11 @@ ResourceManager::~ResourceManager()
 {
 }
 
-void ResourceManager::LoadAll(std::string path)
+void ResourceManager::LoadAll(std::filesystem::path path)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
-		std::size_t pos = path.find("assets/");
+		std::size_t pos = path.string().find("assets");
 		std::string name = entry.path().string();
 		std::string newName = name.substr(pos);
 
@@ -54,7 +53,21 @@ void ResourceManager::LoadAll(std::string path)
 				Logger::Debug("Texture {} loaded", newName);
 			}
 		}
+
+		else if (entry.is_directory())
+		{
+			for (const auto& entry : std::filesystem::directory_iterator(path))
+			{
+				entry.path().string().resize(entry.path().string().size() - 1);
+				LoadAll(entry.path().string() + "/");
+			}
+		}
 	}
+}
+
+bool ResourceManager::Contains(std::string name)
+{
+	return mResources.find(name) != mResources.end();
 }
 
 void ResourceManager::Unload(const std::string& name)

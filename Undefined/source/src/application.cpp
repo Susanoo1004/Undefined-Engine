@@ -21,8 +21,6 @@ void Application::Init()
 
     ResourceManager::LoadAll("assets/");
     ResourceManager::LoadAll("../Undefined/assets/");
-    ResourceManager::Rename("assets/file.png", "file");
-    ResourceManager::Rename("assets/folder.png", "folder");
 
     if (baseShader.ID)
     {

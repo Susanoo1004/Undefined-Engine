@@ -1,4 +1,4 @@
-#include "interface\FPSgraph.h"
+#include "interface\fps_graph.h"
 
 #include <glfw/glfw3.h>
 #include <imgui/imgui.h>

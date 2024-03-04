@@ -17,8 +17,10 @@ public:
 	UNDEFINED_ENGINE ResourceManager();
 	UNDEFINED_ENGINE ~ResourceManager();
 
-	UNDEFINED_ENGINE static void LoadAll(std::string path);
+	UNDEFINED_ENGINE static void LoadAll(std::filesystem::path path);
+	UNDEFINED_ENGINE static bool Contains(std::string name);
 
+	//Create a Resource that has a filepath as a name
 	template<Type T>
 	std::shared_ptr<T> Create(const std::string& name)
 	{
@@ -36,6 +38,7 @@ public:
 		return resource;
 	}
 
+	//Create a Resource with a name in 1st parameter and the filepath as the second
 	template<Type T>
 	std::shared_ptr<T> Create(const std::string& name, const std::string& filepath)
 	{
@@ -61,6 +64,7 @@ public:
 		if (p == mResources.end())
 		{
 			Logger::Warning("Resource name incorrect : {}", name);
+			return nullptr;
 		}
 
 		return std::dynamic_pointer_cast<T>(p->second);

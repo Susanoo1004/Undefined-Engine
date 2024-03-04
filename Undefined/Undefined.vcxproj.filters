@@ -93,7 +93,7 @@
     <ClInclude Include="source\include\world\scene_manager\scene.h" />
     <ClInclude Include="source\include\world\scene_manager\scene_manager.h" />
     <ClInclude Include="source\include\utils\utils.h" />
-    <ClInclude Include="source\include\interface\FPSgraph.h" />
+    <ClInclude Include="source\include\interface\fps_graph.h" />
     <ClInclude Include="source\include\interface\content_browser.h" />
     <ClInclude Include="source\include\interface\inspector.h" />
   </ItemGroup>

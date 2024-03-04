@@ -3,7 +3,7 @@
 #include "utils/utils.h"
 #include "service_locator.h"
 
-#include "interface/FPSgraph.h"
+#include "interface/fps_graph.h"
 #include "interface/content_browser.h"
 #include "interface/inspector.h"
 

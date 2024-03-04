@@ -1,19 +1,23 @@
 #include "interface/content_browser.h"
 
-#include <imgui/imgui.h>
-
 #include "Resources/resource_manager.h"
 #include <Resources/texture.h>
 
 void ContentBrowser::Init()
 {
-    mPath = "../Editor";
+    mPath = std::filesystem::current_path();
     mCurrentPath = mPath;
+
+    isFolderOpen = false;
+    isDirectory = false;
+    isAnythingHovered = false;
+    isAnythingSelected = false;
+    canPop = false;
 }
 
-void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
+void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 {
-    bool isDirectory = std::filesystem::is_directory(path);
+    isDirectory = std::filesystem::is_directory(path);
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding;
 
@@ -69,7 +73,7 @@ void ContentBrowser::DisplayDirectory(const std::filesystem::path& path)
             //For every folder we call the function to display what's inside
             for (const auto& entry : std::filesystem::directory_iterator(path))
             {
-                DisplayDirectory(entry);
+                DisplayDirectories(entry);
             }
         }
         ImGui::TreePop();
@@ -100,98 +104,125 @@ void ContentBrowser::TextCentered(std::string text)
     ImGui::TextWrapped(text.c_str());
 }
 
-void ContentBrowser::ShowDirectory(std::filesystem::path currentPath)
+void ContentBrowser::SetImageValues(std::filesystem::path path)
 {
-    //Get the textures for each images we will use
-    std::shared_ptr<Texture> file = ResourceManager::resourceManager.Get<Texture>("file");
-    std::shared_ptr<Texture> folder = ResourceManager::resourceManager.Get<Texture>("folder");
-    bool isAnythingHovered = false;
+    if (std::filesystem::is_directory(path))
+    {
+        std::shared_ptr<Texture> folder = ResourceManager::resourceManager.Get<Texture>("assets/imgui/folder.png");
+
+        imageSize = ImVec2((float)folder->GetWidth(), (float)folder->GetHeight());
+        imageID = (ImTextureID)folder->GetID();
+    }
+    else
+    {
+        if (path.string().ends_with(".jpg") || path.string().ends_with(".png"))
+        {
+            std::string newName = "assets/" + path.string();
+
+            if (ResourceManager::resourceManager.Contains(newName))
+            {
+                imageSize = ImVec2(80.f, 80.f);
+                imageID = (ImTextureID)ResourceManager::resourceManager.Get<Texture>(newName)->GetID();
+            }
+        }
+        else if (path.string().ends_with(".obj"))
+        {
+            imageSize = ImVec2(80.f, 80.f);
+            imageID = (ImTextureID)ResourceManager::resourceManager.Get<Texture>("assets/imgui/obj_file.png")->GetID();
+        }
+
+        else
+        {
+            std::shared_ptr<Texture> file = ResourceManager::resourceManager.Get<Texture>("assets/imgui/file.png");
+            imageSize = ImVec2((float)file->GetWidth(), (float)file->GetHeight());
+            imageID = (ImTextureID)file->GetID();
+        }
+    }
+}
+
+void ContentBrowser::ShowText(std::string filename, float size)
+{
+    //If the text is larger than the image size it wrap on multiple lines else it's centered
+    if (ImGui::CalcTextSize(filename.c_str()).x > imageSize.x)
+    {
+        ImGui::TextWrapped(filename.c_str());
+    }
+
+    else
+    {
+        TextCentered(filename);
+    }
+}
+
+void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
+{
+    isAnythingHovered = false;
 
     // For loop that goes through every file/folder in a path and displays them
     for (const auto& entry : std::filesystem::directory_iterator(currentPath))
     {
         ImGui::SameLine();
+        isDirectory = entry.is_directory();
+
         if (ImGui::GetCursorPosX() <= ImGui::GetContentRegionAvail().x * 2)
         {
-            bool canPop = false;
-
-            ImVec2 imageSize;
             std::string filename = entry.path().filename().string();
  
-            // Check if directory so it can add a directory image and check if it's clicked
-            if (entry.is_directory())
+            SetImageValues(filename);
+
+            ImVec2 childSize = ImVec2(imageSize.x + ImGui::GetStyle().FramePadding.x * 2.f, imageSize.y + ImGui::CalcTextSize(filename.c_str()).y + ImGui::GetStyle().FramePadding.y * 15.f);
+
+            //If the mHoveredPath is the same as the path we're in we change it's style color
+            if (mSelectedPath == entry.path())
             {
-                imageSize = ImVec2((float)folder->GetWidth(), (float)folder->GetHeight());
-
-                ImVec2 childSize = ImVec2(imageSize.x + ImGui::GetStyle().FramePadding.x * 2.f, imageSize.y + ImGui::CalcTextSize(filename.c_str()).y + ImGui::GetStyle().FramePadding.y * 15.f);
-
-                if (mHoveredPath == entry.path())
-                {
-                    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-                    canPop = true;
-                }
-
-                ImGui::BeginChild(filename.c_str(), childSize, ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-                ImGui::Image((ImTextureID)folder->GetID(), imageSize);
-
-                if (ImGui::IsWindowHovered())
-                {
-                    mHoveredPath = entry.path();
-                    isAnythingHovered = true;
-                }
-
-                //If we double click on a folder it shows us what's inside
-                if (ImGui::IsWindowHovered() && ImGui::IsMouseDoubleClicked(0))
-                {
-                    mCurrentPath = entry.path();
-                    isFolderOpen = false;
-                }
-            }
-            else
-            {
-                imageSize = ImVec2((float)file->GetWidth(), (float)file->GetHeight());
-
-                ImVec2 childSize = ImVec2(imageSize.x + ImGui::GetStyle().FramePadding.x * 2.f, imageSize.y + ImGui::CalcTextSize(filename.c_str()).y + ImGui::GetStyle().FramePadding.y * 15.f);
-
-                if (mHoveredPath == entry.path())
-                {
-                    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-                    canPop = true;
-                }
-
-                ImGui::BeginChild(filename.c_str(), childSize, ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-
-                if (ImGui::IsWindowHovered())
-                {
-                    mHoveredPath = entry.path();
-                    isAnythingHovered = true;
-                }
-
-                //Setup for the drag and drop system (only for the files)
-                if (ImGui::BeginDragDropSource())
-                {
-                    //ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-                    ImGui::Text(filename.c_str());
-                    ImGui::EndDragDropSource();
-                }
-
-                ImGui::Image((ImTextureID)file->GetID(), imageSize);
+                ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
+                canPop = true;
             }
 
-            //If the text is larger than the image size it wrap on multiple lines else it's centered
-            if (ImGui::CalcTextSize(filename.c_str()).x > imageSize.x)
+            else if (mHoveredPath == entry.path())
             {
-                ImGui::TextWrapped(filename.c_str());
+                ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
+                canPop = true;
             }
-            else
+
+            ImGui::BeginChild(filename.c_str(), childSize, ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding);
+            ImGui::Image(imageID, imageSize);
+
+            //If anything is hovered we set mHoveredPath to the path of the hovered item
+            if (ImGui::IsWindowHovered())
             {
-                TextCentered(filename);
+                mHoveredPath = entry.path();
+                isAnythingHovered = true;
             }
+
+            //If we click on something we select it 
+            if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+            {
+                mSelectedPath = entry.path();
+                isAnythingSelected = true;
+            }
+
+            //If something is selected and we click somewhere else it deselect it
+            if (mSelectedPath == entry.path().string() && !ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+            {
+                mSelectedPath = "";
+                isAnythingSelected = false;
+            }
+
+            //If we double click on a folder it shows us what's inside
+            if (ImGui::IsWindowHovered() && isDirectory && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+            {
+                mCurrentPath = entry.path();
+                isFolderOpen = false;
+            }
+
+            ShowText(filename, imageSize.x);
 
             ImGui::EndChild();
             if (canPop)
             {
                 ImGui::PopStyleColor();
+                canPop = false;
             }
         }
         else
@@ -201,6 +232,8 @@ void ContentBrowser::ShowDirectory(std::filesystem::path currentPath)
             ImGui::NewLine();
         }
     }
+
+    //If nothing is hovered we set to path to none so it doesn't hover the last element
     if (!isAnythingHovered)
     {
         mHoveredPath = "";
@@ -212,12 +245,12 @@ void ContentBrowser::ShowWindow()
     ImGui::Begin("Content Browser");
 
     ImGui::BeginChild("Hierarchy", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 0), ImGuiChildFlags_Border | ImGuiChildFlags_ResizeX);
-    DisplayDirectory(mPath);
+    DisplayDirectories(mPath);
     ImGui::EndChild();
 
     ImGui::SameLine();
     ImGui::BeginChild("Repertory", ImVec2(0, 0), ImGuiChildFlags_Border);
-    ShowDirectory(mCurrentPath);
+    ShowActualDirectory(mCurrentPath);
     ImGui::EndChild();
 
     ImGui::End();
