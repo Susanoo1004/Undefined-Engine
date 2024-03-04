@@ -38,11 +38,10 @@ public:
 		return resource;
 	}
 
-	//Create a Resource with a name in 1st parameter and the filepath as the second
-	template<Type T>
-	std::shared_ptr<T> Create(const std::string& name, const std::string& filepath)
+	template<Type T, typename... Args>
+	std::shared_ptr<T> Create(const std::string& name, Args... args)
 	{
-		std::shared_ptr<T> resource = std::make_shared<T>(filepath.c_str());
+		std::shared_ptr<T> resource = std::make_shared<T>(&args...);
 
 		auto&& p = mResources.try_emplace(name, resource);
 		if (!p.second)
