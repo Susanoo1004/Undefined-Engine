@@ -1,11 +1,15 @@
 #include <glad/glad.h>
 
 #include "application.h"
+
 #include "memory_leak.h"
-#include "Resources/resource_manager.h"
+
+#include "resources/resource_manager.h"
+
 #include "utils/flag.h"
+
 #include "service_locator.h"
-#include "wrapper/input_manager.h"
+
 #include "interface/interface.h"
 
 int main()
@@ -33,6 +37,8 @@ int main()
     ServiceLocator::Get<InputManager>()->SetCursorPosCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), Camera::MouseCallback);
 
     KeyInput::SetupKeyInputs();
+
+    WindowManager::SetWindowSizeCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), WindowManager::WindowSizeCallback);
 
     // app.SetupImGui(window);
 

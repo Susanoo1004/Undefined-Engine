@@ -4,13 +4,14 @@
 #include <iostream>
 
 #include "service_locator.h"
+
 #include "resources/texture.h"
 #include "resources/model.h"
 #include "resources/resource_manager.h"
+
 #include "interface/interface.h"
 
-
-Application::Application() : cam(800,600)
+Application::Application()
 {
 }
 
@@ -107,13 +108,13 @@ void Application::Update()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
 
-    cam.ProcessInput(ServiceLocator::Get<WindowManager>()->GetWindowVar());
-    cam.Update();
+    ServiceLocator::Get<WindowManager>()->GetCamera()->ProcessInput(ServiceLocator::Get<WindowManager>()->GetWindowVar());
+    ServiceLocator::Get<WindowManager>()->GetCamera()->Update();
 
     // modify the camera in the shader
     baseShader.Use();
-    baseShader.SetMat4("vp", cam.GetVP());
-    baseShader.SetVec3("viewPos", cam.Eye);
+    baseShader.SetMat4("vp", ServiceLocator::Get<WindowManager>()->GetCamera()->GetVP());
+    baseShader.SetVec3("viewPos", ServiceLocator::Get<WindowManager>()->GetCamera()->Eye);
 
 
     baseShader.SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(t), Vector3(1.f, 0.f, 0.f), Vector3(1)));

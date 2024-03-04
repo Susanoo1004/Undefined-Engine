@@ -56,6 +56,11 @@ Matrix4x4 Camera::ViewMatrix(const Vector3& up, const Vector3& eye, const Vector
     return viewMatrix;
 }
 
+void Camera::SetPerspective(Matrix4x4& perspectiveMat)
+{
+    mPerspective = perspectiveMat;
+}
+
 const Matrix4x4& Camera::GetVP()
 {
     return mVP;

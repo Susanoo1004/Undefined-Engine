@@ -1,8 +1,12 @@
 #include "wrapper/window_manager.h"
 
 #include <iostream>
+#include <toolbox/calc.h>
+
+#include "service_locator.h"
 
 WindowManager::WindowManager()
+    : mCam(1200,800)
 {
     mWindow = NULL;
 }
@@ -55,6 +59,11 @@ GLFWwindow* WindowManager::GetWindowVar()
     return mWindow;
 }
 
+Camera* WindowManager::GetCamera()
+{
+    return &mCam;
+}
+
 bool WindowManager::IsWindowOpen()
 {
     return !glfwWindowShouldClose(mWindow) && glfwGetKey(mWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS;
@@ -64,4 +73,20 @@ void WindowManager::SwapBuffers()
 {
     glfwSwapBuffers(mWindow);
     glfwPollEvents();
+}
+
+void WindowManager::WindowSizeCallback(GLFWwindow* , int width, int height)
+{
+    ServiceLocator::Get<WindowManager>()->Width = width;
+    ServiceLocator::Get<WindowManager>()->Height = height;
+
+    Matrix4x4 result;
+    Matrix4x4::ProjectionMatrix(calc::PI / 2, ServiceLocator::Get<WindowManager>()->Width / ServiceLocator::Get<WindowManager>()->Height, 0.1f, 20.0f, result);
+    ServiceLocator::Get<WindowManager>()->GetCamera()->SetPerspective(result);
+    glViewport(0, 0, ServiceLocator::Get<WindowManager>()->Width, ServiceLocator::Get<WindowManager>()->Height);
+}
+
+void WindowManager::SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback)
+{
+    glfwSetWindowSizeCallback(window, callback);
 }

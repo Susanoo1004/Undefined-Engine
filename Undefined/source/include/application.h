@@ -1,7 +1,5 @@
 #pragma once
 
-#include "camera/camera.h"
-
 #include "resources/texture.h"
 #include "resources/shader.h"
 
@@ -22,8 +20,6 @@ public:
 	UNDEFINED_ENGINE void InitQuad();
 	UNDEFINED_ENGINE void InitVikingRoom();
 	UNDEFINED_ENGINE void Draw();
-
-	Camera cam;
 
 	Shader baseShader;
 	Logger log;

@@ -16,6 +16,8 @@ public:
     Matrix4x4 ProjectionMatrix(float fovY, float aspect, float far, float near);
     Matrix4x4 ViewMatrix(const Vector3& up, const Vector3& eye, const Vector3& lookAt);
 
+    void SetPerspective(Matrix4x4& perspectiveView);
+
     const Matrix4x4& GetVP();
 
     void Update();
