@@ -1,9 +1,9 @@
 #pragma once
 
 #include <ostream>
+#include <vector>
 
 #include "Vector2.h"
-#include <vector>
 
 class Vector;
 class Matrix3x3;

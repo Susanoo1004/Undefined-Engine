@@ -1,9 +1,10 @@
 #pragma once
-#include "Vector3.h"
 
 #include <compare>
 #include <ostream>
 #include <vector>
+
+#include "Vector3.h"
 
 class Vector;
 class Matrix;

@@ -9,5 +9,5 @@ public:
 	static void EndMemoryLeak();
 
 private:
-	static inline bool IsMemoryLeak;
+	static inline bool mIsMemoryLeak;
 };
