@@ -1,7 +1,7 @@
 #include "resources/resource_manager.h"
+
 #include "Resources/model.h"
 #include "Resources/texture.h"
-
 
 ResourceManager ResourceManager::resourceManager;
 
@@ -13,11 +13,13 @@ ResourceManager::~ResourceManager()
 {
 }
 
-void ResourceManager::LoadAll(std::string path)
+void ResourceManager::LoadAll(std::filesystem::path path)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
+		std::size_t pos = path.string().find("assets");
 		std::string name = entry.path().string();
+		std::string newName = name.substr(pos);
 
 		if (name.ends_with(".obj"))
 		{
@@ -28,26 +30,54 @@ void ResourceManager::LoadAll(std::string path)
 			{
 				p.first->second.reset();
 			}
-			mResources.emplace(name, resource);
+			mResources.emplace(newName, resource);
 
-			Logger::Info("Model {} loaded", name);
+			if (resource->IsValid())
+			{
+				Logger::Debug("Model {} loaded", newName);
+			}
 
 		}
 
 		else if (name.ends_with(".png") || name.ends_with(".jpg"))
 		{
-			std::shared_ptr<Texture> resource = std::make_shared<Texture>(name.c_str());
+			std::shared_ptr<Texture> resource;
+			if (name.ends_with("viking_room.png"))
+			{
+				resource = std::make_shared<Texture>(name.c_str(), true);
+			}
+
+			else
+			{
+				resource = std::make_shared<Texture>(name.c_str(), false);
+			}
 
 			auto&& p = mResources.try_emplace(name, resource);
 			if (!p.second)
 			{
 				p.first->second.reset();
 			}
-			mResources.emplace(name, resource);
+			mResources.emplace(newName, resource);
+			if (resource->IsValid())
+			{
+				Logger::Debug("Texture {} loaded", newName);
+			}
+		}
 
-			Logger::Info("Texture {} loaded", name);
+		else if (entry.is_directory())
+		{
+			for (const auto& entryDir : std::filesystem::directory_iterator(path))
+			{
+				entryDir.path().string().resize(entryDir.path().string().size() - 1);
+				LoadAll(entryDir.path().string() + "/");
+			}
 		}
 	}
+}
+
+bool ResourceManager::Contains(std::string name)
+{
+	return mResources.find(name) != mResources.end();
 }
 
 void ResourceManager::Unload(const std::string& name)
@@ -55,14 +85,35 @@ void ResourceManager::Unload(const std::string& name)
 	mResources[name].reset();
 	mResources.erase(name);
 
-	Logger::Info("{} unloaded", name);
+	Logger::Debug("{} unloaded", name);
 }
 
 void ResourceManager::UnloadAll()
 {
 	for (auto&& p : mResources)
 	{
-		Logger::Info("{} {} unloaded", typeid(decltype(*p.second.get())).name(), p.first);
+		Logger::Debug("{} {} unloaded", typeid(decltype(*p.second.get())).name(), p.first);
 	}
 	mResources.clear();
+}
+
+void ResourceManager::Rename(std::string oldName, std::string newName)
+{
+	auto&& p = mResources.find(oldName);
+
+	if (p != mResources.end())
+	{
+		mResources.emplace(newName, p->second);
+
+		if (p->second->IsValid())
+		{
+			Logger::Debug("Resource {} renamed to {}", oldName, newName);
+		}
+
+		mResources.erase(p);
+	}
+	else
+	{
+		Logger::Warning("Resource {} not found", oldName);
+	}
 }

@@ -9,3 +9,8 @@ Resource::~Resource()
 {
 
 }
+
+bool Resource::IsValid()
+{
+    return true;
+}

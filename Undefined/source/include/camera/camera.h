@@ -16,6 +16,8 @@ public:
     Matrix4x4 ProjectionMatrix(float fovY, float aspect, float far, float near);
     Matrix4x4 ViewMatrix(const Vector3& up, const Vector3& eye, const Vector3& lookAt);
 
+    void SetPerspective(Matrix4x4& perspectiveView);
+
     const Matrix4x4& GetVP();
 
     void Update();
@@ -26,7 +28,7 @@ public:
     Vector3 LookAt;
     Vector3 Up;
 
-    float Yaw = -90.f;
+    float Yaw = 90.f;
     float Pitch = 0.f;
 
     float LastX;
@@ -47,5 +49,5 @@ private:
 public:
     static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
-     static Camera* sCamPtr;
+    static Camera* sCamPtr;
 };

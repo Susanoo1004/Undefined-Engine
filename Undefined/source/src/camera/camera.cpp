@@ -20,9 +20,9 @@ Camera::Camera(float width, float height)
 
     sCamPtr = this;
 
-    std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_K, GLFW_KEY_L, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT };
+    std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_K, GLFW_KEY_L, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
 
-    ServiceLocator::Get<InputManager>()->CreateKeyInput("cameraInput", keys);
+    ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
 }
 
 Matrix4x4 Camera::ProjectionMatrix(float fovY, float aspect, float far, float near)
@@ -56,6 +56,11 @@ Matrix4x4 Camera::ViewMatrix(const Vector3& up, const Vector3& eye, const Vector
     return viewMatrix;
 }
 
+void Camera::SetPerspective(Matrix4x4& perspectiveMat)
+{
+    mPerspective = perspectiveMat;
+}
+
 const Matrix4x4& Camera::GetVP()
 {
     return mVP;
@@ -69,35 +74,45 @@ void Camera::Update()
 
 void Camera::ProcessInput(GLFWwindow*)
 {
+
     const float cameraSpeed = 0.05f; // adjust accordingly
 
     InputManager* inputManager = ServiceLocator::Get<InputManager>();
 
-    if (inputManager->GetKeyInput("cameraInput")->GetIsKeyDown(GLFW_KEY_W))
+    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_MOUSE_BUTTON_RIGHT))
+    {
+        IsMouseForCam = true;
+    }
+    else
+    {
+        IsMouseForCam = false;
+    }
+
+    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_W))
     {
         Eye += cameraSpeed * LookAt;
     }   
-    if (inputManager->GetKeyInput("cameraInput")->GetIsKeyDown(GLFW_KEY_S))
+    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_S))
     {
         Eye -= cameraSpeed * LookAt;
     }
-    if (inputManager->GetKeyInput("cameraInput")->GetIsKeyDown(GLFW_KEY_A))
+    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_A))
     {
         Eye -= Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
     }
-    if (inputManager->GetKeyInput("cameraInput")->GetIsKeyDown(GLFW_KEY_D))
+    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_D))
     {
         Eye += Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
     }
-    if (inputManager->GetKeyInput("cameraInput")->GetIsKeyDown(GLFW_KEY_K) || inputManager->GetKeyInput("cameraInput")->GetIsKeyDown(GLFW_KEY_L))
+    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_K) || inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_L))
     {
         IsMouseForCam = !IsMouseForCam;
     }
-    if (inputManager->GetKeyInput("cameraInput")->GetIsKeyDown(GLFW_KEY_SPACE))
+    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_SPACE))
     {
         Eye.y += cameraSpeed;
     }
-    if (inputManager->GetKeyInput("cameraInput")->GetIsKeyDown(GLFW_KEY_LEFT_SHIFT))
+    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_LEFT_SHIFT))
     {
         Eye.y -= cameraSpeed;
     }
@@ -106,16 +121,19 @@ void Camera::ProcessInput(GLFWwindow*)
 
 void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
 {
+    InputManager* inputManager = ServiceLocator::Get<InputManager>();
+
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
     if (sCamPtr->IsMouseForCam)
     {
-        ServiceLocator::Get<InputManager>()->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        inputManager->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     else
     {
-        ServiceLocator::Get<InputManager>()->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        inputManager->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        sCamPtr->IsFirstMouse = true;
         return;
     }
     if (sCamPtr->IsFirstMouse)

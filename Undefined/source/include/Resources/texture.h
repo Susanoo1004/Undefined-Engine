@@ -6,10 +6,13 @@
 class UNDEFINED_ENGINE Texture : public Resource
 {
 public:
-	Texture(const char* filepath);
+	Texture(const char* filepath, bool isFlipped = false);
 	~Texture();
 
 	const unsigned int GetID();
+	const unsigned int GetWidth();
+	const unsigned int GetHeight();
+	bool IsValid();
 
 private:
 	unsigned int mID;

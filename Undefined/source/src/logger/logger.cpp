@@ -8,10 +8,12 @@
 
 #undef ERROR
 
+
 Logger::Logger()
 {
     CreateDebugFile(std::string("../log/"), CurrentDateTime());
 }
+
 Logger::~Logger()
 {
     mFile.close();
@@ -38,7 +40,7 @@ void Logger::CreateDebugFile(std::string path, std::string name)
     {
         std::filesystem::create_directory(path);
 
-        Logger::Info("Directory {} created", path);
+        Logger::Debug("Directory {} created", path);
     }
 
     for ([[maybe_unused]]auto& p : std::filesystem::directory_iterator(path))
@@ -56,7 +58,7 @@ void Logger::CreateDebugFile(std::string path, std::string name)
     mFile.open(filename, std::fstream::out);
     if (mFile.is_open())
     {
-        Logger::Info("File {} created", filename.string());
+        Logger::Debug("File {} created", filename.string());
     }
     else
     {
@@ -130,7 +132,7 @@ void Logger::PrintEntry(LogEntry entry)
         break;
     }
 
-    std::cout << time << color << log << ANSI_RESET;
+    std::cout << color << time << log << ANSI_RESET;
     
     if (mFile.is_open())
     {
