@@ -17,7 +17,7 @@ void Application::Init()
 {
     Interface::Init();
 
-    baseShader = Shader("source/shader_code/base_shader.vs", "source/shader_code/base_shader.fs");
+    ResourceManager::resourceManager.Create<Shader>("baseShader", "source/shader_code/base_shader.vs", "source/shader_code/base_shader.fs");
 
     ResourceManager::LoadAll("assets/");
     ResourceManager::LoadAll("../Undefined/assets/");
@@ -40,13 +40,13 @@ void Application::Update()
 
     cam.ProcessInput(ServiceLocator::Get<WindowManager>()->GetWindowVar());
     cam.Update();
-
+    std::shared_ptr<Shader> baseShader = ResourceManager::resourceManager.Get<Shader>("baseShader");
     // modify the camera in the shader
-    baseShader.Use();
-    baseShader.SetMat4("vp", cam.GetVP());
-    baseShader.SetMat4("model", Matrix4x4::Identity());
+    baseShader->Use();
+    baseShader->SetMat4("vp", cam.GetVP());
+    baseShader->SetMat4("model", Matrix4x4::Identity());
 
-    baseShader.Use();
+    baseShader->Use();
     Draw();
 
     Interface::Update();

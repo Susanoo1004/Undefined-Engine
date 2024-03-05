@@ -20,29 +20,11 @@ public:
 	UNDEFINED_ENGINE static void LoadAll(std::filesystem::path path);
 	UNDEFINED_ENGINE static bool Contains(std::string name);
 
-	//Create a Resource that has a filepath as a name
-	template<Type T>
-	std::shared_ptr<T> Create(const std::string& name)
-	{
-		std::shared_ptr<T> resource = std::make_shared<T>(name.c_str());
-
-		auto&& p = mResources.try_emplace(name, resource);
-		if (!p.second)
-		{
-			p.first->second.reset();
-		}
-		mResources.emplace(name, resource);
-
-		Logger::Debug("{} {} loaded", typeid(T).name(), name);
-
-		return resource;
-	}
-
 	template<Type T, typename... Args>
-	std::shared_ptr<T> Create(const std::string& name, Args... args)
+	std::shared_ptr<T> Create(std::string name, Args... args)
 	{
-		std::shared_ptr<T> resource = std::make_shared<T>(&args...);
-
+		std::shared_ptr<T> resource = std::make_shared<T>(args...);
+			
 		auto&& p = mResources.try_emplace(name, resource);
 		if (!p.second)
 		{
