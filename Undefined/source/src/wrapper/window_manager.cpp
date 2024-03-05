@@ -81,7 +81,7 @@ void WindowManager::WindowSizeCallback(GLFWwindow* , int width, int height)
     ServiceLocator::Get<WindowManager>()->Height = height;
 
     Matrix4x4 result;
-    Matrix4x4::ProjectionMatrix(calc::PI / 2, ServiceLocator::Get<WindowManager>()->Width / ServiceLocator::Get<WindowManager>()->Height, 0.1f, 20.0f, result);
+    Matrix4x4::ProjectionMatrix(calc::PI / 2, (float)ServiceLocator::Get<WindowManager>()->Width / (float)ServiceLocator::Get<WindowManager>()->Height, 0.1f, 20.0f, result);
     ServiceLocator::Get<WindowManager>()->GetCamera()->SetPerspective(result);
     glViewport(0, 0, ServiceLocator::Get<WindowManager>()->Width, ServiceLocator::Get<WindowManager>()->Height);
 }

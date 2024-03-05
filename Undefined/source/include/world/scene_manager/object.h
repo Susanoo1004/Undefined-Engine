@@ -10,5 +10,5 @@ class Object
 public:
 	UNDEFINED_ENGINE Object();
 	UNDEFINED_ENGINE ~Object();
-	std::vector<Component> components;
+	std::vector<Component> Components;
 };

@@ -21,9 +21,10 @@ public:
 	UNDEFINED_ENGINE void InitVikingRoom();
 	UNDEFINED_ENGINE void Draw();
 
-	Shader baseShader;
-	Logger log;
+	Shader BaseShader;
+	Logger Log;
 
+	// INCONSISTENT WITH THE CODE STYLE
 	DirLight dirLight;
 
 	// to del

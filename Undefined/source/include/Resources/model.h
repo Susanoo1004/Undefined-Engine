@@ -10,16 +10,16 @@
 
 struct IndexVertex
 {
-	unsigned int posIndex;
-	unsigned int normalIndex;
-	unsigned int texIndex;
+	unsigned int PosIndex;
+	unsigned int NormalIndex;
+	unsigned int TexIndex;
 };
 
 struct Vertex
 {
-	Vector3 position;
-	Vector3 normal;
-	Vector2 textureUV;
+	Vector3 Position;
+	Vector3 Normal;
+	Vector2 TextureUV;
 };
 
 class Model : public Resource
@@ -32,10 +32,10 @@ public:
 	UNDEFINED_ENGINE void Draw();
 	UNDEFINED_ENGINE void LoadOBJ(const std::string& filepath);
 	UNDEFINED_ENGINE void SetOpenGL();
-	UNDEFINED_ENGINE bool isValid();
+	UNDEFINED_ENGINE bool IsValid();
 
-	std::vector<Vertex> vertexBuffer;
-	std::vector<IndexVertex> indexBuffer;
+	std::vector<Vertex> VertexBuffer;
+	std::vector<IndexVertex> IndexBuffer;
 
 private:
 	unsigned int mVAO, mVBO, mEBO;

@@ -30,7 +30,7 @@ public:
 	void SetMat4(unsigned int ID, const std::string& name, Matrix4x4 m) const;
 	void DeleteShader(unsigned int shader);
 
-	RendererDebug debug;
+	RendererDebug Debug;
 private:
 };
 

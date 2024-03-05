@@ -19,16 +19,16 @@ void Application::Init()
 {
     Interface::Init();
 
-    baseShader = Shader("../Undefined/source/shader_code/base_shader.vs", "../Undefined/source/shader_code/base_shader.fs");
+    BaseShader = Shader("../Undefined/source/shader_code/base_shader.vs", "../Undefined/source/shader_code/base_shader.fs");
 
     ResourceManager::LoadAll("assets/");
     ResourceManager::LoadAll("../Undefined/assets/");
     ResourceManager::Rename("assets/file.png", "file");
     ResourceManager::Rename("assets/folder.png", "folder");
 
-    if (baseShader.ID)
+    if (BaseShader.ID)
     {
-        baseShader.Use();
+        BaseShader.Use();
     }
 
     InitVikingRoom();
@@ -85,16 +85,16 @@ void Application::InitVikingRoom()
     glBindVertexArray(mVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (model->vertexBuffer.size() * sizeof(Vertex)),
-        model->vertexBuffer.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (model->VertexBuffer.size() * sizeof(Vertex)),
+        model->VertexBuffer.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Position));
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
     glEnableVertexAttribArray(1);
 
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureUV));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextureUV));
     glEnableVertexAttribArray(2);
 
 }
@@ -112,20 +112,20 @@ void Application::Update()
     ServiceLocator::Get<WindowManager>()->GetCamera()->Update();
 
     // modify the camera in the shader
-    baseShader.Use();
-    baseShader.SetMat4("vp", ServiceLocator::Get<WindowManager>()->GetCamera()->GetVP());
-    baseShader.SetVec3("viewPos", ServiceLocator::Get<WindowManager>()->GetCamera()->Eye);
+    BaseShader.Use();
+    BaseShader.SetMat4("vp", ServiceLocator::Get<WindowManager>()->GetCamera()->GetVP());
+    BaseShader.SetVec3("viewPos", ServiceLocator::Get<WindowManager>()->GetCamera()->Eye);
 
 
-    baseShader.SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(t), Vector3(1.f, 0.f, 0.f), Vector3(1)));
+    BaseShader.SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(t), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
     // TO MOVE TO LIGHTS UPDATE WHEN RESMANAGER WORKS WITH SHADER
-    baseShader.SetVec3("dirLight.direction", dirLight.rot);
-    baseShader.SetVec3("dirLight.ambient", dirLight.ambient);
-    baseShader.SetVec3("dirLight.diffuse", dirLight.diffuse);
-    baseShader.SetVec3("dirLight.specular", dirLight.specular);
+    BaseShader.SetVec3("dirLight.direction", dirLight.rot);
+    BaseShader.SetVec3("dirLight.ambient", dirLight.Ambient);
+    BaseShader.SetVec3("dirLight.diffuse", dirLight.Diffuse);
+    BaseShader.SetVec3("dirLight.specular", dirLight.Specular);
 
-    baseShader.Use();
+    BaseShader.Use();
     Draw();
 
     Interface::Update();
@@ -134,5 +134,5 @@ void Application::Update()
 void Application::Draw()
 {
     glBindVertexArray(mVAO);
-    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->vertexBuffer.size());
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->VertexBuffer.size());
 }

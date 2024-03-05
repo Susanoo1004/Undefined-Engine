@@ -10,7 +10,7 @@ Resource::~Resource()
 
 }
 
-bool Resource::isValid()
+bool Resource::IsValid()
 {
     return true;
 }

@@ -74,5 +74,6 @@ private:
 	UNDEFINED_ENGINE static inline std::unordered_map<std::string, std::shared_ptr<Resource>> mResources;
 
 public:
+	// INCONSISTENT WITH THE CODE STYLE
 	UNDEFINED_ENGINE static ResourceManager resourceManager;
 };

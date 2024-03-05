@@ -10,6 +10,8 @@
 
 class ServiceLocator
 {
+    STATIC_CLASS(ServiceLocator)
+
 public:
     UNDEFINED_ENGINE static void Setup();
 

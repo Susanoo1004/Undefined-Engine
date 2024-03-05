@@ -12,7 +12,7 @@ public:
 	const unsigned int GetID();
 	const unsigned int GetWidth();
 	const unsigned int GetHeight();
-	bool isValid();
+	bool IsValid();
 
 private:
 	unsigned int mID;

@@ -32,7 +32,7 @@ void ResourceManager::LoadAll(std::string path)
 			}
 			mResources.emplace(newName, resource);
 
-			if (resource->isValid())
+			if (resource->IsValid())
 			{
 				Logger::Debug("Model {} loaded", newName);
 			}
@@ -49,7 +49,7 @@ void ResourceManager::LoadAll(std::string path)
 				p.first->second.reset();
 			}
 			mResources.emplace(newName, resource);
-			if (resource->isValid())
+			if (resource->IsValid())
 			{
 				Logger::Debug("Texture {} loaded", newName);
 			}
@@ -82,7 +82,7 @@ void ResourceManager::Rename(std::string oldName, std::string newName)
 	{
 		mResources.emplace(newName, p->second);
 
-		if (p->second->isValid())
+		if (p->second->IsValid())
 		{
 			Logger::Debug("Resource {} renamed to {}", oldName, newName);
 		}
