@@ -21,14 +21,14 @@ public:
 	UNDEFINED_ENGINE void InitVikingRoom();
 	UNDEFINED_ENGINE void Draw();
 
-	Shader BaseShader;
+	std::shared_ptr<Shader> BaseShader;
 	Logger Log;
 
 	// INCONSISTENT WITH THE CODE STYLE
-	DirLight dirLight;
+	DirLight DirectionalLight;
 
 	// to del
-	float t = 0;
+	float T = 0;
 
 private:
 	unsigned int mVAO = 0, mVBO = 0, mEBO = 0;

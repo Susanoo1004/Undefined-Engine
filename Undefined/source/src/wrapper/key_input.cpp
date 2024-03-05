@@ -4,31 +4,31 @@
 
 #include "service_locator.h"
 
-KeyInput::KeyInput(std::vector<int> keysToMonitor) : IsEnabled(true)
+KeyInput::KeyInput(std::vector<int> keysToMonitor) : mIsEnabled(true)
 {
     for (int key : keysToMonitor)
     {
-        KeysMap[key] = false;
+        mKeysMap[key] = false;
     }
-    KeyInput::Instances.push_back(this);
+    KeyInput::mInstances.push_back(this);
 }
 
 KeyInput::~KeyInput()
 {
-    Instances.erase(std::remove(Instances.begin(), Instances.end(), this), Instances.end());
+    mInstances.erase(std::remove(mInstances.begin(), mInstances.end(), this), mInstances.end());
 }
 
 bool KeyInput::GetIsKeyDown(int key)
 {
     bool result = false;
 
-    if (IsEnabled)
+    if (mIsEnabled)
     {
-        std::map<int, bool>::iterator it = KeysMap.find(key);
+        std::map<int, bool>::iterator it = mKeysMap.find(key);
 
-        if (it != KeysMap.end())
+        if (it != mKeysMap.end())
         {
-            result = KeysMap[key];
+            result = mKeysMap[key];
         }
     }
 
@@ -37,21 +37,21 @@ bool KeyInput::GetIsKeyDown(int key)
 
 bool KeyInput::GetIsEnabled()
 {
-    return IsEnabled;
+    return mIsEnabled;
 }
 
 void KeyInput::SetIsEnabled(bool value)
 {
-    IsEnabled = value;
+    mIsEnabled = value;
 }
 
 void KeyInput::SetIsKeyDown(int key, bool isDown)
 {
-    std::map<int, bool>::iterator it = KeysMap.find(key);
+    std::map<int, bool>::iterator it = mKeysMap.find(key);
 
-    if (it != KeysMap.end())
+    if (it != mKeysMap.end())
     {
-        KeysMap[key] = isDown;
+        mKeysMap[key] = isDown;
     }
 }
 
@@ -63,7 +63,7 @@ void KeyInput::SetupKeyInputs()
 
 void KeyInput::Callback(GLFWwindow*, int key, int , int action, int )
 {
-    for (KeyInput* keyInput : Instances)
+    for (KeyInput* keyInput : mInstances)
     {
         keyInput->SetIsKeyDown(key, action != GLFW_RELEASE);
     }
@@ -71,7 +71,7 @@ void KeyInput::Callback(GLFWwindow*, int key, int , int action, int )
 
 void KeyInput::MouseButtonCallback(GLFWwindow*, int button, int action, int )
 {
-    for (KeyInput* keyInput : Instances)
+    for (KeyInput* keyInput : mInstances)
     {
         keyInput->SetIsKeyDown(button, action != GLFW_RELEASE);
     }
