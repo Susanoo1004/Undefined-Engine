@@ -22,6 +22,8 @@ private:
 	UNDEFINED_ENGINE static inline float mLastTotalTime;
 	UNDEFINED_ENGINE static inline float mMaxFPS;
 	UNDEFINED_ENGINE static inline int mArraySize;
+	UNDEFINED_ENGINE static inline int mMinFpsOffset;
+	UNDEFINED_ENGINE static inline size_t mArraySizeOffset;
 	static inline std::vector<float> mFrameRateArray;
 
 };

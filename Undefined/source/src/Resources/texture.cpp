@@ -6,13 +6,20 @@
 
 #include "logger/logger.h"
 
-Texture::Texture(const char* filepath)
+Texture::Texture(const char* filepath, bool isFlipped)
 {
 	glGenTextures(1, &mID);
 	glBindTexture(GL_TEXTURE_2D, mID);
 
 	int channelCount;
-	//stbi_set_flip_vertically_on_load(true);
+	if (isFlipped)
+	{
+		stbi_set_flip_vertically_on_load(true);
+	}
+	else
+	{
+		stbi_set_flip_vertically_on_load(false);
+	}
 	const unsigned char* data = stbi_load(filepath, &mWidth, &mHeight, &channelCount, 0);
 
 	if (data)

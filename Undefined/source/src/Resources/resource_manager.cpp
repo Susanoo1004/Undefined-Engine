@@ -13,11 +13,11 @@ ResourceManager::~ResourceManager()
 {
 }
 
-void ResourceManager::LoadAll(std::string path)
+void ResourceManager::LoadAll(std::filesystem::path path)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
-		std::size_t pos = path.find("assets/");
+		std::size_t pos = path.string().find("assets");
 		std::string name = entry.path().string();
 		std::string newName = name.substr(pos);
 
@@ -41,7 +41,16 @@ void ResourceManager::LoadAll(std::string path)
 
 		else if (name.ends_with(".png") || name.ends_with(".jpg"))
 		{
-			std::shared_ptr<Texture> resource = std::make_shared<Texture>(name.c_str());
+			std::shared_ptr<Texture> resource;
+			if (name.ends_with("viking_room.png"))
+			{
+				resource = std::make_shared<Texture>(name.c_str(), true);
+			}
+
+			else
+			{
+				resource = std::make_shared<Texture>(name.c_str(), false);
+			}
 
 			auto&& p = mResources.try_emplace(name, resource);
 			if (!p.second)
@@ -54,7 +63,21 @@ void ResourceManager::LoadAll(std::string path)
 				Logger::Debug("Texture {} loaded", newName);
 			}
 		}
+
+		else if (entry.is_directory())
+		{
+			for (const auto& entryDir : std::filesystem::directory_iterator(path))
+			{
+				entryDir.path().string().resize(entryDir.path().string().size() - 1);
+				LoadAll(entryDir.path().string() + "/");
+			}
+		}
 	}
+}
+
+bool ResourceManager::Contains(std::string name)
+{
+	return mResources.find(name) != mResources.end();
 }
 
 void ResourceManager::Unload(const std::string& name)

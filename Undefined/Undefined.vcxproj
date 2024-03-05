@@ -215,7 +215,7 @@
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\interface\content_browser.h" />
-    <ClInclude Include="source\include\interface\FPSgraph.h" />
+    <ClInclude Include="source\include\interface\fps_graph.h" />
     <ClInclude Include="source\include\interface\inspector.h" />
     <ClInclude Include="source\include\interface\interface.h" />
     <ClInclude Include="source\include\utils\utils.h" />
