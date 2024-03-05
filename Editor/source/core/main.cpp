@@ -42,7 +42,7 @@ int main()
 
     // app.SetupImGui(window);
 
-    ServiceLocator::Get<Renderer>()->debug.DebugInit();
+    ServiceLocator::Get<Renderer>()->Debug.DebugInit();
 
     app.Init();
 
@@ -61,7 +61,7 @@ int main()
         // app.Render(window);
 
         ServiceLocator::Get<WindowManager>()->SwapBuffers();
-        ServiceLocator::Get<Renderer>()->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        ServiceLocator::Get<Renderer>()->ClearBuffer(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     ServiceLocator::CleanServiceLocator();

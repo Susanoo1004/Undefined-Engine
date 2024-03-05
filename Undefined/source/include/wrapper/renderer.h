@@ -13,7 +13,8 @@ class UNDEFINED_ENGINE Renderer : public ServiceType
 public:
 	void Init(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
 
-	void SetClearColor(GLbitfield mask);
+	void SetClearColor(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
+	void ClearBuffer(GLbitfield mask);
 	
 	//Texture
 	void BindTexture(unsigned int ID);

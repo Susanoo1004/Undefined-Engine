@@ -7,13 +7,18 @@
 void Renderer::Init(float redBaseColor, float greenBaseColor, float blueBaseColor)
 {
 	gladLoadGL();
-	glClearColor(redBaseColor, greenBaseColor, blueBaseColor, 1.0f);
+	SetClearColor(redBaseColor, greenBaseColor, blueBaseColor);
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Renderer::SetClearColor(GLbitfield)
+void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blueBaseColor)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(redBaseColor, greenBaseColor, blueBaseColor, 1.0f);
+}
+
+void Renderer::ClearBuffer(GLbitfield mask)
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::BindTexture(unsigned int ID)

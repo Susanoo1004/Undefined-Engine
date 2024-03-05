@@ -11,8 +11,9 @@ public:
 
 	UNDEFINED_ENGINE void SetLight() override;
 	UNDEFINED_ENGINE void Update() override;
+	UNDEFINED_ENGINE int GetNbrOfDirLight();
 
 private:
-	UNDEFINED_ENGINE static inline int NbrOfDirLight;
+	UNDEFINED_ENGINE static inline int mNbrOfDirLight;
 
 };

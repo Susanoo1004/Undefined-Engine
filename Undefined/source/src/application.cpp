@@ -36,6 +36,7 @@ void Application::Init()
     dirLight = DirLight(Vector3(-1.f, -1.f, 1.f), {0.1f,0.1f,0.5f}, BASE_DIFFUSE, BASE_SPECULAR);
 }
 
+// move to wrapper
 void Application::InitQuad()
 {
     float vertices[] = {
@@ -75,6 +76,8 @@ void Application::InitQuad()
     glEnableVertexAttribArray(2);
 }
 
+
+// move to wrapper
 void Application::InitVikingRoom()
 {
     std::shared_ptr<Model> model = ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj");
@@ -103,7 +106,7 @@ void Application::Update()
 {
     t += 0.016f;
 
-    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+    ServiceLocator::Get<Renderer>()->SetClearColor();
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
@@ -120,10 +123,11 @@ void Application::Update()
     BaseShader.SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(t), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
     // TO MOVE TO LIGHTS UPDATE WHEN RESMANAGER WORKS WITH SHADER
-    BaseShader.SetVec3("dirLight.direction", dirLight.rot);
-    BaseShader.SetVec3("dirLight.ambient", dirLight.Ambient);
-    BaseShader.SetVec3("dirLight.diffuse", dirLight.Diffuse);
-    BaseShader.SetVec3("dirLight.specular", dirLight.Specular);
+    BaseShader.SetVec3("dirLights[0].direction", dirLight.rot);
+    BaseShader.SetVec3("dirLights[0].ambient", dirLight.Ambient);
+    BaseShader.SetVec3("dirLights[0].diffuse", dirLight.Diffuse);
+    BaseShader.SetVec3("dirLights[0].specular", dirLight.Specular);
+
 
     BaseShader.Use();
     Draw();

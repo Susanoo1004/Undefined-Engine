@@ -14,9 +14,12 @@ in vec3 FragPos;
 in vec2 TexCoord;
 in vec3 Normal;
 
+
 // LIGHT
+#define NBR_OF_DIR_LIGHT 1
+
 uniform vec3 viewPos;
-uniform DirLight dirLight;
+uniform DirLight dirLights[NBR_OF_DIR_LIGHT];
 
 uniform sampler2D texture1;
 
@@ -38,11 +41,13 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 
 void main()
 {
+    vec3 result;
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
     // dirlight
-    vec3 result = CalcDirLight(dirLight, norm, viewDir);
+    for (int i = 0; i < NBR_OF_DIR_LIGHT; i++)
+        result += CalcDirLight(dirLights[i], norm, viewDir);
     
-    FragColor = vec4(result , 1.0);
+    FragColor = vec4(result, 1.0);
 }
