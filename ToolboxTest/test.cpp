@@ -253,6 +253,12 @@ TEST(Vector2, operator) {
 
 	EXPECT_FLOAT_EQ((Vector2(1, 2) / 2.f).x, 1.f / 2.f);
 	EXPECT_FLOAT_EQ((Vector2(1, 2) / 2.f).y, 1.f);
+
+	EXPECT_FLOAT_EQ((Vector2(1, 2) / Vector2(0, 0)).x, INFINITY);
+	EXPECT_FLOAT_EQ((Vector2(1, 2) / Vector2(0, 0)).y, INFINITY);
+
+	EXPECT_FLOAT_EQ((Vector2(1, 2) / 0.f).x, INFINITY);
+	EXPECT_FLOAT_EQ((Vector2(1, 2) / 0.f).y, INFINITY);
 }
 
 TEST(Vector2, operatorEqual) {
@@ -285,6 +291,11 @@ TEST(Vector2, operatorEqual) {
 	EXPECT_FLOAT_EQ((test /= 2.f).x, 1.f / 2.f);
 	test = Vector2(1, 2);
 	EXPECT_FLOAT_EQ((test /= 2.f).y, 1.f);
+
+	test = Vector2(1, 2);
+	EXPECT_FLOAT_EQ((test /= 0).x, INFINITY);
+	test = Vector2(1, 2);
+	EXPECT_FLOAT_EQ((test /= 0).y, INFINITY);
 }
 
 TEST(Vector2, operatorComparison) {
@@ -483,6 +494,14 @@ TEST(Vector3, operator) {
 	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / 2.f).x, 1.f / 2.f);
 	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / 2.f).y, 1.f);
 	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / 2.f).z, 3.f / 2.f);
+
+	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / Vector3(0, 0, 0)).x, INFINITY);
+	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / Vector3(0, 0, 0)).y, INFINITY);
+	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / Vector3(0, 0, 0)).z, INFINITY);
+
+	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / 0.f).x, INFINITY);
+	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / 0.f).y, INFINITY);
+	EXPECT_FLOAT_EQ((Vector3(1, 2, 3) / 0.f).z, INFINITY);
 }
 
 TEST(Vector3, operatorEqual) {
@@ -531,6 +550,20 @@ TEST(Vector3, operatorEqual) {
 	EXPECT_FLOAT_EQ((test /= 2.f).y, 1.f);
 	test = Vector3(1, 2, 3);
 	EXPECT_FLOAT_EQ((test /= 2.f).z, 3.f / 2.f);
+
+	test = Vector3(1, 2, 3);
+	EXPECT_FLOAT_EQ((test /= Vector3(0, 0, 0)).x, INFINITY);
+	test = Vector3(1, 2, 3);
+	EXPECT_FLOAT_EQ((test /= Vector3(0, 0, 0)).y, INFINITY);
+	test = Vector3(1, 2, 3);
+	EXPECT_FLOAT_EQ((test /= Vector3(0, 0, 0)).z, INFINITY);
+
+	test = Vector3(1, 2, 3);
+	EXPECT_FLOAT_EQ((test /= 0.f).x, INFINITY);
+	test = Vector3(1, 2, 3);
+	EXPECT_FLOAT_EQ((test /= 0.f).y, INFINITY);
+	test = Vector3(1, 2, 3);
+	EXPECT_FLOAT_EQ((test /= 0.f).z, INFINITY);
 }
 
 TEST(Vector3, operatorComparison) {
@@ -697,6 +730,16 @@ TEST(Vector4, operator) {
 	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / 2.f).y, 1.f);
 	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / 2.f).z, 3.f / 2.f);
 	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / 2.f).w, 2.f);
+
+	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / Vector4(0, 0, 0, 0)).x, INFINITY);
+	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / Vector4(0, 0, 0, 0)).y, INFINITY);
+	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / Vector4(0, 0, 0, 0)).z, INFINITY);
+	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / Vector4(0, 0, 0, 0)).w, INFINITY);
+
+	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / 0.f).x, INFINITY);
+	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / 0.f).y, INFINITY);
+	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / 0.f).z, INFINITY);
+	EXPECT_FLOAT_EQ((Vector4(1, 2, 3, 4) / 0.f).w, INFINITY);
 }
 
 TEST(Vector4, operatorEqual) {
@@ -753,6 +796,24 @@ TEST(Vector4, operatorEqual) {
 	EXPECT_FLOAT_EQ((test /= 2.f).z, 3.f / 2.f);
 	test = Vector4(1, 2, 3, 4);
 	EXPECT_FLOAT_EQ((test /= 2.f).w, 2.f);
+
+	test = Vector4(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ((test /= Vector4(0, 0, 0, 0)).x, INFINITY);
+	test = Vector4(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ((test /= Vector4(0, 0, 0, 0)).y, INFINITY);
+	test = Vector4(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ((test /= Vector4(0, 0, 0, 0)).z, INFINITY);
+	test = Vector4(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ((test /= Vector4(0, 0, 0, 0)).w, INFINITY);
+
+	test = Vector4(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ((test /= 0.f).x, INFINITY);
+	test = Vector4(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ((test /= 0.f).y, INFINITY);
+	test = Vector4(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ((test /= 0.f).z, INFINITY);
+	test = Vector4(1, 2, 3, 4);
+	EXPECT_FLOAT_EQ((test /= 0.f).w, INFINITY);
 }
 
 TEST(Vector4, operatorComparison) {
@@ -1020,6 +1081,16 @@ TEST(Quaternion, operator) {
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 2.f).imaginary.y, 1.f);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 2.f).imaginary.z, 3.f / 2.f);
 	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 2.f).real, 2.f);
+
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / Quaternion(0, 0, 0, 0)).imaginary.x, INFINITY);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / Quaternion(0, 0, 0, 0)).imaginary.y, INFINITY);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / Quaternion(0, 0, 0, 0)).imaginary.z, INFINITY);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / Quaternion(0, 0, 0, 0)).real, INFINITY);
+
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 0.f).imaginary.x, INFINITY);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 0.f).imaginary.y, INFINITY);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 0.f).imaginary.z, INFINITY);
+	EXPECT_FLOAT_EQ((Quaternion(1, 2, 3, 4) / 0.f).real, INFINITY);
 }
 
 TEST(Quaternion, operatorEqual) {
@@ -1064,6 +1135,21 @@ TEST(Quaternion, operatorEqual) {
 	EXPECT_FLOAT_EQ(test.imaginary.y, 1.f);
 	EXPECT_FLOAT_EQ(test.imaginary.z, 3.f / 2.f);
 	EXPECT_FLOAT_EQ(test.real, 2.f);
+
+
+	test = Quaternion(1, 2, 3, 4);
+	test /= Quaternion(0, 0, 0, 0);
+	EXPECT_FLOAT_EQ(test.imaginary.x, INFINITY);
+	EXPECT_FLOAT_EQ(test.imaginary.y, INFINITY);
+	EXPECT_FLOAT_EQ(test.imaginary.z, INFINITY);
+	EXPECT_FLOAT_EQ(test.real, INFINITY);
+
+	test = Quaternion(1, 2, 3, 4);
+	test /= 0.f;
+	EXPECT_FLOAT_EQ(test.imaginary.x, INFINITY);
+	EXPECT_FLOAT_EQ(test.imaginary.y, INFINITY);
+	EXPECT_FLOAT_EQ(test.imaginary.z, INFINITY);
+	EXPECT_FLOAT_EQ(test.real, INFINITY);
 }
 
 #pragma endregion
