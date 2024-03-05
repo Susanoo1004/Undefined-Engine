@@ -2,9 +2,9 @@
 
 void ServiceLocator::Setup()
 {
+	ServiceLocator::Provide<InputManager>(new InputManager());
 	ServiceLocator::Provide<WindowManager>(new WindowManager());
 	ServiceLocator::Provide<Renderer>(new Renderer());
-	ServiceLocator::Provide<InputManager>(new InputManager());
 }
 
 void ServiceLocator::CleanServiceLocator()

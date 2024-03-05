@@ -75,7 +75,7 @@ const unsigned int Texture::GetHeight()
 	return mHeight;
 }
 
-bool Texture::isValid()
+bool Texture::IsValid()
 {
 	return (mWidth > 0 && mHeight > 0);
 }

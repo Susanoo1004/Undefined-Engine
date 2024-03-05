@@ -1,11 +1,15 @@
 #include <glad/glad.h>
 
 #include "application.h"
+
 #include "memory_leak.h"
-#include "Resources/resource_manager.h"
+
+#include "resources/resource_manager.h"
+
 #include "utils/flag.h"
+
 #include "service_locator.h"
-#include "wrapper/input_manager.h"
+
 #include "interface/interface.h"
 
 int main()
@@ -19,7 +23,7 @@ int main()
         return 1;
     }
 
-    ServiceLocator::Get<WindowManager>()->CreateWindow(800, 600);
+    ServiceLocator::Get<WindowManager>()->CreateWindow(1200, 800);
 
     if (ServiceLocator::Get<WindowManager>()->GetWindowVar() == nullptr)
     {
@@ -34,14 +38,15 @@ int main()
 
     KeyInput::SetupKeyInputs();
 
+    WindowManager::SetWindowSizeCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), WindowManager::WindowSizeCallback);
+
     // app.SetupImGui(window);
 
-    ServiceLocator::Get<Renderer>()->debug.DebugInit();
+    ServiceLocator::Get<Renderer>()->Debug.DebugInit();
 
     app.Init();
 
     // Let the window open until we press escape or the window should close
-
     while (ServiceLocator::Get<WindowManager>()->IsWindowOpen())
     {
 
@@ -56,7 +61,7 @@ int main()
         // app.Render(window);
 
         ServiceLocator::Get<WindowManager>()->SwapBuffers();
-        ServiceLocator::Get<Renderer>()->SetClearColor(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        ServiceLocator::Get<Renderer>()->ClearBuffer(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     ServiceLocator::CleanServiceLocator();

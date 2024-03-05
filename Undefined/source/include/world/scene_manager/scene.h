@@ -9,5 +9,5 @@ public:
 	UNDEFINED_ENGINE Scene();
 	UNDEFINED_ENGINE ~Scene();
 
-	std::vector<Object> objects;
+	std::vector<Object> Objects;
 };

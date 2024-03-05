@@ -56,6 +56,11 @@ Matrix4x4 Camera::ViewMatrix(const Vector3& up, const Vector3& eye, const Vector
     return viewMatrix;
 }
 
+void Camera::SetPerspective(Matrix4x4& perspectiveMat)
+{
+    mPerspective = perspectiveMat;
+}
+
 const Matrix4x4& Camera::GetVP()
 {
     return mVP;
@@ -128,6 +133,7 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     else
     {
         inputManager->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        sCamPtr->IsFirstMouse = true;
         return;
     }
     if (sCamPtr->IsFirstMouse)

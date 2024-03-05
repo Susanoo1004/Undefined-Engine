@@ -5,10 +5,13 @@
 #include "wrapper/window_manager.h"
 #include "wrapper/renderer.h"
 #include "wrapper/input_manager.h"
+
 #include "utils/flag.h"
 
 class ServiceLocator
 {
+    STATIC_CLASS(ServiceLocator)
+
 public:
     UNDEFINED_ENGINE static void Setup();
 

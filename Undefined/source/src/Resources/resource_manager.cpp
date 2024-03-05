@@ -1,4 +1,5 @@
 #include "resources/resource_manager.h"
+
 #include "Resources/model.h"
 #include "Resources/texture.h"
 
@@ -31,7 +32,7 @@ void ResourceManager::LoadAll(std::filesystem::path path)
 			}
 			mResources.emplace(newName, resource);
 
-			if (resource->isValid())
+			if (resource->IsValid())
 			{
 				Logger::Debug("Model {} loaded", newName);
 			}
@@ -57,7 +58,7 @@ void ResourceManager::LoadAll(std::filesystem::path path)
 				p.first->second.reset();
 			}
 			mResources.emplace(newName, resource);
-			if (resource->isValid())
+			if (resource->IsValid())
 			{
 				Logger::Debug("Texture {} loaded", newName);
 			}
@@ -104,7 +105,7 @@ void ResourceManager::Rename(std::string oldName, std::string newName)
 	{
 		mResources.emplace(newName, p->second);
 
-		if (p->second->isValid())
+		if (p->second->IsValid())
 		{
 			Logger::Debug("Resource {} renamed to {}", oldName, newName);
 		}

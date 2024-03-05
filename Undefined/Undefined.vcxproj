@@ -167,6 +167,7 @@
     <ClCompile Include="source\src\interface\interface.cpp" />
     <ClCompile Include="source\src\utils\utils.cpp" />
     <ClCompile Include="source\src\world\component\component.cpp" />
+    <ClCompile Include="source\src\world\component\dir_light.cpp" />
     <ClCompile Include="source\src\world\component\light.cpp" />
     <ClCompile Include="source\src\world\component\skybox.cpp" />
     <ClCompile Include="source\src\world\scene_manager\object.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="source\include\interface\interface.h" />
     <ClInclude Include="source\include\utils\utils.h" />
     <ClInclude Include="source\include\world\component\component.h" />
+    <ClInclude Include="source\include\world\component\dir_light.h" />
     <ClInclude Include="source\include\world\component\light.h" />
     <ClInclude Include="source\include\world\component\skybox.h" />
     <ClInclude Include="source\include\world\scene_manager\object.h" />
