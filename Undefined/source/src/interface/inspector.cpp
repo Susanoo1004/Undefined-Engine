@@ -1,4 +1,5 @@
 #include "interface/inspector.h"
+
 #include <imgui/imgui.h>
 
 void Inspector::Init()

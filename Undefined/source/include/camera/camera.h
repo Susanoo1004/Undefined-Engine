@@ -11,10 +11,7 @@ class UNDEFINED_ENGINE Camera
 {
 public:
     Camera(float width, float height);
-    ~Camera() = default;
-
-    Matrix4x4 ProjectionMatrix(float fovY, float aspect, float far, float near);
-    Matrix4x4 ViewMatrix(const Vector3& up, const Vector3& eye, const Vector3& lookAt);
+    ~Camera();
 
     void SetPerspective(Matrix4x4& perspectiveView);
 
@@ -34,8 +31,8 @@ public:
     float LastX;
     float LastY;
 
-    bool IsFirstMouse;
-    bool IsMouseForCam;
+    bool IsFirstMouse = true;
+    bool IsMouseForCam = false;
 
 private:
     Matrix4x4 mVP;

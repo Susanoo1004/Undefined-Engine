@@ -16,44 +16,18 @@ Camera::Camera(float width, float height)
     LookAt = Vector3(0, 0, 1);
     Up = Vector3(0, 1, 0);
 
-    mPerspective = ProjectionMatrix(PI / 2, mWidth / mHeight, 0.1f, 20.0f);
+    Matrix4x4::ProjectionMatrix(PI / 2, mWidth / mHeight, 0.1f, 20.0f, mPerspective);
 
     sCamPtr = this;
 
-    std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_K, GLFW_KEY_L, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
+    std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
 
     ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
 }
 
-Matrix4x4 Camera::ProjectionMatrix(float fovY, float aspect, float far, float near)
+Camera::~Camera()
 {
-    float f = 1.0f / tanf((fovY) / 2);
-    Matrix4x4 projectionMatrix =
-    {
-        {f / aspect, 0, 0, 0},
-        {0, f, 0, 0},
-        {0, 0, (far + near) / (far - near), (2.0f * far * near) / (far - near)},
-        {0, 0, -1.0, 0}
-    };
 
-    return projectionMatrix;
-}
-
-Matrix4x4 Camera::ViewMatrix(const Vector3& up, const Vector3& eye, const Vector3& lookAt)
-{
-    Vector3 axisZ = (eye - lookAt).Normalized();
-    Vector3 axisX = Vector3::Cross(up, axisZ).Normalized();
-    Vector3 axisY = Vector3::Cross(axisZ, axisX).Normalized();
-
-    Matrix4x4 viewMatrix =
-    {
-        { axisX[0], axisX[1], axisX[2], Vector3::Dot(-axisX, eye)},
-        { axisY[0], axisY[1], axisY[2], Vector3::Dot(-axisY, eye)},
-        { axisZ[0], axisZ[1], axisZ[2], Vector3::Dot(-axisZ, eye)},
-        {0, 0, 0, 1}
-    };
-
-    return viewMatrix;
 }
 
 void Camera::SetPerspective(Matrix4x4& perspectiveMat)
@@ -68,7 +42,7 @@ const Matrix4x4& Camera::GetVP()
 
 void Camera::Update()
 {
-    mView = ViewMatrix(Up, Eye, Eye + LookAt);
+    Matrix4x4::ViewMatrix(Eye, Eye + LookAt, Up, mView);
     mVP = mPerspective * mView;
 }
 
@@ -77,9 +51,9 @@ void Camera::ProcessInput(GLFWwindow*)
 
     const float cameraSpeed = 0.05f; // adjust accordingly
 
-    InputManager* inputManager = ServiceLocator::Get<InputManager>();
+    std::shared_ptr<KeyInput> editorCameraInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
 
-    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_MOUSE_BUTTON_RIGHT))
+    if (editorCameraInput->GetIsKeyDown(GLFW_MOUSE_BUTTON_RIGHT))
     {
         IsMouseForCam = true;
     }
@@ -88,31 +62,27 @@ void Camera::ProcessInput(GLFWwindow*)
         IsMouseForCam = false;
     }
 
-    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_W))
+    if (editorCameraInput->GetIsKeyDown(GLFW_KEY_W))
     {
         Eye += cameraSpeed * LookAt;
-    }   
-    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_S))
+    }
+    if (editorCameraInput->GetIsKeyDown(GLFW_KEY_S))
     {
         Eye -= cameraSpeed * LookAt;
     }
-    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_A))
+    if (editorCameraInput->GetIsKeyDown(GLFW_KEY_A))
     {
         Eye -= Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
     }
-    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_D))
+    if (editorCameraInput->GetIsKeyDown(GLFW_KEY_D))
     {
         Eye += Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
     }
-    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_K) || inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_L))
-    {
-        IsMouseForCam = !IsMouseForCam;
-    }
-    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_SPACE))
+    if (editorCameraInput->GetIsKeyDown(GLFW_KEY_SPACE))
     {
         Eye.y += cameraSpeed;
     }
-    if (inputManager->GetKeyInput("editorCameraInput")->GetIsKeyDown(GLFW_KEY_LEFT_SHIFT))
+    if (editorCameraInput->GetIsKeyDown(GLFW_KEY_LEFT_SHIFT))
     {
         Eye.y -= cameraSpeed;
     }

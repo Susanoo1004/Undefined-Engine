@@ -57,8 +57,8 @@ void KeyInput::SetIsKeyDown(int key, bool isDown)
 
 void KeyInput::SetupKeyInputs()
 {
-    glfwSetKeyCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), KeyInput::Callback);
-    glfwSetMouseButtonCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), KeyInput::MouseButtonCallback);
+    glfwSetKeyCallback(ServiceLocator::Get<Window>()->GetWindowVar(), KeyInput::Callback);
+    glfwSetMouseButtonCallback(ServiceLocator::Get<Window>()->GetWindowVar(), KeyInput::MouseButtonCallback);
 }
 
 void KeyInput::Callback(GLFWwindow*, int key, int , int action, int )

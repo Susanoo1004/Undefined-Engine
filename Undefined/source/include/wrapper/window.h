@@ -1,19 +1,18 @@
 #pragma once
 
-#include <glfw/glfw3.h>
-#include <glfw/glfw3native.h>
-
 #include "wrapper/service_type.h"
 
 #include "utils/flag.h"
 
 #include "camera/camera.h"
 
-class UNDEFINED_ENGINE WindowManager : public ServiceType
+struct GLFWwindow;
+
+class UNDEFINED_ENGINE Window : public ServiceType
 {
 public:
-    WindowManager();
-    ~WindowManager();
+    Window();
+    ~Window();
 
     bool SetupGlfw();
 

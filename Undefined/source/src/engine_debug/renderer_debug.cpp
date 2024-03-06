@@ -1,6 +1,7 @@
 #include "engine_debug/renderer_debug.h"
 
 #include <iostream>
+#include <glad/glad.h>
 
 #include "logger/logger.h"
 

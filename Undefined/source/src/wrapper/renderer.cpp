@@ -1,6 +1,8 @@
 #include "wrapper/renderer.h"
 
 #include <iostream>
+#include <glad/glad.h>
+
 
 #include "logger/logger.h"
 
@@ -16,7 +18,7 @@ void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blu
     glClearColor(redBaseColor, greenBaseColor, blueBaseColor, 1.0f);
 }
 
-void Renderer::ClearBuffer(GLbitfield mask)
+void Renderer::ClearBuffer()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

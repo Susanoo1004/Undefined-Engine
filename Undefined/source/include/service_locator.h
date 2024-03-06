@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include "wrapper/window_manager.h"
+#include "wrapper/window.h"
 #include "wrapper/renderer.h"
 #include "wrapper/input_manager.h"
 
