@@ -21,6 +21,7 @@ in vec3 Normal;
 uniform vec3 viewPos;
 uniform DirLight dirLights[NBR_OF_DIR_LIGHT];
 
+// TEXTURE
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 uniform sampler2D texture2;

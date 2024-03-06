@@ -95,8 +95,26 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         // process material
         if (mesh->mMaterialIndex >= 0)
         {
-            [...]
+            aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+            std::vector<Texture> texMap = LoadMaterialTextures(material);
         }
 
     return Mesh(vertices, indices, textures);
+}
+
+std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat)
+{
+    std::vector<Texture> textures;
+    for (unsigned int i = 0; i < mat->GetTextureCount(aiTextureType_DIFFUSE); i++)
+    {
+        aiString str;
+        mat->GetTexture(aiTextureType_DIFFUSE, i, &str);
+        Texture texture;
+        texture.id = TextureFromFile(str.C_Str(), directory);
+        texture.type = typeName;
+        texture.path = str;
+        textures.push_back(texture);
+    }
+    return textures;
 }

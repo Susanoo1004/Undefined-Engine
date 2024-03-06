@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <glad/glad.h>
 #include <toolbox/Vector3.h>
 #include <toolbox/Vector2.h>
