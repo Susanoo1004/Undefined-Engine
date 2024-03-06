@@ -1,158 +1,102 @@
 #include "resources/model.h"
 
-#include <fstream>
-#include <string>
-#include <sstream>
+#include <iostream>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 
-#include "logger/logger.h"
-#include <glad/glad.h>
-
-Model::Model()
+Model::Model(char* path)
 {
-	mVBO = 0;
-	mVAO = 0;
-	mEBO = 0;
+	LoadModel(path);
 }
 
-Model::Model(const std::string& filepath)
+void Model::Draw(Shader& shader)
 {
-	LoadOBJ(filepath);
-}
-
-Model::~Model()
-{
-	glDeleteBuffers(1, &mVBO);
-	glDeleteVertexArrays(1, &mVAO);
-}
-
-void Model::Draw()
-{
-	glBindVertexArray(mVAO);
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)VertexBuffer.size());
-}
-
-void Model::LoadOBJ(const std::string& filepath)
-{
-	VertexBuffer.clear();
-	IndexBuffer.clear();
-
-	std::ifstream file(filepath);
-
-	if (file.fail())
+	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
-		Logger::Warning("Model could not be loaded. filepath : {}", filepath);
+		meshes[i].Draw(shader);
 	}
-
-	std::string currentLine;
-	std::string word;
-
-	std::vector<Vector3> positions, normals;
-	std::vector<Vector2> textureUvs;
-
-	while (std::getline(file, currentLine))
-	{
-		std::stringstream line(currentLine);
-		line >> word;
-
-		if (word == "v")
-		{
-			Vector3 pos;
-			line >> pos.x >> pos.y >> pos.z;
-			positions.push_back(pos);
-		}
-		else if (word == "vt")
-		{
-			Vector2 Uv;
-			line >> Uv.x >> Uv.y;
-			textureUvs.push_back(Uv);
-		}
-		else if (word == "vn")
-		{
-			Vector3 normal;
-			line >> normal.x >> normal.y >> normal.z;
-			normals.push_back(normal);
-		}
-		else if (word == "f")
-		{
-			int count = 0;
-			while (line >> word)
-			{
-				count++;
-			}
-			std::stringstream newLine(currentLine);
-			newLine >> word >> word;
-
-			IndexVertex indexVertex = { 0,0,0 };
-			sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex.PosIndex, &indexVertex.TexIndex, &indexVertex.NormalIndex);
-			IndexBuffer.push_back(indexVertex);
-
-			Vertex vertex;
-			vertex.Position = positions[indexVertex.PosIndex - 1];
-			vertex.TextureUV = textureUvs[indexVertex.TexIndex - 1];
-			vertex.Normal = normals[indexVertex.NormalIndex - 1];
-			VertexBuffer.push_back(vertex);
-
-			newLine >> word;
-			IndexVertex indexVertex2 = { 0,0,0 };
-			sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex2.PosIndex, &indexVertex2.TexIndex, &indexVertex2.NormalIndex);
-			IndexBuffer.push_back(indexVertex2);
-
-			vertex.Position = positions[indexVertex2.PosIndex - 1];
-			vertex.TextureUV = textureUvs[indexVertex2.TexIndex - 1];
-			vertex.Normal = normals[indexVertex2.NormalIndex - 1];
-			VertexBuffer.push_back(vertex);
-
-			for (size_t i = 2; i < count; i++)
-			{
-				newLine >> word;
-				IndexVertex indexVertex_i = { 0,0,0 };
-				sscanf_s(word.c_str(), "%d/%d/%d", &indexVertex_i.PosIndex, &indexVertex_i.TexIndex, &indexVertex_i.NormalIndex);
-				IndexBuffer.push_back(indexVertex_i);
-
-				Vertex newVertex;
-				newVertex.Position = positions[indexVertex_i.PosIndex - 1];
-				newVertex.TextureUV = textureUvs[indexVertex_i.TexIndex - 1];
-				newVertex.Normal = normals[indexVertex_i.NormalIndex - 1];
-				VertexBuffer.push_back(newVertex);
-
-				if (i + 1 == count)
-				{
-					break;
-				}
-
-				IndexBuffer.push_back(indexVertex);
-				IndexBuffer.push_back(indexVertex_i);
-			}
-		}
-	}
-	file.close();
-
-	SetOpenGL();
 }
 
-// HAS TO BE MOVE IN RENDERER OR AT LEAST CALL A RENDERER FUNCTION
-void Model::SetOpenGL()
+void Model::LoadModel(std::string path)
 {
-	glGenBuffers(1, &mVBO);
-	glGenVertexArrays(1, &mVAO);
+    Assimp::Importer import;
+    const aiScene * scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
-	glBindVertexArray(mVAO);
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    {
+        std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+        return;
+    }
+    directory = path.substr(0, path.find_last_of('/'));
 
-	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-	glBufferData(GL_ARRAY_BUFFER, VertexBuffer.size() * sizeof(Vertex),
-		VertexBuffer.data(), GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Position));
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	glEnableVertexAttribArray(1);
-
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextureUV));
-	glEnableVertexAttribArray(2);
+    ProcessNode(scene->mRootNode, scene);
 }
 
-bool Model::IsValid()
+void Model::ProcessNode(aiNode* node, const aiScene* scene)
 {
-	return (IndexBuffer.size() > 0 && VertexBuffer.size() > 0);
+    // process all the node's meshes (if any)
+    for (unsigned int i = 0; i < node->mNumMeshes; i++)
+    {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        meshes.push_back(ProcessMesh(mesh, scene));
+    }
+    // then do the same for each of its children
+    for (unsigned int i = 0; i < node->mNumChildren; i++)
+    {
+        ProcessNode(node->mChildren[i], scene);
+    }
+}
+
+Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+{
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture> textures;
+
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+    {
+        Vertex vertex;
+
+        // process vertex positions, normals and texture coordinates
+        Vector3 v;
+        v.x = mesh->mVertices[i].x;
+        v.y = mesh->mVertices[i].y;
+        v.z = mesh->mVertices[i].z;
+        vertex.Position = v;
+
+        v.x = mesh->mNormals[i].x;
+        v.y = mesh->mNormals[i].y;
+        v.z = mesh->mNormals[i].z;
+        vertex.Normal = v;
+
+        if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+        {
+            Vector2 vec;
+            vec.x = mesh->mTextureCoords[0][i].x;
+            vec.y = mesh->mTextureCoords[0][i].y;
+            vertex.TexCoords = vec;
+        }
+        else
+        {
+            vertex.TexCoords = Vector2(0.0f, 0.0f);
+        }
+
+        vertices.push_back(vertex);
+    }
+    // process indices
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+    {
+        aiFace face = mesh->mFaces[i];
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
+        {
+            indices.push_back(face.mIndices[j]);
+        }
+    }
+        // process material
+        if (mesh->mMaterialIndex >= 0)
+        {
+            [...]
+        }
+
+    return Mesh(vertices, indices, textures);
 }
