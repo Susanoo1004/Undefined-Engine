@@ -21,7 +21,7 @@ public:
 	UNDEFINED_ENGINE void InitVikingRoom();
 	UNDEFINED_ENGINE void Draw();
 
-	Shader BaseShader;
+	std::shared_ptr<Shader> BaseShader;
 	Logger Log;
 
 	// INCONSISTENT WITH THE CODE STYLE

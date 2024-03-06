@@ -24,8 +24,8 @@ private:
 
 	//Function to center text for ImGui texts
 	UNDEFINED_ENGINE static void TextCentered(std::string text);
-	UNDEFINED_ENGINE static void SetImageValues(std::filesystem::path path);
-	UNDEFINED_ENGINE static void ShowText(std::string filename);
+	UNDEFINED_ENGINE static void SetImageValues(std::filesystem::path path, ImTextureID& imageID, ImVec2& imageSize);
+	UNDEFINED_ENGINE static void ShowText(std::string filename, ImVec2& imageSize);
 	UNDEFINED_ENGINE static void InteractionWithItems(std::filesystem::path path, bool isBackFolder = false);
 	UNDEFINED_ENGINE static void GoBackFolder(std::filesystem::path path);
 
@@ -43,7 +43,4 @@ private:
 	UNDEFINED_ENGINE static inline bool mCanPop;
 
 	UNDEFINED_ENGINE static inline unsigned int mClickCountOffset;
-
-	static inline ImVec2 mImageSize;
-	static inline ImTextureID mImageID;
 };
