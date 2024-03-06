@@ -254,6 +254,10 @@
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\BuildCmake\bin\bin\Debug\assimp-vc142-mtd.dll" />
+    <None Include="..\..\BuildCmake\bin\bin\Debug\assimp-vc142-mtd.pdb" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

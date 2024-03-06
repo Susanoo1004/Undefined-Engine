@@ -104,4 +104,8 @@
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\BuildCmake\bin\bin\Debug\assimp-vc142-mtd.dll" />
+    <None Include="..\..\BuildCmake\bin\bin\Debug\assimp-vc142-mtd.pdb" />
+  </ItemGroup>
 </Project>
