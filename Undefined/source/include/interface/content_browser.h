@@ -36,12 +36,14 @@ private:
 
 	static inline std::string mBackFolder;
 
-	UNDEFINED_ENGINE static inline bool isFolderOpen;
-	UNDEFINED_ENGINE static inline bool isDirectory;
-	UNDEFINED_ENGINE static inline bool isAnythingHovered;
-	UNDEFINED_ENGINE static inline bool isAnythingSelected;
-	UNDEFINED_ENGINE static inline bool canPop;
+	UNDEFINED_ENGINE static inline bool mIsFolderOpen;
+	UNDEFINED_ENGINE static inline bool mIsDirectory;
+	UNDEFINED_ENGINE static inline bool mIsAnythingHovered;
+	UNDEFINED_ENGINE static inline bool mIsAnythingSelected;
+	UNDEFINED_ENGINE static inline bool mCanPop;
 
-	static inline ImVec2 imageSize;
-	static inline ImTextureID imageID;
+	UNDEFINED_ENGINE static inline unsigned int mClickCountOffset;
+
+	static inline ImVec2 mImageSize;
+	static inline ImTextureID mImageID;
 };
