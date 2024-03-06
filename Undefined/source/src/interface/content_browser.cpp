@@ -25,18 +25,6 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 
-    static bool isOpen;
-
-    if (ImGui::IsItemToggledOpen())
-    {
-        isOpen ^= isOpen;
-    }
-
-    if (!isOpen && ImGui::IsItemToggledOpen())
-    {
-
-    }
-
     if (mIsDirectory)
     {
         if (mCurrentPath == path)
@@ -52,7 +40,7 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
     {
-        if (mCurrentPath != mPath && ImGui::IsItemClicked(ImGuiMouseButton_Left))
+        if (path == mPath && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
             mCurrentPath = path;
         }
@@ -89,7 +77,7 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     else
     {
-        if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
+        if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
             mCurrentPath = path;
         } 
