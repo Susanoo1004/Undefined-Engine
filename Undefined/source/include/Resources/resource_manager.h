@@ -44,7 +44,7 @@ public:
 
 		if (p == mResources.end())
 		{
-			Logger::Warning("Resource name incorrect : {}", name);
+			Logger::Warning("Invalid resource name : {}", name);
 			return nullptr;
 		}
 

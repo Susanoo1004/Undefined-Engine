@@ -40,7 +40,7 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
     {
-        if (path == mPath && ImGui::IsItemClicked(ImGuiMouseButton_Left))
+        if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
             mCurrentPath = path;
         }
@@ -77,6 +77,7 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     else
     {
+        //If state changes (if we click on the arrow) then we don't change current path
         if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
             mCurrentPath = path;
