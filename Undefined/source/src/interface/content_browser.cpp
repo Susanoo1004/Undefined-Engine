@@ -31,6 +31,11 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         {
             flags |= ImGuiTreeNodeFlags_Selected;
         }
+
+        if (path == mPath)
+        {
+            flags |= ImGuiTreeNodeFlags_DefaultOpen;
+        }
     }
 
     else
@@ -40,11 +45,6 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
     {
-        if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
-        {
-            mCurrentPath = path;
-        }
-
         //Setup for the drag and drop system
         if (ImGui::BeginDragDropSource())
         {
@@ -66,6 +66,11 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
         if (mIsDirectory)
         {
+            if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
+            {
+                mCurrentPath = path;
+            }
+
             //For every folder we call the function to display what's inside
             for (const auto& entry : std::filesystem::directory_iterator(path))
             {
