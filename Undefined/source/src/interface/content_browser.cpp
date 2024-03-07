@@ -40,51 +40,16 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
     else
     {
         flags |= ImGuiTreeNodeFlags_Leaf;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-        {
-            std::string file = '"' + absolute(path).string() + '"';
-            system(file.c_str());
-        }*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
     {
+        if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+        {
+            std::string file = '"' + absolute(path).string() + '"';
+            system(file.c_str());
+        }
+
         //Setup for the drag and drop system
         if (ImGui::BeginDragDropSource())
         {
