@@ -36,7 +36,6 @@ void ResourceManager::LoadAll(std::filesystem::path path)
 			{
 				Logger::Debug("Model {} loaded", newName);
 			}
-
 		}
 
 		else if (name.ends_with(".png") || name.ends_with(".jpg"))
@@ -57,7 +56,9 @@ void ResourceManager::LoadAll(std::filesystem::path path)
 			{
 				p.first->second.reset();
 			}
+
 			mResources.emplace(newName, resource);
+
 			if (resource->IsValid())
 			{
 				Logger::Debug("Texture {} loaded", newName);
@@ -66,18 +67,23 @@ void ResourceManager::LoadAll(std::filesystem::path path)
 
 		else if (entry.is_directory())
 		{
-			for (const auto& entryDir : std::filesystem::directory_iterator(path))
-			{
-				entryDir.path().string().resize(entryDir.path().string().size() - 1);
-				LoadAll(entryDir.path().string() + "/");
-			}
+				LoadAll(name + "/");
 		}
 	}
 }
 
 bool ResourceManager::Contains(std::string name)
 {
-	return mResources.find(name) != mResources.end();
+	if (mResources.find(name) != mResources.end())
+	{
+		return true;
+	}
+
+	else
+	{
+		Logger::Warning("The resource manager does not contain : {}", name);
+		return false;
+	}
 }
 
 void ResourceManager::Unload(const std::string& name)

@@ -214,6 +214,7 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="source\include\interface\content_browser.h" />
     <ClInclude Include="source\include\interface\fps_graph.h" />
     <ClInclude Include="source\include\interface\inspector.h" />
@@ -253,6 +254,9 @@
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\undefined_logo.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

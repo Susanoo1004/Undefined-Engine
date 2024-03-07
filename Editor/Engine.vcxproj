@@ -151,6 +151,15 @@
   <ItemGroup>
     <ClCompile Include="source\core\main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Editor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="undefined_logo.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

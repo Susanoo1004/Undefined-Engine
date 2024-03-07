@@ -98,10 +98,14 @@
     <ClInclude Include="source\include\interface\content_browser.h" />
     <ClInclude Include="source\include\interface\inspector.h" />
     <ClInclude Include="source\include\world\component\dir_light.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\undefined_logo.png" />
   </ItemGroup>
 </Project>

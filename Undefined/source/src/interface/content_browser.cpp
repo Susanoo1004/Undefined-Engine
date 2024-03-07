@@ -16,7 +16,6 @@ void ContentBrowser::Init()
     mIsAnythingHovered = false;
     mIsAnythingSelected = false;
     mCanPop = false;
-    mClickCountOffset = 0;
 }
 
 void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
@@ -41,6 +40,47 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
     else
     {
         flags |= ImGuiTreeNodeFlags_Leaf;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+        {
+            std::string file = '"' + absolute(path).string() + '"';
+            system(file.c_str());
+        }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
@@ -77,6 +117,7 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
                 DisplayDirectories(entry);
             }
         }
+
         ImGui::TreePop();
     }
 
@@ -123,19 +164,18 @@ void ContentBrowser::SetImageValues(std::filesystem::path path, ImTextureID& ima
     {
         std::string newName = "assets/" + path.string();
         
+        //If it's a texture we put the image of the texture instead of a basic file image
         if (path.string().ends_with(".jpg") || path.string().ends_with(".png"))
         {
-
             if (ResourceManager::resourceManager.Contains(newName))
             {
                 imageSize = ImVec2(80.f, 80.f);
                 imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::resourceManager.Get<Texture>(newName)->GetID());
             }
         }
+
         else if (path.string().ends_with(".obj"))
         {
-            std::string newName = "assets/" + path.string();
-
             imageSize = ImVec2(80.f, 80.f);
             imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::resourceManager.Get<Texture>("assets/imgui/obj_file.png")->GetID());
         }
@@ -262,6 +302,29 @@ void ContentBrowser::GoBackFolder(std::filesystem::path path)
     }
 }
 
+void ContentBrowser::LoadFolders(std::filesystem::path path)
+{
+    // For loop that goes through every file/folder in a path and displays them
+    for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(path))
+    {
+        if (entry.is_directory())
+        {
+            mCurrPathArray.push_back(entry);
+        }
+    }
+}
+
+void ContentBrowser::LoadFiles(std::filesystem::path path)
+{
+    for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(path))
+    {
+        if (!entry.is_directory())
+        {
+            mCurrPathArray.push_back(entry);
+        }
+    }
+}
+
 void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
 {
     mIsAnythingHovered = false;
@@ -269,13 +332,16 @@ void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
     GoBackFolder(currentPath);
     ImGui::SameLine();
 
-    // For loop that goes through every file/folder in a path and displays them
-    for (const auto& entry : std::filesystem::directory_iterator(currentPath))
-    {
-        mIsDirectory = entry.is_directory();
+    LoadFolders(currentPath);
+    LoadFiles(currentPath);
 
-        std::string filename = entry.path().filename().string();
-         
+    // For loop that goes through every file/folder in a path and displays them
+    for (int i = 0; i < mCurrPathArray.size(); i++)
+    {
+        mIsDirectory = mCurrPathArray[i].is_directory();
+
+        std::string filename = mCurrPathArray[i].path().filename().string();
+
         ImVec2 imageSize;
         ImTextureID imageID;
 
@@ -284,14 +350,14 @@ void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
 
         ImVec2 childSize = ImVec2(imageSize.x + ImGui::GetStyle().FramePadding.x * 2.f, imageSize.y + ImGui::CalcTextSize(filename.c_str()).y + ImGui::GetStyle().FramePadding.y * 15.f);
 
-        if (mSelectedPath == entry.path())
+        if (mSelectedPath == mCurrPathArray[i].path())
         {
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
             mCanPop = true;
         }
 
         //If the mHoveredPath is the same as the path we're in we change it's style color
-        else if (mHoveredPath == entry.path())
+        else if (mHoveredPath == mCurrPathArray[i].path())
         {
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
             mCanPop = true;
@@ -300,7 +366,7 @@ void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
         ImGui::BeginChild(filename.c_str(), childSize, ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding);
         ImGui::Image(imageID, imageSize);
 
-        InteractionWithItems(entry);
+        InteractionWithItems(mCurrPathArray[i]);
 
         ShowText(filename, imageSize);
 
@@ -325,6 +391,8 @@ void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
     {
         mHoveredPath = "";
     }
+    mCurrPathArray.resize(0);
+    mCurrPathArray.shrink_to_fit();
 }
 
 void ContentBrowser::ShowWindow()
