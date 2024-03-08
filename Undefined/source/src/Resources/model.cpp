@@ -4,10 +4,16 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
-Model::Model(char* path)
+Model::Model()
+{
+
+}
+
+Model::Model(const char* path)
 {
 	LoadModel(path);
 }
+
 
 void Model::Draw(Shader& shader)
 {
@@ -106,14 +112,13 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat)
 {
     std::vector<Texture> textures;
-    for (unsigned int i = 0; i < mat->GetTextureCount(aiTextureType_DIFFUSE); i++)
+    unsigned int a = mat->GetTextureCount(aiTextureType_DIFFUSE);
+    for (unsigned int i = 0; i < a; i++)
     {
         aiString str;
         mat->GetTexture(aiTextureType_DIFFUSE, i, &str);
-        Texture texture;
-        texture.id = TextureFromFile(str.C_Str(), directory);
-        texture.type = typeName;
-        texture.path = str;
+        std::string filename = directory + "/" + std::string(str.C_Str());
+        Texture texture = Texture(filename.c_str());
         textures.push_back(texture);
     }
     return textures;

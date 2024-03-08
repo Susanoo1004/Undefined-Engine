@@ -16,7 +16,7 @@ struct Vertex
 	Vector2 TexCoords;
 };
 
-class Mesh
+class UNDEFINED_ENGINE Mesh
 {
 public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);

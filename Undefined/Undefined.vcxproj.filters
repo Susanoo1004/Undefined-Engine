@@ -107,4 +107,7 @@
     <Library Include="external\libs\toolboxMoteurd.lib" />
     <Library Include="external\libs\assimp-vc142-mtd.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="external\libs\assimp-vc142-mtd.dll" />
+  </ItemGroup>
 </Project>

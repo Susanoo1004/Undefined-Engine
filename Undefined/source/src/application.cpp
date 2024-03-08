@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <iostream>
+#include <filesystem>
 
 #include "service_locator.h"
 
@@ -22,7 +23,7 @@ void Application::Init()
     BaseShader = ResourceManager::resourceManager.Create<Shader>("baseShader", "../Undefined/source/shader_code/base_shader.vs", "../Undefined/source/shader_code/base_shader.fs");
     
     ResourceManager::LoadAll("assets/");
-    ResourceManager::LoadAll("../Undefined/assets/");
+    ResourceManager::LoadAll("../Undefined/assets/imgui/");
 
     if (BaseShader->ID)
     {
@@ -31,7 +32,10 @@ void Application::Init()
 
     InitVikingRoom();
 
-    DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), {0.1f,0.1f,0.5f}, BASE_DIFFUSE, BASE_SPECULAR);
+    DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
+
+
+    TempModel = Model("assets/test/backpack.obj");
 }
 
 // move to wrapper
@@ -78,6 +82,7 @@ void Application::InitQuad()
 // move to wrapper
 void Application::InitVikingRoom()
 {
+    /*
     std::shared_ptr<Model> model = ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj");
 
     glGenBuffers(1, &mVBO);
@@ -97,6 +102,7 @@ void Application::InitVikingRoom()
 
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextureUV));
     glEnableVertexAttribArray(2);
+    */
 
 }
 
@@ -106,8 +112,8 @@ void Application::Update()
 
     ServiceLocator::Get<Renderer>()->SetClearColor();
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
 
     ServiceLocator::Get<Window>()->GetCamera()->ProcessInput(ServiceLocator::Get<Window>()->GetWindowVar());
     ServiceLocator::Get<Window>()->GetCamera()->Update();
@@ -135,6 +141,9 @@ void Application::Update()
 
 void Application::Draw()
 {
+    /*
     glBindVertexArray(mVAO);
     glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->VertexBuffer.size());
+    */
+    TempModel.Draw(*BaseShader);
 }

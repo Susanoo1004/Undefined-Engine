@@ -6,6 +6,10 @@
 
 #include "logger/logger.h"
 
+Texture::Texture()
+{
+}
+
 Texture::Texture(const char* filepath, bool isFlipped)
 {
 	glGenTextures(1, &mID);
@@ -63,6 +67,11 @@ Texture::~Texture()
 const unsigned int Texture::GetID()
 {
 	return mID;
+}
+
+const void Texture::SetID(unsigned int newID)
+{
+	mID = newID;
 }
 
 const unsigned int Texture::GetWidth()
