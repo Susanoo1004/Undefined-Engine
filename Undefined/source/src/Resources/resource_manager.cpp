@@ -25,15 +25,15 @@ void ResourceManager::LoadAll(std::filesystem::path path)
 		{
 			std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
 
-			auto&& p = mResources.try_emplace(name, resource);
-			if (!p.second)
-			{
-				p.first->second.reset();
-			}
-			mResources.emplace(newName, resource);
-
 			if (resource->IsValid())
 			{
+				auto&& p = mResources.try_emplace(name, resource);
+				if (!p.second)
+				{
+					p.first->second.reset();
+				}
+				mResources.emplace(newName, resource);
+
 				Logger::Debug("Model {} loaded", newName);
 			}
 		}
@@ -41,6 +41,7 @@ void ResourceManager::LoadAll(std::filesystem::path path)
 		else if (name.ends_with(".png") || name.ends_with(".jpg"))
 		{
 			std::shared_ptr<Texture> resource;
+			
 			if (name.ends_with("viking_room.png"))
 			{
 				resource = std::make_shared<Texture>(name.c_str(), true);
@@ -51,23 +52,78 @@ void ResourceManager::LoadAll(std::filesystem::path path)
 				resource = std::make_shared<Texture>(name.c_str(), false);
 			}
 
-			auto&& p = mResources.try_emplace(name, resource);
-			if (!p.second)
-			{
-				p.first->second.reset();
-			}
-
-			mResources.emplace(newName, resource);
-
 			if (resource->IsValid())
 			{
+				auto&& p = mResources.try_emplace(name, resource);
+				if (!p.second)
+				{
+					p.first->second.reset();
+				}
+
+				mResources.emplace(newName, resource);
+
 				Logger::Debug("Texture {} loaded", newName);
 			}
 		}
 
 		else if (entry.is_directory())
 		{
-				LoadAll(name + "/");
+			LoadAll(name + "/");
+		}
+	}
+}
+
+void ResourceManager::Load(std::filesystem::path path)
+{
+	for (const auto& entry : std::filesystem::directory_iterator(path))
+	{
+		std::size_t pos = path.string().find("assets");
+		std::string name = entry.path().string();
+		std::string newName = name.substr(pos);
+
+		if (name.ends_with(".obj"))
+		{
+			std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
+
+			if (resource->IsValid())
+			{
+				auto&& p = mResources.try_emplace(name, resource);
+				if (!p.second)
+				{
+					p.first->second.reset();
+				}
+				mResources.emplace(newName, resource);
+
+				Logger::Debug("Model {} loaded", newName);
+			}
+		}
+
+		else if (name.ends_with(".png") || name.ends_with(".jpg"))
+		{
+			std::shared_ptr<Texture> resource;
+
+			if (name.ends_with("viking_room.png"))
+			{
+				resource = std::make_shared<Texture>(name.c_str(), true);
+			}
+
+			else
+			{
+				resource = std::make_shared<Texture>(name.c_str(), false);
+			}
+
+			if (resource->IsValid())
+			{
+				auto&& p = mResources.try_emplace(name, resource);
+				if (!p.second)
+				{
+					p.first->second.reset();
+				}
+
+				mResources.emplace(newName, resource);
+
+				Logger::Debug("Texture {} loaded", newName);
+			}
 		}
 	}
 }

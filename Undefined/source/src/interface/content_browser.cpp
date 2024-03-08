@@ -46,7 +46,8 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
     {
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
         {
-            std::string file = '"' + absolute(path).string() + '"';
+            std::string file = "start explorer ";
+            file += '"' + absolute(path).string() + '"';
             system(file.c_str());
         }
 
@@ -63,7 +64,8 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         {
             if (ImGui::Button("Open in explorer"))
             {
-                std::string explorer = "start explorer /select," + absolute(path).string();
+                std::string explorer = "start explorer /select,";
+                explorer += absolute(path).string();
                 system(explorer.c_str());
             }
             ImGui::EndPopup();
@@ -99,7 +101,8 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         {
             if (ImGui::Button("Open in explorer"))
             {
-                std::string explorer = "start explorer /select," + absolute(path).string();
+                std::string explorer = "start explorer /select,";
+                explorer += absolute(path).string();
                 system(explorer.c_str());
             }
             ImGui::EndPopup();
@@ -178,7 +181,7 @@ void ContentBrowser::ShowText(std::string filename, ImVec2& imageSize)
 void ContentBrowser::InteractionWithItems(std::filesystem::path path, bool isBackFolder)
 {
     bool isClicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
-
+    
     //If we hover on a window we add a background color 
     if (ImGui::IsWindowHovered())
     {
@@ -212,7 +215,8 @@ void ContentBrowser::InteractionWithItems(std::filesystem::path path, bool isBac
             
             else
             {
-                std::string file = '"' + absolute(path).string() + '"';
+                std::string file = "start explorer ";
+                file += '"' + absolute(path).string() + '"';
                 system(file.c_str());
             }
         }
