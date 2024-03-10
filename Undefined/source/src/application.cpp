@@ -17,12 +17,12 @@ Application::Application()
 
 void Application::Init()
 {
+    ResourceManager::Load("assets/", true);
+    ResourceManager::Load("../Undefined/resource_manager/", true );
     Interface::Init();
 
-    BaseShader = ResourceManager::resourceManager.Create<Shader>("baseShader", "../Undefined/source/shader_code/base_shader.vs", "../Undefined/source/shader_code/base_shader.fs");
+    BaseShader = ResourceManager::resourceManager.Get<Shader>("baseShader");
 
-    ResourceManager::LoadAll("assets/");
-    ResourceManager::LoadAll("../Undefined/assets/");
 
     if (BaseShader->ID)
     {

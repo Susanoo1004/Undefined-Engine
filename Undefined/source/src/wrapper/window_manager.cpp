@@ -45,7 +45,7 @@ void WindowManager::CreateWindow(int width, int height)
 
     //Add an icon to our window
     GLFWimage images[1];
-    images[0].pixels = stbi_load("../Undefined/assets/undefined_logo.png", &images[0].width, &images[0].height, 0, 4); //rgba channels
+    images[0].pixels = stbi_load("../Undefined/resource_manager/assets/undefined_logo.png", &images[0].width, &images[0].height, 0, 4); //rgba channels
 
     glfwSetWindowIcon(mWindow, 1, images);
 

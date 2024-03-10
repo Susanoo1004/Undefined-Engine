@@ -2,6 +2,7 @@
 
 #include "Resources/model.h"
 #include "Resources/texture.h"
+#include "Resources/shader.h"
 
 ResourceManager ResourceManager::resourceManager;
 
@@ -13,88 +14,40 @@ ResourceManager::~ResourceManager()
 {
 }
 
-void ResourceManager::LoadAll(std::filesystem::path path)
+void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 {
+	std::string fragPath;
+	std::string vertexPath;
+
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
-		std::size_t pos = path.string().find("assets");
+		if (recursivity)
+		{
+			if (std::filesystem::is_directory(entry))
+			{
+				Load(entry.path().string() + "/", true);
+			}
+		}
+
 		std::string name = entry.path().string();
+		std::string parentName = entry.path().parent_path().filename().string();
+		size_t pos = name.find(parentName);
 		std::string newName = name.substr(pos);
 
 		if (name.ends_with(".obj"))
 		{
 			std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
 
-			if (resource->IsValid())
+			auto&& p = mResources.try_emplace(name, resource);
+			if (!p.second)
 			{
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
-				{
-					p.first->second.reset();
-				}
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Model {} loaded", newName);
+				p.first->second.reset();
 			}
-		}
-
-		else if (name.ends_with(".png") || name.ends_with(".jpg"))
-		{
-			std::shared_ptr<Texture> resource;
-			
-			if (name.ends_with("viking_room.png"))
-			{
-				resource = std::make_shared<Texture>(name.c_str(), true);
-			}
-
-			else
-			{
-				resource = std::make_shared<Texture>(name.c_str(), false);
-			}
+			mResources.emplace(newName, resource);
 
 			if (resource->IsValid())
 			{
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
-				{
-					p.first->second.reset();
-				}
-
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Texture {} loaded", newName);
-			}
-		}
-
-		else if (entry.is_directory())
-		{
-			LoadAll(name + "/");
-		}
-	}
-}
-
-void ResourceManager::Load(std::filesystem::path path)
-{
-	for (const auto& entry : std::filesystem::directory_iterator(path))
-	{
-		std::size_t pos = path.string().find("assets");
-		std::string name = entry.path().string();
-		std::string newName = name.substr(pos);
-
-		if (name.ends_with(".obj"))
-		{
-			std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
-
-			if (resource->IsValid())
-			{
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
-				{
-					p.first->second.reset();
-				}
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Model {} loaded", newName);
+				Logger::Debug("Model : {} loaded", newName);
 			}
 		}
 
@@ -122,7 +75,36 @@ void ResourceManager::Load(std::filesystem::path path)
 
 				mResources.emplace(newName, resource);
 
-				Logger::Debug("Texture {} loaded", newName);
+				Logger::Debug("Texture : {} loaded", newName);
+			}
+		}
+
+		else if (name.ends_with(".fs"))
+		{
+			fragPath = name;
+		}
+
+		else if (name.ends_with(".vs"))
+		{
+			vertexPath = name;
+		}
+
+		if (vertexPath.size() && fragPath.size())
+		{
+			std::shared_ptr<Shader> resource;
+			resource = std::make_shared<Shader>(vertexPath.c_str(), fragPath.c_str());
+
+			if (resource->IsValid())
+			{
+				newName = "baseShader";
+				auto&& p = mResources.try_emplace(name, resource);
+				if (!p.second)
+				{
+					p.first->second.reset();
+				}
+				mResources.emplace(newName, resource);
+
+				Logger::Debug("Shader : {} loaded", newName);
 			}
 		}
 	}
@@ -152,11 +134,15 @@ void ResourceManager::Unload(const std::string& name)
 
 void ResourceManager::UnloadAll()
 {
+	Logger::Debug("\n \n [UNLOAD] \n");
+
 	for (auto&& p : mResources)
 	{
-		Logger::Debug("{} {} unloaded", typeid(decltype(*p.second.get())).name(), p.first);
+		Logger::Debug("{} {} unloaded", typeid(*p.second.get()).name(), p.first);
 	}
 	mResources.clear();
+
+	Logger::Debug("\n");
 }
 
 void ResourceManager::Rename(std::string oldName, std::string newName)

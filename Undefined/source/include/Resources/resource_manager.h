@@ -17,8 +17,7 @@ public:
 	UNDEFINED_ENGINE ResourceManager();
 	UNDEFINED_ENGINE ~ResourceManager();
 
-	UNDEFINED_ENGINE static void Load(std::filesystem::path path);
-	UNDEFINED_ENGINE static void LoadAll(std::filesystem::path path);
+	UNDEFINED_ENGINE static void Load(std::filesystem::path path, bool recursivity = false);
 	UNDEFINED_ENGINE static bool Contains(std::string name);
 
 	template<Type T, typename... Args>
