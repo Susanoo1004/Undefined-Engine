@@ -34,7 +34,6 @@ void Application::Init()
 
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 
-
     TempModel = Model("assets/test/backpack.obj");
 }
 
