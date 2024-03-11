@@ -1,42 +1,25 @@
 #pragma once
 
-#include <vector>
-#include <glad/glad.h>
-#include <toolbox/Vector3.h>
-#include <toolbox/Vector2.h>
+#include <assimp/scene.h>
 
-#include "resources/resource.h"
-#include "utils/flag.h"
+#include "resources/mesh.h"
 
-struct IndexVertex
-{
-	unsigned int PosIndex;
-	unsigned int NormalIndex;
-	unsigned int TexIndex;
-};
-
-struct Vertex
-{
-	Vector3 Position;
-	Vector3 Normal;
-	Vector2 TextureUV;
-};
-
-class Model : public Resource
+class Model
 {
 public:
-	UNDEFINED_ENGINE Model();
-	UNDEFINED_ENGINE Model(const std::string& filepath);
-	UNDEFINED_ENGINE ~Model();
+    UNDEFINED_ENGINE Model();
+    UNDEFINED_ENGINE Model(const char* path);
+    UNDEFINED_ENGINE void Draw(Shader& shader);
 
-	UNDEFINED_ENGINE void Draw();
-	UNDEFINED_ENGINE void LoadOBJ(const std::string& filepath);
-	UNDEFINED_ENGINE void SetOpenGL();
-	UNDEFINED_ENGINE bool IsValid();
-
-	std::vector<Vertex> VertexBuffer;
-	std::vector<IndexVertex> IndexBuffer;
-
+    UNDEFINED_ENGINE bool IsValid() { return false; };
 private:
-	unsigned int mVAO, mVBO, mEBO;
+    // model data
+    std::vector<Mesh> meshes;
+    std::string directory;
+
+    UNDEFINED_ENGINE void LoadModel(std::string path);
+    UNDEFINED_ENGINE void ProcessNode(aiNode* node, const aiScene* scene);
+    UNDEFINED_ENGINE Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
+    UNDEFINED_ENGINE std::vector<Texture> LoadMaterialTextures(aiMaterial* mat);
+
 };

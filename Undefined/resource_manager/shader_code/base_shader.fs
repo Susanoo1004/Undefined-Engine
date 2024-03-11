@@ -21,7 +21,17 @@ in vec3 Normal;
 uniform vec3 viewPos;
 uniform DirLight dirLights[NBR_OF_DIR_LIGHT];
 
+// TEXTURE
+uniform sampler2D texture0;
 uniform sampler2D texture1;
+uniform sampler2D texture2;
+uniform sampler2D texture3;
+uniform sampler2D texture4;
+uniform sampler2D texture5;
+uniform sampler2D texture6;
+uniform sampler2D texture7;
+uniform sampler2D texture8;
+uniform sampler2D texture9;
 
 // calculates the color when using a directional light.
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
@@ -33,9 +43,9 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     // combine results
-    vec3 ambient = light.ambient * vec3(texture(texture1, TexCoord));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(texture1, TexCoord));
-    vec3 specular = light.specular * spec * vec3(texture(texture1, TexCoord));
+    vec3 ambient = light.ambient * vec3(texture(texture0, TexCoord));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(texture0, TexCoord));
+    vec3 specular = light.specular * spec * vec3(texture(texture0, TexCoord));
     return  (ambient + diffuse + specular);
 }
 

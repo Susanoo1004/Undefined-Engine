@@ -24,7 +24,7 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 		std::string parentName = entry.path().parent_path().filename().string();
 		size_t pos = name.find(parentName);
 		std::string newName = name.substr(pos);
-
+		/*
 		if (name.ends_with(".obj"))
 		{
 			std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
@@ -41,8 +41,9 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 				Logger::Debug("Model : {} loaded", newName);
 			}
 		}
+		*/
 
-		else if (name.ends_with(".png") || name.ends_with(".jpg"))
+		if (name.ends_with(".png") || name.ends_with(".jpg"))
 		{
 			std::shared_ptr<Texture> resource;
 
@@ -98,6 +99,7 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 				Logger::Debug("Shader : {} loaded", newName);
 			}
 		}
+		
 	}
 }
 

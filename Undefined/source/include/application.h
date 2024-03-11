@@ -9,6 +9,8 @@
 
 #include "world/component/dir_light.h"
 
+#include "resources/model.h"
+
 class Application
 {
 public:
@@ -26,6 +28,9 @@ public:
 
 	// INCONSISTENT WITH THE CODE STYLE
 	DirLight DirectionalLight;
+
+	// to del
+	Model TempModel;
 
 	// to del
 	float T = 0;
