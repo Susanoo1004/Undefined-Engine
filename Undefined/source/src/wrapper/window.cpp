@@ -1,24 +1,26 @@
-#include "wrapper/window_manager.h"
+#include "wrapper/window.h"
 
+#include <glfw/glfw3.h>
+#include <glfw/glfw3native.h>
 #include <iostream>
 #include <toolbox/calc.h>
 #include <stb_image/stb_image.h>
 
 #include "service_locator.h"
 
-WindowManager::WindowManager()
+Window::Window()
     : mCam(1200,800)
 {
     mWindow = NULL;
 }
 
-WindowManager::~WindowManager()
+Window::~Window()
 {
     glfwDestroyWindow(mWindow);
     glfwTerminate();
 }
 
-bool WindowManager::SetupGlfw()
+bool Window::SetupGlfw()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -39,7 +41,7 @@ bool WindowManager::SetupGlfw()
     return true;
 }
 
-void WindowManager::CreateWindow(int width, int height)
+void Window::CreateWindow(int width, int height)
 {
     mWindow = glfwCreateWindow(width, height, "Undefined Engine", nullptr, nullptr);
 
@@ -52,51 +54,58 @@ void WindowManager::CreateWindow(int width, int height)
     stbi_image_free(images[0].pixels);
 }
 
-void WindowManager::SetupWindow()
+void Window::SetupWindow()
 {
     glfwMakeContextCurrent(mWindow);
 
     glfwSwapInterval(1); // Enable vsync
 }
 
-void WindowManager::GetFramebufferSize(int& display_width, int& display_height)
+void Window::GetFramebufferSize(int& display_width, int& display_height)
 {
     glfwGetFramebufferSize(mWindow, &display_width, &display_height);
 }
 
-GLFWwindow* WindowManager::GetWindowVar()
+GLFWwindow* Window::GetWindowVar()
 {
     return mWindow;
 }
 
-Camera* WindowManager::GetCamera()
+Camera* Window::GetCamera()
 {
     return &mCam;
 }
 
-bool WindowManager::IsWindowOpen()
+bool Window::IsWindowOpen()
 {
     return !glfwWindowShouldClose(mWindow) && glfwGetKey(mWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS;
 }
 
-void WindowManager::SwapBuffers()
+void Window::SwapBuffers()
 {
     glfwSwapBuffers(mWindow);
     glfwPollEvents();
 }
 
-void WindowManager::WindowSizeCallback(GLFWwindow* , int width, int height)
+void Window::WindowSizeCallback(GLFWwindow* , int width, int height)
 {
-    ServiceLocator::Get<WindowManager>()->Width = width;
-    ServiceLocator::Get<WindowManager>()->Height = height;
+    Window* w = ServiceLocator::Get<Window>();
+
+    w->Width = width;
+    w->Height = height;
+
+    if (w->Height < 0 || w->Width < 0)
+    {
+        return;
+    }
 
     Matrix4x4 result;
-    Matrix4x4::ProjectionMatrix(calc::PI / 2, (float)ServiceLocator::Get<WindowManager>()->Width / (float)ServiceLocator::Get<WindowManager>()->Height, 0.1f, 20.0f, result);
-    ServiceLocator::Get<WindowManager>()->GetCamera()->SetPerspective(result);
-    glViewport(0, 0, ServiceLocator::Get<WindowManager>()->Width, ServiceLocator::Get<WindowManager>()->Height);
+    Matrix4x4::ProjectionMatrix(calc::PI / 2, (float)w->Width / (float)w->Height, 0.1f, 20.0f, result);
+    w->GetCamera()->SetPerspective(result);
+    glViewport(0, 0, w->Width, w->Height);
 }
 
-void WindowManager::SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback)
+void Window::SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback)
 {
     glfwSetWindowSizeCallback(window, callback);
 }

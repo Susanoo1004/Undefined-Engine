@@ -1,6 +1,5 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <toolbox/Matrix4x4.h>
 #include <toolbox/Vector3.h>
 
@@ -14,7 +13,7 @@ public:
 	void Init(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
 
 	void SetClearColor(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
-	void ClearBuffer(GLbitfield mask);
+	void ClearBuffer();
 	
 	//Texture
 	void BindTexture(unsigned int ID);

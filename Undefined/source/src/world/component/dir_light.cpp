@@ -11,13 +11,10 @@ DirLight::DirLight(const Vector3& rotation, const Vector3& ambient, const Vector
 	: Light(Vector3(0), rotation, ambient, diffuse, specular)
 {
 	mNbrOfDirLight++;
+	DirLightsArray.push_back(this);
 }
 
 DirLight::~DirLight()
-{
-}
-
-void DirLight::SetLight()
 {
 }
 

@@ -130,6 +130,7 @@ void Model::LoadOBJ(const std::string& filepath)
 	SetOpenGL();
 }
 
+// HAS TO BE MOVE IN RENDERER OR AT LEAST CALL A RENDERER FUNCTION
 void Model::SetOpenGL()
 {
 	glGenBuffers(1, &mVBO);

@@ -18,36 +18,39 @@ int main()
 
     Application app;
 
-    if (!ServiceLocator::Get<WindowManager>()->SetupGlfw())
+    Window* wManager = ServiceLocator::Get<Window>();
+    Renderer* renderer = ServiceLocator::Get<Renderer>();
+
+    if (!wManager->SetupGlfw())
     {
         return 1;
     }
 
-    ServiceLocator::Get<WindowManager>()->CreateWindow(1200, 800);
+    wManager->CreateWindow(1200, 800);
 
-    if (ServiceLocator::Get<WindowManager>()->GetWindowVar() == nullptr)
+    if (wManager->GetWindowVar() == nullptr)
     {
         return 1;
     }
 
-    ServiceLocator::Get<WindowManager>()->SetupWindow();
+    wManager->SetupWindow();
 
-    ServiceLocator::Get<Renderer>()->Init();
+    renderer->Init();
 
-    ServiceLocator::Get<InputManager>()->SetCursorPosCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), Camera::MouseCallback);
+    ServiceLocator::Get<InputManager>()->SetCursorPosCallback(wManager->GetWindowVar(), Camera::MouseCallback);
 
     KeyInput::SetupKeyInputs();
 
-    WindowManager::SetWindowSizeCallback(ServiceLocator::Get<WindowManager>()->GetWindowVar(), WindowManager::WindowSizeCallback);
+    Window::SetWindowSizeCallback(wManager->GetWindowVar(), Window::WindowSizeCallback);
 
     // app.SetupImGui(window);
 
-    ServiceLocator::Get<Renderer>()->Debug.DebugInit();
+    renderer->Debug.DebugInit();
 
     app.Init();
 
     // Let the window open until we press escape or the window should close
-    while (ServiceLocator::Get<WindowManager>()->IsWindowOpen())
+    while (wManager->IsWindowOpen())
     {
 
         // app.StartImGuiFrame();
@@ -60,8 +63,8 @@ int main()
         // Rendering 
         // app.Render(window);
 
-        ServiceLocator::Get<WindowManager>()->SwapBuffers();
-        ServiceLocator::Get<Renderer>()->ClearBuffer(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        wManager->SwapBuffers();
+        renderer->ClearBuffer();
     }
 
     ServiceLocator::CleanServiceLocator();

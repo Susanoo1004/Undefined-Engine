@@ -17,8 +17,6 @@ public:
 	UNDEFINED_ENGINE Light(const Vector3& position, const Vector3& rotation, const Vector3& ambient, const Vector3& diffuse, const Vector3& specular);
 	UNDEFINED_ENGINE ~Light();
 
-	UNDEFINED_ENGINE virtual void SetLight();
-
 	// TO CHANGE TO OVERRIDE WHEN COMPOENENT WORKS
 	UNDEFINED_ENGINE virtual void Update();
 

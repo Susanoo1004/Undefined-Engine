@@ -20,7 +20,7 @@ void Interface::Init()
 
     constexpr const char* glslVersion = "#version 450";
 
-    ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<WindowManager>()->GetWindowVar(), true);
+    ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<Window>()->GetWindowVar(), true);
     ImGui_ImplOpenGL3_Init(glslVersion);
 
     ContentBrowser::Init();
@@ -40,7 +40,7 @@ void Interface::Render()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     ImGui::UpdatePlatformWindows();
     ImGui::RenderPlatformWindowsDefault();
-    ServiceLocator::Get<WindowManager>()->SetupWindow();
+    ServiceLocator::Get<Window>()->SetupWindow();
 }
 
 void Interface::BeginDockSpace()
@@ -85,8 +85,6 @@ void Interface::Update()
     FPSGraph::ShowWindow();
     ContentBrowser::ShowWindow();
     Inspector::ShowWindow();
-
-    ImGui::ShowDemoWindow();
 
     ImGui::End();
     Render();

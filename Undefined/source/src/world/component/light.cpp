@@ -13,10 +13,6 @@ Light::~Light()
 {
 }
 
-void Light::SetLight()
-{
-}
-
 void Light::Update()
 {
 }

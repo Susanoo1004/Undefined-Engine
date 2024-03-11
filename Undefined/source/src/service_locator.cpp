@@ -3,7 +3,7 @@
 void ServiceLocator::Setup()
 {
 	ServiceLocator::Provide<InputManager>(new InputManager());
-	ServiceLocator::Provide<WindowManager>(new WindowManager());
+	ServiceLocator::Provide<Window>(new Window());
 	ServiceLocator::Provide<Renderer>(new Renderer());
 }
 
