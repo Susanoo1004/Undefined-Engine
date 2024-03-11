@@ -13,14 +13,14 @@ public:
 	UNDEFINED_ENGINE static void Init();
 	
 	//Update for the ContentBrowser
-	UNDEFINED_ENGINE static void ShowWindow();
+	UNDEFINED_ENGINE static void DisplayWindow();
 	
 private:
 	//Recursive function that displays the left side of the content browser who shows us every directory and file in a specific path
 	UNDEFINED_ENGINE static void DisplayDirectories(const std::filesystem::path& path);
 
 	//Display the right side of the content browser who shows an image for a file/folder in a directory
-	UNDEFINED_ENGINE static void ShowActualDirectory(std::filesystem::path currentPath);
+	UNDEFINED_ENGINE static void DisplayActualDirectory(std::filesystem::path currentPath);
 
 	//Center text for ImGui texts
 	UNDEFINED_ENGINE static void TextCentered(std::string text);
@@ -29,7 +29,7 @@ private:
 	UNDEFINED_ENGINE static void SetImageValues(std::filesystem::path path, ImTextureID& imageID, ImVec2& imageSize);
 
 	//Print the text depending of it's lenght
-	UNDEFINED_ENGINE static void ShowText(std::string filename, ImVec2& imageSize);
+	UNDEFINED_ENGINE static void DisplayText(std::string filename, ImVec2& imageSize);
 
 	//Handle every interaction a folder/file can have
 	UNDEFINED_ENGINE static void InteractionWithItems(std::filesystem::path path, bool isBackFolder = false);

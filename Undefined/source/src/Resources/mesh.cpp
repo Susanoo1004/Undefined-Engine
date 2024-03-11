@@ -15,15 +15,15 @@ void Mesh::Draw(Shader& shader)
 
     for (unsigned int i = 0; i < textures.size(); i++)
     {
-        glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
+        // glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
         // retrieve texture number (the N in diffuse_textureN)
         std::string number;
         number = std::to_string(textureNr++);
 
-        shader.SetInt(("material.texture" + number).c_str(), i);
+        // shader.SetInt(("material.texture" + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].GetID());
     }
-    glActiveTexture(GL_TEXTURE0);
+    // glActiveTexture(GL_TEXTURE0);
 
     // draw mesh
     glBindVertexArray(mVAO);

@@ -83,7 +83,7 @@ void Interface::Update()
     BeginDockSpace();
 
     FPSGraph::ShowWindow();
-    ContentBrowser::ShowWindow();
+    ContentBrowser::DisplayWindow();
     Inspector::ShowWindow();
 
     ImGui::End();

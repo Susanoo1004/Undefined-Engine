@@ -1,5 +1,6 @@
 #include "camera/camera.h"
 
+#include <glfw/glfw3.h>
 #include <numbers>
 #include <iostream>
 
@@ -46,47 +47,36 @@ void Camera::Update()
     mVP = mPerspective * mView;
 }
 
-void Camera::ProcessInput(GLFWwindow*)
+void Camera::ProcessInput()
 {
-
-    const float cameraSpeed = 0.05f; // adjust accordingly
-
     std::shared_ptr<KeyInput> editorCameraInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
 
-    if (editorCameraInput->GetIsKeyDown(GLFW_MOUSE_BUTTON_RIGHT))
-    {
-        IsMouseForCam = true;
-    }
-    else
-    {
-        IsMouseForCam = false;
-    }
+    mIsMouseForCam = editorCameraInput->GetIsKeyDown(GLFW_MOUSE_BUTTON_RIGHT);
 
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_W))
     {
-        Eye += cameraSpeed * LookAt;
+        Eye += LookAt * mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_S))
     {
-        Eye -= cameraSpeed * LookAt;
+        Eye -= LookAt * mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_A))
     {
-        Eye -= Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
+        Eye -= Vector3::Cross(LookAt, Up).Normalized() * mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_D))
     {
-        Eye += Vector3::Cross(LookAt, Up).Normalized() * cameraSpeed;
+        Eye += Vector3::Cross(LookAt, Up).Normalized() * mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_SPACE))
     {
-        Eye.y += cameraSpeed;
+        Eye.y += mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_LEFT_SHIFT))
     {
-        Eye.y -= cameraSpeed;
+        Eye.y -= mCameraSpeed;
     }
-
 }
 
 void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
@@ -96,47 +86,47 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
-    if (sCamPtr->IsMouseForCam)
+    if (sCamPtr->mIsMouseForCam)
     {
         inputManager->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     else
     {
         inputManager->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        sCamPtr->IsFirstMouse = true;
+        sCamPtr->mIsFirstMouse = true;
         return;
     }
-    if (sCamPtr->IsFirstMouse)
+
+    if (sCamPtr->mIsFirstMouse)
     {
-        sCamPtr->LastX = xpos;
-        sCamPtr->LastY = ypos;
-        sCamPtr->IsFirstMouse = false;
+        sCamPtr->mLastX = xpos;
+        sCamPtr->mLastY = ypos;
+        sCamPtr->mIsFirstMouse = false;
     }
 
-    float xoffset = xpos - sCamPtr->LastX;
-    float yoffset = sCamPtr->LastY - ypos;
-    sCamPtr->LastX = xpos;
-    sCamPtr->LastY = ypos;
+    float xoffset = xpos - sCamPtr->mLastX;
+    float yoffset = sCamPtr->mLastY - ypos;
+    sCamPtr->mLastX = xpos;
+    sCamPtr->mLastY = ypos;
 
-    float sensitivity = 0.05f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
+    xoffset *= sCamPtr->mMouseSensitivity;
+    yoffset *= sCamPtr->mMouseSensitivity;
 
-    sCamPtr->Yaw += xoffset;
-    sCamPtr->Pitch += yoffset;
+    sCamPtr->mYaw += xoffset;
+    sCamPtr->mPitch += yoffset;
 
-    if (sCamPtr->Pitch > 89.0f)
+    if (sCamPtr->mPitch > 89.0f)
     {
-        sCamPtr->Pitch = 89.0f;
+        sCamPtr->mPitch = 89.0f;
     }
-    if (sCamPtr->Pitch < -89.0f)
+    if (sCamPtr->mPitch < -89.0f)
     {
-        sCamPtr->Pitch = -89.0f;
+        sCamPtr->mPitch = -89.0f;
     }
 
     Vector3 direction;
-    direction.x = cosf((sCamPtr->Yaw * (PI / 180.f))) * cosf((sCamPtr->Pitch * (PI / 180.f)));
-    direction.y = sinf((sCamPtr->Pitch * (PI / 180.f)));
-    direction.z = sinf((sCamPtr->Yaw * (PI / 180.f))) * cosf((sCamPtr->Pitch * (PI / 180.f)));
+    direction.x = cosf((sCamPtr->mYaw * (PI / 180.f))) * cosf((sCamPtr->mPitch * (PI / 180.f)));
+    direction.y = sinf((sCamPtr->mPitch * (PI / 180.f)));
+    direction.z = sinf((sCamPtr->mYaw * (PI / 180.f))) * cosf((sCamPtr->mPitch * (PI / 180.f)));
     sCamPtr->LookAt = direction.Normalized();
 }

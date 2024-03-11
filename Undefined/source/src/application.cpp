@@ -19,7 +19,7 @@ Application::Application()
 void Application::Init()
 {
     ResourceManager::Load("assets/", true);
-    ResourceManager::Load("../Undefined/resource_manager/", true );
+    ResourceManager::Load("../Undefined/resource_manager/", true);
     Interface::Init();
 
     BaseShader = ResourceManager::Get<Shader>("baseShader");
@@ -33,7 +33,8 @@ void Application::Init()
 
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 
-    TempModel = Model("assets/test/backpack.obj");
+    TempModel = Model("assets/viking_room.obj");
+    ServiceLocator::Get<Renderer>()->BindTexture(ResourceManager::Get<Texture>("assets/viking_room.png")->GetID());
 }
 
 // move to wrapper
@@ -114,7 +115,7 @@ void Application::Update()
     glBindTexture(GL_TEXTURE_2D, ResourceManager::Get<Texture>("assets/viking_room.png")->GetID());
     */
 
-    ServiceLocator::Get<Window>()->GetCamera()->ProcessInput(ServiceLocator::Get<Window>()->GetWindowVar());
+    ServiceLocator::Get<Window>()->GetCamera()->ProcessInput();
     ServiceLocator::Get<Window>()->GetCamera()->Update();
 
     // modify the camera in the shader
@@ -136,6 +137,7 @@ void Application::Update()
     Draw();
 
     Interface::Update();
+    
 }
 
 void Application::Draw()

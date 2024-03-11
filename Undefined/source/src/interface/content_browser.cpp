@@ -9,7 +9,7 @@ void ContentBrowser::Init()
 {
     mPath = std::filesystem::current_path();
     mCurrentPath = mPath;
-    mBackFolder = "folder";
+    mBackFolder = "initBackFolder";
 
     mIsFolderOpen = false;
     mIsDirectory = false;
@@ -163,7 +163,7 @@ void ContentBrowser::SetImageValues(std::filesystem::path path, ImTextureID& ima
     }
 }
 
-void ContentBrowser::ShowText(std::string filename, ImVec2& imageSize)
+void ContentBrowser::DisplayText(std::string filename, ImVec2& imageSize)
 {
     //If the text is larger than the image size it wrap on multiple lines else it's centered
     if (ImGui::CalcTextSize(filename.c_str()).x > imageSize.x)
@@ -206,19 +206,18 @@ void ContentBrowser::InteractionWithItems(std::filesystem::path path, bool isBac
                 {
                     mCurrentPath = path;
                 }
-
                 else
                 {
                     mCurrentPath = mCurrentPath.parent_path();
                 }
             }
-            
             else
             {
                 std::string file = "start explorer ";
                 file += '"' + absolute(path).string() + '"';
                 system(file.c_str());
             }
+            
         }
     }
 
@@ -246,7 +245,6 @@ void ContentBrowser::GoBackFolder(std::filesystem::path path)
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
             mCanPop = true;
         }
-
         else if (mHoveredPath == mBackFolder)
         {
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
@@ -294,7 +292,7 @@ void ContentBrowser::LoadFiles(std::filesystem::path path)
     }
 }
 
-void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
+void ContentBrowser::DisplayActualDirectory(std::filesystem::path currentPath)
 {
     mIsAnythingHovered = false;
 
@@ -337,7 +335,7 @@ void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
 
         InteractionWithItems(mCurrPathArray[i]);
 
-        ShowText(filename, imageSize);
+        DisplayText(filename, imageSize);
 
         ImGui::EndChild();
         if (mCanPop)
@@ -364,7 +362,7 @@ void ContentBrowser::ShowActualDirectory(std::filesystem::path currentPath)
     mCurrPathArray.shrink_to_fit();
 }
 
-void ContentBrowser::ShowWindow()
+void ContentBrowser::DisplayWindow()
 {
     ImGui::Begin("Content Browser");
 
@@ -374,7 +372,7 @@ void ContentBrowser::ShowWindow()
 
     ImGui::SameLine();
     ImGui::BeginChild("Repertory", ImVec2(0, 0), ImGuiChildFlags_Border);
-    ShowActualDirectory(mCurrentPath);
+    DisplayActualDirectory(mCurrentPath);
     ImGui::EndChild();
 
     ImGui::End();

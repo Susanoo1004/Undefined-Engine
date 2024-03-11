@@ -15,33 +15,36 @@ public:
 
     void SetPerspective(Matrix4x4& perspectiveView);
 
-    const Matrix4x4& GetVP();
-
     void Update();
 
-    void ProcessInput(GLFWwindow*);
+    void ProcessInput();
+
+    const Matrix4x4& GetVP();
 
     Vector3 Eye;
     Vector3 LookAt;
     Vector3 Up;
 
-    float Yaw = 90.f;
-    float Pitch = 0.f;
-
-    float LastX;
-    float LastY;
-
-    bool IsFirstMouse = true;
-    bool IsMouseForCam = false;
-
 private:
     Matrix4x4 mVP;
-
     Matrix4x4 mView;
     Matrix4x4 mPerspective;
 
     float mWidth;
     float mHeight;
+
+    float mCameraSpeed = 0.05f;
+    float mMouseSensitivity = 0.05f;
+
+    float mYaw = 90.f;
+    float mPitch = 0.f;
+
+    float mLastX = 0.f;
+    float mLastY = 0.f;
+    
+    bool mIsActive = true;
+    bool mIsFirstMouse = true;
+    bool mIsMouseForCam = false;
 
 public:
     static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
