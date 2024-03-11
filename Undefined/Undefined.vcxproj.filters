@@ -108,4 +108,8 @@
   <ItemGroup>
     <Image Include="assets\undefined_logo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="external\libs\toolboxMoteur.pdb" />
+    <None Include="external\libs\toolboxMoteurd.pdb" />
+  </ItemGroup>
 </Project>

@@ -4,15 +4,6 @@
 #include "Resources/texture.h"
 #include "Resources/shader.h"
 
-ResourceManager ResourceManager::resourceManager;
-
-ResourceManager::ResourceManager()
-{
-}
-
-ResourceManager::~ResourceManager()
-{
-}
 
 void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 {

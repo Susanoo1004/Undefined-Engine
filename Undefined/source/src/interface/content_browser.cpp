@@ -123,7 +123,7 @@ void ContentBrowser::SetImageValues(std::filesystem::path path, ImTextureID& ima
 {
     if (mIsDirectory)
     {
-        std::shared_ptr<Texture> folder = ResourceManager::resourceManager.Get<Texture>("imgui/folder.png");
+        std::shared_ptr<Texture> folder = ResourceManager::Get<Texture>("imgui/folder.png");
 
         imageSize = ImVec2((float)folder->GetWidth(), (float)folder->GetHeight());
         imageID = Utils::IntToPointer<ImTextureID>(folder->GetID());
@@ -135,28 +135,28 @@ void ContentBrowser::SetImageValues(std::filesystem::path path, ImTextureID& ima
         //If it's a texture we put the image of the texture instead of a basic file image
         if (path.string().ends_with(".jpg") || path.string().ends_with(".png"))
         {
-            if (ResourceManager::resourceManager.Contains(newName))
+            if (ResourceManager::Contains(newName))
             {
                 imageSize = ImVec2(80.f, 80.f);
-                imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::resourceManager.Get<Texture>(newName)->GetID());
+                imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>(newName)->GetID());
             }
         }
 
         else if (path.string().ends_with(".obj"))
         {
             imageSize = ImVec2(80.f, 80.f);
-            imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::resourceManager.Get<Texture>("imgui/obj_file.png")->GetID());
+            imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/obj_file.png")->GetID());
         }
 
         else if (path.string().ends_with(".cpp") || path.string().ends_with(".h") || path.string().ends_with(".hpp"))
         {
             imageSize = ImVec2(80.f, 80.f);
-            imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::resourceManager.Get<Texture>("imgui/visual_studio.png")->GetID());
+            imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/visual_studio.png")->GetID());
         }
 
         else
         {
-            std::shared_ptr<Texture> file = ResourceManager::resourceManager.Get<Texture>("imgui/file.png");
+            std::shared_ptr<Texture> file = ResourceManager::Get<Texture>("imgui/file.png");
             imageSize = ImVec2((float)file->GetWidth(), (float)file->GetHeight());
             imageID = Utils::IntToPointer<ImTextureID>(file->GetID());
         }
@@ -254,7 +254,7 @@ void ContentBrowser::GoBackFolder(std::filesystem::path path)
         }
 
         ImGui::BeginChild("go back folder", ImVec2(100, 120), ImGuiChildFlags_AlwaysUseWindowPadding);
-        imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::resourceManager.Get<Texture>("imgui/folder.png")->GetID());
+        imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID());
         ImGui::Image(imageID, ImVec2(80, 80));
 
         InteractionWithItems(mBackFolder, true);

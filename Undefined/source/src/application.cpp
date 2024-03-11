@@ -21,7 +21,7 @@ void Application::Init()
     ResourceManager::Load("../Undefined/resource_manager/", true );
     Interface::Init();
 
-    BaseShader = ResourceManager::resourceManager.Get<Shader>("baseShader");
+    BaseShader = ResourceManager::Get<Shader>("baseShader");
 
 
     if (BaseShader->ID)
@@ -78,7 +78,7 @@ void Application::InitQuad()
 // move to wrapper
 void Application::InitVikingRoom()
 {
-    std::shared_ptr<Model> model = ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj");
+    std::shared_ptr<Model> model = ResourceManager::Get<Model>("assets/viking_room.obj");
 
     glGenBuffers(1, &mVBO);
     glGenVertexArrays(1, &mVAO);
@@ -107,7 +107,7 @@ void Application::Update()
     ServiceLocator::Get<Renderer>()->SetClearColor();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
+    glBindTexture(GL_TEXTURE_2D, ResourceManager::Get<Texture>("assets/viking_room.png")->GetID());
 
     ServiceLocator::Get<WindowManager>()->GetCamera()->ProcessInput(ServiceLocator::Get<WindowManager>()->GetWindowVar());
     ServiceLocator::Get<WindowManager>()->GetCamera()->Update();
@@ -136,5 +136,5 @@ void Application::Update()
 void Application::Draw()
 {
     glBindVertexArray(mVAO);
-    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->VertexBuffer.size());
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::Get<Model>("assets/viking_room.obj")->VertexBuffer.size());
 }
