@@ -6,19 +6,10 @@
 
 #include "utils/utils.h"
 
-void FPSGraph::Init()
-{
-    mUpdateTime = 0.1f;
-    mLastTotalTime = (float)glfwGetTime();
-    mMaxFPS = 200.0f;
-    mArraySize = 50;
-    mMinFpsOffset = 5;
-    mArraySizeOffset = 5;
-}
-
 void FPSGraph::ShowWindow()
 {
     ImGui::Begin("FPS Graph");
+    ImGui::Text("Time since launch : %.2f", (float)glfwGetTime());
  
     //Every ImGUI slider 
     ImGui::SliderFloat("Time between updates", &mUpdateTime, 0.0f, 1.0f, "%.2f");
@@ -60,6 +51,7 @@ void FPSGraph::ShowWindow()
 
     //Draw FPS Graph
     ImGui::PlotLines("", mFrameRateArray.data(), (int)mFrameRateArray.size(), 0, string.c_str(), 0, mMaxFPS, ImGui::GetContentRegionAvail());
+
 
     ImGui::End();
 }

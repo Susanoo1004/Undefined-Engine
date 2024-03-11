@@ -22,8 +22,6 @@ void Interface::Init()
 
     ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<Window>()->GetWindowVar(), true);
     ImGui_ImplOpenGL3_Init(glslVersion);
-
-    FPSGraph::Init();
 }
 
 void Interface::NewFrame()
