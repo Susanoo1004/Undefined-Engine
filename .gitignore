@@ -442,6 +442,7 @@ FodyWeavers.xsd
 !source
 !**/libs/**
 
-Editor/Undefined_Engine.lib
-Editor/imgui.ini
+editor/Undefined_Engine.lib
+editor/imgui.ini
+!editor/assimp-vc142-mtd.dll
 *.exp
