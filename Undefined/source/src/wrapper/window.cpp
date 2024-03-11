@@ -4,6 +4,7 @@
 #include <glfw/glfw3native.h>
 #include <iostream>
 #include <toolbox/calc.h>
+#include <stb_image/stb_image.h>
 
 #include "service_locator.h"
 
@@ -24,6 +25,7 @@ bool Window::SetupGlfw()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
+
     glfwSetErrorCallback(
         [](int error, const char* description)
         {
@@ -42,6 +44,14 @@ bool Window::SetupGlfw()
 void Window::CreateWindow(int width, int height)
 {
     mWindow = glfwCreateWindow(width, height, "Undefined Engine", nullptr, nullptr);
+
+    //Add an icon to our window
+    GLFWimage images[1];
+    images[0].pixels = stbi_load("../Undefined/resource_manager/assets/undefined_logo.png", &images[0].width, &images[0].height, 0, 4); //rgba channels
+
+    glfwSetWindowIcon(mWindow, 1, images);
+
+    stbi_image_free(images[0].pixels);
 }
 
 void Window::SetupWindow()

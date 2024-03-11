@@ -17,12 +17,12 @@ Application::Application()
 
 void Application::Init()
 {
+    ResourceManager::Load("assets/", true);
+    ResourceManager::Load("../Undefined/resource_manager/", true );
     Interface::Init();
 
-    BaseShader = ResourceManager::resourceManager.Create<Shader>("baseShader", "../Undefined/source/shader_code/base_shader.vs", "../Undefined/source/shader_code/base_shader.fs");
-    
-    ResourceManager::LoadAll("assets/");
-    ResourceManager::LoadAll("../Undefined/assets/");
+    BaseShader = ResourceManager::Get<Shader>("baseShader");
+
 
     if (BaseShader->ID)
     {
@@ -31,7 +31,7 @@ void Application::Init()
 
     InitVikingRoom();
 
-    DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), {0.1f,0.1f,0.5f}, BASE_DIFFUSE, BASE_SPECULAR);
+    dirLight = DirLight(Vector3(-1.f, -1.f, 1.f), {0.1f,0.1f,0.5f}, BASE_DIFFUSE, BASE_SPECULAR);
 }
 
 // move to wrapper
@@ -78,7 +78,7 @@ void Application::InitQuad()
 // move to wrapper
 void Application::InitVikingRoom()
 {
-    std::shared_ptr<Model> model = ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj");
+    std::shared_ptr<Model> model = ResourceManager::Get<Model>("assets/viking_room.obj");
 
     glGenBuffers(1, &mVBO);
     glGenVertexArrays(1, &mVAO);
@@ -102,29 +102,29 @@ void Application::InitVikingRoom()
 
 void Application::Update()
 {
-    T += 0.016f;
+    t += 0.016f;
 
     ServiceLocator::Get<Renderer>()->SetClearColor();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, ResourceManager::resourceManager.Get<Texture>("assets/viking_room.png")->GetID());
+    glBindTexture(GL_TEXTURE_2D, ResourceManager::Get<Texture>("assets/viking_room.png")->GetID());
 
-    ServiceLocator::Get<Window>()->GetCamera()->ProcessInput(ServiceLocator::Get<Window>()->GetWindowVar());
-    ServiceLocator::Get<Window>()->GetCamera()->Update();
+    ServiceLocator::Get<WindowManager>()->GetCamera()->ProcessInput(ServiceLocator::Get<WindowManager>()->GetWindowVar());
+    ServiceLocator::Get<WindowManager>()->GetCamera()->Update();
 
     // modify the camera in the shader
     BaseShader->Use();
-    BaseShader->SetMat4("vp", ServiceLocator::Get<Window>()->GetCamera()->GetVP());
-    BaseShader->SetVec3("viewPos", ServiceLocator::Get<Window>()->GetCamera()->Eye);
+    BaseShader->SetMat4("vp", ServiceLocator::Get<WindowManager>()->GetCamera()->GetVP());
+    BaseShader->SetVec3("viewPos", ServiceLocator::Get<WindowManager>()->GetCamera()->Eye);
 
 
-    BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
+    BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(t), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
     // TO MOVE TO LIGHTS UPDATE WHEN RESMANAGER WORKS WITH SHADER
-    BaseShader->SetVec3("dirLights[0].direction", DirectionalLight.rot);
-    BaseShader->SetVec3("dirLights[0].ambient", DirectionalLight.Ambient);
-    BaseShader->SetVec3("dirLights[0].diffuse", DirectionalLight.Diffuse);
-    BaseShader->SetVec3("dirLights[0].specular", DirectionalLight.Specular);
+    BaseShader->SetVec3("dirLights[0].direction", dirLight.rot);
+    BaseShader->SetVec3("dirLights[0].ambient", dirLight.Ambient);
+    BaseShader->SetVec3("dirLights[0].diffuse", dirLight.Diffuse);
+    BaseShader->SetVec3("dirLights[0].specular", dirLight.Specular);
 
 
     BaseShader->Use();
@@ -136,5 +136,5 @@ void Application::Update()
 void Application::Draw()
 {
     glBindVertexArray(mVAO);
-    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::resourceManager.Get<Model>("assets/viking_room.obj")->VertexBuffer.size());
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::Get<Model>("assets/viking_room.obj")->VertexBuffer.size());
 }
