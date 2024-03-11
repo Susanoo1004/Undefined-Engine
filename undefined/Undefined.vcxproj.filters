@@ -115,7 +115,5 @@
   <ItemGroup>
     <None Include="external\libs\toolboxMoteur.pdb" />
     <None Include="external\libs\toolboxMoteurd.pdb" />
-    <None Include="..\..\BuildCmake\bin\bin\Debug\assimp-vc142-mtd.dll" />
-    <None Include="..\..\BuildCmake\bin\bin\Debug\assimp-vc142-mtd.pdb" />
   </ItemGroup>
 </Project>

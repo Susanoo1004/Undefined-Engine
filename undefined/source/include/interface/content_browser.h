@@ -10,8 +10,6 @@ class ContentBrowser
 	STATIC_CLASS(ContentBrowser)
 
 public:
-	UNDEFINED_ENGINE static void Init();
-	
 	//Update for the ContentBrowser
 	UNDEFINED_ENGINE static void DisplayWindow();
 	
@@ -43,18 +41,18 @@ private:
 	//Load files in a path and add them to an array
 	UNDEFINED_ENGINE static void LoadFiles(std::filesystem::path path);
 
-	UNDEFINED_ENGINE static inline bool mIsFolderOpen;
-	UNDEFINED_ENGINE static inline bool mIsDirectory;
-	UNDEFINED_ENGINE static inline bool mIsAnythingHovered;
-	UNDEFINED_ENGINE static inline bool mIsAnythingSelected;
-	UNDEFINED_ENGINE static inline bool mCanPop;
+	UNDEFINED_ENGINE static inline bool mIsFolderOpen = false;
+	UNDEFINED_ENGINE static inline bool mIsDirectory = false;
+	UNDEFINED_ENGINE static inline bool mIsAnythingHovered = false;
+	UNDEFINED_ENGINE static inline bool mIsAnythingSelected = false;
+	UNDEFINED_ENGINE static inline bool mCanPop = false;
 
-	static inline std::filesystem::path mPath;
-	static inline std::filesystem::path mCurrentPath;
-	static inline std::filesystem::path mHoveredPath;
-	static inline std::filesystem::path mSelectedPath;
+	static inline std::filesystem::path mPath = std::filesystem::current_path();
+	static inline std::filesystem::path mCurrentPath = mPath;
+	static inline std::filesystem::path mHoveredPath = "";
+	static inline std::filesystem::path mSelectedPath = "";
 
-	static inline std::string mBackFolder;
+	static inline std::string mBackFolder = "BackFolder";
 	
 	static inline std::vector<std::filesystem::directory_entry> mCurrPathArray;
 };

@@ -5,19 +5,6 @@
 
 #include "utils/utils.h"
 
-void ContentBrowser::Init()
-{
-    mPath = std::filesystem::current_path();
-    mCurrentPath = mPath;
-    mBackFolder = "initBackFolder";
-
-    mIsFolderOpen = false;
-    mIsDirectory = false;
-    mIsAnythingHovered = false;
-    mIsAnythingSelected = false;
-    mCanPop = false;
-}
-
 void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 {
     mIsDirectory = std::filesystem::is_directory(path);
@@ -130,15 +117,23 @@ void ContentBrowser::SetImageValues(std::filesystem::path path, ImTextureID& ima
     }
     else
     {
-        std::string newName = "assets/" + path.string();
+        std::string name = path.generic_string();
+        std::string parentName = path.parent_path().filename().generic_string();
+        size_t pos = name.find(parentName);
+        std::string newName = name.substr(pos);
         
         //If it's a texture we put the image of the texture instead of a basic file image
         if (path.string().ends_with(".jpg") || path.string().ends_with(".png"))
         {
+            imageSize = ImVec2(80.f, 80.f);
             if (ResourceManager::Contains(newName))
             {
-                imageSize = ImVec2(80.f, 80.f);
+
                 imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>(newName)->GetID());
+            }
+            else
+            {
+                std::shared_ptr<Texture> file = ResourceManager::Get<Texture>("imgui/file.png");
             }
         }
 
@@ -251,7 +246,7 @@ void ContentBrowser::GoBackFolder(std::filesystem::path path)
             mCanPop = true;
         }
 
-        ImGui::BeginChild("go back folder", ImVec2(100, 120), ImGuiChildFlags_AlwaysUseWindowPadding);
+        ImGui::BeginChild("BackFolder", ImVec2(100, 120), ImGuiChildFlags_AlwaysUseWindowPadding);
         imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID());
         ImGui::Image(imageID, ImVec2(80, 80));
 
@@ -308,12 +303,13 @@ void ContentBrowser::DisplayActualDirectory(std::filesystem::path currentPath)
         mIsDirectory = mCurrPathArray[i].is_directory();
 
         std::string filename = mCurrPathArray[i].path().filename().string();
+        std::filesystem::path filepath = mCurrPathArray[i].path();
 
         ImVec2 imageSize;
         ImTextureID imageID;
 
         //Set imageID and imageSize
-        SetImageValues(filename, imageID, imageSize);
+        SetImageValues(filepath, imageID, imageSize);
 
         ImVec2 childSize = ImVec2(imageSize.x + ImGui::GetStyle().FramePadding.x * 2.f, imageSize.y + ImGui::CalcTextSize(filename.c_str()).y + ImGui::GetStyle().FramePadding.y * 15.f);
 
