@@ -217,6 +217,7 @@
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\resources\mesh.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="source\include\interface\content_browser.h" />
     <ClInclude Include="source\include\interface\fps_graph.h" />
     <ClInclude Include="source\include\interface\inspector.h" />
@@ -259,6 +260,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />
+    <Image Include="assets\undefined_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="external\libs\toolboxMoteur.pdb" />
+    <None Include="external\libs\toolboxMoteurd.pdb" />
+    <None Include="..\..\BuildCmake\bin\bin\Debug\assimp-vc142-mtd.dll" />
+    <None Include="..\..\BuildCmake\bin\bin\Debug\assimp-vc142-mtd.pdb" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
