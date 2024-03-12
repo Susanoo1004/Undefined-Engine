@@ -16,22 +16,17 @@ struct Vertex
 	Vector2 TexCoords;
 };
 
-class UNDEFINED_ENGINE Mesh
+class Mesh
 {
 public:
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+	UNDEFINED_ENGINE Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 
-	void Draw(Shader& shader);
-
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-
-	// can be change in an array of Texture*
-	std::vector <Texture> textures;
-
+	std::vector<Vertex> Vertices;
+	std::vector<unsigned int> Indices;
 private:
+	UNDEFINED_ENGINE void SetupMesh();
+
 	unsigned int mVAO, mVBO, mEBO;
 
-	void SetupMesh();
 };
 

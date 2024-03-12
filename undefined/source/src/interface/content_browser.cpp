@@ -23,7 +23,6 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
             flags |= ImGuiTreeNodeFlags_DefaultOpen;
         }
     }
-
     else
     {
         flags |= ImGuiTreeNodeFlags_Leaf;

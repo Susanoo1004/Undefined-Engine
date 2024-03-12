@@ -11,6 +11,9 @@
 
 #include "resources/model.h"
 
+class Window;
+class Renderer;
+
 class Application
 {
 public:
@@ -18,19 +21,14 @@ public:
 
 	UNDEFINED_ENGINE void Init();
 	UNDEFINED_ENGINE void Update();
+	UNDEFINED_ENGINE void Clear();
 
 	UNDEFINED_ENGINE void InitQuad();
-	UNDEFINED_ENGINE void InitVikingRoom();
 	UNDEFINED_ENGINE void Draw();
 
 	std::shared_ptr<Shader> BaseShader;
 	Logger Log;
-
-	// INCONSISTENT WITH THE CODE STYLE
 	DirLight DirectionalLight;
-
-	// to del
-	Model TempModel;
 
 	// to del
 	float T = 0;
@@ -38,5 +36,8 @@ public:
 private:
 	unsigned int mVAO = 0, mVBO = 0, mEBO = 0;
 	unsigned int mVertexShader = 0, mFragmentShader = 0, mShaderProgram = 0;
+
+	Window* mWindowManager = nullptr;
+	Renderer* mRenderer = nullptr;
 };
 

@@ -1025,7 +1025,7 @@ GLAPI int GLAD_GL_VERSION_1_1;
 typedef void (APIENTRYP PFNGLDRAWARRAYSPROC)(GLenum mode, GLint first, GLsizei count);
 GLAPI PFNGLDRAWARRAYSPROC glad_glDrawArrays;
 #define glDrawArrays glad_glDrawArrays
-typedef void (APIENTRYP PFNGLDRAWELEMENTSPROC)(GLenum mode, GLsizei count, GLenum type, const void *indices);
+typedef void (APIENTRYP PFNGLDRAWELEMENTSPROC)(GLenum mode, GLsizei count, GLenum type, const void *Indices);
 GLAPI PFNGLDRAWELEMENTSPROC glad_glDrawElements;
 #define glDrawElements glad_glDrawElements
 typedef void (APIENTRYP PFNGLPOLYGONOFFSETPROC)(GLfloat factor, GLfloat units);
@@ -1052,10 +1052,10 @@ GLAPI PFNGLTEXSUBIMAGE2DPROC glad_glTexSubImage2D;
 typedef void (APIENTRYP PFNGLBINDTEXTUREPROC)(GLenum target, GLuint texture);
 GLAPI PFNGLBINDTEXTUREPROC glad_glBindTexture;
 #define glBindTexture glad_glBindTexture
-typedef void (APIENTRYP PFNGLDELETETEXTURESPROC)(GLsizei n, const GLuint *textures);
+typedef void (APIENTRYP PFNGLDELETETEXTURESPROC)(GLsizei n, const GLuint *mTextures);
 GLAPI PFNGLDELETETEXTURESPROC glad_glDeleteTextures;
 #define glDeleteTextures glad_glDeleteTextures
-typedef void (APIENTRYP PFNGLGENTEXTURESPROC)(GLsizei n, GLuint *textures);
+typedef void (APIENTRYP PFNGLGENTEXTURESPROC)(GLsizei n, GLuint *mTextures);
 GLAPI PFNGLGENTEXTURESPROC glad_glGenTextures;
 #define glGenTextures glad_glGenTextures
 typedef GLboolean (APIENTRYP PFNGLISTEXTUREPROC)(GLuint texture);
@@ -1065,7 +1065,7 @@ GLAPI PFNGLISTEXTUREPROC glad_glIsTexture;
 #ifndef GL_VERSION_1_2
 #define GL_VERSION_1_2 1
 GLAPI int GLAD_GL_VERSION_1_2;
-typedef void (APIENTRYP PFNGLDRAWRANGEELEMENTSPROC)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void *indices);
+typedef void (APIENTRYP PFNGLDRAWRANGEELEMENTSPROC)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void *Indices);
 GLAPI PFNGLDRAWRANGEELEMENTSPROC glad_glDrawRangeElements;
 #define glDrawRangeElements glad_glDrawRangeElements
 typedef void (APIENTRYP PFNGLTEXIMAGE3DPROC)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const void *pixels);
@@ -1118,7 +1118,7 @@ GLAPI PFNGLBLENDFUNCSEPARATEPROC glad_glBlendFuncSeparate;
 typedef void (APIENTRYP PFNGLMULTIDRAWARRAYSPROC)(GLenum mode, const GLint *first, const GLsizei *count, GLsizei drawcount);
 GLAPI PFNGLMULTIDRAWARRAYSPROC glad_glMultiDrawArrays;
 #define glMultiDrawArrays glad_glMultiDrawArrays
-typedef void (APIENTRYP PFNGLMULTIDRAWELEMENTSPROC)(GLenum mode, const GLsizei *count, GLenum type, const void *const*indices, GLsizei drawcount);
+typedef void (APIENTRYP PFNGLMULTIDRAWELEMENTSPROC)(GLenum mode, const GLsizei *count, GLenum type, const void *const*Indices, GLsizei drawcount);
 GLAPI PFNGLMULTIDRAWELEMENTSPROC glad_glMultiDrawElements;
 #define glMultiDrawElements glad_glMultiDrawElements
 typedef void (APIENTRYP PFNGLPOINTPARAMETERFPROC)(GLenum pname, GLfloat param);
@@ -1768,7 +1768,7 @@ GLAPI int GLAD_GL_VERSION_3_1;
 typedef void (APIENTRYP PFNGLDRAWARRAYSINSTANCEDPROC)(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
 GLAPI PFNGLDRAWARRAYSINSTANCEDPROC glad_glDrawArraysInstanced;
 #define glDrawArraysInstanced glad_glDrawArraysInstanced
-typedef void (APIENTRYP PFNGLDRAWELEMENTSINSTANCEDPROC)(GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount);
+typedef void (APIENTRYP PFNGLDRAWELEMENTSINSTANCEDPROC)(GLenum mode, GLsizei count, GLenum type, const void *Indices, GLsizei instancecount);
 GLAPI PFNGLDRAWELEMENTSINSTANCEDPROC glad_glDrawElementsInstanced;
 #define glDrawElementsInstanced glad_glDrawElementsInstanced
 typedef void (APIENTRYP PFNGLTEXBUFFERPROC)(GLenum target, GLenum internalformat, GLuint buffer);

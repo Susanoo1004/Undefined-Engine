@@ -10,6 +10,8 @@
 #include "resources/model.h"
 #include "resources/resource_manager.h"
 
+#include "memory_leak.h"
+
 #include "interface/interface.h"
 
 Application::Application()
@@ -18,6 +20,32 @@ Application::Application()
 
 void Application::Init()
 {
+    ServiceLocator::Setup();
+
+    mWindowManager = ServiceLocator::Get<Window>();
+    mRenderer = ServiceLocator::Get<Renderer>();
+
+    mWindowManager->SetupGlfw();
+
+    mWindowManager->CreateWindow(1200, 800);
+
+    if (mWindowManager->GetWindowVar() == nullptr)
+    {
+        return;
+    }
+
+    mWindowManager->SetupWindow();
+
+    mRenderer->Init();
+
+    ServiceLocator::Get<InputManager>()->SetCursorPosCallback(mWindowManager->GetWindowVar(), Camera::MouseCallback);
+
+    KeyInput::SetupKeyInputs();
+
+    Window::SetWindowSizeCallback(mWindowManager->GetWindowVar(), Window::WindowSizeCallback);
+
+    mRenderer->Debug.DebugInit();
+
     ResourceManager::Load("assets/", true);
     ResourceManager::Load("../Undefined/resource_manager/", true);
     Interface::Init();
@@ -29,18 +57,15 @@ void Application::Init()
         BaseShader->Use();
     }
 
-    InitVikingRoom();
-
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 
-    TempModel = Model("assets/viking_room.obj");
-    ServiceLocator::Get<Renderer>()->BindTexture(ResourceManager::Get<Texture>("assets/viking_room.png")->GetID());
+    ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 }
 
 // move to wrapper
 void Application::InitQuad()
 {
-    float vertices[] = {
+    float Vertices[] = {
         // positions          // normal           // texture coords
          0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
          0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
@@ -48,7 +73,7 @@ void Application::InitQuad()
         -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
     };
 
-    unsigned int indices[] = 
+    unsigned int Indices[] = 
     {  // note that we start from 0!
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
@@ -61,10 +86,10 @@ void Application::InitQuad()
     glBindVertexArray(mVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), &Vertices, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), &Indices, GL_STATIC_DRAW);
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -78,42 +103,11 @@ void Application::InitQuad()
 }
 
 
-// move to wrapper
-void Application::InitVikingRoom()
-{
-    /*
-    std::shared_ptr<Model> model = ResourceManager::Get<Model>("assets/viking_room.obj");
-
-    glGenBuffers(1, &mVBO);
-    glGenVertexArrays(1, &mVAO);
-
-    glBindVertexArray(mVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (model->VertexBuffer.size() * sizeof(Vertex)),
-        model->VertexBuffer.data(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Position));
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-    glEnableVertexAttribArray(1);
-
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TextureUV));
-    glEnableVertexAttribArray(2);
-    */
-
-}
-
 void Application::Update()
 {
     T += 0.016f;
 
     ServiceLocator::Get<Renderer>()->SetClearColor();
-    /*
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, ResourceManager::Get<Texture>("assets/viking_room.png")->GetID());
-    */
 
     ServiceLocator::Get<Window>()->GetCamera()->ProcessInput();
     ServiceLocator::Get<Window>()->GetCamera()->Update();
@@ -132,20 +126,25 @@ void Application::Update()
     BaseShader->SetVec3("dirLights[0].diffuse", DirectionalLight.Diffuse);
     BaseShader->SetVec3("dirLights[0].specular", DirectionalLight.Specular);
 
-
     BaseShader->Use();
     Draw();
 
     Interface::Update();
     
+    mWindowManager->SwapBuffers();
+    mRenderer->ClearBuffer();
+}
+
+void Application::Clear()
+{
+    ServiceLocator::CleanServiceLocator();
+    ResourceManager::UnloadAll();
+    Interface::Delete();
+
+    Logger::Stop();
 }
 
 void Application::Draw()
 {
-    /*
-    glBindVertexArray(mVAO);
-    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ResourceManager::Get<Model>("assets/viking_room.obj")->VertexBuffer.size());
-    */
-    TempModel.Draw(*BaseShader);
-
+    ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
 }

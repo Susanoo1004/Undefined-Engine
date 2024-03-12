@@ -8,7 +8,6 @@
 class UNDEFINED_ENGINE Texture : public Resource
 {
 public:
-	Texture();
 	Texture(const char* filepath, bool isFlipped = false);
 	~Texture();
 
@@ -17,8 +16,6 @@ public:
 	const unsigned int GetWidth();
 	const unsigned int GetHeight();
 	bool IsValid();
-
-	std::string TextureType;
 
 private:
 	unsigned int mID;

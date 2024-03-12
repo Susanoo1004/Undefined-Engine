@@ -4,6 +4,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
+#include "resources/resource_manager.h"
+
 Model::Model()
 {
 
@@ -12,15 +14,61 @@ Model::Model()
 Model::Model(const char* path)
 {
 	LoadModel(path);
+
+    Init();
 }
 
-
-void Model::Draw(Shader& shader)
+void Model::Init()
 {
-	for (unsigned int i = 0; i < meshes.size(); i++)
-	{
-		meshes[i].Draw(shader);
-	}
+    glGenVertexArrays(1, &mVAO);
+    glGenBuffers(1, &mVBO);
+    glGenBuffers(1, &mEBO);
+
+    glBindVertexArray(mVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+
+    // vertex positions
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    // vertex normals
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    // vertex texture coords
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+    glBindVertexArray(0);
+}
+void Model::Draw()
+{
+    glBindVertexArray(mVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+
+    for (std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Texture>> pair : mModel)
+    {
+        glBufferData(GL_ARRAY_BUFFER, pair.first->Vertices.size() * sizeof(Vertex), &pair.first->Vertices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, pair.first->Indices.size() * sizeof(unsigned int), &pair.first->Indices[0], GL_STATIC_DRAW);
+
+        if (pair.second)
+        {
+            glBindTexture(GL_TEXTURE_2D, pair.second->GetID());
+        }
+        else
+        {
+            glBindTexture(GL_TEXTURE_2D, ResourceManager::Get<Texture>("assets/missing_texture.jpg")->GetID());
+        }
+
+        glDrawElements(GL_TRIANGLES, pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
+    }
+    
+  
+}
+
+UNDEFINED_ENGINE void Model::SetTexture(int index, std::shared_ptr<Texture> tex)
+{
+    mModel[index].second = tex;
 }
 
 void Model::LoadModel(std::string path)
@@ -30,10 +78,9 @@ void Model::LoadModel(std::string path)
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
-        std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+        Logger::Error("ERROR::ASSIMP:: {} ", import.GetErrorString());
         return;
     }
-    directory = path.substr(0, path.find_last_of('/'));
 
     ProcessNode(scene->mRootNode, scene);
 }
@@ -44,7 +91,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(ProcessMesh(mesh, scene));
+        mModel.push_back(std::make_pair<std::shared_ptr<Mesh>, std::shared_ptr<Texture>>(std::make_shared<Mesh>(ProcessMesh(mesh)), nullptr));
     }
     // then do the same for each of its children
     for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -53,11 +100,10 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
     }
 }
 
-Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+Mesh Model::ProcessMesh(aiMesh* mesh)
 {
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+    std::vector<Vertex> Vertices;
+    std::vector<unsigned int> Indices;
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -87,7 +133,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             vertex.TexCoords = Vector2(0.0f, 0.0f);
         }
 
-        vertices.push_back(vertex);
+        Vertices.push_back(vertex);
     }
     // process indices
     for (unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -95,9 +141,9 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         aiFace face = mesh->mFaces[i];
         for (unsigned int j = 0; j < face.mNumIndices; j++)
         {
-            indices.push_back(face.mIndices[j]);
+            Indices.push_back(face.mIndices[j]);
         }
     }
 
-    return Mesh(vertices, indices, textures);
+    return Mesh(Vertices, Indices);
 }
