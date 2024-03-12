@@ -16,7 +16,7 @@ public:
     UNDEFINED_ENGINE static void Setup();
 
     template<typename ServiceType>
-    static void Provide(ServiceType* p_service)
+    static void Provide(ServiceType* const p_service)
     {
         mServices[typeid(ServiceType).hash_code()] = p_service;
     }

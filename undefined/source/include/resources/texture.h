@@ -6,7 +6,6 @@
 class UNDEFINED_ENGINE Texture : public Resource
 {
 public:
-	Texture();
 	Texture(const char* filepath, bool isFlipped = false);
 	~Texture();
 

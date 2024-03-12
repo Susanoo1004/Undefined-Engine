@@ -6,10 +6,6 @@
 
 #include "logger/logger.h"
 
-Texture::Texture()
-{
-}
-
 Texture::Texture(const char* filepath, bool isFlipped)
 {
 	glGenTextures(1, &mID);
