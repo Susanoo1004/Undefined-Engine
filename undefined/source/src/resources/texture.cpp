@@ -11,6 +11,7 @@ Texture::Texture()
 }
 
 Texture::Texture(const char* filepath, bool isFlipped)
+	: TextureType("diffuse")
 {
 	glGenTextures(1, &mID);
 	glBindTexture(GL_TEXTURE_2D, mID);

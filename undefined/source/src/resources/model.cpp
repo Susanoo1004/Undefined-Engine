@@ -98,28 +98,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             indices.push_back(face.mIndices[j]);
         }
     }
-        // process material
-        if (mesh->mMaterialIndex >= 0)
-        {
-            aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-            std::vector<Texture> texMap = LoadMaterialTextures(material);
-        }
 
     return Mesh(vertices, indices, textures);
-}
-
-std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat)
-{
-    std::vector<Texture> textures;
-    unsigned int a = mat->GetTextureCount(aiTextureType_DIFFUSE);
-    for (unsigned int i = 0; i < a; i++)
-    {
-        aiString str;
-        mat->GetTexture(aiTextureType_DIFFUSE, i, &str);
-        std::string filename = directory + "/" + std::string(str.C_Str());
-        Texture texture = Texture(filename.c_str());
-        textures.push_back(texture);
-    }
-    return textures;
 }

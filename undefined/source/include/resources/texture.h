@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "resources/resource.h"
 #include "utils/flag.h"
 
@@ -15,6 +17,8 @@ public:
 	const unsigned int GetWidth();
 	const unsigned int GetHeight();
 	bool IsValid();
+
+	std::string TextureType;
 
 private:
 	unsigned int mID;

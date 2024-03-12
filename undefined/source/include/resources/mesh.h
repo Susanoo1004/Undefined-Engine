@@ -25,7 +25,7 @@ public:
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
+	Texture* textures[16];
 
 private:
 	unsigned int mVAO, mVBO, mEBO;
