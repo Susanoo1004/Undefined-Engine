@@ -39,6 +39,8 @@
     <ClCompile Include="source\src\interface\inspector.cpp" />
     <ClCompile Include="source\src\world\component\dir_light.cpp" />
     <ClCompile Include="source\src\resources\mesh.cpp" />
+    <ClCompile Include="source\src\world\component\mono_behaviour.cpp" />
+    <ClCompile Include="source\src\world\component\player_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -101,6 +103,10 @@
     <ClInclude Include="source\include\world\component\dir_light.h" />
     <ClInclude Include="source\include\resources\mesh.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="source\include\world\component\mono_behaviour.h" />
+    <ClInclude Include="source\include\world\component\player_test.h" />
+    <ClInclude Include="source\include\world\component\visitor.h" />
+    <ClInclude Include="source\include\world\component\visitor_mono_behaviour.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

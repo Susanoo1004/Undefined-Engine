@@ -170,6 +170,8 @@
     <ClCompile Include="source\src\world\component\component.cpp" />
     <ClCompile Include="source\src\world\component\dir_light.cpp" />
     <ClCompile Include="source\src\world\component\light.cpp" />
+    <ClCompile Include="source\src\world\component\mono_behaviour.cpp" />
+    <ClCompile Include="source\src\world\component\player_test.cpp" />
     <ClCompile Include="source\src\world\component\skybox.cpp" />
     <ClCompile Include="source\src\world\scene_manager\object.cpp" />
     <ClCompile Include="source\src\world\scene_manager\scene.cpp" />
@@ -226,7 +228,11 @@
     <ClInclude Include="source\include\world\component\component.h" />
     <ClInclude Include="source\include\world\component\dir_light.h" />
     <ClInclude Include="source\include\world\component\light.h" />
+    <ClInclude Include="source\include\world\component\mono_behaviour.h" />
+    <ClInclude Include="source\include\world\component\player_test.h" />
     <ClInclude Include="source\include\world\component\skybox.h" />
+    <ClInclude Include="source\include\world\component\visitor.h" />
+    <ClInclude Include="source\include\world\component\visitor_mono_behaviour.h" />
     <ClInclude Include="source\include\world\scene_manager\object.h" />
     <ClInclude Include="source\include\world\scene_manager\scene.h" />
     <ClInclude Include="source\include\world\scene_manager\scene_manager.h" />

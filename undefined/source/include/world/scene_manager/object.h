@@ -10,5 +10,9 @@ class Object
 public:
 	UNDEFINED_ENGINE Object();
 	UNDEFINED_ENGINE ~Object();
+
+	UNDEFINED_ENGINE void Start();
+	UNDEFINED_ENGINE void Update();
+
 	std::vector<Component> Components;
 };
