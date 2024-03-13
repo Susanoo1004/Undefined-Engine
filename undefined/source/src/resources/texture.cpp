@@ -7,20 +7,13 @@
 #include "logger/logger.h"
 
 Texture::Texture(const char* filepath, bool isFlipped)
-	: TextureType("diffuse")
 {
 	glGenTextures(1, &mID);
 	glBindTexture(GL_TEXTURE_2D, mID);
 
+	stbi_set_flip_vertically_on_load(isFlipped);
+
 	int channelCount;
-	if (isFlipped)
-	{
-		stbi_set_flip_vertically_on_load(true);
-	}
-	else
-	{
-		stbi_set_flip_vertically_on_load(false);
-	}
 	const unsigned char* data = stbi_load(filepath, &mWidth, &mHeight, &channelCount, 0);
 
 	if (data)

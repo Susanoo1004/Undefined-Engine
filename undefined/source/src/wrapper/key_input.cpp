@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "service_locator.h"
+#include "logger/logger.h"
 
 KeyInput::KeyInput(std::vector<int> keysToMonitor) : mIsEnabled(true)
 {
@@ -10,12 +10,10 @@ KeyInput::KeyInput(std::vector<int> keysToMonitor) : mIsEnabled(true)
     {
         mKeysMap[key] = false;
     }
-    KeyInput::mInstances.push_back(this);
 }
 
 KeyInput::~KeyInput()
 {
-    mInstances.erase(std::remove(mInstances.begin(), mInstances.end(), this), mInstances.end());
 }
 
 bool KeyInput::GetIsKeyDown(int key)
@@ -55,24 +53,4 @@ void KeyInput::SetIsKeyDown(int key, bool isDown)
     }
 }
 
-void KeyInput::SetupKeyInputs()
-{
-    glfwSetKeyCallback(ServiceLocator::Get<Window>()->GetWindowVar(), KeyInput::Callback);
-    glfwSetMouseButtonCallback(ServiceLocator::Get<Window>()->GetWindowVar(), KeyInput::MouseButtonCallback);
-}
 
-void KeyInput::Callback(GLFWwindow*, int key, int , int action, int )
-{
-    for (KeyInput* keyInput : mInstances)
-    {
-        keyInput->SetIsKeyDown(key, action != GLFW_RELEASE);
-    }
-}
-
-void KeyInput::MouseButtonCallback(GLFWwindow*, int button, int action, int )
-{
-    for (KeyInput* keyInput : mInstances)
-    {
-        keyInput->SetIsKeyDown(button, action != GLFW_RELEASE);
-    }
-}

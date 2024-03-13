@@ -24,5 +24,5 @@ private:
     UNDEFINED_ENGINE void ProcessNode(aiNode* node, const aiScene* scene);
     UNDEFINED_ENGINE Mesh ProcessMesh(aiMesh* mesh);
 
-    unsigned int mVBO, mEBO, mVAO;
+    unsigned int mVBO = 0, mEBO = 0, mVAO = 0;
 };

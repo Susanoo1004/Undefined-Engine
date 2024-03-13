@@ -7,6 +7,12 @@ void ServiceLocator::Setup()
 	ServiceLocator::Provide<Renderer>(new Renderer());
 }
 
+UNDEFINED_ENGINE void ServiceLocator::SetupCallbacks()
+{
+	Window::SetWindowSizeCallback(Get<Window>()->GetWindowVar(), Window::WindowSizeCallback);
+	InputManager::InputManagerCallback();
+}
+
 void ServiceLocator::CleanServiceLocator()
 {
 	for (auto&& s : mServices)

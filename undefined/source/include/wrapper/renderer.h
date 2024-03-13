@@ -10,7 +10,7 @@
 class UNDEFINED_ENGINE Renderer : public ServiceType
 {
 public:
-	void Init(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
+	void Init();
 
 	void SetClearColor(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
 	void ClearBuffer();
@@ -20,17 +20,19 @@ public:
 
 	// Shader
 	unsigned int SetShader(int shaderType, const char* vShaderCode);
+	unsigned int LinkShader(unsigned int ID, unsigned int vertex, unsigned int fragment);
+
 	void UseShader(int ID);
 	void UnUseShader();
-	unsigned int LinkShader(unsigned int ID, unsigned int vertex, unsigned int fragment);
+
 	void SetBool(unsigned int ID, const std::string& name, bool value) const;
 	void SetInt(unsigned int ID, const std::string& name, int value) const;
 	void SetFloat(unsigned int ID, const std::string& name, float value) const;
 	void SetVec3(unsigned int ID, const std::string& name, Vector3 v) const;
 	void SetMat4(unsigned int ID, const std::string& name, Matrix4x4 m) const;
+
 	void DeleteShader(unsigned int shader);
 
 	RendererDebug Debug;
-private:
 };
 

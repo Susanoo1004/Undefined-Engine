@@ -16,46 +16,26 @@
 
 Application::Application()
 {
-}
-
-void Application::Init()
-{
     ServiceLocator::Setup();
 
     mWindowManager = ServiceLocator::Get<Window>();
     mRenderer = ServiceLocator::Get<Renderer>();
+}
 
-    mWindowManager->SetupGlfw();
-
-    mWindowManager->CreateWindow(1200, 800);
-
-    if (mWindowManager->GetWindowVar() == nullptr)
-    {
-        return;
-    }
-
-    mWindowManager->SetupWindow();
+void Application::Init()
+{
+    mWindowManager->Init();
 
     mRenderer->Init();
 
-    ServiceLocator::Get<InputManager>()->SetCursorPosCallback(mWindowManager->GetWindowVar(), Camera::MouseCallback);
-
-    KeyInput::SetupKeyInputs();
-
-    Window::SetWindowSizeCallback(mWindowManager->GetWindowVar(), Window::WindowSizeCallback);
-
-    mRenderer->Debug.DebugInit();
+    // Callback
+    ServiceLocator::SetupCallbacks();
 
     ResourceManager::Load("assets/", true);
     ResourceManager::Load("../Undefined/resource_manager/", true);
     Interface::Init();
 
     BaseShader = ResourceManager::Get<Shader>("baseShader");
-
-    if (BaseShader->ID)
-    {
-        BaseShader->Use();
-    }
 
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 

@@ -14,6 +14,8 @@ public:
     Window();
     ~Window();
 
+    void Init();
+
     void SetupGlfw();
 
     void CreateWindow(int width, int height);

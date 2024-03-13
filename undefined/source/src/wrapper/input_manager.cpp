@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cassert>
 
+#include "service_locator.h"
+
 InputManager::InputManager()
 {
 }
@@ -20,16 +22,17 @@ void InputManager::CreateKeyInput(std::string keyInputName, std::vector<int> key
 	}
 
 	KeyInputsMap.emplace(keyInputName, keyInput);
+	mInstances.push_back(keyInput);
+}
+
+UNDEFINED_ENGINE void InputManager::DeleteKeyInput(std::string keyInputName)
+{
+	mInstances.erase(std::remove(mInstances.begin(), mInstances.end(), GetKeyInput(keyInputName)), mInstances.end());
 }
 
 void InputManager::SetInputMode(GLFWwindow* window, int mode, int value)
 {
 	glfwSetInputMode(window, mode, value);
-}
-
-void InputManager::SetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback)
-{
-	glfwSetCursorPosCallback(window, callback);
 }
 
 std::shared_ptr<KeyInput> InputManager::GetKeyInput(std::string keyInputName)
@@ -44,4 +47,28 @@ std::shared_ptr<KeyInput> InputManager::GetKeyInput(std::string keyInputName)
 	}
 
 	return p->second;
+}
+
+void InputManager::InputManagerCallback()
+{
+	GLFWwindow* mWindowManager = ServiceLocator::Get<Window>()->GetWindowVar();
+	glfwSetKeyCallback(mWindowManager, InputManager::Callback);
+	glfwSetMouseButtonCallback(mWindowManager, InputManager::MouseButtonCallback);
+	glfwSetCursorPosCallback(mWindowManager, Camera::MouseCallback);
+}
+
+void InputManager::Callback(GLFWwindow*, int key, int, int action, int)
+{
+	for (std::shared_ptr<KeyInput> keyInput : mInstances)
+	{
+		keyInput->SetIsKeyDown(key, action != GLFW_RELEASE);
+	}
+}
+
+void InputManager::MouseButtonCallback(GLFWwindow*, int button, int action, int)
+{
+	for (std::shared_ptr<KeyInput> keyInput : mInstances)
+	{
+		keyInput->SetIsKeyDown(button, action != GLFW_RELEASE);
+	}
 }

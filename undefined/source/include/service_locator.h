@@ -15,6 +15,8 @@ class ServiceLocator
 public:
     UNDEFINED_ENGINE static void Setup();
 
+    UNDEFINED_ENGINE static void SetupCallbacks();
+
     template<typename ServiceType>
     static void Provide(ServiceType* const p_service)
     {

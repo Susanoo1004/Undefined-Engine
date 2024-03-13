@@ -21,6 +21,15 @@ Window::~Window()
     glfwTerminate();
 }
 
+void Window::Init()
+{
+    SetupGlfw();
+
+    CreateWindow(1200, 800);
+
+    SetupWindow();
+}
+
 void Window::SetupGlfw()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -43,6 +52,11 @@ void Window::SetupGlfw()
 void Window::CreateWindow(int width, int height)
 {
     mWindow = glfwCreateWindow(width, height, "Undefined Engine", nullptr, nullptr);
+
+    if (!mWindow)
+    {
+        Logger::FatalError("Window not initialized");
+    }
 
     //Add an icon to our window
     GLFWimage images;
@@ -99,8 +113,11 @@ void Window::WindowSizeCallback(GLFWwindow* , int width, int height)
     }
 
     Matrix4x4 result;
-    Matrix4x4::ProjectionMatrix(calc::PI / 2, (float)w->Width / (float)w->Height, 0.1f, 20.0f, result);
-    w->GetCamera()->SetPerspective(result);
+    if (w->Height)
+    {
+        Matrix4x4::ProjectionMatrix(calc::PI / 2, (float)w->Width / (float)w->Height, 0.1f, 20.0f, result);
+        w->GetCamera()->SetPerspective(result);
+    }
     glViewport(0, 0, w->Width, w->Height);
 }
 

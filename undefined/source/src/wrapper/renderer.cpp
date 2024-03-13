@@ -6,11 +6,13 @@
 
 #include "logger/logger.h"
 
-void Renderer::Init(float redBaseColor, float greenBaseColor, float blueBaseColor)
+void Renderer::Init()
 {
 	gladLoadGL();
-	SetClearColor(redBaseColor, greenBaseColor, blueBaseColor);
+	SetClearColor();
 	glEnable(GL_DEPTH_TEST);
+
+    Debug.DebugInit();
 }
 
 void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blueBaseColor)

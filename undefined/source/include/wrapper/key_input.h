@@ -16,19 +16,15 @@ public:
     UNDEFINED_ENGINE bool GetIsEnabled();
     UNDEFINED_ENGINE void SetIsEnabled(bool value);
 
-private:
     UNDEFINED_ENGINE void SetIsKeyDown(int key, bool isDown);
+private:
 
     std::map<int, bool> mKeysMap;
     bool mIsEnabled;
 
 public:
-    UNDEFINED_ENGINE static void SetupKeyInputs();
+    
 
 private:
-    UNDEFINED_ENGINE static void Callback(GLFWwindow* window, int key, int , int action, int );
-
-    UNDEFINED_ENGINE static void MouseButtonCallback(GLFWwindow*, int button, int action, int );
-
-    UNDEFINED_ENGINE static inline std::vector<KeyInput*> mInstances;
+    
 };

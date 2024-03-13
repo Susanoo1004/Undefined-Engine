@@ -60,7 +60,7 @@ void Model::Draw()
             glBindTexture(GL_TEXTURE_2D, ResourceManager::Get<Texture>("assets/missing_texture.jpg")->GetID());
         }
 
-        glDrawElements(GL_TRIANGLES, pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, (GLsizei)pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
     }
     
   
