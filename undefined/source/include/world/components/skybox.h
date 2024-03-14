@@ -1,7 +1,7 @@
 #pragma once
 
 #include "utils/flag.h"
-#include "world/component/component.h"
+#include "world/components/component.h"
 
 class Skybox : public Component
 {

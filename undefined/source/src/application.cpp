@@ -40,6 +40,12 @@ void Application::Init()
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
+
+    Player* playerTest = new Player;
+    Object* objectTest = new Object;
+    objectTest->Components.push_back(playerTest);
+
+    ActualScene.Objects.push_back(objectTest);
 }
 
 // move to wrapper
@@ -86,6 +92,8 @@ void Application::InitQuad()
 void Application::Update()
 {
     T += 0.016f;
+
+    ActualScene.Update();
 
     ServiceLocator::Get<Renderer>()->SetClearColor();
 

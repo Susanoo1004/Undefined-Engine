@@ -1,4 +1,4 @@
-#include "world/component/light.h"
+#include "world/components/light.h"
 
 Light::Light()
 {

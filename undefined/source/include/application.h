@@ -7,9 +7,13 @@
 
 #include "utils/flag.h"
 
-#include "world/component/dir_light.h"
+#include "world/components/dir_light.h"
 
 #include "resources/model.h"
+
+#include "world/scene_manager/scene.h"
+#include "world/scene_manager/object.h"
+#include "world/components/player_test.h"
 
 class Window;
 class Renderer;
@@ -30,7 +34,8 @@ public:
 	Logger Log;
 	DirLight DirectionalLight;
 
-	// to del
+	// TODO: del
+	Scene ActualScene;
 	float T = 0;
 
 private:

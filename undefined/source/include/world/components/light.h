@@ -2,7 +2,7 @@
 
 #include <toolbox/Vector3.h>
 
-#include "world/component/component.h"
+#include "world/components/component.h"
 #include "utils/flag.h"
 
 
