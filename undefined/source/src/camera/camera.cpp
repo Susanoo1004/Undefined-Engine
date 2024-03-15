@@ -13,16 +13,15 @@ Camera* Camera::sCamPtr;
 Camera::Camera(float width, float height)
     : mWidth(width), mHeight(height)
 {
-    Eye = Vector3(0, 0, -1);
-    LookAt = Vector3(0, 0, 1);
-    Up = Vector3(0, 1, 0);
+    mEye = Vector3(0, 0, -1);
+    mLookAt = Vector3(0, 0, 1);
+    mUp = Vector3(0, 1, 0);
 
     Matrix4x4::ProjectionMatrix(PI / 2, mWidth / mHeight, 0.1f, 20.0f, mPerspective);
 
     sCamPtr = this;
 
     std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
-
     ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
 }
 
@@ -43,7 +42,7 @@ const Matrix4x4& Camera::GetVP()
 
 void Camera::Update()
 {
-    Matrix4x4::ViewMatrix(Eye, Eye + LookAt, Up, mView);
+    Matrix4x4::ViewMatrix(mEye, mEye + mLookAt, mUp, mView);
     mVP = mPerspective * mView;
 }
 
@@ -55,27 +54,27 @@ void Camera::ProcessInput()
 
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_W))
     {
-        Eye += LookAt * mCameraSpeed;
+        mEye += mLookAt * mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_S))
     {
-        Eye -= LookAt * mCameraSpeed;
+        mEye -= mLookAt * mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_A))
     {
-        Eye -= Vector3::Cross(LookAt, Up).Normalized() * mCameraSpeed;
+        mEye -= Vector3::Cross(mLookAt, mUp).Normalized() * mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_D))
     {
-        Eye += Vector3::Cross(LookAt, Up).Normalized() * mCameraSpeed;
+        mEye += Vector3::Cross(mLookAt, mUp).Normalized() * mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_SPACE))
     {
-        Eye.y += mCameraSpeed;
+        mEye.y += mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_LEFT_SHIFT))
     {
-        Eye.y -= mCameraSpeed;
+        mEye.y -= mCameraSpeed;
     }
 }
 
@@ -128,5 +127,5 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     direction.x = cosf((sCamPtr->mYaw * (PI / 180.f))) * cosf((sCamPtr->mPitch * (PI / 180.f)));
     direction.y = sinf((sCamPtr->mPitch * (PI / 180.f)));
     direction.z = sinf((sCamPtr->mYaw * (PI / 180.f))) * cosf((sCamPtr->mPitch * (PI / 180.f)));
-    sCamPtr->LookAt = direction.Normalized();
+    sCamPtr->mLookAt = direction.Normalized();
 }

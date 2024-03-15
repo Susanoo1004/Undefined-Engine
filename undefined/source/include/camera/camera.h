@@ -21,11 +21,12 @@ public:
 
     const Matrix4x4& GetVP();
 
-    Vector3 Eye;
-    Vector3 LookAt;
-    Vector3 Up;
-
+    Vector3 mEye;
+    Vector3 mLookAt;
+    Vector3 mUp;
+  
 private:
+
     Matrix4x4 mVP;
     Matrix4x4 mView;
     Matrix4x4 mPerspective;
@@ -50,4 +51,7 @@ public:
     static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
 
     static Camera* sCamPtr;
+
+private:
+    // friend class DirLight;
 };
