@@ -28,33 +28,31 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         flags |= ImGuiTreeNodeFlags_Leaf;
     }
 
+    //Window that pop when we right click on a folder with the option to open it in our windows explorer
+    if (ImGui::BeginPopupContextItem())
+    {
+        if (ImGui::Button("Open in explorer"))
+        {
+            std::string explorer = "start explorer /select,";
+            explorer += absolute(path).string();
+            system(explorer.c_str());
+        }
+
+        if (ImGui::Button("Rename"))
+        {
+            mRenamingPath = path;
+        }
+
+        ImGui::EndPopup();
+    }
+
     if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
     {
-        if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+        if (ImGui::IsItemHovered() && !ImGui::IsItemToggledOpen() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
         {
             std::string file = "start explorer ";
             file += '"' + absolute(path).string() + '"';
             system(file.c_str());
-        }
-
-        //Setup for the drag and drop system
-        if (ImGui::BeginDragDropSource())
-        {
-            //ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-            ImGui::Text(path.filename().string().c_str());
-            ImGui::EndDragDropSource();
-        }
-
-        //Window that pop when we right click on a file with the option to open it in our windows explorer
-        if (ImGui::BeginPopupContextItem())
-        {
-            if (ImGui::Button("Open in explorer"))
-            {
-                std::string explorer = "start explorer /select,";
-                explorer += absolute(path).string();
-                system(explorer.c_str());
-            }
-            ImGui::EndPopup();
         }
 
         if (mIsDirectory)
@@ -70,7 +68,6 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
                 DisplayDirectories(entry);
             }
         }
-
         ImGui::TreePop();
     }
 
@@ -81,18 +78,11 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         {
             mCurrentPath = path;
         } 
+    } 
 
-        //Window that pop when we right click on a folder with the option to open it in our windows explorer
-        if (ImGui::BeginPopupContextItem())
-        {
-            if (ImGui::Button("Open in explorer"))
-            {
-                std::string explorer = "start explorer /select,";
-                explorer += absolute(path).string();
-                system(explorer.c_str());
-            }
-            ImGui::EndPopup();
-        }
+    if (mRenamingPath == path)
+    {
+        RenameItem();
     }
 }
 
@@ -211,8 +201,8 @@ void ContentBrowser::InteractionWithItems(std::filesystem::path path, bool isBac
                 file += '"' + absolute(path).string() + '"';
                 system(file.c_str());
             }
-            
         }
+
     }
 
     //If a window is selected and we click somewhere else it deselect it
@@ -286,6 +276,34 @@ void ContentBrowser::LoadFiles(std::filesystem::path path)
     }
 }
 
+void ContentBrowser::RenameItem()
+{
+    ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
+    std::string name = mRenamingPath.filename().string();
+    std::filesystem::path path = mRenamingPath.parent_path();
+
+    char* newName = { (char*)name.c_str() };
+
+    ImGui::BeginChild(name.c_str(), ImVec2(ImGui::CalcTextSize(name.c_str()).x * 1.65f, 20));
+
+    if (ImGui::InputText("##label", newName, 256, flags))
+    {
+        if (std::filesystem::is_directory(mRenamingPath))
+        {
+            mCurrentPath = newName;
+        }
+
+        std::filesystem::path newPath = path.generic_string();
+        newPath += "/";
+        newPath += newName;
+
+        ResourceManager::RenameFolder(name, newPath.string());
+        std::filesystem::rename(mRenamingPath, newPath);
+        mRenamingPath = "";
+    }
+    ImGui::EndChild();
+}
+
 void ContentBrowser::DisplayActualDirectory(std::filesystem::path currentPath)
 {
     mIsAnythingHovered = false;
@@ -347,8 +365,7 @@ void ContentBrowser::DisplayActualDirectory(std::filesystem::path currentPath)
             ImGui::Dummy(ImVec2(0, 0));
         }
     }
-
-    //If nothing is hovered we set to path to none so it doesn't hover the last element
+    
     if (!mIsAnythingHovered)
     {
         mHoveredPath = "";

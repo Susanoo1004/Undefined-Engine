@@ -41,6 +41,9 @@ private:
 	//Load files in a path and add them to an array
 	UNDEFINED_ENGINE static void LoadFiles(std::filesystem::path path);
 
+	//Load files in a path and add them to an array
+	UNDEFINED_ENGINE static void RenameItem();
+
 	UNDEFINED_ENGINE static inline bool mIsFolderOpen = false;
 	UNDEFINED_ENGINE static inline bool mIsDirectory = false;
 	UNDEFINED_ENGINE static inline bool mIsAnythingHovered = false;
@@ -51,6 +54,7 @@ private:
 	static inline std::filesystem::path mCurrentPath = mPath;
 	static inline std::filesystem::path mHoveredPath = "";
 	static inline std::filesystem::path mSelectedPath = "";
+	static inline std::filesystem::path mRenamingPath = "";
 
 	static inline std::string mBackFolder = "BackFolder";
 	
