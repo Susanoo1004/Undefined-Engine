@@ -1,5 +1,7 @@
 #include "resources/resource_manager.h"
 
+#include <vector>
+
 #include "Resources/model.h"
 #include "Resources/texture.h"
 #include "Resources/shader.h"
@@ -106,23 +108,9 @@ bool ResourceManager::Contains(std::string name)
 	{
 		return true;
 	}
-
-	else
-	{
-		Logger::Warning("The resource manager does not contain : {}", name);
-		return false;
-	}
-}
-
-void ResourceManager::RenameFolder(const std::string& oldName, const std::string& newName)
-{
-	for (auto& it : mResources)
-	{
-		if (it.first == oldName)
-		{
-			it.first._Equal(newName.c_str());
-		}
-	}
+		
+	Logger::Warning("The resource manager does not contain : {}", name);
+	return false;
 }
 
 void ResourceManager::Unload(const std::string& name)
@@ -164,5 +152,27 @@ void ResourceManager::Rename(const std::string& oldName, const std::string& newN
 	else
 	{
 		Logger::Warning("Resource {} not found", oldName);
+	}
+}
+
+
+void ResourceManager::RenameFolder(const std::string& oldName, const std::string& newName)
+{
+	std::vector<std::pair<std::string, std::shared_ptr<Resource>>> test;
+	for (auto& it : mResources)
+	{
+		if (it.first.find(oldName) == 0)
+		{
+			test.push_back(it);
+		}
+	}
+
+
+	for (auto& it : test)
+	{
+		auto node = mResources.extract(it.first);
+		node.key() = newName + it.first.substr(it.first.find_last_of("/"));
+
+		mResources.insert(std::move(node));
 	}
 }

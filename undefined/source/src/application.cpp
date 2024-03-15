@@ -146,5 +146,5 @@ void Application::Clear()
 
 void Application::Draw()
 {
-    ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
+        ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
 }

@@ -7,6 +7,7 @@
 
 void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 {
+    std::string name = path.filename().string();
     mIsDirectory = std::filesystem::is_directory(path);
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
@@ -28,25 +29,12 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         flags |= ImGuiTreeNodeFlags_Leaf;
     }
 
-    //Window that pop when we right click on a folder with the option to open it in our windows explorer
-    if (ImGui::BeginPopupContextItem())
+    if (mRenamingPath == path)
     {
-        if (ImGui::Button("Open in explorer"))
-        {
-            std::string explorer = "start explorer /select,";
-            explorer += absolute(path).string();
-            system(explorer.c_str());
-        }
-
-        if (ImGui::Button("Rename"))
-        {
-            mRenamingPath = path;
-        }
-
-        ImGui::EndPopup();
+        name = "##";
     }
 
-    if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
+    if (ImGui::TreeNodeEx(name.c_str(), flags))
     {
         if (ImGui::IsItemHovered() && !ImGui::IsItemToggledOpen() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
         {
@@ -70,7 +58,6 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         }
         ImGui::TreePop();
     }
-
     else
     {
         //If state changes (if we click on the arrow) then we don't change current path
@@ -78,11 +65,29 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         {
             mCurrentPath = path;
         } 
-    } 
+    }
 
     if (mRenamingPath == path)
     {
+        ImGui::SameLine();
         RenameItem();
+    }
+
+    //Window that pop when we right click on a folder with the option to open it in our windows explorer
+    if (ImGui::BeginPopupContextItem())
+    {
+        if (ImGui::Button("Open in explorer"))
+        {
+            std::string explorer = "start explorer /select,";
+            explorer += absolute(path).string();
+            system(explorer.c_str());
+        }
+
+        if (ImGui::Button("Rename"))
+        {
+            mRenamingPath = path;
+        }
+        ImGui::EndPopup();
     }
 }
 
@@ -280,28 +285,35 @@ void ContentBrowser::RenameItem()
 {
     ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
     std::string name = mRenamingPath.filename().string();
+    std::string ff = mRenamingPath.filename().string();
     std::filesystem::path path = mRenamingPath.parent_path();
 
-    char* newName = { (char*)name.c_str() };
+    char* newName = (char*)name.c_str();
 
-    ImGui::BeginChild(name.c_str(), ImVec2(ImGui::CalcTextSize(name.c_str()).x * 1.65f, 20));
-
+    ImGui::SetKeyboardFocusHere();
     if (ImGui::InputText("##label", newName, 256, flags))
     {
         if (std::filesystem::is_directory(mRenamingPath))
         {
             mCurrentPath = newName;
         }
-
+        
         std::filesystem::path newPath = path.generic_string();
         newPath += "/";
         newPath += newName;
 
-        ResourceManager::RenameFolder(name, newPath.string());
+        if (std::filesystem::is_directory(mRenamingPath))
+        {
+            ResourceManager::RenameFolder(ff, newName);
+            //Change current path to the new path so the back folder does not crash (since the current path does not exist it doesn't have a parent)
+            std::string newCurrentPath = mRenamingPath.parent_path().generic_string() + "/";
+            newCurrentPath += newName;
+            mCurrentPath = newCurrentPath;
+        }
+
         std::filesystem::rename(mRenamingPath, newPath);
         mRenamingPath = "";
     }
-    ImGui::EndChild();
 }
 
 void ContentBrowser::DisplayActualDirectory(std::filesystem::path currentPath)
