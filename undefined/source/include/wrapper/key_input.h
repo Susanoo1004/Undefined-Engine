@@ -12,7 +12,7 @@ public:
     UNDEFINED_ENGINE KeyInput(std::vector<int> keysToMonitor);
     UNDEFINED_ENGINE ~KeyInput();
 
-    UNDEFINED_ENGINE bool GetIsKeyDown(int key);
+    UNDEFINED_ENGINE const bool GetIsKeyDown(int key);
     UNDEFINED_ENGINE bool GetIsEnabled();
     UNDEFINED_ENGINE void SetIsEnabled(bool value);
 
@@ -22,9 +22,6 @@ private:
     std::map<int, bool> mKeysMap;
     bool mIsEnabled;
 
-public:
-    
-
 private:
-    
+    friend class InputManager;
 };

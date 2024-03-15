@@ -5,6 +5,8 @@
 
 #include "service_locator.h"
 
+#include "logger/logger.h"
+
 InputManager::InputManager()
 {
 }
@@ -59,16 +61,49 @@ void InputManager::InputManagerCallback()
 
 void InputManager::Callback(GLFWwindow*, int key, int, int action, int)
 {
+	bool isInInstances = false;
+
 	for (std::shared_ptr<KeyInput> keyInput : mInstances)
 	{
-		keyInput->SetIsKeyDown(key, action != GLFW_RELEASE);
+		std::map<int, bool>::iterator it = keyInput->mKeysMap.find(key);
+
+		if (it != keyInput->mKeysMap.end())
+		{
+			keyInput->SetIsKeyDown(key, action != GLFW_RELEASE);
+			isInInstances = true;
+		}
+	}
+	
+	if (isInInstances == false)
+	{
+		if (key >= 65 && key <= 90)
+		{
+			Logger::Error("Key {} is not in the KeyInput", static_cast<char>(key));
+		}
+		else
+		{
+			Logger::Error("A key that is not a letter is not in a KeyInput");
+		}
 	}
 }
 
 void InputManager::MouseButtonCallback(GLFWwindow*, int button, int action, int)
 {
+	bool isInInstances = false;
+
 	for (std::shared_ptr<KeyInput> keyInput : mInstances)
 	{
-		keyInput->SetIsKeyDown(button, action != GLFW_RELEASE);
+		std::map<int, bool>::iterator it = keyInput->mKeysMap.find(button);
+
+		if (it != keyInput->mKeysMap.end())
+		{
+			keyInput->SetIsKeyDown(button, action != GLFW_RELEASE);
+			isInInstances = true;
+		}
+	}
+
+	if (isInInstances == false)
+	{
+		Logger::Error("Mouse button {} is not in the KeyInput", button + 1);
 	}
 }
