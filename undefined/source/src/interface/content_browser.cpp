@@ -14,18 +14,25 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     if (mIsDirectory)
     {
+        bool isAnyFolder = false;
         for (const auto& entry : std::filesystem::directory_iterator(path))
         {
             if (entry.is_directory())
             {
+                isAnyFolder = true;
                 flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
                 break;
             }
+
             else
             {
-                flags |= ImGuiTreeNodeFlags_Leaf;
-                break;
+                continue;
             }
+        }
+
+        if (!isAnyFolder)
+        {
+            flags |= ImGuiTreeNodeFlags_Leaf;
         }
 
         if (mCurrentPath == path)
@@ -43,6 +50,9 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
     {
         name = "##";
     }
+
+    ImGui::Image(Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID()), ImVec2(15, 15));
+    ImGui::SameLine();
 
     if (ImGui::TreeNodeEx(name.c_str(), flags))
     {
