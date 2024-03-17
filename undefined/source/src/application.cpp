@@ -120,6 +120,7 @@ void Application::Update()
     Interface::Update();
 
     Skybox::Update(mWindowManager->GetCamera(), skyboxShader);
+
     mWindowManager->SwapBuffers();
     mRenderer->ClearBuffer();
 }

@@ -65,6 +65,9 @@ void Window::CreateWindow(int width, int height)
     glfwSetWindowIcon(mWindow, 1, &images);
 
     stbi_image_free(images.pixels);
+
+    Width = width;
+    Height = height;
 }
 
 void Window::SetupWindow()
