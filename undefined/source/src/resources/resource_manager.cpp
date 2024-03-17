@@ -9,6 +9,11 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 {
 	std::string fragPath;
 	std::string vertexPath;
+	bool isBaseShaderLoaded = false;
+
+	std::string skyboxFragPath;
+	std::string skyboxVertexPath;
+	bool isSkyboxShaderLoaded = false;
 
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
@@ -62,18 +67,29 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 			}
 		}
 
-		else if (name.ends_with(".fs"))
+		if (name.ends_with("base_shader.fs") && fragPath.empty())
 		{
 			fragPath = name;
 		}
 
-		else if (name.ends_with(".vs"))
+		else if (name.ends_with("base_shader.vs") && vertexPath.empty())
 		{
 			vertexPath = name;
 		}
 
-		if (vertexPath.size() && fragPath.size())
+		if (name.ends_with("skyboxShader.fs") && skyboxFragPath.empty())
 		{
+			skyboxFragPath = name;
+		}
+
+		else if (name.ends_with("skyboxShader.vs") && skyboxVertexPath.empty())
+		{
+			skyboxVertexPath = name;
+		}
+
+		if (vertexPath.size() && fragPath.size() && !isBaseShaderLoaded)
+		{
+			isBaseShaderLoaded = true;
 			std::shared_ptr<Shader> resource;
 			resource = std::make_shared<Shader>(vertexPath.c_str(), fragPath.c_str());
 
@@ -90,7 +106,26 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 				Logger::Debug("Shader : {} loaded", newName);
 			}
 		}
-		
+
+		if (skyboxVertexPath.size() && skyboxFragPath.size() && !isSkyboxShaderLoaded)
+		{
+			isSkyboxShaderLoaded = true;
+			std::shared_ptr<Shader> resource;
+			resource = std::make_shared<Shader>(skyboxVertexPath.c_str(), skyboxFragPath.c_str());
+
+			if (resource->IsValid())
+			{
+				newName = "skyboxShader";
+				auto&& p = mResources.try_emplace(name, resource);
+				if (!p.second)
+				{
+					p.first->second.reset();
+				}
+				mResources.emplace(newName, resource);
+
+				Logger::Debug("Shader : {} loaded", newName);
+			}
+		}
 	}
 }
 

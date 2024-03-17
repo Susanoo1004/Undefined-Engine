@@ -3,12 +3,15 @@
 #include <glad/glad.h>
 #include <iostream>
 #include <filesystem>
+#include <stb_image/stb_image.h>
 
 #include "service_locator.h"
 
 #include "resources/texture.h"
 #include "resources/model.h"
 #include "resources/resource_manager.h"
+
+#include "world/component/skybox.h"
 
 #include "memory_leak.h"
 
@@ -35,7 +38,12 @@ void Application::Init()
     ResourceManager::Load("../Undefined/resource_manager/", true);
     Interface::Init();
 
+    Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("baseShader");
+    skyboxShader = ResourceManager::Get<Shader>("skyboxShader");
+
+    skyboxShader->Use();
+    glUniform1i(glGetUniformLocation(skyboxShader->ID, "skybox"), 0);
 
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 
@@ -89,13 +97,13 @@ void Application::Update()
 
     ServiceLocator::Get<Renderer>()->SetClearColor();
 
-    ServiceLocator::Get<Window>()->GetCamera()->ProcessInput();
-    ServiceLocator::Get<Window>()->GetCamera()->Update();
+    mWindowManager->GetCamera()->ProcessInput();
+    mWindowManager->GetCamera()->Update();
 
     // modify the camera in the shader
     BaseShader->Use();
-    BaseShader->SetMat4("vp", ServiceLocator::Get<Window>()->GetCamera()->GetVP());
-    BaseShader->SetVec3("viewPos", ServiceLocator::Get<Window>()->GetCamera()->Eye);
+    BaseShader->SetMat4("vp", mWindowManager->GetCamera()->GetVP());
+    BaseShader->SetVec3("viewPos", mWindowManager->GetCamera()->Eye);
 
 
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
@@ -110,7 +118,8 @@ void Application::Update()
     Draw();
 
     Interface::Update();
-    
+
+    Skybox::Update(mWindowManager->GetCamera(), skyboxShader);
     mWindowManager->SwapBuffers();
     mRenderer->ClearBuffer();
 }
