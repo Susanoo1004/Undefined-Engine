@@ -1,24 +1,31 @@
 #include "world/scene_manager/object.h"
 
-#include "world/components/visitor_for_update.h"
+#include "world/components/component.h"
 
-void Object::Start()
+void Object::Enable()
 {
-	//VisitorForStart start;
 	for (size_t i = 0; i < Components.size(); i++)
 	{
-		//Components[i]->Accept(start);
+		Components[i]->OnEnable();
 	}
+	isEnable = true;
 }
 
-void Object::Update()
+void Object::Disable()
 {
-	VisitorForUpdate update;
 	for (size_t i = 0; i < Components.size(); i++)
 	{
-		Components[i]->Accept(update);
-
-
+		Components[i]->OnDisable();
 	}
+	isEnable = false;
 }
 
+const bool Object::IsEnable() const
+{
+	return isEnable;
+}
+
+const Transform* Object::GetTransform() const
+{
+	return mTransform;
+}

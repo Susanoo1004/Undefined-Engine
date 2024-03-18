@@ -2,32 +2,32 @@
 #include "world/components/component.h"
 
 
-class Visitor;
 
 class MonoBehaviour : public Component
 {
 public:
-	UNDEFINED_ENGINE void Accept(Visitor& visitor) override;
+	
+	virtual void Awake() {};
 
-	UNDEFINED_ENGINE virtual void Start() {};
+	virtual void Start() {};
 
-	UNDEFINED_ENGINE virtual void Update() {};
+	virtual void Update() {};
 
-	UNDEFINED_ENGINE virtual void FixedUpdate() {};
+	virtual void FixedUpdate() {};
 
-	UNDEFINED_ENGINE virtual void LateUpdate() {};
+	virtual void LateUpdate() {};
 
-	UNDEFINED_ENGINE virtual void OnEnable() {};
+	virtual void OnEnable() {};
 
-	UNDEFINED_ENGINE virtual void OnDisable() {};
+	virtual void OnDisable() {};
 
-	UNDEFINED_ENGINE virtual void OnCollisionEnter() {};
+	virtual void OnCollisionEnter() {};
 
-	UNDEFINED_ENGINE virtual void OnCollisionStay() {};
+	virtual void OnCollisionStay() {};
 
-	UNDEFINED_ENGINE virtual void OnCollisionExit() {};
+	virtual void OnCollisionExit() {};
 
-	UNDEFINED_ENGINE virtual void OnDestroy() {};
+	virtual void OnDestroy() {};
 
 private:
 

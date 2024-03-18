@@ -105,8 +105,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="source\include\world\components\mono_behaviour.h" />
     <ClInclude Include="source\include\world\components\player_test.h" />
-    <ClInclude Include="source\include\world\components\visitor.h" />
-    <ClInclude Include="source\include\world\components\visitor_for_update.h" />
+    <ClInclude Include="source\include\world\components\transform.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

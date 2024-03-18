@@ -7,6 +7,7 @@ class Scene
 {
 public:
 
+	UNDEFINED_ENGINE void Awake();
 	UNDEFINED_ENGINE void Start();
 	UNDEFINED_ENGINE void Update();
 	UNDEFINED_ENGINE void FixedUpdate();

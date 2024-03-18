@@ -42,8 +42,10 @@ void Application::Init()
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
     Player* playerTest = new Player;
+    Light* lightTest = new Light;
     Object* objectTest = new Object;
     objectTest->Components.push_back(playerTest);
+    objectTest->Components.push_back(lightTest);
 
     ActualScene.Objects.push_back(objectTest);
 }

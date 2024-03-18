@@ -2,15 +2,26 @@
 
 #include <vector>
 
-#include "world/components/component.h"
 #include "utils/flag.h"
+
+#include "world/components/component.h"
+#include "world/components/transform.h"
 
 class Object
 {
 public:
 
-	UNDEFINED_ENGINE void Start();
-	UNDEFINED_ENGINE void Update();
+	void Enable();
+	void Disable();
+	const bool IsEnable() const;
+
+	const Transform* GetTransform() const;
 
 	std::vector<Component*> Components;
+
+private:
+	bool isEnable = true;
+
+	Transform* mTransform;
+
 };
