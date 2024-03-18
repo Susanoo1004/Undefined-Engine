@@ -125,3 +125,16 @@ void Window::SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callbac
 {
     glfwSetWindowSizeCallback(window, callback);
 }
+
+void Window::ScrollWheelCallback(GLFWwindow* window, GLFWscrollfun callback)
+{
+    glfwSetScrollCallback(window, callback);
+}
+
+void Window::Callbacks()
+{
+    Window* w = ServiceLocator::Get<Window>();
+
+    Window::SetWindowSizeCallback(w->GetWindowVar(), Window::WindowSizeCallback);
+    Window::ScrollWheelCallback(w->GetWindowVar(), Camera::ChangeSpeedCam);
+}

@@ -1,12 +1,10 @@
 #include "camera/camera.h"
 
 #include <glfw/glfw3.h>
-#include <numbers>
 #include <iostream>
+#include <toolbox/calc.h>
 
 #include "service_locator.h"
-
-#define PI std::numbers::pi_v<float>
 
 Camera* Camera::sCamPtr;
 
@@ -17,7 +15,7 @@ Camera::Camera(float width, float height)
     mLookAt = Vector3(0, 0, 1);
     mUp = Vector3(0, 1, 0);
 
-    Matrix4x4::ProjectionMatrix(PI / 2, mWidth / mHeight, 0.1f, 20.0f, mPerspective);
+    Matrix4x4::ProjectionMatrix(calc::PI / 2, mWidth / mHeight, 0.1f, 20.0f, mPerspective);
 
     sCamPtr = this;
 
@@ -124,8 +122,22 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     }
 
     Vector3 direction;
-    direction.x = cosf((sCamPtr->mYaw * (PI / 180.f))) * cosf((sCamPtr->mPitch * (PI / 180.f)));
-    direction.y = sinf((sCamPtr->mPitch * (PI / 180.f)));
-    direction.z = sinf((sCamPtr->mYaw * (PI / 180.f))) * cosf((sCamPtr->mPitch * (PI / 180.f)));
+    direction.x = cosf((sCamPtr->mYaw * (calc::PI / 180.f))) * cosf((sCamPtr->mPitch * (calc::PI / 180.f)));
+    direction.y = sinf((sCamPtr->mPitch * (calc::PI / 180.f)));
+    direction.z = sinf((sCamPtr->mYaw * (calc::PI / 180.f))) * cosf((sCamPtr->mPitch * (calc::PI / 180.f)));
     sCamPtr->mLookAt = direction.Normalized();
+}
+
+void Camera::ChangeSpeedCam(GLFWwindow* , double , double yposIn)
+{
+    sCamPtr->mCameraSpeed += calc::Sign((float)yposIn) * 0.01f;
+
+    // verify is camera speed is not negative so that we dont go opposite of where we want
+    if (sCamPtr->mCameraSpeed < 0)
+    {
+        sCamPtr->mCameraSpeed = 0.001f;
+    }
+
+    // TEMP
+    std::cout << "Camera speed = " << sCamPtr->mCameraSpeed << std::endl;
 }

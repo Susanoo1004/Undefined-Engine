@@ -54,7 +54,7 @@ std::shared_ptr<KeyInput> InputManager::GetKeyInput(std::string keyInputName)
 	return p->second;
 }
 
-void InputManager::InputManagerCallback()
+void InputManager::Callbacks()
 {
 	GLFWwindow* mWindowManager = ServiceLocator::Get<Window>()->GetWindowVar();
 
