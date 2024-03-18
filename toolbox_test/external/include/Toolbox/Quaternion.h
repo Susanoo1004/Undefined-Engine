@@ -3,12 +3,13 @@
 #include <vector>
 
 #include "Vector3.h"
+#include "flag.h"
 
 class Matrix4x4;
 
 #define SQ(var) ((var) * (var))
 
-class Quaternion
+class TOOLBOX Quaternion
 {
 public:
 	

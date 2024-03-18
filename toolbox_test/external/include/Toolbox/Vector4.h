@@ -3,13 +3,15 @@
 #include <ostream>
 #include <vector>
 
+#include "flag.h"
+
 class Matrix;
 class Vector;
 class Vector3;
 class Vector2;
 
 /// @brief The Vector4 class represents either a four-dimensional vector or a point.
-class Vector4
+class TOOLBOX Vector4
 {
 public:
 	float x, y, z, w;
@@ -52,9 +54,9 @@ public:
 	float& operator[](const size_t i);
 
     operator Matrix() const;
-	operator Vector();
-	explicit operator Vector3();
-	explicit operator Vector2();
+	operator Vector() const;
+	explicit operator Vector3() const;
+	explicit operator Vector2() const;
 
     // Automatically generates all comparison operators
 	[[nodiscard]]
