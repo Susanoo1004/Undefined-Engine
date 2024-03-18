@@ -43,7 +43,7 @@ void Application::Init()
     skyboxShader = ResourceManager::Get<Shader>("skyboxShader");
 
     skyboxShader->Use();
-    glUniform1i(glGetUniformLocation(skyboxShader->ID, "skybox"), 0);
+    skyboxShader->SetInt("skybox", 0);
 
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 
@@ -117,9 +117,10 @@ void Application::Update()
     BaseShader->Use();
     Draw();
 
+    skyboxShader->Use();
+    Skybox::Update();
+    
     Interface::Update();
-
-    Skybox::Update(mWindowManager->GetCamera(), skyboxShader);
 
     mWindowManager->SwapBuffers();
     mRenderer->ClearBuffer();
@@ -130,7 +131,7 @@ void Application::Clear()
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
     Interface::Delete();
-
+    skyboxShader->UnUse();
     Logger::Stop();
 }
 
