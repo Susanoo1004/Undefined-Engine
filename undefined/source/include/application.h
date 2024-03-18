@@ -12,8 +12,6 @@
 #include "resources/model.h"
 
 #include "world/scene_manager/scene.h"
-#include "world/scene_manager/object.h"
-#include "world/components/player_test.h"
 
 class Window;
 class Renderer;

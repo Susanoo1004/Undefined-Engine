@@ -9,8 +9,12 @@ Light::Light()
 }
 
 Light::Light(const Vector3& position, const Vector3& rotation, const Vector3& ambient, const Vector3& diffuse, const Vector3& specular)
-	: Ambient(ambient), Diffuse(diffuse), Specular(specular), pos(), rot(rotation)
+	: Ambient(ambient), Diffuse(diffuse), Specular(specular)
 {
+	/*
+	GetTransform().Position = position;
+	GetTransform().Rotation = rotation;
+	*/
 }
 
 Light::~Light()

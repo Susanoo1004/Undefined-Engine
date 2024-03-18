@@ -1,9 +1,7 @@
 #pragma once
 #include <toolbox/Vector3.h>
 
-#include "world/components/component.h"
-
-class Transform : Component
+class Transform
 {
 public:
 

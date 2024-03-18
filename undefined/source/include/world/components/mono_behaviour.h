@@ -6,8 +6,6 @@
 class MonoBehaviour : public Component
 {
 public:
-	
-	virtual void Awake() {};
 
 	virtual void Start() {};
 

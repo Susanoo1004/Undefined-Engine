@@ -2,10 +2,9 @@
 
 #include "utils/flag.h"
 
-//#include "world/components/transform.h"
+#include "world/components/transform.h"
 
 class Object;
-class Transform;
 
 class Component
 {
@@ -16,10 +15,9 @@ public:
 	void Disable();
 	const bool IsEnable() const;
 
-	const Object* GetObject() const;
-	const Transform* GetTransform() const;
-
-	virtual void Awake() {};
+	Object& GetObject();
+	Transform& GetTransform();
+	const Transform& GetTransform() const;
 
 	virtual void Start() {};
 
@@ -37,10 +35,8 @@ public:
 
 private:
 	
-	Object* mObject;
+	std::shared_ptr<Object> mObject;
 
-	Transform* mTransform;
-
-	bool isEnable = true;
+	bool mIsEnable = true;
 
 };

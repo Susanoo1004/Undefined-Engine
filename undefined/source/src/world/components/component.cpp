@@ -1,26 +1,33 @@
 #include "world/components/component.h"
 
-const Object* Component::GetObject() const
+#include "world/scene_manager/object.h"
+
+Object& Component::GetObject()
 {
-	return mObject;
+	return *mObject;
 }
 
-const Transform* Component::GetTransform() const
+Transform& Component::GetTransform()
 {
-	return mTransform;
+	return mObject->GetTransform();
+}
+
+const Transform& Component::GetTransform() const
+{
+	return mObject->GetTransform();
 }
 
 void Component::Enable()
 {
-	isEnable = true;
+	mIsEnable = true;
 }
 
 void Component::Disable()
 {
-	isEnable = false;
+	mIsEnable = false;
 }
 
 const bool Component::IsEnable() const
 {
-	return isEnable;
+	return mIsEnable;
 }
