@@ -15,21 +15,21 @@ public:
 	void SetClearColor(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
 	void ClearBuffer();
 	
-	//Texture
-	void BindTexture(unsigned int ID);
 
-	// Shader
+	void BindTexture(unsigned int ID);
+	void BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO);
+
 	unsigned int SetShader(int shaderType, const char* vShaderCode);
 	unsigned int LinkShader(unsigned int ID, unsigned int vertex, unsigned int fragment);
 
 	void UseShader(int ID);
 	void UnUseShader();
 
-	void SetBool(unsigned int ID, const std::string& name, bool value) const;
-	void SetInt(unsigned int ID, const std::string& name, int value) const;
-	void SetFloat(unsigned int ID, const std::string& name, float value) const;
-	void SetVec3(unsigned int ID, const std::string& name, Vector3 v) const;
-	void SetMat4(unsigned int ID, const std::string& name, Matrix4x4 m) const;
+	void SetUniform(unsigned int ID, const std::string& name, bool value) const;
+	void SetUniform(unsigned int ID, const std::string& name, int value) const;
+	void SetUniform(unsigned int ID, const std::string& name, float value) const;
+	void SetUniform(unsigned int ID, const std::string& name, Vector3 v) const;
+	void SetUniform(unsigned int ID, const std::string& name, Matrix4x4 m) const;
 
 	void DeleteShader(unsigned int shader);
 

@@ -42,7 +42,7 @@ void Application::Init()
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 }
 
-// move to wrapper
+// move to RENDERER
 void Application::InitQuad()
 {
     float Vertices[] = {
@@ -96,7 +96,6 @@ void Application::Update()
     BaseShader->Use();
     BaseShader->SetMat4("vp", ServiceLocator::Get<Window>()->GetCamera()->GetVP());
     BaseShader->SetVec3("viewPos", ServiceLocator::Get<Window>()->GetCamera()->mEye);
-
 
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 

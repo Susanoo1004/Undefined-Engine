@@ -3,6 +3,9 @@
 #include <iostream>
 #include <cassert>
 
+// not sure about that
+#include "application.h"
+
 #include "service_locator.h"
 
 #include "logger/logger.h"
@@ -43,7 +46,7 @@ std::shared_ptr<KeyInput> InputManager::GetKeyInput(std::string keyInputName)
 
 	if (p == KeyInputsMap.end())
 	{
-		std::cerr << "Key Input name incorrect : " << keyInputName << std::endl;
+		Logger::Error("Key Input name incorrect : {} ", keyInputName);
 		assert(false);
 		return nullptr;
 	}
@@ -54,6 +57,7 @@ std::shared_ptr<KeyInput> InputManager::GetKeyInput(std::string keyInputName)
 void InputManager::InputManagerCallback()
 {
 	GLFWwindow* mWindowManager = ServiceLocator::Get<Window>()->GetWindowVar();
+
 	glfwSetKeyCallback(mWindowManager, InputManager::Callback);
 	glfwSetMouseButtonCallback(mWindowManager, InputManager::MouseButtonCallback);
 	glfwSetCursorPosCallback(mWindowManager, Camera::MouseCallback);
@@ -74,15 +78,18 @@ void InputManager::Callback(GLFWwindow*, int key, int, int action, int)
 		}
 	}
 	
-	if (isInInstances == false)
+	if (Application::IsInGame == true)
 	{
-		if (key >= 65 && key <= 90)
+		if (isInInstances == false)
 		{
-			Logger::Error("Key {} is not in the KeyInput", static_cast<char>(key));
-		}
-		else
-		{
-			Logger::Error("A key that is not a letter is not in a KeyInput");
+			if (key >= 65 && key <= 90)
+			{
+				Logger::Error("Key {} is not in the KeyInput", static_cast<char>(key));
+			}
+			else
+			{
+				Logger::Error("A key that is not a letter is not in a KeyInput");
+			}
 		}
 	}
 }
@@ -102,8 +109,11 @@ void InputManager::MouseButtonCallback(GLFWwindow*, int button, int action, int)
 		}
 	}
 
-	if (isInInstances == false)
+	if (Application::IsInGame == true)
 	{
-		Logger::Error("Mouse button {} is not in the KeyInput", button + 1);
+		if (isInInstances == false)
+		{
+			Logger::Error("Mouse button {} is not in the KeyInput", button + 1);
+		}
 	}
 }
