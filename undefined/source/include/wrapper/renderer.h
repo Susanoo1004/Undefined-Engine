@@ -18,13 +18,16 @@ public:
 	void GenerateBuffer(int index, unsigned int* buffer);
 	void GenerateVertexArray(int index, unsigned int* buffer);
 
-	void BindTexture(unsigned int ID);
+	void ActiveTexture(unsigned int ID);
+	//0x0DE1 = GL_TEXTURE_2D
+	void BindTexture(unsigned int ID, unsigned int type = 0x0DE1);
 
 	void BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO);
 	void AttributePointers(unsigned int index, int size, unsigned int type, int stride, const void* pointer, bool isNormalized = false);
 	void SetBufferData(unsigned int target, int size, const void* data, unsigned int usage);
 
 	void Draw(unsigned int mode, int size, unsigned int type, const void* indices);
+	void Draw(unsigned int mode, int start, int end);
 
 	unsigned int SetShader(int shaderType, const char* vShaderCode);
 	unsigned int LinkShader(unsigned int ID, unsigned int vertex, unsigned int fragment);
@@ -42,4 +45,3 @@ public:
 
 	RendererDebug Debug;
 };
-

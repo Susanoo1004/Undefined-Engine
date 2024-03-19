@@ -38,6 +38,7 @@ void Application::Init()
     ResourceManager::Load("../Undefined/resource_manager/", true);
     Interface::Init();
 
+    Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
 
     skyboxShader = ResourceManager::Get<Shader>("skyboxShader");
@@ -104,7 +105,7 @@ void Application::Update()
     BaseShader->Use();
 
     BaseShader->SetMat4("vp", mWindowManager->GetCamera()->GetVP());
-    BaseShader->SetVec3("viewPos", mWindowManager->GetCamera()->Eye);
+    BaseShader->SetVec3("viewPos", mWindowManager->GetCamera()->mEye);
 
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
