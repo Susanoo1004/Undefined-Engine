@@ -41,5 +41,8 @@ private:
 
 	Window* mWindowManager = nullptr;
 	Renderer* mRenderer = nullptr;
+
+public:
+	UNDEFINED_ENGINE static inline bool IsInGame = false;
 };
 

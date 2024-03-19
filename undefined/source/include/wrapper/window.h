@@ -42,5 +42,8 @@ public:
     static void WindowSizeCallback(GLFWwindow* , int width, int height);
 
     static void SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback);
+    static void ScrollWheelCallback(GLFWwindow* window, GLFWscrollfun callback);
+
+    static void Callbacks();
 
 };

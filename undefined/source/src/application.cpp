@@ -38,8 +38,8 @@ void Application::Init()
     ResourceManager::Load("../Undefined/resource_manager/", true);
     Interface::Init();
 
-    Skybox::Setup();
-    BaseShader = ResourceManager::Get<Shader>("baseShader");
+    BaseShader = ResourceManager::Get<Shader>("base_shader");
+
     skyboxShader = ResourceManager::Get<Shader>("skyboxShader");
 
     skyboxShader->Use();
@@ -50,7 +50,7 @@ void Application::Init()
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 }
 
-// move to wrapper
+// move to RENDERER
 void Application::InitQuad()
 {
     float Vertices[] = {
@@ -102,9 +102,9 @@ void Application::Update()
 
     // modify the camera in the shader
     BaseShader->Use();
+
     BaseShader->SetMat4("vp", mWindowManager->GetCamera()->GetVP());
     BaseShader->SetVec3("viewPos", mWindowManager->GetCamera()->Eye);
-
 
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 

@@ -5,14 +5,17 @@
 #include <vector>
 
 #include "Vector4.h"
+#include "flag.h"
 
 class Matrix;
+class Matrix2x2;
+class Matrix3x3;
 class Vector;
 class Vector3;
 class Quaternion;
 
 /// @brief The Matrix4x4 class represents a two-dimensional array mainly used for mathematical operations.
-class Matrix4x4
+class TOOLBOX Matrix4x4
 {
 public:
     /// @brief Returns the identity matrix.
@@ -143,6 +146,8 @@ public:
     explicit operator Vector3() const;
     explicit operator Vector4() const;
     explicit operator Vector() const;
+    operator Matrix2x2() const;
+    operator Matrix3x3() const;
     operator Matrix() const;
 
     // Automatically generates all comparison operators

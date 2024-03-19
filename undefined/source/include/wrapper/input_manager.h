@@ -24,7 +24,7 @@ public:
 	std::unordered_map<std::string, std::shared_ptr<KeyInput>> KeyInputsMap;
 
 public:
-	UNDEFINED_ENGINE static void InputManagerCallback();
+	UNDEFINED_ENGINE static void Callbacks();
 
 private:
 	UNDEFINED_ENGINE static void Callback(GLFWwindow* window, int key, int, int action, int);

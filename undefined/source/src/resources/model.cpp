@@ -6,6 +6,8 @@
 
 #include "resources/resource_manager.h"
 
+#include "service_locator.h"
+
 Model::Model()
 {
 
@@ -13,6 +15,8 @@ Model::Model()
 
 Model::Model(const char* path)
 {
+    Render = ServiceLocator::Get<Renderer>();
+
 	LoadModel(path);
 
     Init();
@@ -42,9 +46,7 @@ void Model::Init()
 }
 void Model::Draw()
 {
-    glBindVertexArray(mVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+    Render->BindBuffers(mVAO, mVBO, mEBO);
 
     for (std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Texture>> pair : mModel)
     {

@@ -9,8 +9,8 @@ void ServiceLocator::Setup()
 
 UNDEFINED_ENGINE void ServiceLocator::SetupCallbacks()
 {
-	Window::SetWindowSizeCallback(Get<Window>()->GetWindowVar(), Window::WindowSizeCallback);
-	InputManager::InputManagerCallback();
+	Window::Callbacks();
+	InputManager::Callbacks();
 }
 
 void ServiceLocator::CleanServiceLocator()

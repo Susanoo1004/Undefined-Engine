@@ -7,14 +7,6 @@
 
 void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 {
-	std::string fragPath;
-	std::string vertexPath;
-	bool isBaseShaderLoaded = false;
-
-	std::string skyboxFragPath;
-	std::string skyboxVertexPath;
-	bool isSkyboxShaderLoaded = false;
-
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
 		if (recursivity)
@@ -26,107 +18,40 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 		}
 
 		std::string name = entry.path().string();
+		std::string filename = entry.path().filename().generic_string();
 		std::string parentName = entry.path().parent_path().filename().string();
 		size_t pos = name.find(parentName);
 		std::string newName = name.substr(pos);
-		
+
 		if (name.ends_with(".obj"))
 		{
-			std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
-
-			auto&& p = mResources.try_emplace(name, resource);
-			if (!p.second)
-			{
-				p.first->second.reset();
-			}
-			mResources.emplace(newName, resource);
-
-			if (resource->IsValid())
-			{
-				Logger::Debug("Model : {} loaded", newName);
-			}
+			Create<Model>(newName, name.c_str());
 		}
-		
 
-		if (name.ends_with(".png") || name.ends_with(".jpg"))
+		else if (name.ends_with(".png") || name.ends_with(".jpg"))
 		{
-			std::shared_ptr<Texture> resource;
-			resource = std::make_shared<Texture>(name.c_str(), false);
+			Create<Texture>(newName, name.c_str());
+		}
 
-			if (resource->IsValid())
+		else if (name.ends_with(".fs"))
+		{
+			mShader.push_back(entry.path().generic_string());
+		}
+
+		else if (name.ends_with(".vs"))
+		{
+			if (mShader.size() != 0)
 			{
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
+				std::string fragShaderName = entry.path().generic_string();
+				fragShaderName.resize(fragShaderName.size() - 2);
+				fragShaderName += "fs";
+				if (std::find(mShader.begin(), mShader.end(), fragShaderName) != mShader.end())
 				{
-					p.first->second.reset();
+					filename.resize(filename.size() - 3);
+					Create<Shader>(filename, name.c_str(), fragShaderName.c_str());
 				}
-
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Texture : {} loaded", newName);
 			}
 		}
-
-		if (name.ends_with("base_shader.fs") && fragPath.empty())
-		{
-			fragPath = name;
-		}
-
-		else if (name.ends_with("base_shader.vs") && vertexPath.empty())
-		{
-			vertexPath = name;
-		}
-
-		if (name.ends_with("skyboxShader.fs") && skyboxFragPath.empty())
-		{
-			skyboxFragPath = name;
-		}
-
-		else if (name.ends_with("skyboxShader.vs") && skyboxVertexPath.empty())
-		{
-			skyboxVertexPath = name;
-		}
-
-		if (vertexPath.size() && fragPath.size() && !isBaseShaderLoaded)
-		{
-			isBaseShaderLoaded = true;
-			std::shared_ptr<Shader> resource;
-			resource = std::make_shared<Shader>(vertexPath.c_str(), fragPath.c_str());
-
-			if (resource->IsValid())
-			{
-				newName = "baseShader";
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
-				{
-					p.first->second.reset();
-				}
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Shader : {} loaded", newName);
-			}
-		}
-
-		if (skyboxVertexPath.size() && skyboxFragPath.size() && !isSkyboxShaderLoaded)
-		{
-			isSkyboxShaderLoaded = true;
-			std::shared_ptr<Shader> resource;
-			resource = std::make_shared<Shader>(skyboxVertexPath.c_str(), skyboxFragPath.c_str());
-
-			if (resource->IsValid())
-			{
-				newName = "skyboxShader";
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
-				{
-					p.first->second.reset();
-				}
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Shader : {} loaded", newName);
-			}
-		}
-	}
 }
 
 bool ResourceManager::Contains(std::string name)
@@ -153,15 +78,11 @@ void ResourceManager::Unload(const std::string& name)
 
 void ResourceManager::UnloadAll()
 {
-	Logger::Debug("\n \n [UNLOAD] \n");
-
 	for (auto&& p : mResources)
 	{
 		Logger::Debug("{} {} unloaded", typeid(*p.second.get()).name(), p.first);
 	}
 	mResources.clear();
-
-	Logger::Debug("\n");
 }
 
 void ResourceManager::Rename(std::string oldName, std::string newName)
