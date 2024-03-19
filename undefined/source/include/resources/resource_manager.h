@@ -9,7 +9,7 @@
 #include "utils/flag.h"
 
 template<class T>
-concept Type = std::is_base_of<Resource, T>::value;
+concept ResourceType = std::is_base_of_v<Resource, T>;
 
 class ResourceManager
 {
@@ -19,11 +19,11 @@ public:
 	UNDEFINED_ENGINE static void Load(std::filesystem::path path, bool recursivity = false);
 	UNDEFINED_ENGINE static bool Contains(std::string name);
 
-	template<Type T, typename... Args>
-	static std::shared_ptr<T> Create(std::string name, Args... args)
+	template<ResourceType Resource, typename... Args>
+	static std::shared_ptr<Resource> Create(std::string name, Args... args)
 	{
-		std::shared_ptr<T> resource = std::make_shared<T>(args...);
-			
+		std::shared_ptr<Resource> resource = std::make_shared<Resource>(args...);
+		
 		auto&& p = mResources.try_emplace(name, resource);
 		if (!p.second)
 		{
@@ -31,13 +31,13 @@ public:
 		}
 		mResources.emplace(name, resource);
 
-		Logger::Debug("{} {} loaded", typeid(T).name(), name);
+		Logger::Debug("{} {} loaded", typeid(Resource).name(), name);
 
 		return resource;
 	}
 
-	template<Type T>
-	static std::shared_ptr<T> Get(const std::string& name)
+	template<ResourceType Resource>
+	static std::shared_ptr<Resource> Get(const std::string& name)
 	{
 		auto&& p = mResources.find(name);
 
@@ -47,7 +47,7 @@ public:
 			return nullptr;
 		}
 
-		return std::dynamic_pointer_cast<T>(p->second);
+		return std::dynamic_pointer_cast<Resource>(p->second);
 	}
 
 	UNDEFINED_ENGINE static void Rename(std::string oldName, std::string newName);
@@ -55,5 +55,6 @@ public:
 	UNDEFINED_ENGINE static void UnloadAll();
 
 private:
+	UNDEFINED_ENGINE static inline std::vector<std::string> mShader;
 	UNDEFINED_ENGINE static inline std::unordered_map<std::string, std::shared_ptr<Resource>> mResources;
 };

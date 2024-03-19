@@ -27,44 +27,17 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 		
 		if (name.ends_with(".obj"))
 		{
-			std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
-
-			auto&& p = mResources.try_emplace(name, resource);
-			if (!p.second)
-			{
-				p.first->second.reset();
-			}
-			mResources.emplace(newName, resource);
-
-			if (resource->IsValid())
-			{
-				Logger::Debug("Model : {} loaded", newName);
-			}
+			Create<Model>(newName, name.c_str());
 		}
-		
 
 		if (name.ends_with(".png") || name.ends_with(".jpg"))
 		{
-			std::shared_ptr<Texture> resource;
-			resource = std::make_shared<Texture>(name.c_str(), false);
-
-			if (resource->IsValid())
-			{
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
-				{
-					p.first->second.reset();
-				}
-
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Texture : {} loaded", newName);
-			}
+			Create<Texture>(newName, name.c_str());
 		}
 
 		else if (name.ends_with(".fs"))
 		{
-			fragPath = name;
+			mShader.push_back(entry.path().generic_string());
 		}
 
 		else if (name.ends_with(".vs"))
