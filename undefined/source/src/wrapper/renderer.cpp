@@ -25,6 +25,16 @@ void Renderer::ClearBuffer()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void Renderer::GenerateBuffer(int index, unsigned int* buffer)
+{
+    glGenBuffers(index, buffer);
+}
+
+void Renderer::GenerateVertexArray(int index, unsigned int* buffer)
+{
+    glGenVertexArrays(index, buffer);
+}
+
 void Renderer::BindTexture(unsigned int ID)
 {
 	glBindTexture(GL_TEXTURE_2D, ID);
@@ -35,6 +45,22 @@ void Renderer::BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO)
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+}
+
+void Renderer::AttributePointers(unsigned int index, int size, unsigned int type, int stride, const void* pointer, bool isNormalized)
+{
+    glEnableVertexAttribArray(index);
+    glVertexAttribPointer(index, size, type, isNormalized, stride, pointer);
+}
+
+void Renderer::SetBufferData(unsigned int target, int size, const void* data, unsigned int usage)
+{
+    glBufferData(target, size, data, usage);
+}
+
+void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* indices)
+{
+    glDrawElements(mode, size, type, indices);
 }
 
 unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
@@ -109,12 +135,12 @@ void Renderer::SetUniform(unsigned int ID, const std::string& name, float value)
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, Vector3 v) const
+void Renderer::SetUniform(unsigned int ID, const std::string& name, const Vector3& v) const
 {
     glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &v.x);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, Matrix4x4 m) const
+void Renderer::SetUniform(unsigned int ID, const std::string& name, const Matrix4x4& m) const
 {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, true, &m[0].x);
 }
