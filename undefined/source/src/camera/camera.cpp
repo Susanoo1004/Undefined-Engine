@@ -33,6 +33,16 @@ void Camera::SetPerspective(Matrix4x4& perspectiveMat)
     mPerspective = perspectiveMat;
 }
 
+Matrix4x4 Camera::GetView()
+{
+    return mView;
+}
+
+Matrix4x4 Camera::GetProjection()
+{
+    return mPerspective;
+}
+
 const Matrix4x4& Camera::GetVP()
 {
     return mVP;

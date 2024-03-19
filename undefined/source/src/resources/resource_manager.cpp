@@ -26,19 +26,16 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 		if (name.ends_with(".obj"))
 		{
 			Create<Model>(newName, name.c_str());
-			continue;
 		}
 
-		if (name.ends_with(".png") || name.ends_with(".jpg"))
+		else if (name.ends_with(".png") || name.ends_with(".jpg"))
 		{
 			Create<Texture>(newName, name.c_str());
-			continue;
 		}
 
 		else if (name.ends_with(".fs"))
 		{
 			mShader.push_back(entry.path().generic_string());
-			continue;
 		}
 
 		else if (name.ends_with(".vs"))
@@ -52,11 +49,9 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 				{
 					filename.resize(filename.size() - 3);
 					Create<Shader>(filename, name.c_str(), fragShaderName.c_str());
-					continue;
 				}
 			}
 		}
-	}
 }
 
 bool ResourceManager::Contains(std::string name)

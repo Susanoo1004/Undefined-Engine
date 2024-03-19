@@ -14,6 +14,8 @@ public:
     ~Camera();
 
     void SetPerspective(Matrix4x4& perspectiveView);
+    Matrix4x4 GetView();
+    Matrix4x4 GetProjection();
 
     void Update();
 
