@@ -15,9 +15,16 @@ public:
 	void SetClearColor(float redBaseColor = 0.3f, float greenBaseColor = 0.3f, float blueBaseColor = 0.3f);
 	void ClearBuffer();
 	
+	void GenerateBuffer(int index, unsigned int* buffer);
+	void GenerateVertexArray(int index, unsigned int* buffer);
 
 	void BindTexture(unsigned int ID);
+
 	void BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO);
+	void AttributePointers(unsigned int index, int size, unsigned int type, int stride, const void* pointer, bool isNormalized = false);
+	void SetBufferData(unsigned int target, int size, const void* data, unsigned int usage);
+
+	void Draw(unsigned int mode, int size, unsigned int type, const void* indices);
 
 	unsigned int SetShader(int shaderType, const char* vShaderCode);
 	unsigned int LinkShader(unsigned int ID, unsigned int vertex, unsigned int fragment);
@@ -28,8 +35,8 @@ public:
 	void SetUniform(unsigned int ID, const std::string& name, bool value) const;
 	void SetUniform(unsigned int ID, const std::string& name, int value) const;
 	void SetUniform(unsigned int ID, const std::string& name, float value) const;
-	void SetUniform(unsigned int ID, const std::string& name, Vector3 v) const;
-	void SetUniform(unsigned int ID, const std::string& name, Matrix4x4 m) const;
+	void SetUniform(unsigned int ID, const std::string& name, const Vector3& v) const;
+	void SetUniform(unsigned int ID, const std::string& name, const Matrix4x4& m) const;
 
 	void DeleteShader(unsigned int shader);
 
