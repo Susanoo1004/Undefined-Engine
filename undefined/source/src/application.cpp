@@ -35,7 +35,7 @@ void Application::Init()
     ResourceManager::Load("../Undefined/resource_manager/", true);
     Interface::Init();
 
-    BaseShader = ResourceManager::Get<Shader>("baseShader");
+    BaseShader = ResourceManager::Get<Shader>("base_shader");
 
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 

@@ -7,9 +7,6 @@
 
 void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 {
-	std::string fragPath;
-	std::string vertexPath;
-
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
 		if (recursivity)
@@ -21,49 +18,44 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 		}
 
 		std::string name = entry.path().string();
+		std::string filename = entry.path().filename().generic_string();
 		std::string parentName = entry.path().parent_path().filename().string();
 		size_t pos = name.find(parentName);
 		std::string newName = name.substr(pos);
-		
+
 		if (name.ends_with(".obj"))
 		{
 			Create<Model>(newName, name.c_str());
+			continue;
 		}
 
 		if (name.ends_with(".png") || name.ends_with(".jpg"))
 		{
 			Create<Texture>(newName, name.c_str());
+			continue;
 		}
 
 		else if (name.ends_with(".fs"))
 		{
 			mShader.push_back(entry.path().generic_string());
+			continue;
 		}
 
 		else if (name.ends_with(".vs"))
 		{
-			vertexPath = name;
-		}
-
-		if (vertexPath.size() && fragPath.size())
-		{
-			std::shared_ptr<Shader> resource;
-			resource = std::make_shared<Shader>(vertexPath.c_str(), fragPath.c_str());
-
-			if (resource->IsValid())
+			if (mShader.size() != 0)
 			{
-				newName = "baseShader";
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
+				std::string fragShaderName = entry.path().generic_string();
+				fragShaderName.resize(fragShaderName.size() - 2);
+				fragShaderName += "fs";
+				if (std::find(mShader.begin(), mShader.end(), fragShaderName) != mShader.end())
 				{
-					p.first->second.reset();
+					filename.resize(filename.size() - 3);
+					Create<Shader>(filename, name.c_str(), fragShaderName.c_str());
+					continue;
 				}
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Shader : {} loaded", newName);
 			}
 		}
-		
 	}
 }
 
@@ -91,15 +83,11 @@ void ResourceManager::Unload(const std::string& name)
 
 void ResourceManager::UnloadAll()
 {
-	Logger::Debug("\n \n [UNLOAD] \n");
-
 	for (auto&& p : mResources)
 	{
 		Logger::Debug("{} {} unloaded", typeid(*p.second.get()).name(), p.first);
 	}
 	mResources.clear();
-
-	Logger::Debug("\n");
 }
 
 void ResourceManager::Rename(std::string oldName, std::string newName)
