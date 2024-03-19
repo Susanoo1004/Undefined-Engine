@@ -7,7 +7,7 @@
 #include "service_locator.h"
 #include "resources/resource_manager.h"
 
-unsigned int Skybox::loadCubemap(const std::vector<std::string>& cubemapFaces)
+unsigned int Skybox::loadCubemap(const std::array<std::string, 6>& cubemapFaces)
 {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
@@ -36,7 +36,7 @@ unsigned int Skybox::loadCubemap(const std::vector<std::string>& cubemapFaces)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	return textureID;
-}	
+}
 
 void Skybox::Setup()
 {
@@ -67,17 +67,11 @@ void Skybox::Setup()
 
 void Skybox::Update()
 {
+	skyboxShader->Use();
+
 	Camera* camera = ServiceLocator::Get<Window>()->GetCamera();
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-	view = Matrix4x4(camera->GetView()); // remove translation from the view matrix
-	view[0][3] = 0.0f;
-	view[1][3] = 0.0f;
-	view[2][3] = 0.0f;
-	view[3][3] = 1.0f;
-	
-	view[3][0] = 0.0f;
-	view[3][1] = 0.0f;
-	view[3][2] = 0.0f;
+	view = Matrix4x4(Matrix3x3(camera->GetView())); // remove translation from the view matrix
 
 	skyboxShader->SetMat4("view", view);
 	skyboxShader->SetMat4("projection", camera->GetProjection());
@@ -88,4 +82,5 @@ void Skybox::Update()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 	glDepthFunc(GL_LESS); // set depth function back to default
+	skyboxShader->UnUse();
 }

@@ -54,9 +54,9 @@ public:
 	float& operator[](const size_t i);
 
     operator Matrix() const;
-	operator Vector();
-	explicit operator Vector3();
-	explicit operator Vector2();
+	operator Vector() const;
+	explicit operator Vector3() const;
+	explicit operator Vector2() const;
 
     // Automatically generates all comparison operators
 	[[nodiscard]]

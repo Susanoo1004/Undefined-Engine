@@ -117,7 +117,6 @@ void Application::Update()
     BaseShader->Use();
     Draw();
 
-    skyboxShader->Use();
     Skybox::Update();
     
     Interface::Update();

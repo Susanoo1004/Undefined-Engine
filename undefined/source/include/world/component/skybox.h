@@ -3,6 +3,7 @@
 #include <string>
 #include <toolbox/Matrix3x3.h>
 #include <toolbox/Matrix4x4.h>
+#include <array>
 
 #include "utils/flag.h"
 #include "world/component/component.h"
@@ -14,7 +15,7 @@ class Skybox : public Component
 public:
 	UNDEFINED_ENGINE static void Setup();
 	UNDEFINED_ENGINE static void Update();
-	UNDEFINED_ENGINE static unsigned int loadCubemap(const std::vector<std::string>& cubemapFaces);
+	UNDEFINED_ENGINE static unsigned int loadCubemap(const std::array<std::string, 6>& cubemapFaces);
 
 	static inline float cubeVertices[] = {
 		// positions          // texture Coords
@@ -106,7 +107,7 @@ public:
 		 1.0f, -1.0f,  1.0f
 	};
 
-	static inline std::vector<std::string> faces
+	static inline std::array<std::string, 6> faces
 	{
 		"../undefined/skybox/right.jpg",
 		"../undefined/skybox/left.jpg",

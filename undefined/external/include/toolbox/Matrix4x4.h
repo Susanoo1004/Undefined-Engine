@@ -8,6 +8,8 @@
 #include "flag.h"
 
 class Matrix;
+class Matrix2x2;
+class Matrix3x3;
 class Vector;
 class Vector3;
 class Quaternion;
@@ -144,6 +146,8 @@ public:
     explicit operator Vector3() const;
     explicit operator Vector4() const;
     explicit operator Vector() const;
+    operator Matrix2x2() const;
+    operator Matrix3x3() const;
     operator Matrix() const;
 
     // Automatically generates all comparison operators
