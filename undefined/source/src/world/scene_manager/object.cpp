@@ -2,18 +2,18 @@
 
 void Object::Enable()
 {
-	for (size_t i = 0; i < Components.size(); i++)
+	for (std::shared_ptr<Component> comp : Components)
 	{
-		Components[i]->OnEnable();
+		comp->OnEnable();
 	}
 	mIsEnable = true;
 }
 
 void Object::Disable()
 {
-	for (size_t i = 0; i < Components.size(); i++)
+	for (std::shared_ptr<Component> comp : Components)
 	{
-		Components[i]->OnDisable();
+		comp->OnDisable();
 	}
 	mIsEnable = false;
 }
@@ -31,4 +31,12 @@ Transform& Object::GetTransform()
 const Transform& Object::GetTransform() const
 {
 	return mTransform;
+}
+
+void Object::Test()
+{
+	for (std::shared_ptr<Component> comp : Components)
+	{
+		comp->Object.Ptr;
+	}
 }

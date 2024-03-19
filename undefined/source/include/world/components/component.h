@@ -33,10 +33,19 @@ public:
 
 	virtual void OnDisable() {};
 
+	struct Object
+	{
+	public:
+		friend class Object;
+		__declspec(property(get = Get, put = Set)) std::shared_ptr<Object> Ptr;
+
+		const std::shared_ptr<::Object> Get() const { return mObject; };
+	private:
+		void Set(std::shared_ptr<Object> newPtr) { mObject = newPtr; };
+		std::shared_ptr<Object> mObject;
+
+	} Object;
+
 private:
-	
-	std::shared_ptr<Object> mObject;
-
 	bool mIsEnable = true;
-
 };

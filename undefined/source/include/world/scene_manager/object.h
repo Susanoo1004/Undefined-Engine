@@ -1,10 +1,11 @@
 #pragma once
 
-#include <set>
+#include <list>
 
 #include "utils/flag.h"
 
 #include "world/components/component.h"
+#include "logger/logger.h"
 
 template<class Comp>
 concept ComponentType = std::is_base_of<Component, Comp>::value;
@@ -22,19 +23,54 @@ public:
 
 
 	template <ComponentType Comp, typename... Args>
-	Comp& AddComponent(Comp test, Args... args)
+	std::shared_ptr<Comp> AddComponent(Args... args)
 	{
-		Components.insert(Comp(args));
+		std::shared_ptr<Comp> comp = nullptr;
+		for (std::shared_ptr<Component> findComp : Components)
+		{
+			if (typeid(std::shared_ptr<Comp>) == typeid(findComp))
+			{
+				comp = std::dynamic_pointer_cast<Comp>(findComp);
+				break;
+			}
+		}
+
+		if (comp)
+		{
+			Logger::Error("Component {} already exist in object {}", typeid(Comp).name(), name);
+			
+			// TODO: decide between return null or already existing comp
+			//return comp;
+			return nullptr;
+		}
+		comp = std::make_shared<Comp>(args...);
+
+		
+
+		Components.push_back(comp);
+		
+		return comp;
 	}
 
 	template <ComponentType Comp>
-	Comp& GetComponent()
+	std::shared_ptr<Comp> GetComponent()
 	{
-		return Components.find<Comp>();
+		for (std::shared_ptr<Component> findComp : Components)
+		{
+			if (std::shared_ptr<Comp> castComp = std::dynamic_pointer_cast<Comp>(findComp))
+			{
+				return castComp;
+			}
+		}
+
+		return nullptr;
 	}
 
+	void Test();
 
-	std::set<Component> Components;
+	std::string name = "empty";
+
+	std::list<std::shared_ptr<Component>> Components;
 
 private:
 	bool mIsEnable = true;

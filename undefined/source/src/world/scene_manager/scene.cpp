@@ -5,9 +5,9 @@ void Scene::Start()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
-		for (size_t j = 0; j < Objects[i]->Components.size(); j++)
+		for (std::shared_ptr<Component> comp : Objects[i]->Components)
 		{
-			Objects[i]->Components[j]->Start();
+			comp->Start();
 		}
 	}
 }
@@ -16,9 +16,9 @@ void Scene::Update()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
-		for (size_t j = 0; j < Objects[i]->Components.size(); j++)
+		for (std::shared_ptr<Component> comp : Objects[i]->Components)
 		{
-			Objects[i]->Components[j]->Update();
+			comp->Update();
 		}
 	}
 }

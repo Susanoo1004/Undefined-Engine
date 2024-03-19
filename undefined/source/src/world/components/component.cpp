@@ -4,17 +4,17 @@
 
 Object& Component::GetObject()
 {
-	return *mObject;
+	return *Object.Ptr;
 }
 
 Transform& Component::GetTransform()
 {
-	return mObject->GetTransform();
+	return Object.Ptr->GetTransform();
 }
 
 const Transform& Component::GetTransform() const
 {
-	return mObject->GetTransform();
+	return Object.Ptr->GetTransform();
 }
 
 void Component::Enable()

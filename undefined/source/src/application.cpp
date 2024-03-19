@@ -45,20 +45,26 @@ void Application::Init()
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
     Object* objectTest = new Object;
-    Player* playerTest = new Player;
-    Light* lightTest = new Light;
-    //objectTest->Components.push_back(playerTest);
-    //objectTest->Components.push_back(lightTest);
+    
+    objectTest->AddComponent<Player>();
+
+    std::shared_ptr<Player> player = objectTest->GetComponent<Player>();
+    if (player)
+    {
+        Logger::Debug("yes");
+    }
+
+    player->Chiffre += 200;
+
+    Logger::Debug("Object : {}", objectTest->GetTransform().Position.x);
+    Logger::Debug("Object : {}", objectTest->GetTransform().Position.x += 1);
+
+    Logger::Debug("Component : {}", player->GetTransform().Position.x);
+    Logger::Debug("Component : {}", player->GetTransform().Position.x += 1);
 
     ActualScene.Objects.push_back(objectTest);
 
-    Logger::Debug("Object : {}", objectTest->GetTransform().Position.x);
-
-    Logger::Debug("Object : {}", objectTest->GetTransform().Position.x += 1);
-
-    //Logger::Debug("Component : {}", objectTest->Components.find<Player>()->GetTransform().Position.x);
-
-    //Logger::Debug("Component : {}", objectTest->Components[0]->GetTransform().Position.x += 1);
+    
 }
 
 // move to wrapper
