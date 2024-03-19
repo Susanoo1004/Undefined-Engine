@@ -29,7 +29,7 @@ void Skybox::Setup()
 	mRenderer->SetBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
 	mRenderer->AttributePointers(0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
 
-	faces = ResourceManager::LoadFolder("../undefined/resource_manager/skybox");
+	//faces = ResourceManager::LoadFolder("../undefined/resource_manager/skybox");
 	cubemapTexture = Texture::LoadCubeMap(faces);
 }
 
