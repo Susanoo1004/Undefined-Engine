@@ -13,7 +13,7 @@
     <ClCompile Include="source\src\wrapper\window.cpp" />
     <ClCompile Include="source\src\wrapper\renderer.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
-    <ClCompile Include="source\src\logger\logger.cpp" />
+    <ClCompile Include="source\src\engine_debug\logger.cpp" />
     <ClCompile Include="source\src\memory_leak.cpp" />
     <ClCompile Include="source\src\service_locator.cpp" />
     <ClCompile Include="source\src\wrapper\input_manager.cpp" />
@@ -39,6 +39,8 @@
     <ClCompile Include="source\src\interface\inspector.cpp" />
     <ClCompile Include="source\src\world\component\dir_light.cpp" />
     <ClCompile Include="source\src\resources\mesh.cpp" />
+    <ClCompile Include="source\src\framebuffer.cpp" />
+    <ClCompile Include="source\src\interface\editor_viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -72,7 +74,7 @@
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
     <ClInclude Include="source\include\resources\shader.h" />
-    <ClInclude Include="source\include\logger\logger.h" />
+    <ClInclude Include="source\include\engine_debug\logger.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\memory_leak.h" />
     <ClInclude Include="source\include\utils\flag.h" />
@@ -101,6 +103,8 @@
     <ClInclude Include="source\include\world\component\dir_light.h" />
     <ClInclude Include="source\include\resources\mesh.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="source\include\framebuffer.h" />
+    <ClInclude Include="source\include\interface\editor_viewport.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

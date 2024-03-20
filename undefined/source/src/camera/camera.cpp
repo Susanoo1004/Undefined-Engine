@@ -6,7 +6,7 @@
 
 #include "service_locator.h"
 
-Camera* Camera::sCamPtr;
+Camera* Camera::CurrentCamera;
 
 Camera::Camera(float width, float height)
     : mWidth(width), mHeight(height)
@@ -17,7 +17,7 @@ Camera::Camera(float width, float height)
 
     Matrix4x4::ProjectionMatrix(calc::PI / 2, mWidth / mHeight, 0.1f, 20.0f, mPerspective);
 
-    sCamPtr = this;
+    CurrentCamera = this;
 
     std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
     ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
@@ -83,61 +83,61 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
-    if (sCamPtr->mIsMouseForCam)
+    if (CurrentCamera->mIsMouseForCam)
     {
         inputManager->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     else
     {
         inputManager->SetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        sCamPtr->mIsFirstMouse = true;
+        CurrentCamera->mIsFirstMouse = true;
         return;
     }
 
-    if (sCamPtr->mIsFirstMouse)
+    if (CurrentCamera->mIsFirstMouse)
     {
-        sCamPtr->mLastX = xpos;
-        sCamPtr->mLastY = ypos;
-        sCamPtr->mIsFirstMouse = false;
+        CurrentCamera->mLastX = xpos;
+        CurrentCamera->mLastY = ypos;
+        CurrentCamera->mIsFirstMouse = false;
     }
 
-    float xoffset = xpos - sCamPtr->mLastX;
-    float yoffset = sCamPtr->mLastY - ypos;
-    sCamPtr->mLastX = xpos;
-    sCamPtr->mLastY = ypos;
+    float xoffset = xpos - CurrentCamera->mLastX;
+    float yoffset = CurrentCamera->mLastY - ypos;
+    CurrentCamera->mLastX = xpos;
+    CurrentCamera->mLastY = ypos;
 
-    xoffset *= sCamPtr->mMouseSensitivity;
-    yoffset *= sCamPtr->mMouseSensitivity;
+    xoffset *= CurrentCamera->mMouseSensitivity;
+    yoffset *= CurrentCamera->mMouseSensitivity;
 
-    sCamPtr->mYaw += xoffset;
-    sCamPtr->mPitch += yoffset;
+    CurrentCamera->mYaw += xoffset;
+    CurrentCamera->mPitch += yoffset;
 
-    if (sCamPtr->mPitch > 89.0f)
+    if (CurrentCamera->mPitch > 89.0f)
     {
-        sCamPtr->mPitch = 89.0f;
+        CurrentCamera->mPitch = 89.0f;
     }
-    if (sCamPtr->mPitch < -89.0f)
+    if (CurrentCamera->mPitch < -89.0f)
     {
-        sCamPtr->mPitch = -89.0f;
+        CurrentCamera->mPitch = -89.0f;
     }
 
     Vector3 direction;
-    direction.x = cosf((sCamPtr->mYaw * (calc::PI / 180.f))) * cosf((sCamPtr->mPitch * (calc::PI / 180.f)));
-    direction.y = sinf((sCamPtr->mPitch * (calc::PI / 180.f)));
-    direction.z = sinf((sCamPtr->mYaw * (calc::PI / 180.f))) * cosf((sCamPtr->mPitch * (calc::PI / 180.f)));
-    sCamPtr->mLookAt = direction.Normalized();
+    direction.x = cosf((CurrentCamera->mYaw * (calc::PI / 180.f))) * cosf((CurrentCamera->mPitch * (calc::PI / 180.f)));
+    direction.y = sinf((CurrentCamera->mPitch * (calc::PI / 180.f)));
+    direction.z = sinf((CurrentCamera->mYaw * (calc::PI / 180.f))) * cosf((CurrentCamera->mPitch * (calc::PI / 180.f)));
+    CurrentCamera->mLookAt = direction.Normalized();
 }
 
 void Camera::ChangeSpeedCam(GLFWwindow* , double , double yposIn)
 {
-    sCamPtr->mCameraSpeed += calc::Sign((float)yposIn) * 0.01f;
+    CurrentCamera->mCameraSpeed += calc::Sign((float)yposIn) * 0.005f;
 
     // verify is camera speed is not negative so that we dont go opposite of where we want
-    if (sCamPtr->mCameraSpeed < 0)
+    if (CurrentCamera->mCameraSpeed < 0.f)
     {
-        sCamPtr->mCameraSpeed = 0.001f;
+        CurrentCamera->mCameraSpeed = 0.0001f;
     }
 
     // TEMP
-    std::cout << "Camera speed = " << sCamPtr->mCameraSpeed << std::endl;
+    std::cout << "Camera speed = " << CurrentCamera->mCameraSpeed << std::endl;
 }

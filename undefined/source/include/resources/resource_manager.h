@@ -5,7 +5,9 @@
 #include <cassert>
 
 #include "resources/resource.h"
-#include "logger/logger.h"
+
+#include "engine_debug/logger.h"
+
 #include "utils/flag.h"
 
 template<class T>
