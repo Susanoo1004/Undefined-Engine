@@ -22,13 +22,6 @@ void Skybox::Setup()
 	mRenderer->AttributePointers(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
 	mRenderer->AttributePointers(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	
-	//Skybox setup
-	mRenderer->GenerateVertexArray(1, &skyboxVAO);
-	mRenderer->GenerateBuffer(1, &skyboxVBO);
-	mRenderer->BindBuffers(skyboxVAO, skyboxVBO, 0);
-	mRenderer->SetBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-	mRenderer->AttributePointers(0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
-
 	//faces = ResourceManager::LoadFolder("../undefined/resource_manager/skybox");
 	cubemapTexture = Texture::LoadCubeMap(faces);
 }
@@ -46,7 +39,7 @@ void Skybox::Update()
 	mSkyboxShader->SetMat4("projection", camera->GetProjection());
 
 	// skybox cube
-	mRenderer->BindBuffers(skyboxVAO, 0, 0);
+	mRenderer->BindBuffers(cubeVAO, 0, 0);
 	mRenderer->ActiveTexture(GL_TEXTURE0);
 	mRenderer->BindTexture(cubemapTexture, GL_TEXTURE_CUBE_MAP);
 	mRenderer->Draw(GL_TRIANGLES, 0, 36);
