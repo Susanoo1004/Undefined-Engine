@@ -12,5 +12,5 @@ public:
 	UNDEFINED_ENGINE void FixedUpdate();
 	UNDEFINED_ENGINE void LateUpdate();
 
-	std::vector<Object*> Objects;
+	std::vector<std::shared_ptr<Object>> Objects;
 };

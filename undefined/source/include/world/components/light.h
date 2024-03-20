@@ -10,7 +10,7 @@
 #define BASE_DIFFUSE Vector3{ 0.8f, 0.8f, 0.8f }
 #define BASE_SPECULAR Vector3{ 0.5f, 0.5f, 0.5f }
 
-class Light : public Component
+class Light
 {
 public:
 	UNDEFINED_ENGINE Light();

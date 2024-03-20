@@ -14,11 +14,7 @@ public:
 	void Enable();
 	void Disable();
 	const bool IsEnable() const;
-
-	Object& GetObject();
-	Transform& GetTransform();
-	const Transform& GetTransform() const;
-
+	
 	virtual void Start() {};
 
 	virtual void FixedUpdate() {};
@@ -33,19 +29,20 @@ public:
 
 	virtual void OnDisable() {};
 
-	struct Object
-	{
-	public:
-		friend class Object;
-		__declspec(property(get = Get, put = Set)) std::shared_ptr<Object> Ptr;
+	friend class ::Object;
+	__declspec(property(get = GetObject, put = SetObject)) std::shared_ptr<::Object> GameObject;
+	std::shared_ptr<::Object> GetObject() const { return mObject; };
 
-		const std::shared_ptr<::Object> Get() const { return mObject; };
-	private:
-		void Set(std::shared_ptr<Object> newPtr) { mObject = newPtr; };
-		std::shared_ptr<Object> mObject;
+	__declspec(property(get = GetTransform, put = SetTransform)) std::shared_ptr<::Transform> GameTransform;
+	std::shared_ptr<::Transform> GetTransform() const { return mTransform; };
 
-	} Object;
 
 private:
+	void SetObject(std::shared_ptr<::Object> newObject) { mObject = newObject; };
+	void SetTransform(std::shared_ptr<::Transform> newTransform) { mTransform = newTransform; };
+
 	bool mIsEnable = true;
+	
+	std::shared_ptr<::Object> mObject;
+	std::shared_ptr<::Transform> mTransform;
 };

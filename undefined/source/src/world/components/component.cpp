@@ -1,21 +1,17 @@
 #include "world/components/component.h"
 
 #include "world/scene_manager/object.h"
-
+/*
 Object& Component::GetObject()
 {
-	return *Object.Ptr;
+	return GameObject;
 }
 
 Transform& Component::GetTransform()
 {
-	return Object.Ptr->GetTransform();
+	return GameObject.GetTransform();
 }
-
-const Transform& Component::GetTransform() const
-{
-	return Object.Ptr->GetTransform();
-}
+*/
 
 void Component::Enable()
 {

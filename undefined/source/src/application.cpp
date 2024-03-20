@@ -44,11 +44,11 @@ void Application::Init()
 
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-    Object* objectTest = new Object;
+    Object objectTest;
     
-    objectTest->AddComponent<Player>();
+    objectTest.AddComponent<Player>();
 
-    std::shared_ptr<Player> player = objectTest->GetComponent<Player>();
+    std::shared_ptr<Player> player = objectTest.GetComponent<Player>();
     if (player)
     {
         Logger::Debug("yes");
@@ -56,13 +56,26 @@ void Application::Init()
 
     player->Chiffre += 200;
 
-    Logger::Debug("Object : {}", objectTest->GetTransform().Position.x);
-    Logger::Debug("Object : {}", objectTest->GetTransform().Position.x += 1);
+    
+    Logger::Debug("{}", player->GameObject->IsEnable());
+    player->GameObject->Disable();
+    Logger::Debug("{}", player->GameObject->IsEnable());
 
-    Logger::Debug("Component : {}", player->GetTransform().Position.x);
-    Logger::Debug("Component : {}", player->GetTransform().Position.x += 1);
+    Logger::Debug("Object = Player->Object : {}", &objectTest == player->GameObject.get());
 
-    ActualScene.Objects.push_back(objectTest);
+    objectTest.Name = "oui";
+
+    Logger::Debug("Object : {}", objectTest.Name);
+    Logger::Debug("Player->Object  : {}", player->GameObject->Name);
+
+    Logger::Debug("Object : {}", objectTest.GameTransform->Position.x);
+    Logger::Debug("Object : {}", objectTest.GameTransform->Position.x += 1);
+
+    Logger::Debug("Object->Player : {}", player->GameTransform->Position.x);
+    Logger::Debug("Object->Player : {}", player->GameTransform->Position.x += 1);
+
+
+    ActualScene.Objects.push_back(std::make_shared<Object>(objectTest));
 
     
 }

@@ -10,5 +10,6 @@ public:
 	void Update();
 
 private:
+	int tet;
 
 };

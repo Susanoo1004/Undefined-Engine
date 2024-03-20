@@ -13,14 +13,11 @@ concept ComponentType = std::is_base_of<Component, Comp>::value;
 class Object
 {
 public:
+	~Object() {};
 
 	void Enable();
 	void Disable();
 	const bool IsEnable() const;
-
-	Transform& GetTransform();
-	const Transform& GetTransform() const;
-
 
 	template <ComponentType Comp, typename... Args>
 	std::shared_ptr<Comp> AddComponent(Args... args)
@@ -37,15 +34,13 @@ public:
 
 		if (comp)
 		{
-			Logger::Error("Component {} already exist in object {}", typeid(Comp).name(), name);
-			
-			// TODO: decide between return null or already existing comp
-			//return comp;
+			Logger::Error("Component {} already exist in object {}", typeid(Comp).name(), Name);
 			return nullptr;
 		}
 		comp = std::make_shared<Comp>(args...);
 
-		
+		comp->GameObject = std::shared_ptr<Object>(this);
+		comp->GameTransform = GameTransform;
 
 		Components.push_back(comp);
 		
@@ -66,15 +61,14 @@ public:
 		return nullptr;
 	}
 
-	void Test();
+	std::string Name = "empty";
 
-	std::string name = "empty";
+	std::shared_ptr<Transform> GameTransform = std::make_shared<Transform>();
 
 	std::list<std::shared_ptr<Component>> Components;
 
 private:
-	bool mIsEnable = true;
 
-	Transform mTransform;
+	bool mIsEnable = true;
 
 };
