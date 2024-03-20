@@ -52,6 +52,7 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 				}
 			}
 		}
+	}
 }
 
 bool ResourceManager::Contains(std::string name)
