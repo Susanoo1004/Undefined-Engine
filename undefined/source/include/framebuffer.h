@@ -11,11 +11,11 @@
 class Framebuffer
 {
 public:
-	Framebuffer();
+    Framebuffer();
 	~Framebuffer();
 
 	template <size_t TextureNumber>
-    static Framebuffer* Create();
+    static Framebuffer* Create(unsigned int width, unsigned int height);
 
     void RescaleFramebuffer(float width, float height);
 
@@ -29,12 +29,16 @@ public:
 };
 
 template <size_t TextureNumber>
-Framebuffer* Framebuffer::Create()
+Framebuffer* Framebuffer::Create(unsigned int width, unsigned int height)
 {
     static_assert(TextureNumber < 32, "TextureNumber must be less than 32");
-    Framebuffer* f = new Framebuffer();
-    Window* w = ServiceLocator::Get<Window>();
+
     unsigned int attachments[TextureNumber] = { 0 };
+
+    Framebuffer* f = new Framebuffer();
+
+    f->Width = width;
+    f->Height = height;
 
     // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
     glGenRenderbuffers(1, &f->RBO_ID);
@@ -48,7 +52,7 @@ Framebuffer* Framebuffer::Create()
 
     for (int i = 0; i < TextureNumber; i++)
     {
-        f->RenderedTextures[i] = std::make_shared<Texture>(w->Width, w->Height);
+        f->RenderedTextures[i] = std::make_shared<Texture>(f->Width, f->Height);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, f->RenderedTextures[i]->GetID(), 0);
         attachments[i] = GL_COLOR_ATTACHMENT0 + i;
     }
@@ -56,11 +60,14 @@ Framebuffer* Framebuffer::Create()
     glDrawBuffers(TextureNumber, attachments);
 
     glBindFramebuffer(GL_FRAMEBUFFER, f->FBO_ID);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, f->RBO_ID);
     // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         Logger::Error("Framebuffer is not complete! : {}", glGetError());
     }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     return f;
 }

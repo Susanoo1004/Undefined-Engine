@@ -6,10 +6,14 @@ Framebuffer::Framebuffer()
 
 Framebuffer::~Framebuffer()
 {
+	glDeleteFramebuffers(1, &FBO_ID);
 }
 
 void Framebuffer::RescaleFramebuffer(float width, float height)
 {
+	Width = width;
+	Height = height;
+
 	for (int i = 0; i < RenderedTextures.size(); i++)
 	{
 		glBindTexture(GL_TEXTURE_2D, RenderedTextures[i]->GetID());

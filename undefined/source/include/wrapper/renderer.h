@@ -40,6 +40,8 @@ public:
 
 	void DeleteShader(unsigned int shader);
 
+	void CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO);
+
 	RendererDebug Debug;
 };
 
