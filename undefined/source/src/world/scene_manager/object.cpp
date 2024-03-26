@@ -1,8 +1,18 @@
 #include "world/scene_manager/object.h"
 
+
+
+Object::~Object()
+{
+	for (Component* comp : Components)
+	{
+		delete comp;
+	}
+}
+
 void Object::Enable()
 {
-	for (std::shared_ptr<Component> comp : Components)
+	for (Component* comp : Components)
 	{
 		comp->OnEnable();
 	}
@@ -11,7 +21,7 @@ void Object::Enable()
 
 void Object::Disable()
 {
-	for (std::shared_ptr<Component> comp : Components)
+	for (Component* comp : Components)
 	{
 		comp->OnDisable();
 	}

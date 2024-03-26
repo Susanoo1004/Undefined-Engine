@@ -30,19 +30,19 @@ public:
 	virtual void OnDisable() {};
 
 	friend class ::Object;
-	__declspec(property(get = GetObject, put = SetObject)) std::shared_ptr<::Object> GameObject;
-	std::shared_ptr<::Object> GetObject() const { return mObject; };
+	__declspec(property(get = GetObject, put = SetObject)) ::Object* GameObject;
+	::Object* GetObject() const { return mObject; };
 
-	__declspec(property(get = GetTransform, put = SetTransform)) std::shared_ptr<::Transform> GameTransform;
-	std::shared_ptr<::Transform> GetTransform() const { return mTransform; };
+	__declspec(property(get = GetTransform, put = SetTransform)) ::Transform* GameTransform;
+	::Transform* GetTransform() const { return mTransform; };
 
 
 private:
-	void SetObject(std::shared_ptr<::Object> newObject) { mObject = newObject; };
-	void SetTransform(std::shared_ptr<::Transform> newTransform) { mTransform = newTransform; };
+	void SetObject(::Object* newObject) { mObject = newObject; };
+	void SetTransform(::Transform* newTransform) { mTransform = newTransform; };
 
 	bool mIsEnable = true;
 	
-	std::shared_ptr<::Object> mObject;
-	std::shared_ptr<::Transform> mTransform;
+	::Object* mObject;
+	::Transform* mTransform;
 };
