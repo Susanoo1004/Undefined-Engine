@@ -52,7 +52,9 @@ public:
 		return std::dynamic_pointer_cast<T>(p->second);
 	}
 
-	UNDEFINED_ENGINE static void Rename(std::string oldName, std::string newName);
+	UNDEFINED_ENGINE static void Rename(const std::string& oldName, const std::string& newName);
+	UNDEFINED_ENGINE static void RenameFolder(const std::string& oldName, const std::string& newName);
+
 	UNDEFINED_ENGINE static void Unload(const std::string& name);
 	UNDEFINED_ENGINE static void UnloadAll();
 
