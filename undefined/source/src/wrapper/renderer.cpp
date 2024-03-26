@@ -35,9 +35,14 @@ void Renderer::GenerateVertexArray(int index, unsigned int* buffer)
     glGenVertexArrays(index, buffer);
 }
 
-void Renderer::BindTexture(unsigned int ID)
+void Renderer::ActiveTexture(unsigned int ID)
 {
-	glBindTexture(GL_TEXTURE_2D, ID);
+    glActiveTexture(ID);
+}
+
+void Renderer::BindTexture(unsigned int ID, unsigned int type)
+{
+	glBindTexture(type, ID);
 }
 
 void Renderer::BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO)
@@ -61,6 +66,11 @@ void Renderer::SetBufferData(unsigned int target, int size, const void* data, un
 void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* indices)
 {
     glDrawElements(mode, size, type, indices);
+}
+
+void Renderer::Draw(unsigned int mode, int start, int end)
+{
+    glDrawArrays(mode, start, end);
 }
 
 unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)

@@ -18,7 +18,8 @@ class ResourceManager
 	STATIC_CLASS(ResourceManager)
 
 public:
-	UNDEFINED_ENGINE static void Load(std::filesystem::path path, bool recursivity = false);
+	UNDEFINED_ENGINE static void Load(const std::filesystem::path& path, bool recursivity = false);
+	UNDEFINED_ENGINE static std::vector<std::string> LoadFolder(std::filesystem::path path);
 	UNDEFINED_ENGINE static bool Contains(std::string name);
 
 	template<ResourceType Resource, typename... Args>

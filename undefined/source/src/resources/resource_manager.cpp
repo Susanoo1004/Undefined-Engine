@@ -7,7 +7,7 @@
 #include "Resources/shader.h"
 
 
-void ResourceManager::Load(std::filesystem::path path, bool recursivity)
+void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
@@ -56,6 +56,33 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 			}
 		}
 	}
+}
+
+std::vector<std::string> ResourceManager::LoadFolder(std::filesystem::path path)
+{
+	std::vector<std::string> vectorArray;
+	for (const auto& entry : std::filesystem::directory_iterator(path))
+	{
+		std::string name = entry.path().string();
+		std::string filename = entry.path().filename().generic_string();
+		std::string parentName = entry.path().parent_path().filename().string();
+		size_t pos = name.find(parentName);
+		std::string newName = name.substr(pos);
+
+		if (name.ends_with(".obj"))
+		{
+			Create<Model>(newName, name.c_str());
+			vectorArray.push_back(name);
+		}
+
+		else if (name.ends_with(".png") || name.ends_with(".jpg"))
+		{
+			Create<Texture>(newName, name.c_str());
+			vectorArray.push_back(name);
+		}
+	}
+
+	return vectorArray;
 }
 
 bool ResourceManager::Contains(std::string name)

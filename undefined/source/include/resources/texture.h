@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
+#include <array>
 
 #include "resources/resource.h"
 #include "utils/flag.h"
@@ -17,6 +19,8 @@ public:
 	const unsigned int GetWidth();
 	const unsigned int GetHeight();
 	bool IsValid();
+
+	static unsigned int LoadCubeMap(std::vector<std::string> faces);
 
 private:
 	unsigned int mID;
