@@ -29,6 +29,8 @@ public:
 	UNDEFINED_ENGINE void Draw();
 
 	std::shared_ptr<Shader> BaseShader;
+	std::shared_ptr<Shader> skyboxShader;
+
 	Logger Log;
 	DirLight DirectionalLight;
 
