@@ -11,14 +11,11 @@
 #include "resources/model.h"
 #include "resources/resource_manager.h"
 
-#include "world/component/skybox.h"
+#include "world/components/skybox.h"
 
 #include "memory_leak.h"
 
 #include "interface/interface.h"
-
-#include "world/scene_manager/object.h"
-#include "world/components/player_test.h"
 
 Application::Application()
 {
@@ -33,59 +30,21 @@ void Application::Init()
     mWindowManager->Init();
 
     mRenderer->Init();
+    ResourceManager::Load("assets/", true);
+    ResourceManager::Load("../Undefined/resource_manager/", true);
 
     // Callback
     ServiceLocator::SetupCallbacks();
 
-    ResourceManager::Load("assets/", true);
-    ResourceManager::Load("../Undefined/resource_manager/", true);
-    ResourceManager::Create<Shader>("viewportShader", "../Undefined/resource_manager/shader_code/viewport_shader.vs", "../Undefined/resource_manager/shader_code/viewport_shader.fs");
     Interface::Init();
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
-    skyboxShader = ResourceManager::Get<Shader>("skyboxShader");
-
-    skyboxShader->Use();
-    skyboxShader->SetInt("skybox", 0);
-
-    DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-    Object* objectTest = new Object;
-    
-    objectTest->AddComponent<Player>();
-
-    Player* player = objectTest->GetComponent<Player>();
-    if (player)
-    {
-        Logger::Debug("player added");
-    }
-
-    player->Chiffre += 200;
-
-    
-    Logger::Debug("player->GameObject IsEnable = {}", player->GameObject->IsEnable());
-    player->GameObject->Disable();
-    Logger::Debug("player->GameObject->Disable()");
-    Logger::Debug("player->GameObject IsEnable = {}", player->GameObject->IsEnable());
-
-    Logger::Debug("Object = Player->Object : {}", objectTest == player->GameObject);
-
-    objectTest->Name = "oui";
-
-    Logger::Debug("Object : {}", objectTest->Name);
-    Logger::Debug("Player->Object  : {}", player->GameObject->Name);
-
-    Logger::Debug("Object : {}", objectTest->GameTransform->Position.x);
-    Logger::Debug("Object : {}", objectTest->GameTransform->Position.x += 1);
-
-    Logger::Debug("Object->Player : {}", player->GameTransform->Position.x);
-    Logger::Debug("Object->Player : {}", player->GameTransform->Position.x += 1);
-
-
-    ActualScene.Objects.push_back(objectTest);
+   Object* light = ActualScene.AddObject();
+   light->AddComponent<Light>();
 }
 
 // move to RENDERER
@@ -133,8 +92,6 @@ void Application::Update()
 {
     T += 0.016f;
 
-    ActualScene.Update();
-
     ServiceLocator::Get<Renderer>()->SetClearColor();
 
     mWindowManager->GetCamera()->ProcessInput();
@@ -148,16 +105,12 @@ void Application::Update()
 
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
-    // TO MOVE TO LIGHTS UPDATE WHEN RESMANAGER WORKS WITH SHADER
-    BaseShader->SetVec3("dirLights[0].direction", DirectionalLight.rot);
-    BaseShader->SetVec3("dirLights[0].ambient", DirectionalLight.Ambient);
-    BaseShader->SetVec3("dirLights[0].diffuse", DirectionalLight.Diffuse);
-    BaseShader->SetVec3("dirLights[0].specular", DirectionalLight.Specular);
-
     glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[0].GetFBO_ID());
     glEnable(GL_DEPTH_TEST);
 
-    glClearColor(0.3, 0.3, 0.3, 1);
+    glClearColor(0.3f, 0.3f, 0.3f, 1);
+
+    ActualScene.Update();
 
     mRenderer->ClearBuffer();
 
@@ -185,5 +138,5 @@ void Application::Clear()
 
 void Application::Draw()
 {
-        ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
+    ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
 }

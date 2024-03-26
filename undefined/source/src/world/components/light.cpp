@@ -1,20 +1,20 @@
 #include "world/components/light.h"
 
-
-// TODO: Remove
-#include "engine_debug/logger.h"
+#include "resources/resource_manager.h"
 
 Light::Light()
 {
+	Ambient = BASE_AMBIENT;
+	Diffuse = BASE_DIFFUSE;
+	Specular = BASE_SPECULAR;
+
+	mBaseShader = ResourceManager::Get<Shader>("base_shader");
 }
 
-Light::Light(const Vector3& position, const Vector3& rotation, const Vector3& ambient, const Vector3& diffuse, const Vector3& specular)
+Light::Light(const Vector3& ambient, const Vector3& diffuse, const Vector3& specular)
 	: Ambient(ambient), Diffuse(diffuse), Specular(specular)
 {
-	/*
-	GetTransform().Position = position;
-	GetTransform().Rotation = rotation;
-	*/
+	mBaseShader = ResourceManager::Get<Shader>("base_shader");
 }
 
 Light::~Light()
@@ -23,5 +23,8 @@ Light::~Light()
 
 void Light::Update()
 {
-	Logger::Debug("light Update");
+	mBaseShader->SetVec3("dirLights[0].direction", GameTransform->Position);
+	mBaseShader->SetVec3("dirLights[0].ambient", Ambient);
+	mBaseShader->SetVec3("dirLights[0].diffuse", Diffuse);
+	mBaseShader->SetVec3("dirLights[0].specular", Specular);
 }

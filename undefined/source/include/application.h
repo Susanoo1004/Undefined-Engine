@@ -32,7 +32,6 @@ public:
 	std::shared_ptr<Shader> skyboxShader;
 
 	Logger Log;
-	DirLight DirectionalLight;
 
 	// TODO: del
 	Scene ActualScene;

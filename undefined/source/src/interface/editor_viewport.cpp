@@ -7,7 +7,7 @@
 EditorViewport::EditorViewport(Framebuffer* framebuffer)
 	: mFramebuffer(framebuffer)
 {
-	mShader = ResourceManager::Get<Shader>("viewportShader");
+	mShader = ResourceManager::Get<Shader>("viewport_shader");
 }
 
 EditorViewport::~EditorViewport()

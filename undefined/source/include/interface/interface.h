@@ -11,19 +11,19 @@
 
 #include "interface/editor_viewport.h"
 
-class UNDEFINED_ENGINE Interface
+class Interface
 {
 	STATIC_CLASS(Interface)
 
 public:
-	static void Init();
+	UNDEFINED_ENGINE static void Init();
 
-	static void Update();
-	static void NewFrame();
-	static void BeginDockSpace();
-	static void Render();
+	UNDEFINED_ENGINE static void Update();
+	UNDEFINED_ENGINE static void NewFrame();
+	UNDEFINED_ENGINE static void BeginDockSpace();
+	UNDEFINED_ENGINE static void Render();
 
 	static inline std::vector<EditorViewport> EditorViewports;
 
-	static void Delete();
+	UNDEFINED_ENGINE static void Delete();
 };

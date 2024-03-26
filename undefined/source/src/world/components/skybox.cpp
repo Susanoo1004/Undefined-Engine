@@ -1,9 +1,9 @@
-#include "world/component/skybox.h"
+#include "world/components/skybox.h"
 
 #include <glad/glad.h>
 #include <stb_image/stb_image.h>
 
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 #include "service_locator.h"
 #include "resources/resource_manager.h"
 
@@ -40,7 +40,7 @@ unsigned int Skybox::loadCubemap(const std::array<std::string, 6>& cubemapFaces)
 
 void Skybox::Setup()
 {
-	skyboxShader = ResourceManager::Get<Shader>("skyboxShader");
+	skyboxShader = ResourceManager::Get<Shader>("skybox_shader");
 
 	//Cube setup
 	glGenVertexArrays(1, &cubeVAO);
@@ -63,6 +63,9 @@ void Skybox::Setup()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	cubemapTexture = loadCubemap(faces);
+
+	skyboxShader->Use();
+	skyboxShader->SetInt("skybox", 0);
 }
 
 void Skybox::Update()
@@ -73,8 +76,8 @@ void Skybox::Update()
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 	view = Matrix4x4(Matrix3x3(camera->GetView())); // remove translation from the view matrix
 
-	view = skyboxShader->SetMat4("view");
-	camera->GetProjection() = skyboxShader->SetMat4("projection");
+	skyboxShader->SetMat4("view", view);
+	skyboxShader->SetMat4("projection", camera->GetProjection());
 	// skybox cube
 	glBindVertexArray(skyboxVAO);
 	glActiveTexture(GL_TEXTURE0);

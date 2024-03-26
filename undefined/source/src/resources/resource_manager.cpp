@@ -11,15 +11,13 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
-		for (const auto& entry : std::filesystem::directory_iterator(path))
+		if (recursivity)
 		{
-			if (recursivity)
+			if (std::filesystem::is_directory(entry))
 			{
-				if (std::filesystem::is_directory(entry))
-				{
-					Load(entry.path().string() + "/", true);
-				}
+				Load(entry.path().string() + "/", true);
 			}
+		}
 
 		std::string name = entry.path().string();
 		std::string filename = entry.path().filename().generic_string();
@@ -53,6 +51,7 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 				{
 					filename.resize(filename.size() - 3);
 					Create<Shader>(filename, name.c_str(), fragShaderName.c_str());
+					mShader.erase(std::find(mShader.begin(), mShader.end(), fragShaderName));
 				}
 			}
 		}

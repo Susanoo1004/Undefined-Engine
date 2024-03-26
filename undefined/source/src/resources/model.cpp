@@ -10,7 +10,7 @@
 
 Model::Model()
 {
-
+    Render = nullptr;
 }
 
 Model::Model(const char* path)
