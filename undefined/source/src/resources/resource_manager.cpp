@@ -1,5 +1,7 @@
 #include "resources/resource_manager.h"
 
+#include <vector>
+
 #include "Resources/model.h"
 #include "Resources/texture.h"
 #include "Resources/shader.h"
@@ -9,13 +11,15 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 {
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
-		if (recursivity)
+		for (const auto& entry : std::filesystem::directory_iterator(path))
 		{
-			if (std::filesystem::is_directory(entry))
+			if (recursivity)
 			{
-				Load(entry.path().string() + "/", true);
+				if (std::filesystem::is_directory(entry))
+				{
+					Load(entry.path().string() + "/", true);
+				}
 			}
-		}
 
 		std::string name = entry.path().string();
 		std::string filename = entry.path().filename().generic_string();
@@ -61,12 +65,9 @@ bool ResourceManager::Contains(std::string name)
 	{
 		return true;
 	}
-
-	else
-	{
-		Logger::Warning("The resource manager does not contain : {}", name);
-		return false;
-	}
+		
+	Logger::Warning("The resource manager does not contain : {}", name);
+	return false;
 }
 
 void ResourceManager::Unload(const std::string& name)
@@ -86,7 +87,7 @@ void ResourceManager::UnloadAll()
 	mResources.clear();
 }
 
-void ResourceManager::Rename(std::string oldName, std::string newName)
+void ResourceManager::Rename(const std::string& oldName, const std::string& newName)
 {
 	auto&& p = mResources.find(oldName);
 
@@ -104,5 +105,27 @@ void ResourceManager::Rename(std::string oldName, std::string newName)
 	else
 	{
 		Logger::Warning("Resource {} not found", oldName);
+	}
+}
+
+
+void ResourceManager::RenameFolder(const std::string& oldName, const std::string& newName)
+{
+	std::vector<std::pair<std::string, std::shared_ptr<Resource>>> test;
+	for (auto& it : mResources)
+	{
+		if (it.first.find(oldName) == 0)
+		{
+			test.push_back(it);
+		}
+	}
+
+
+	for (auto& it : test)
+	{
+		auto node = mResources.extract(it.first);
+		node.key() = newName + it.first.substr(it.first.find_last_of("/"));
+
+		mResources.insert(std::move(node));
 	}
 }

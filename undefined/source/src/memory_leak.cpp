@@ -2,7 +2,7 @@
 
 #include <crtdbg.h>
 
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 
 void MemoryLeak::CheckMemoryLeak(bool printResult)
 {

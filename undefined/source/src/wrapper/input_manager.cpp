@@ -8,7 +8,7 @@
 
 #include "service_locator.h"
 
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 
 InputManager::InputManager()
 {

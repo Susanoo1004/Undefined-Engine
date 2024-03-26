@@ -7,12 +7,34 @@
 
 void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 {
+    std::string name = path.filename().string();
     mIsDirectory = std::filesystem::is_directory(path);
 
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding;
 
     if (mIsDirectory)
     {
+        bool isAnyFolder = false;
+        for (const auto& entry : std::filesystem::directory_iterator(path))
+        {
+            if (entry.is_directory())
+            {
+                isAnyFolder = true;
+                flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+                break;
+            }
+
+            else
+            {
+                continue;
+            }
+        }
+
+        if (!isAnyFolder)
+        {
+            flags |= ImGuiTreeNodeFlags_Leaf;
+        }
+
         if (mCurrentPath == path)
         {
             flags |= ImGuiTreeNodeFlags_Selected;
@@ -23,38 +45,22 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
             flags |= ImGuiTreeNodeFlags_DefaultOpen;
         }
     }
-    else
+
+    if (mRenamingPath == path)
     {
-        flags |= ImGuiTreeNodeFlags_Leaf;
+        name = "##";
     }
 
-    if (ImGui::TreeNodeEx(path.filename().string().c_str(), flags))
+    ImGui::Image(Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID()), ImVec2(15, 15));
+    ImGui::SameLine();
+
+    if (ImGui::TreeNodeEx(name.c_str(), flags))
     {
-        if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+        if (ImGui::IsItemHovered() && !ImGui::IsItemToggledOpen() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
         {
             std::string file = "start explorer ";
             file += '"' + absolute(path).string() + '"';
             system(file.c_str());
-        }
-
-        //Setup for the drag and drop system
-        if (ImGui::BeginDragDropSource())
-        {
-            //ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-            ImGui::Text(path.filename().string().c_str());
-            ImGui::EndDragDropSource();
-        }
-
-        //Window that pop when we right click on a file with the option to open it in our windows explorer
-        if (ImGui::BeginPopupContextItem())
-        {
-            if (ImGui::Button("Open in explorer"))
-            {
-                std::string explorer = "start explorer /select,";
-                explorer += absolute(path).string();
-                system(explorer.c_str());
-            }
-            ImGui::EndPopup();
         }
 
         if (mIsDirectory)
@@ -67,36 +73,33 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
             //For every folder we call the function to display what's inside
             for (const auto& entry : std::filesystem::directory_iterator(path))
             {
-                DisplayDirectories(entry);
+                if (entry.is_directory())
+                {
+                    DisplayDirectories(entry);
+                }
             }
         }
-
         ImGui::TreePop();
     }
 
     else
     {
-        //If state changes (if we click on the arrow) then we don't change current path
         if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
             mCurrentPath = path;
-        } 
-
-        //Window that pop when we right click on a folder with the option to open it in our windows explorer
-        if (ImGui::BeginPopupContextItem())
-        {
-            if (ImGui::Button("Open in explorer"))
-            {
-                std::string explorer = "start explorer /select,";
-                explorer += absolute(path).string();
-                system(explorer.c_str());
-            }
-            ImGui::EndPopup();
         }
+    }
+
+    RightClickWindow(path);
+
+    if (mRenamingPath == path)
+    {
+        ImGui::SameLine();
+        RenameItem();
     }
 }
 
-void ContentBrowser::TextCentered(std::string text)
+void ContentBrowser::TextCentered(const std::string& text)
 {
     auto windowWidth = ImGui::GetWindowSize().x;
     auto textWidth = ImGui::CalcTextSize(text.c_str()).x;
@@ -105,7 +108,7 @@ void ContentBrowser::TextCentered(std::string text)
     ImGui::TextWrapped(text.c_str());
 }
 
-void ContentBrowser::SetImageValues(std::filesystem::path path, ImTextureID& imageID, ImVec2& imageSize)
+void ContentBrowser::SetImageValues(const std::filesystem::path& path, ImTextureID& imageID, ImVec2& imageSize)
 {
     if (mIsDirectory)
     {
@@ -157,22 +160,35 @@ void ContentBrowser::SetImageValues(std::filesystem::path path, ImTextureID& ima
     }
 }
 
-void ContentBrowser::DisplayText(std::string filename, ImVec2& imageSize)
+void ContentBrowser::DisplayText(const std::filesystem::path& filepath, const std::string& filename, ImVec2& imageSize)
 {
     //If the text is larger than the image size it wrap on multiple lines else it's centered
     if (ImGui::CalcTextSize(filename.c_str()).x > imageSize.x)
     {
-        ImGui::TextWrapped(filename.c_str());
+        if (mRenamingPath != filepath)
+        {
+            ImGui::TextWrapped(filename.c_str());
+        }
+        else
+        {
+            RenameItemMultiline();
+        }
     }
 
     else
     {
-        TextCentered(filename);
+        if (mRenamingPath != filepath)
+        {
+            TextCentered(filename);
+        }
+        else
+        {
+            RenameItem();
+        }
     }
 }
 
-
-void ContentBrowser::InteractionWithItems(std::filesystem::path path, bool isBackFolder)
+void ContentBrowser::InteractionWithItems(const std::filesystem::path& path, bool isBackFolder)
 {
     bool isClicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left);
     
@@ -211,8 +227,8 @@ void ContentBrowser::InteractionWithItems(std::filesystem::path path, bool isBac
                 file += '"' + absolute(path).string() + '"';
                 system(file.c_str());
             }
-            
         }
+
     }
 
     //If a window is selected and we click somewhere else it deselect it
@@ -220,11 +236,11 @@ void ContentBrowser::InteractionWithItems(std::filesystem::path path, bool isBac
     {
         mSelectedPath = "";
         mIsAnythingSelected = false;
+        mRenamingPath = "";
     }
 }
 
-
-void ContentBrowser::GoBackFolder(std::filesystem::path path)
+void ContentBrowser::GoBackFolder(const std::filesystem::path& path)
 {
     mIsAnythingHovered = false;
     mIsDirectory = true;
@@ -263,7 +279,7 @@ void ContentBrowser::GoBackFolder(std::filesystem::path path)
     }
 }
 
-void ContentBrowser::LoadFolders(std::filesystem::path path)
+void ContentBrowser::LoadFolders(const std::filesystem::path& path)
 {
     // For loop that goes through every file/folder in a path and displays them
     for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(path))
@@ -275,7 +291,7 @@ void ContentBrowser::LoadFolders(std::filesystem::path path)
     }
 }
 
-void ContentBrowser::LoadFiles(std::filesystem::path path)
+void ContentBrowser::LoadFiles(const std::filesystem::path& path)
 {
     for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(path))
     {
@@ -286,7 +302,102 @@ void ContentBrowser::LoadFiles(std::filesystem::path path)
     }
 }
 
-void ContentBrowser::DisplayActualDirectory(std::filesystem::path currentPath)
+void ContentBrowser::RenameItem()
+{
+    ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
+    std::string name = mRenamingPath.filename().string();
+    std::string oldName = mRenamingPath.filename().string();
+    std::filesystem::path path = mRenamingPath.parent_path();
+
+    char* newName = (char*)name.c_str();
+
+    ImGui::SetKeyboardFocusHere();
+    ImGui::PushItemWidth(ImGui::CalcTextSize(name.c_str()).x + 5);
+    if (ImGui::InputText("##label", (char*)name.c_str(), 256, flags))
+    {
+        if (std::filesystem::is_directory(mRenamingPath))
+        {
+            mCurrentPath = (char*)name.c_str();
+        }
+
+        std::filesystem::path newPath = path.generic_string();
+        newPath += "/";
+        newPath += (char*)name.c_str();
+
+        if (std::filesystem::is_directory(mRenamingPath))
+        {
+            ResourceManager::RenameFolder(oldName, (char*)name.c_str());
+            //Change current path to the new path so the back folder does not crash (since the current path does not exist it doesn't have a parent)
+            std::string newCurrentPath = mRenamingPath.parent_path().generic_string() + "/";
+            newCurrentPath += newName;
+            mCurrentPath = newCurrentPath;
+        }
+
+        std::filesystem::rename(mRenamingPath, newPath);
+        mRenamingPath = "";
+    }
+}
+
+void ContentBrowser::RenameItemMultiline()
+{
+    ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
+    std::string name = mRenamingPath.filename().string();
+    std::string oldName = mRenamingPath.filename().string();
+    std::filesystem::path path = mRenamingPath.parent_path();
+
+    char* newName = (char*)name.c_str();
+
+    ImGui::SetKeyboardFocusHere();
+
+    //Change so it goes to another line when you are at the end and not expand it
+    if (ImGui::InputTextMultiline("##label", (char*)name.c_str(), 256, ImVec2(50, 40), flags))
+    {
+        if (std::filesystem::is_directory(mRenamingPath))
+        {
+            mCurrentPath = (char*)name.c_str();
+        }
+
+        std::filesystem::path newPath = path.generic_string();
+        newPath += "/";
+        newPath += (char*)name.c_str();
+
+        if (std::filesystem::is_directory(mRenamingPath))
+        {
+            ResourceManager::RenameFolder(oldName, (char*)name.c_str());
+            //Change current path to the new path so the back folder does not crash (since the current path does not exist it doesn't have a parent)
+            std::string newCurrentPath = mRenamingPath.parent_path().generic_string() + "/";
+            newCurrentPath += newName;
+            mCurrentPath = newCurrentPath;
+        }
+
+        std::filesystem::rename(mRenamingPath, newPath);
+        mRenamingPath = "";
+    }
+}
+
+void ContentBrowser::RightClickWindow(const std::filesystem::path& path)
+{
+    if (ImGui::BeginPopupContextItem(path.string().c_str()))
+    {
+        if (ImGui::Button("Open in explorer"))
+        {
+            std::string explorer = "start explorer /select,";
+            explorer += absolute(path).string();
+            system(explorer.c_str());
+            ImGui::CloseCurrentPopup();
+        }
+
+        if (ImGui::Button("Rename"))
+        {
+            mRenamingPath = path;
+            mSelectedPath = mRenamingPath;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+}
+
+void ContentBrowser::DisplayActualDirectory(const std::filesystem::path& currentPath)
 {
     mIsAnythingHovered = false;
 
@@ -330,9 +441,12 @@ void ContentBrowser::DisplayActualDirectory(std::filesystem::path currentPath)
 
         InteractionWithItems(mCurrPathArray[i]);
 
-        DisplayText(filename, imageSize);
+        DisplayText(mCurrPathArray[i], filename, imageSize);
 
         ImGui::EndChild();
+     
+        RightClickWindow(mCurrPathArray[i]);
+        
         if (mCanPop)
         {
             ImGui::PopStyleColor();
@@ -347,12 +461,18 @@ void ContentBrowser::DisplayActualDirectory(std::filesystem::path currentPath)
             ImGui::Dummy(ImVec2(0, 0));
         }
     }
+    
+    if (!mSelectedPath.empty() && ImGui::IsKeyPressed(ImGuiKey_F2))
+    {
+        mRenamingPath = mSelectedPath;
+    }
 
-    //If nothing is hovered we set to path to none so it doesn't hover the last element
     if (!mIsAnythingHovered)
     {
         mHoveredPath = "";
     }
+
+
     mCurrPathArray.resize(0);
     mCurrPathArray.shrink_to_fit();
 }

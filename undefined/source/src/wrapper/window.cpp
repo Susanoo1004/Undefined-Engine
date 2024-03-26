@@ -6,7 +6,7 @@
 #include <toolbox/calc.h>
 #include <stb_image/stb_image.h>
 
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 #include "service_locator.h"
 
 Window::Window()

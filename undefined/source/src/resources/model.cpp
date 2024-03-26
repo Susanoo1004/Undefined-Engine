@@ -24,25 +24,22 @@ Model::Model(const char* path)
 
 void Model::Init()
 {
-    glGenVertexArrays(1, &mVAO);
-    glGenBuffers(1, &mVBO);
-    glGenBuffers(1, &mEBO);
+    Render->GenerateVertexArray(1, &mVAO);
+    Render->GenerateBuffer(1, &mVBO);
+    Render->GenerateBuffer(1, &mEBO);
 
-    glBindVertexArray(mVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+    Render->BindBuffers(mVAO, mVBO, mEBO);
 
     // vertex positions
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    // vertex normals
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-    // vertex texture coords
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+    Render->AttributePointers(0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
 
-    glBindVertexArray(0);
+    // vertex normals
+    Render->AttributePointers(1, 3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+
+    // vertex texture coords
+    Render->AttributePointers(2, 2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+    Render->BindBuffers(0, 0, 0);
 }
 void Model::Draw()
 {
@@ -50,19 +47,19 @@ void Model::Draw()
 
     for (std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Texture>> pair : mModel)
     {
-        glBufferData(GL_ARRAY_BUFFER, pair.first->Vertices.size() * sizeof(Vertex), &pair.first->Vertices[0], GL_STATIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, pair.first->Indices.size() * sizeof(unsigned int), &pair.first->Indices[0], GL_STATIC_DRAW);
+        Render->SetBufferData(GL_ARRAY_BUFFER, (int)pair.first->Vertices.size() * sizeof(Vertex), &pair.first->Vertices[0], GL_STATIC_DRAW);
+        Render->SetBufferData(GL_ELEMENT_ARRAY_BUFFER, (int)pair.first->Indices.size() * sizeof(unsigned int), &pair.first->Indices[0], GL_STATIC_DRAW);
 
         if (pair.second)
         {
-            glBindTexture(GL_TEXTURE_2D, pair.second->GetID());
+            Render->BindTexture(pair.second->GetID());
         }
         else
         {
-            glBindTexture(GL_TEXTURE_2D, ResourceManager::Get<Texture>("assets/missing_texture.jpg")->GetID());
+            Render->BindTexture(ResourceManager::Get<Texture>("assets/missing_texture.jpg")->GetID());
         }
 
-        glDrawElements(GL_TRIANGLES, (GLsizei)pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
+        Render->Draw(GL_TRIANGLES, (GLsizei)pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
     }
     
   

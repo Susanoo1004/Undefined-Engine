@@ -22,6 +22,10 @@ void Interface::Init()
 
     ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<Window>()->GetWindowVar(), true);
     ImGui_ImplOpenGL3_Init(glslVersion);
+
+    Framebuffer* framebuffer = Framebuffer::Create<1>(200,200);
+
+    EditorViewports.emplace_back(framebuffer);
 }
 
 void Interface::NewFrame()
@@ -82,6 +86,8 @@ void Interface::Update()
     FPSGraph::ShowWindow();
     ContentBrowser::DisplayWindow();
     Inspector::ShowWindow();
+
+    EditorViewports[0].ShowWindow();
 
     ImGui::End();
     Render();

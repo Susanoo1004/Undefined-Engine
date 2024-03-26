@@ -6,7 +6,7 @@
 #include <toolbox/Vector3.h>
 
 #include "service_locator.h"
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 
 Shader::Shader()
 {

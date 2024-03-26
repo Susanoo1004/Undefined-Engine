@@ -53,7 +53,8 @@ public:
     static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
     static void ChangeSpeedCam(GLFWwindow* window, double xposIn, double yposIn);
 
-    static Camera* sCamPtr;
+    static Camera* CurrentCamera;
+
 
 private:
     // friend class DirLight;

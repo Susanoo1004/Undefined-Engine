@@ -36,6 +36,7 @@ void Application::Init()
 
     ResourceManager::Load("assets/", true);
     ResourceManager::Load("../Undefined/resource_manager/", true);
+    ResourceManager::Create<Shader>("viewportShader", "../Undefined/resource_manager/shader_code/viewport_shader.vs", "../Undefined/resource_manager/shader_code/viewport_shader.fs");
     Interface::Init();
 
     Skybox::Setup();
@@ -114,11 +115,20 @@ void Application::Update()
     BaseShader->SetVec3("dirLights[0].diffuse", DirectionalLight.Diffuse);
     BaseShader->SetVec3("dirLights[0].specular", DirectionalLight.Specular);
 
+    glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[0].GetFBO_ID());
+    glEnable(GL_DEPTH_TEST);
+
+    glClearColor(0.3, 0.3, 0.3, 1);
+
+    mRenderer->ClearBuffer();
+
     BaseShader->Use();
     Draw();
 
     Skybox::Update();
     
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     Interface::Update();
 
     mWindowManager->SwapBuffers();
@@ -136,5 +146,5 @@ void Application::Clear()
 
 void Application::Draw()
 {
-    ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
+        ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
 }
