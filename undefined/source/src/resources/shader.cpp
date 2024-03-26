@@ -6,7 +6,7 @@
 #include <toolbox/Vector3.h>
 
 #include "service_locator.h"
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 
 Shader::Shader()
 {
@@ -48,23 +48,23 @@ void Shader::Link(unsigned int vertex, unsigned int fragment)
 
 void Shader::SetBool(const std::string& name, bool value) const
 {
-    ServiceLocator::Get<Renderer>()->SetBool(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), value);
 }
 void Shader::SetInt(const std::string& name, int value) const
 {
-    ServiceLocator::Get<Renderer>()->SetInt(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), value);
 }
 void Shader::SetFloat(const std::string& name, float value) const
 {
-    ServiceLocator::Get<Renderer>()->SetFloat(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), value);
 }
 void Shader::SetVec3(const std::string& name, Vector3 v) const
 {
-    ServiceLocator::Get<Renderer>()->SetVec3(ID, name.c_str(), v);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), v);
 }
 void Shader::SetMat4(const std::string& name, Matrix4x4 m) const
 {
-    ServiceLocator::Get<Renderer>()->SetMat4(ID, name.c_str(), m);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), m);
 }
 
 void Shader::Load(const char* vertexPath, const char* fragmentPath)

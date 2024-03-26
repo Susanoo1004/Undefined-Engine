@@ -6,7 +6,7 @@
 #include <toolbox/calc.h>
 #include <stb_image/stb_image.h>
 
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 #include "service_locator.h"
 
 Window::Window()
@@ -124,4 +124,17 @@ void Window::WindowSizeCallback(GLFWwindow* , int width, int height)
 void Window::SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback)
 {
     glfwSetWindowSizeCallback(window, callback);
+}
+
+void Window::ScrollWheelCallback(GLFWwindow* window, GLFWscrollfun callback)
+{
+    glfwSetScrollCallback(window, callback);
+}
+
+void Window::Callbacks()
+{
+    Window* w = ServiceLocator::Get<Window>();
+
+    Window::SetWindowSizeCallback(w->GetWindowVar(), Window::WindowSizeCallback);
+    Window::ScrollWheelCallback(w->GetWindowVar(), Camera::ChangeSpeedCam);
 }

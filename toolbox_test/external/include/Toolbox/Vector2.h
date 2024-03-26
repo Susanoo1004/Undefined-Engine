@@ -3,12 +3,15 @@
 #include <ostream>
 #include <vector>
 
+#include "flag.h"
+
 class Vector;
 class Vector3;
+class Vector4;
 class Matrix;
 
 /// @brief The Vector2 class represents either a two-dimensional vector or a point.
-class Vector2
+class TOOLBOX Vector2
 {
 public:
 	float x, y;
@@ -89,6 +92,7 @@ public:
 	float& operator[](const size_t i);
 	operator Vector() const;
 	operator Vector3() const;
+	operator Vector4() const;
 	operator Matrix() const;
 
 	// Automatically generates all comparison operators

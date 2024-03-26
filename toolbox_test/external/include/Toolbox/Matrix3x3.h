@@ -5,13 +5,15 @@
 #include <vector>
 
 #include "Vector3.h"
+#include "flag.h"
 
 class Vector;
 class Matrix;
+class Matrix2x2;
 class Matrix4x4;
 
 /// @brief The Matrix3x3 class represents a two-dimensional array mainly used for mathematical operations.
-class Matrix3x3
+class TOOLBOX Matrix3x3
 {
 public:
     /// @brief Returns the identity matrix.
@@ -79,6 +81,7 @@ public:
 
     explicit operator Vector3() const;
     explicit operator Vector() const;
+    explicit operator Matrix2x2() const;
     operator Matrix4x4() const;
     operator Matrix() const;
 

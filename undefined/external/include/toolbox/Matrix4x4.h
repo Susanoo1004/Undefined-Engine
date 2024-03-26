@@ -8,6 +8,8 @@
 #include "flag.h"
 
 class Matrix;
+class Matrix2x2;
+class Matrix3x3;
 class Vector;
 class Vector3;
 class Quaternion;
@@ -134,8 +136,8 @@ public:
     [[nodiscard]]
     Quaternion ToQuaternion() const;
 
-    static void ViewMatrix(const Vector3& eye, const Vector3& center, const Vector3& up, Matrix4x4& result);
-    static void ProjectionMatrix(const float fovY, const float aspectRatio, const float zNear, const float zFar, Matrix4x4& result);
+    static Matrix4x4 ViewMatrix(const Vector3& eye, const Vector3& center, const Vector3& up);
+    static Matrix4x4 ProjectionMatrix(const float fovY, const float aspectRatio, const float zNear, const float zFar);
 
     [[nodiscard]]
     constexpr const Vector4& operator[](const size_t row) const;
@@ -144,6 +146,8 @@ public:
     explicit operator Vector3() const;
     explicit operator Vector4() const;
     explicit operator Vector() const;
+    operator Matrix2x2() const;
+    operator Matrix3x3() const;
     operator Matrix() const;
 
     // Automatically generates all comparison operators

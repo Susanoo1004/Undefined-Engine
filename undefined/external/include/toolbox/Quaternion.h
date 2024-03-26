@@ -12,9 +12,20 @@ class Matrix4x4;
 class TOOLBOX Quaternion
 {
 public:
+	
+	union
+	{
+		struct
+		{
+			Vector3 imaginary;
+			float real;
+		};
 
-	Vector3 imaginary;
-	float real;
+		struct
+		{
+			float x, y, z, w;
+		};
+	};
 
 	Quaternion();
 	/// @brief Constructs a Quaternion with all its components set to 'xyzw'.

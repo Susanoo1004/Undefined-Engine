@@ -3,7 +3,7 @@
 #include <iostream>
 #include <glad/glad.h>
 
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 
 void RendererDebug::DebugInit()
 {

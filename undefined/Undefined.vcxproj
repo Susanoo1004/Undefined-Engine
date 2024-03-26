@@ -161,6 +161,8 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\framebuffer.cpp" />
+    <ClCompile Include="source\src\interface\editor_viewport.cpp" />
     <ClCompile Include="source\src\resources\mesh.cpp" />
     <ClCompile Include="source\src\interface\content_browser.cpp" />
     <ClCompile Include="source\src\interface\fps_graph.cpp" />
@@ -178,7 +180,7 @@
     <ClCompile Include="source\src\world\scene_manager\scene_manager.cpp" />
     <ClCompile Include="source\src\wrapper\key_input.cpp" />
     <ClCompile Include="source\src\service_locator.cpp" />
-    <ClCompile Include="source\src\logger\logger.cpp" />
+    <ClCompile Include="source\src\engine_debug\logger.cpp" />
     <ClCompile Include="source\src\memory_leak.cpp" />
     <ClCompile Include="source\src\resources\shader.cpp" />
     <ClCompile Include="source\src\application.cpp" />
@@ -218,6 +220,8 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\framebuffer.h" />
+    <ClInclude Include="source\include\interface\editor_viewport.h" />
     <ClInclude Include="source\include\resources\mesh.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="source\include\interface\content_browser.h" />
@@ -239,7 +243,7 @@
     <ClInclude Include="source\include\wrapper\input_manager.h" />
     <ClInclude Include="source\include\wrapper\service_type.h" />
     <ClInclude Include="source\include\service_locator.h" />
-    <ClInclude Include="source\include\logger\logger.h" />
+    <ClInclude Include="source\include\engine_debug\logger.h" />
     <ClInclude Include="source\include\memory_leak.h" />
     <ClInclude Include="source\include\resources\shader.h" />
     <ClInclude Include="source\include\application.h" />

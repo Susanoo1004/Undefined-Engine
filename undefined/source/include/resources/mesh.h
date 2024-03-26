@@ -23,10 +23,5 @@ public:
 
 	std::vector<Vertex> Vertices;
 	std::vector<unsigned int> Indices;
-private:
-	UNDEFINED_ENGINE void SetupMesh();
-
-	unsigned int mVAO, mVBO, mEBO;
-
 };
 

@@ -2,8 +2,6 @@
 
 #include <algorithm>
 
-#include "logger/logger.h"
-
 KeyInput::KeyInput(std::vector<int> keysToMonitor) : mIsEnabled(true)
 {
     for (int key : keysToMonitor)
@@ -16,7 +14,7 @@ KeyInput::~KeyInput()
 {
 }
 
-bool KeyInput::GetIsKeyDown(int key)
+const bool KeyInput::GetIsKeyDown(int key)
 {
     bool result = false;
 
@@ -28,6 +26,7 @@ bool KeyInput::GetIsKeyDown(int key)
         {
             result = mKeysMap[key];
         }
+       
     }
 
     return result;
@@ -45,12 +44,7 @@ void KeyInput::SetIsEnabled(bool value)
 
 void KeyInput::SetIsKeyDown(int key, bool isDown)
 {
-    std::map<int, bool>::iterator it = mKeysMap.find(key);
-
-    if (it != mKeysMap.end())
-    {
-        mKeysMap[key] = isDown;
-    }
+    mKeysMap[key] = isDown;
 }
 
 

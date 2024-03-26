@@ -3,7 +3,7 @@
 #include "resources/texture.h"
 #include "resources/shader.h"
 
-#include "logger/logger.h"
+#include "engine_debug/logger.h"
 
 #include "utils/flag.h"
 
@@ -42,5 +42,8 @@ private:
 
 	Window* mWindowManager = nullptr;
 	Renderer* mRenderer = nullptr;
+
+public:
+	UNDEFINED_ENGINE static inline bool IsInGame = false;
 };
 

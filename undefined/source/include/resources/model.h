@@ -4,6 +4,8 @@
 
 #include "resources/mesh.h"
 
+class Renderer;
+
 class Model : public Resource
 {
 public:
@@ -25,4 +27,6 @@ private:
     UNDEFINED_ENGINE Mesh ProcessMesh(aiMesh* mesh);
 
     unsigned int mVBO = 0, mEBO = 0, mVAO = 0;
+
+    Renderer* Render;
 };

@@ -36,6 +36,7 @@ void Application::Init()
 
     ResourceManager::Load("assets/", true);
     ResourceManager::Load("../Undefined/resource_manager/", true);
+    ResourceManager::Create<Shader>("viewportShader", "../Undefined/resource_manager/shader_code/viewport_shader.vs", "../Undefined/resource_manager/shader_code/viewport_shader.fs");
     Interface::Init();
 
     BaseShader = ResourceManager::Get<Shader>("baseShader");
@@ -79,7 +80,7 @@ void Application::Init()
     ActualScene.Objects.push_back(objectTest);
 }
 
-// move to wrapper
+// move to RENDERER
 void Application::InitQuad()
 {
     float Vertices[] = {
@@ -134,8 +135,7 @@ void Application::Update()
     // modify the camera in the shader
     BaseShader->Use();
     BaseShader->SetMat4("vp", ServiceLocator::Get<Window>()->GetCamera()->GetVP());
-    BaseShader->SetVec3("viewPos", ServiceLocator::Get<Window>()->GetCamera()->Eye);
-
+    BaseShader->SetVec3("viewPos", ServiceLocator::Get<Window>()->GetCamera()->mEye);
 
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
@@ -145,8 +145,17 @@ void Application::Update()
     BaseShader->SetVec3("dirLights[0].diffuse", DirectionalLight.Diffuse);
     BaseShader->SetVec3("dirLights[0].specular", DirectionalLight.Specular);
 
+    glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[0].GetFBO_ID());
+    glEnable(GL_DEPTH_TEST);
+
+    glClearColor(0.3, 0.3, 0.3, 1);
+
+    mRenderer->ClearBuffer();
+
     BaseShader->Use();
     Draw();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     Interface::Update();
     
@@ -165,5 +174,5 @@ void Application::Clear()
 
 void Application::Draw()
 {
-    ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
+        ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
 }

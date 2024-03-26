@@ -4,13 +4,14 @@
 #include <vector>
 
 #include "Vector2.h"
+#include "flag.h"
 
 class Vector;
 class Matrix3x3;
 class Matrix4x4;
 
 /// @brief The Matrix2x2 class represents a two-dimensional array mainly used for mathematical operations.
-class Matrix2x2
+class TOOLBOX Matrix2x2
 {
 public:
     /// @brief Returns the identity matrix.
@@ -82,7 +83,7 @@ public:
 
     // Automatically generates all comparison operators
     [[nodiscard]]
-    friend auto operator<=>(const Matrix2x2& a, const Matrix2x2& b) = default;
+    TOOLBOX friend auto operator<=>(const Matrix2x2& a, const Matrix2x2& b) = default;
 
 private:
     Vector2 r0, r1;

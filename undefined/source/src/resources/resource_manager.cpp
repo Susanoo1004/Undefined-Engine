@@ -1,5 +1,7 @@
 #include "resources/resource_manager.h"
 
+#include <vector>
+
 #include "Resources/model.h"
 #include "Resources/texture.h"
 #include "Resources/shader.h"
@@ -10,76 +12,27 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 	std::string fragPath;
 	std::string vertexPath;
 
-	for (const auto& entry : std::filesystem::directory_iterator(path))
+	if (!path.empty())
 	{
-		if (recursivity)
+		for (const auto& entry : std::filesystem::directory_iterator(path))
 		{
-			if (std::filesystem::is_directory(entry))
+			if (recursivity)
 			{
-				Load(entry.path().string() + "/", true);
-			}
-		}
-
-		std::string name = entry.path().string();
-		std::string parentName = entry.path().parent_path().filename().string();
-		size_t pos = name.find(parentName);
-		std::string newName = name.substr(pos);
-		
-		if (name.ends_with(".obj"))
-		{
-			std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
-
-			auto&& p = mResources.try_emplace(name, resource);
-			if (!p.second)
-			{
-				p.first->second.reset();
-			}
-			mResources.emplace(newName, resource);
-
-			if (resource->IsValid())
-			{
-				Logger::Debug("Model : {} loaded", newName);
-			}
-		}
-		
-
-		if (name.ends_with(".png") || name.ends_with(".jpg"))
-		{
-			std::shared_ptr<Texture> resource;
-			resource = std::make_shared<Texture>(name.c_str(), false);
-
-			if (resource->IsValid())
-			{
-				auto&& p = mResources.try_emplace(name, resource);
-				if (!p.second)
+				if (std::filesystem::is_directory(entry))
 				{
-					p.first->second.reset();
+					Load(entry.path().string() + "/", true);
 				}
-
-				mResources.emplace(newName, resource);
-
-				Logger::Debug("Texture : {} loaded", newName);
 			}
-		}
 
-		else if (name.ends_with(".fs"))
-		{
-			fragPath = name;
-		}
-
-		else if (name.ends_with(".vs"))
-		{
-			vertexPath = name;
-		}
-
-		if (vertexPath.size() && fragPath.size())
-		{
-			std::shared_ptr<Shader> resource;
-			resource = std::make_shared<Shader>(vertexPath.c_str(), fragPath.c_str());
-
-			if (resource->IsValid())
+			std::string name = entry.path().string();
+			std::string parentName = entry.path().parent_path().filename().string();
+			size_t pos = name.find(parentName);
+			std::string newName = name.substr(pos);
+		
+			if (name.ends_with(".obj"))
 			{
-				newName = "baseShader";
+				std::shared_ptr<Model> resource = std::make_shared<Model>(name.c_str());
+
 				auto&& p = mResources.try_emplace(name, resource);
 				if (!p.second)
 				{
@@ -87,10 +40,65 @@ void ResourceManager::Load(std::filesystem::path path, bool recursivity)
 				}
 				mResources.emplace(newName, resource);
 
-				Logger::Debug("Shader : {} loaded", newName);
+				if (resource->IsValid())
+				{
+					Logger::Debug("Model : {} loaded", newName);
+				}
+			}
+		
+
+			if (name.ends_with(".png") || name.ends_with(".jpg"))
+			{
+				std::shared_ptr<Texture> resource;
+				resource = std::make_shared<Texture>(name.c_str(), false);
+
+				if (resource->IsValid())
+				{
+					auto&& p = mResources.try_emplace(name, resource);
+					if (!p.second)
+					{
+						p.first->second.reset();
+					}
+
+					mResources.emplace(newName, resource);
+
+					Logger::Debug("Texture : {} loaded", newName);
+				}
+			}
+
+			else if (name.ends_with(".fs"))
+			{
+				fragPath = name;
+			}
+
+			else if (name.ends_with(".vs"))
+			{
+				vertexPath = name;
+			}
+
+			if (vertexPath.size() && fragPath.size())
+			{
+				std::shared_ptr<Shader> resource;
+				resource = std::make_shared<Shader>(vertexPath.c_str(), fragPath.c_str());
+
+				if (resource->IsValid())
+				{
+					newName = "baseShader";
+					auto&& p = mResources.try_emplace(name, resource);
+					if (!p.second)
+					{
+						p.first->second.reset();
+					}
+					mResources.emplace(newName, resource);
+
+					Logger::Debug("Shader : {} loaded", newName);
+				}
 			}
 		}
-		
+	}
+	else
+	{
+		Logger::Warning("Path {} does not exist", path.string());
 	}
 }
 
@@ -100,12 +108,9 @@ bool ResourceManager::Contains(std::string name)
 	{
 		return true;
 	}
-
-	else
-	{
-		Logger::Warning("The resource manager does not contain : {}", name);
-		return false;
-	}
+		
+	Logger::Warning("The resource manager does not contain : {}", name);
+	return false;
 }
 
 void ResourceManager::Unload(const std::string& name)
@@ -129,7 +134,7 @@ void ResourceManager::UnloadAll()
 	Logger::Debug("\n");
 }
 
-void ResourceManager::Rename(std::string oldName, std::string newName)
+void ResourceManager::Rename(const std::string& oldName, const std::string& newName)
 {
 	auto&& p = mResources.find(oldName);
 
@@ -147,5 +152,27 @@ void ResourceManager::Rename(std::string oldName, std::string newName)
 	else
 	{
 		Logger::Warning("Resource {} not found", oldName);
+	}
+}
+
+
+void ResourceManager::RenameFolder(const std::string& oldName, const std::string& newName)
+{
+	std::vector<std::pair<std::string, std::shared_ptr<Resource>>> test;
+	for (auto& it : mResources)
+	{
+		if (it.first.find(oldName) == 0)
+		{
+			test.push_back(it);
+		}
+	}
+
+
+	for (auto& it : test)
+	{
+		auto node = mResources.extract(it.first);
+		node.key() = newName + it.first.substr(it.first.find_last_of("/"));
+
+		mResources.insert(std::move(node));
 	}
 }
