@@ -40,10 +40,9 @@ void Application::Init()
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
-
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-   Object* light = ActualScene.AddObject();
+   Object* light = ActualScene.AddObject("Light");
    light->AddComponent<Light>();
 }
 
@@ -110,9 +109,9 @@ void Application::Update()
 
     glClearColor(0.3f, 0.3f, 0.3f, 1);
 
-    ActualScene.Update();
-
     mRenderer->ClearBuffer();
+    
+    ActualScene.Update();
 
     BaseShader->Use();
     Draw();

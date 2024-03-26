@@ -45,3 +45,12 @@ UNDEFINED_ENGINE void Scene::LateUpdate()
 	}
 }
 
+Object* Scene::AddObject(std::string name)
+{
+	Object* obj = new Object(name);
+
+	Objects.push_back(obj);
+
+	return obj;
+}
+

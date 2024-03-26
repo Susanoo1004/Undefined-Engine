@@ -13,6 +13,7 @@ concept ComponentType = std::is_base_of<Component, Comp>::value;
 class Object
 {
 public:
+	Object(const std::string& name);
 	~Object();
 
 	void Enable();

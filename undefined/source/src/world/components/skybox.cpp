@@ -10,7 +10,7 @@
 
 void Skybox::Setup()
 {
-	mSkyboxShader = ResourceManager::Get<Shader>("skyboxShader");
+	mSkyboxShader = ResourceManager::Get<Shader>("skybox_shader");
 
 	mRenderer = ServiceLocator::Get<Renderer>();
 
@@ -24,6 +24,8 @@ void Skybox::Setup()
 	
 	//faces = ResourceManager::LoadFolder("../undefined/resource_manager/skybox");
 	cubemapTexture = Texture::LoadCubeMap(faces);
+
+	mSkyboxShader->SetInt("skybox", 0);
 }
 
 void Skybox::Update()

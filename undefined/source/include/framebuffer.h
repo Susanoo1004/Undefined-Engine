@@ -17,7 +17,7 @@ public:
 	template <size_t TextureNumber>
     static Framebuffer* Create(unsigned int width, unsigned int height);
 
-    void RescaleFramebuffer(float width, float height);
+    void RescaleFramebuffer(unsigned int width, unsigned int height);
 
 	unsigned int Width;
 	unsigned int Height;

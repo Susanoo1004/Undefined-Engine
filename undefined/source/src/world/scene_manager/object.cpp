@@ -2,6 +2,11 @@
 
 
 
+Object::Object(const std::string& name)
+	:Name(name)
+{
+}
+
 Object::~Object()
 {
 	for (Component* comp : Components)

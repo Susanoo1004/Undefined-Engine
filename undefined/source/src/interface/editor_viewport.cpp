@@ -2,6 +2,8 @@
 
 #include <imgui/imgui.h>
 
+#include "utils/utils.h"
+
 #include "resources/resource_manager.h"
 
 EditorViewport::EditorViewport(Framebuffer* framebuffer)
@@ -27,14 +29,14 @@ void EditorViewport::ShowWindow()
 	const float windowWidth = ImGui::GetContentRegionAvail().x;
 	const float windowHeight = ImGui::GetContentRegionAvail().y;
 
-	mFramebuffer->RescaleFramebuffer(windowWidth, windowHeight);
-	glViewport(0, 0, windowWidth, windowHeight);
+	mFramebuffer->RescaleFramebuffer((unsigned int)windowWidth, (unsigned int)windowHeight);
+	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
 
 	// we get the screen position of the window
 	ImVec2 pos = ImGui::GetCursorScreenPos();
 	
 	ImGui::GetWindowDrawList()->AddImage(
-		(void*)mFramebuffer->RenderedTextures[0]->GetID(),
+		Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
 		ImVec2(pos.x, pos.y),
 		ImVec2(pos.x + mFramebuffer->Width, pos.y + mFramebuffer->Height),
 		ImVec2(0, 1),
@@ -51,8 +53,6 @@ void EditorViewport::ShowWindow()
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	ImGui::End();
-
-
 }
 
 unsigned int EditorViewport::GetFBO_ID()
