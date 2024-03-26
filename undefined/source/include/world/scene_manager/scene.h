@@ -6,8 +6,21 @@
 class Scene
 {
 public:
-	UNDEFINED_ENGINE Scene();
-	UNDEFINED_ENGINE ~Scene();
 
-	std::vector<Object> Objects;
+	UNDEFINED_ENGINE void Start();
+	UNDEFINED_ENGINE void FixedUpdate();
+	UNDEFINED_ENGINE void Update();
+	UNDEFINED_ENGINE void LateUpdate();
+
+	template <typename... Args>
+	Object* AddObject(Args... args)
+	{
+		Object* obj = new Object(args...);
+
+		Objects.push_back(obj);
+
+		return obj;
+	}
+
+	std::vector<Object*> Objects;
 };

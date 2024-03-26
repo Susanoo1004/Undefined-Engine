@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "world/component/light.h"
+#include "world/components/light.h"
 
 class DirLight : public Light
 {

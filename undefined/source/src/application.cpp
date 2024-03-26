@@ -14,6 +14,9 @@
 
 #include "interface/interface.h"
 
+#include "world/scene_manager/object.h"
+#include "world/components/player_test.h"
+
 Application::Application()
 {
     ServiceLocator::Setup();
@@ -41,6 +44,40 @@ void Application::Init()
     DirectionalLight = DirLight(Vector3(-1.f, -1.f, 1.f), BASE_AMBIENT, BASE_DIFFUSE, BASE_SPECULAR);
 
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
+
+    Object* objectTest = new Object;
+    
+    objectTest->AddComponent<Player>();
+
+    Player* player = objectTest->GetComponent<Player>();
+    if (player)
+    {
+        Logger::Debug("player added");
+    }
+
+    player->Chiffre += 200;
+
+    
+    Logger::Debug("player->GameObject IsEnable = {}", player->GameObject->IsEnable());
+    player->GameObject->Disable();
+    Logger::Debug("player->GameObject->Disable()");
+    Logger::Debug("player->GameObject IsEnable = {}", player->GameObject->IsEnable());
+
+    Logger::Debug("Object = Player->Object : {}", objectTest == player->GameObject);
+
+    objectTest->Name = "oui";
+
+    Logger::Debug("Object : {}", objectTest->Name);
+    Logger::Debug("Player->Object  : {}", player->GameObject->Name);
+
+    Logger::Debug("Object : {}", objectTest->GameTransform->Position.x);
+    Logger::Debug("Object : {}", objectTest->GameTransform->Position.x += 1);
+
+    Logger::Debug("Object->Player : {}", player->GameTransform->Position.x);
+    Logger::Debug("Object->Player : {}", player->GameTransform->Position.x += 1);
+
+
+    ActualScene.Objects.push_back(objectTest);
 }
 
 // move to RENDERER
@@ -87,6 +124,8 @@ void Application::InitQuad()
 void Application::Update()
 {
     T += 0.016f;
+
+    ActualScene.Update();
 
     ServiceLocator::Get<Renderer>()->SetClearColor();
 
