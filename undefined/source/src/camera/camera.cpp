@@ -15,7 +15,7 @@ Camera::Camera(float width, float height)
     mLookAt = Vector3(0, 0, 1);
     mUp = Vector3(0, 1, 0);
 
-    Matrix4x4::ProjectionMatrix(calc::PI / 2, mWidth / mHeight, 0.1f, 20.0f, mPerspective);
+    mPerspective = Matrix4x4::ProjectionMatrix(calc::PI / 2, mWidth / mHeight, 0.1f, 20.0f);
 
     CurrentCamera = this;
 
@@ -40,7 +40,7 @@ const Matrix4x4& Camera::GetVP()
 
 void Camera::Update()
 {
-    Matrix4x4::ViewMatrix(mEye, mEye + mLookAt, mUp, mView);
+    mView = Matrix4x4::ViewMatrix(mEye, mEye + mLookAt, mUp);
     mVP = mPerspective * mView;
 }
 

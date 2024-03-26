@@ -115,7 +115,7 @@ void Window::WindowSizeCallback(GLFWwindow* , int width, int height)
     Matrix4x4 result;
     if (w->Height)
     {
-        Matrix4x4::ProjectionMatrix(calc::PI / 2, (float)w->Width / (float)w->Height, 0.1f, 20.0f, result);
+        result = Matrix4x4::ProjectionMatrix(calc::PI / 2, (float)w->Width / (float)w->Height, 0.1f, 20.0f);
         w->GetCamera()->SetPerspective(result);
     }
     glViewport(0, 0, w->Width, w->Height);
