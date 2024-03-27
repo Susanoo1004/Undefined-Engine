@@ -8,6 +8,7 @@ Framebuffer::Framebuffer()
 Framebuffer::~Framebuffer()
 {
 	glDeleteFramebuffers(1, &FBO_ID);
+	glDeleteRenderbuffers(1, &RBO_ID);
 }
 
 void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)

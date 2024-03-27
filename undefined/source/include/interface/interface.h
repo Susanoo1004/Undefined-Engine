@@ -22,8 +22,10 @@ public:
 	UNDEFINED_ENGINE static void NewFrame();
 	UNDEFINED_ENGINE static void BeginDockSpace();
 	UNDEFINED_ENGINE static void Render();
-
-	static inline std::vector<EditorViewport> EditorViewports;
-
 	UNDEFINED_ENGINE static void Delete();
+
+	UNDEFINED_ENGINE static void CreateEditorViewport();
+
+	static inline std::vector<EditorViewport*> EditorViewports;
+
 };
