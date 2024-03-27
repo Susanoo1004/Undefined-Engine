@@ -62,10 +62,12 @@ void Model::Draw()
         Render->Draw(GL_TRIANGLES, (GLsizei)pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
     }
     
-  
+    Render->BindBuffers(0, 0, 0);
+    Render->BindTexture(0);
+
 }
 
-UNDEFINED_ENGINE void Model::SetTexture(int index, std::shared_ptr<Texture> tex)
+void Model::SetTexture(int index, std::shared_ptr<Texture> tex)
 {
     mModel[index].second = tex;
 }

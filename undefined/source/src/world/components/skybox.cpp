@@ -25,29 +25,35 @@ void Skybox::Setup()
 	//faces = ResourceManager::LoadFolder("../undefined/resource_manager/skybox");
 	cubemapTexture = Texture::LoadCubeMap(faces);
 
-	mSkyboxShader->SetInt("skybox", 0);
+	mRenderer->ActiveTexture(GL_TEXTURE0);
+	mRenderer->BindTexture(cubemapTexture, GL_TEXTURE_CUBE_MAP);
+
+	mRenderer->UseShader(mSkyboxShader->ID);
+	mRenderer->SetUniform(mSkyboxShader->ID, "skybox", 0);
+	mRenderer->UnUseShader();
+	mRenderer->BindBuffers(0, 0, 0);
 }
 
 void Skybox::Update()
 {
-	mSkyboxShader->Use();
 
 	Camera* camera = ServiceLocator::Get<Window>()->GetCamera();
 	view = Matrix4x4(Matrix3x3(camera->GetView())); // remove translation from the view matrix
 
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 
-	mSkyboxShader->SetMat4("view", view);
-	mSkyboxShader->SetMat4("projection", camera->GetProjection());
+	mRenderer->UseShader(mSkyboxShader->ID);
+
+	mRenderer->SetUniform(mSkyboxShader->ID, "view", view);
+	mRenderer->SetUniform(mSkyboxShader->ID, "projection", camera->GetProjection());
 
 	// skybox cube
 	mRenderer->BindBuffers(cubeVAO, 0, 0);
 	mRenderer->ActiveTexture(GL_TEXTURE0);
-	mRenderer->BindTexture(cubemapTexture, GL_TEXTURE_CUBE_MAP);
 	mRenderer->Draw(GL_TRIANGLES, 0, 36);
 	mRenderer->BindBuffers(0, 0, 0);
 
 	glDepthFunc(GL_LESS); // set depth function back to default
 
-	mSkyboxShader->UnUse();
+	mRenderer->UnUseShader();
 }

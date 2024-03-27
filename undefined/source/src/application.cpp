@@ -109,12 +109,15 @@ void Application::Update()
 
     glClearColor(0.3f, 0.3f, 0.3f, 1);
 
+    BaseShader->UnUse();
     mRenderer->ClearBuffer();
-    
+    BaseShader->Use();
+
     ActualScene.Update();
 
-    BaseShader->Use();
+    mRenderer->UseShader(BaseShader->ID);
     Draw();
+    mRenderer->UnUseShader();
 
     Skybox::Update();
     

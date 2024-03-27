@@ -45,7 +45,8 @@ void RendererDebug::DebugInit()
                 break;
             }
 
-            switch (type) {
+            switch (type) 
+            {
             case GL_DEBUG_TYPE_ERROR:
                 typeMessage = "ERROR";
                 break;
@@ -79,7 +80,8 @@ void RendererDebug::DebugInit()
                 break;
             }
 
-            switch (severity) {
+            switch (severity) 
+            {
             case GL_DEBUG_SEVERITY_HIGH:
                 Logger::Error("[{}] {} {}", sourceMessage, typeMessage, message);
                 break;
@@ -88,9 +90,6 @@ void RendererDebug::DebugInit()
                 Logger::Warning("[{}] {} {}", sourceMessage, typeMessage, message);
                 break;
 
-            case GL_DEBUG_SEVERITY_LOW:
-                Logger::Info("[{}] {} {}", sourceMessage, typeMessage, message);
-                break;
             }
 
     },

@@ -15,6 +15,8 @@ void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)
 	Width = width;
 	Height = height;
 
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO_ID);
+
 	for (int i = 0; i < RenderedTextures.size(); i++)
 	{
 		glBindTexture(GL_TEXTURE_2D, RenderedTextures[i]->GetID());
@@ -27,4 +29,6 @@ void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)
 	glBindRenderbuffer(GL_RENDERBUFFER, RBO_ID);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (GLsizei)width, (GLsizei)height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO_ID);
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

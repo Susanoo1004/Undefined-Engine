@@ -40,13 +40,15 @@ Framebuffer* Framebuffer::Create(unsigned int width, unsigned int height)
     f->Width = width;
     f->Height = height;
 
+    glGenFramebuffers(1, &f->FBO_ID);
+    glBindFramebuffer(GL_FRAMEBUFFER, f->FBO_ID);
+
     // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
     glGenRenderbuffers(1, &f->RBO_ID);
     glBindRenderbuffer(GL_RENDERBUFFER, f->RBO_ID);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, f->Width, f->Height); // use a single renderbuffer object for both a depth AND stencil buffer.
 
-    glGenFramebuffers(1, &f->FBO_ID);
-    glBindFramebuffer(GL_FRAMEBUFFER, f->FBO_ID);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, f->RBO_ID);
 
     f->RenderedTextures.resize(TextureNumber);
 
@@ -60,7 +62,6 @@ Framebuffer* Framebuffer::Create(unsigned int width, unsigned int height)
     glDrawBuffers(TextureNumber, attachments);
 
     glBindFramebuffer(GL_FRAMEBUFFER, f->FBO_ID);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, f->RBO_ID);
     // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
