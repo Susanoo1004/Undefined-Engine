@@ -1,6 +1,8 @@
 #version 450 core
 
-out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out int EntityID;
+
 
 struct DirLight {
     vec3 direction;
@@ -51,4 +53,5 @@ void main()
         result += CalcDirLight(dirLights[i], norm, viewDir);
     
     FragColor = vec4(result, 1.0);
+    EntityID = 50;
 }

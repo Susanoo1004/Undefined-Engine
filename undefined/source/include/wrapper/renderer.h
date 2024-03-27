@@ -21,6 +21,7 @@ public:
 	void ActiveTexture(unsigned int ID);
 	//0x0DE1 = GL_TEXTURE_2D
 	void BindTexture(unsigned int ID, unsigned int type = 0x0DE1);
+	int ReadPixels(uint32_t attachmentIndex, int x, int y);
 
 	void BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO);
 	void AttributePointers(unsigned int index, int size, unsigned int type, int stride, const void* pointer, bool isNormalized = false);

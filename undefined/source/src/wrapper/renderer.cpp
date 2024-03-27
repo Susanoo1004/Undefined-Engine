@@ -45,6 +45,16 @@ void Renderer::BindTexture(unsigned int ID, unsigned int type)
 	glBindTexture(type, ID);
 }
 
+int Renderer::ReadPixels(uint32_t attachmentIndex, int x, int y)
+{
+    glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+
+    int pixelData;
+    glReadPixels(x, y, 1, 1, GL_RGB, GL_INT, &pixelData);
+    
+    return pixelData;
+}
+
 void Renderer::BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO)
 {
     glBindVertexArray(VAO);
@@ -189,12 +199,18 @@ void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), &Indices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
     // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
     // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+
+    // entity id attribute
+    glVertexAttribPointer(3, 1, GL_INT, GL_FALSE, 9 * sizeof(int), (void*)(8 * sizeof(float)));
+    glEnableVertexAttribArray(3);
 }

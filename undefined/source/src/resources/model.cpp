@@ -39,6 +39,9 @@ void Model::Init()
     // vertex texture coords
     Render->AttributePointers(2, 2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
+    // entity id
+    Render->AttributePointers(3, 1, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, EntityID));
+
     Render->BindBuffers(0, 0, 0);
 }
 void Model::Draw()
@@ -64,7 +67,6 @@ void Model::Draw()
     
     Render->BindBuffers(0, 0, 0);
     Render->BindTexture(0);
-
 }
 
 void Model::SetTexture(int index, std::shared_ptr<Texture> tex)

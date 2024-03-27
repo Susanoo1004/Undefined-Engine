@@ -14,6 +14,7 @@ struct Vertex
 	Vector3 Position;
 	Vector3 Normal;
 	Vector2 TexCoords;
+	int EntityID;
 };
 
 class Mesh
