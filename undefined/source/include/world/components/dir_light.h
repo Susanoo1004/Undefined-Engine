@@ -1,0 +1,20 @@
+#pragma once
+
+#include <vector>
+
+#include "world/components/light.h"
+
+class DirLight : public Light
+{
+public:
+	UNDEFINED_ENGINE DirLight();
+	UNDEFINED_ENGINE DirLight(const Vector3& ambient, const Vector3& diffuse, const Vector3& specular);
+	UNDEFINED_ENGINE ~DirLight();
+
+	UNDEFINED_ENGINE void Update() override;
+	UNDEFINED_ENGINE int GetNbrOfDirLight();
+
+private:
+	UNDEFINED_ENGINE static inline int mNbrOfDirLight;
+	UNDEFINED_ENGINE static inline std::vector<DirLight*> DirLightsArray;
+};
