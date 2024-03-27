@@ -2,6 +2,8 @@
 
 #include "framebuffer.h"
 
+#include <toolbox/Vector2.h>
+
 #include "resources/shader.h"
 
 class EditorViewport
@@ -18,6 +20,7 @@ public:
 private:
 	Framebuffer* mFramebuffer;
 	std::shared_ptr<Shader> mShader;
+	Vector2 mViewportBounds[2];
 
 	unsigned int mEBO = 0, mVBO = 0, mVAO = 0;
 };
