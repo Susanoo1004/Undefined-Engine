@@ -47,10 +47,11 @@ void Renderer::BindTexture(unsigned int ID, unsigned int type)
 
 int Renderer::ReadPixels(uint32_t attachmentIndex, int x, int y)
 {
-    glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+    glFinish();
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     int pixelData;
-    glReadPixels(x, y, 1, 1, GL_RGB, GL_INT, &pixelData);
+    glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &pixelData);
     
     return pixelData;
 }

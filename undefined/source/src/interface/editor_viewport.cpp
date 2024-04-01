@@ -65,7 +65,7 @@ void EditorViewport::ShowWindow()
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
 		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(1, mouseX, mouseY);
 		Logger::Debug("Pixel data = {}", pixelData);

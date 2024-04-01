@@ -40,10 +40,11 @@ void Application::Init()
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
+    pickingShader = ResourceManager::Get<Shader>("picking_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-   Object* light = ActualScene.AddObject("Light");
-   light->AddComponent<Light>();
+    Object* light = ActualScene.AddObject("Light");
+    light->AddComponent<Light>();
 }
 
 // move to RENDERER
@@ -101,6 +102,8 @@ void Application::Update()
 
     BaseShader->SetMat4("vp", mWindowManager->GetCamera()->GetVP());
     BaseShader->SetVec3("viewPos", mWindowManager->GetCamera()->mEye);
+    
+    //pickingShader->SetVec3("PickingColor", T);
 
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 

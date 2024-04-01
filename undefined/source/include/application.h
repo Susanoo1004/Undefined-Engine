@@ -30,6 +30,7 @@ public:
 
 	std::shared_ptr<Shader> BaseShader;
 	std::shared_ptr<Shader> skyboxShader;
+	std::shared_ptr<Shader> pickingShader;
 
 	Logger Log;
 
