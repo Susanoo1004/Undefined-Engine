@@ -14,27 +14,29 @@ public:
     ~Camera();
 
     void SetPerspective(Matrix4x4& perspectiveView);
-    Matrix4x4 GetView();
-    Matrix4x4 GetProjection();
 
     void Update();
 
-    void ProcessInput();
 
+    Matrix4x4 GetView();
+    Matrix4x4 GetProjection();
     const Matrix4x4& GetVP();
+
+    const void SetCurrentCamera();
 
     Vector3 mEye;
     Vector3 mLookAt;
     Vector3 mUp;
   
+    float Width;
+    float Height;
+
 private:
 
     Matrix4x4 mVP;
     Matrix4x4 mView;
     Matrix4x4 mPerspective;
 
-    float mWidth;
-    float mHeight;
 
     float mCameraSpeed = 0.05f;
     float mMouseSensitivity = 0.05f;
@@ -52,6 +54,7 @@ private:
 public:
     static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
     static void ChangeSpeedCam(GLFWwindow* window, double xposIn, double yposIn);
+    static void ProcessInput();
 
     static Camera* CurrentCamera;
 

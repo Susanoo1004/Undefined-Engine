@@ -8,6 +8,8 @@
 #include "resources/texture.h"
 #include "resources/resource_manager.h"
 
+#include "interface/interface.h"
+
 void Skybox::Setup()
 {
 	mSkyboxShader = ResourceManager::Get<Shader>("skybox_shader");
@@ -36,23 +38,27 @@ void Skybox::Setup()
 
 void Skybox::Update()
 {
-
-	Camera* camera = ServiceLocator::Get<Window>()->GetCamera();
-	view = Matrix4x4(Matrix3x3(camera->GetView())); // remove translation from the view matrix
-
-	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-
 	mRenderer->UseShader(mSkyboxShader->ID);
 
-	mRenderer->SetUniform(mSkyboxShader->ID, "view", view);
-	mRenderer->SetUniform(mSkyboxShader->ID, "projection", camera->GetProjection());
+	for (int i = 0; i < Interface::EditorViewports.size(); i++)
+	{
+		view = Matrix4x4(Matrix3x3(Interface::EditorViewports[i]->ViewportCamera->GetView())); // remove translation from the view matrix
+		mRenderer->SetUniform(mSkyboxShader->ID, "view", view);
+		mRenderer->SetUniform(mSkyboxShader->ID, "projection", Interface::EditorViewports[i]->ViewportCamera->GetProjection());
+	}
 
+	mRenderer->UnUseShader();
+}
+
+void Skybox::Draw()
+{
 	// skybox cube
+	mRenderer->UseShader(mSkyboxShader->ID);
+	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 	mRenderer->BindBuffers(cubeVAO, 0, 0);
 	mRenderer->ActiveTexture(GL_TEXTURE0);
 	mRenderer->Draw(GL_TRIANGLES, 0, 36);
 	mRenderer->BindBuffers(0, 0, 0);
-
 	glDepthFunc(GL_LESS); // set depth function back to default
 
 	mRenderer->UnUseShader();
