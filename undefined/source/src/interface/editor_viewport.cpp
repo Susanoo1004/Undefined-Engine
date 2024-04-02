@@ -31,6 +31,7 @@ void EditorViewport::Init()
 
 void EditorViewport::ShowWindow()
 {
+
 	ImGui::Begin(((std::string)"Editor " + std::to_string(mID)).c_str());
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
