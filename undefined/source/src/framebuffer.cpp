@@ -23,9 +23,9 @@ void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)
 		glBindTexture(GL_TEXTURE_2D, RenderedTextures[i]->GetID());
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)Width, (GLsizei)Height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)Width , (GLsizei)Height, 0, GL_RGB, GL_UNSIGNED_BYTE, RenderedTextures[i]->Data);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, RenderedTextures[i]->GetID(), 0);
 	}
 

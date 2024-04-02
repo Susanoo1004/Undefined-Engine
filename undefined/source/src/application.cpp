@@ -101,7 +101,7 @@ void Application::Update()
     ActualScene.Update();
 
     Skybox::Update();
-    Interface::EditorViewports[0]->ViewportCamera->ProcessInput();
+    Camera::ProcessInput();
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
@@ -128,7 +128,6 @@ void Application::Update()
 
 
     Interface::Update();
-
     mWindowManager->SwapBuffers();
     mRenderer->ClearBuffer();
 }

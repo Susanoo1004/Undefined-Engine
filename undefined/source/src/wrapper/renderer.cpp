@@ -11,6 +11,7 @@ void Renderer::Init()
 	gladLoadGL();
 	SetClearColor();
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_SCISSOR_TEST);
 
     Debug.DebugInit();
 }
@@ -197,4 +198,8 @@ void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     // texture coord attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

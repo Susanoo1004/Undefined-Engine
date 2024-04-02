@@ -20,10 +20,13 @@ public:
 	const unsigned int GetHeight();
 	bool IsValid();
 
-	static unsigned int LoadCubeMap(std::vector<std::string> faces);
+	const void* Data;
 
 private:
 	unsigned int mID;
 	int mWidth;
 	int mHeight;
+
+public:
+	static unsigned int LoadCubeMap(std::vector<std::string> faces);
 };
