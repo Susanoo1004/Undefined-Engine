@@ -35,3 +35,14 @@ void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
+void Framebuffer::AttachTexture(size_t attachment, unsigned int format, unsigned int id)
+{
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, format, (GLsizei)Width, (GLsizei)Height, 0, format, GL_UNSIGNED_INT, NULL);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment, GL_TEXTURE_2D, id, 0);
+}

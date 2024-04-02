@@ -8,6 +8,8 @@
 
 #include "resources/resource_manager.h"
 
+#include "resources/texture.h"
+
 #include "interface/interface.h"
 
 EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
@@ -68,8 +70,6 @@ void EditorViewport::ShowWindow()
 	int mouseX = (int)mx;
 	int mouseY = (int)my;
 
-	Logger::Debug("ID {} ; width {} ; height {}", mID, windowWidth, windowHeight);
-
 	ViewportCamera->Width = windowWidth;
 	ViewportCamera->Height = windowHeight;
 
@@ -103,11 +103,18 @@ void EditorViewport::ShowWindow()
 	glBindVertexArray(mVAO);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-
+	
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
+		std::shared_ptr<Shader> picking = ResourceManager::Get<Shader>("picking_shader");
+		Texture test(mFramebuffer->Width, mFramebuffer->Height, GL_RED);
+		mFramebuffer->AttachTexture(1, GL_RED, test.GetID());
+		picking->Use();
 		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(1, mouseX, mouseY);
 		Logger::Debug("Pixel data = {}", pixelData);
+		picking->UnUse();
+		mFramebuffer->AttachTexture(0, GL_RGB, mFramebuffer->RenderedTextures[0]->GetID());
+		glUseProgram(mShader->ID);
 	}
 
 	glBindVertexArray(0);

@@ -127,7 +127,6 @@ void Application::Update()
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-
     Interface::Update();
 
     mWindowManager->SwapBuffers();

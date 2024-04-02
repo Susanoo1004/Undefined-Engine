@@ -1,13 +1,8 @@
-#version 330 core
+#version 450 core
 
-// Ouput data
-out vec4 color;
+layout (location = 0) out int color;
 
-// Values that stay constant for the whole mesh.
-uniform vec4 PickingColor;
-
-void main(){
-	
-	color = PickingColor;
-
+void main()
+{
+	color = 50;
 }

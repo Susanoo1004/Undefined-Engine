@@ -13,6 +13,8 @@ class Framebuffer
 public:
     Framebuffer();
 	~Framebuffer();
+    
+    void AttachTexture(size_t attachment, unsigned int format, unsigned int id);
 
 	template <size_t TextureNumber>
     static Framebuffer* Create(unsigned int width, unsigned int height);
