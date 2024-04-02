@@ -2,19 +2,26 @@
 
 #include <imgui/imgui.h>
 
+#include <toolbox/calc.h>
+
 #include "utils/utils.h"
 
 #include "resources/resource_manager.h"
 
-EditorViewport::EditorViewport(Framebuffer* framebuffer)
-	: mFramebuffer(framebuffer)
+#include "interface/interface.h"
+
+EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
+	: mFramebuffer(framebuffer), ViewportCamera(camera), mShader(ResourceManager::Get<Shader>("viewport_shader"))
 {
-	mShader = ResourceManager::Get<Shader>("viewport_shader");
+	mEditorNumber++;
+	mID = mEditorNumber;
 }
 
 EditorViewport::~EditorViewport()
 {
+	mEditorNumber--;
 	delete mFramebuffer;
+	delete ViewportCamera;
 }
 
 void EditorViewport::Init()
@@ -24,7 +31,23 @@ void EditorViewport::Init()
 
 void EditorViewport::ShowWindow()
 {
-	ImGui::Begin("Editor");
+
+	ImGui::Begin(((std::string)"Editor " + std::to_string(mID)).c_str());
+
+	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
+	{
+		Camera::CurrentCamera = ViewportCamera;
+	}
+
+	if (ImGui::BeginPopupContextItem())
+	{
+		if (ImGui::Button("Create Editor Viewport"))
+		{
+			Interface::CreateEditorViewport();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 
 	const float windowWidth = ImGui::GetContentRegionAvail().x;
 	const float windowHeight = ImGui::GetContentRegionAvail().y;
@@ -45,8 +68,24 @@ void EditorViewport::ShowWindow()
 	int mouseX = (int)mx;
 	int mouseY = (int)my;
 
+	Logger::Debug("ID {} ; width {} ; height {}", mID, windowWidth, windowHeight);
+
+	ViewportCamera->Width = windowWidth;
+	ViewportCamera->Height = windowHeight;
+
+	Matrix4x4 result;
+	if (windowHeight <= 0)
+	{
+		result = Matrix4x4::Identity();
+	}
+	else
+	{
+		result = Matrix4x4::ProjectionMatrix(calc::PI / 2.0f, windowWidth / windowHeight, 0.1f, 20.0f);
+	}
+	ViewportCamera->SetPerspective(result);
+
 	mFramebuffer->RescaleFramebuffer((unsigned int)windowWidth, (unsigned int)windowHeight);
-	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
+	//glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
 
 	// we get the screen position of the window
 	ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -54,7 +93,7 @@ void EditorViewport::ShowWindow()
 	ImGui::GetWindowDrawList()->AddImage(
 		Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
 		ImVec2(pos.x, pos.y),
-		ImVec2(pos.x + mFramebuffer->Width, pos.y + mFramebuffer->Height),
+		ImVec2(pos.x + windowWidth, pos.y + windowHeight),
 		ImVec2(0, 1),
 		ImVec2(1, 0)
 	);

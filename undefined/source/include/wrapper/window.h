@@ -25,7 +25,6 @@ public:
     void GetFramebufferSize(int &displayWidth, int &displayHeight);
 
     GLFWwindow* GetWindowVar();
-    Camera* GetCamera();
 
     bool IsWindowOpen();
 
@@ -36,7 +35,6 @@ public:
 
 private:
     GLFWwindow* mWindow;
-    Camera mCam;
 
 public:
     static void WindowSizeCallback(GLFWwindow* , int width, int height);

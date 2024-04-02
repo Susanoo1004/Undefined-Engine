@@ -9,18 +9,15 @@
 Camera* Camera::CurrentCamera;
 
 Camera::Camera(float width, float height)
-    : mWidth(width), mHeight(height)
+    : Width(width), Height(height)
 {
     mEye = Vector3(0, 0, -1);
     mLookAt = Vector3(0, 0, 1);
     mUp = Vector3(0, 1, 0);
 
-    mPerspective = Matrix4x4::ProjectionMatrix(calc::PI / 2, mWidth / mHeight, 0.1f, 20.0f);
+    mPerspective = Matrix4x4::ProjectionMatrix(calc::PI / 2, Width / Height, 0.1f, 20.0f);
 
     CurrentCamera = this;
-
-    std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
-    ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
 }
 
 Camera::~Camera()
@@ -48,6 +45,11 @@ const Matrix4x4& Camera::GetVP()
     return mVP;
 }
 
+const void Camera::SetCurrentCamera()
+{
+    CurrentCamera = this;
+}
+
 void Camera::Update()
 {
     mView = Matrix4x4::ViewMatrix(mEye, mEye + mLookAt, mUp);
@@ -58,31 +60,31 @@ void Camera::ProcessInput()
 {
     std::shared_ptr<KeyInput> editorCameraInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
 
-    mIsMouseForCam = editorCameraInput->GetIsKeyDown(GLFW_MOUSE_BUTTON_RIGHT);
+    CurrentCamera->mIsMouseForCam = editorCameraInput->GetIsKeyDown(GLFW_MOUSE_BUTTON_RIGHT);
 
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_W))
     {
-        mEye += mLookAt * mCameraSpeed;
+        CurrentCamera->mEye += CurrentCamera->mLookAt * CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_S))
     {
-        mEye -= mLookAt * mCameraSpeed;
+        CurrentCamera->mEye -= CurrentCamera->mLookAt * CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_A))
     {
-        mEye -= Vector3::Cross(mLookAt, mUp).Normalized() * mCameraSpeed;
+        CurrentCamera->mEye -= Vector3::Cross(CurrentCamera->mLookAt, CurrentCamera->mUp).Normalized() * CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_D))
     {
-        mEye += Vector3::Cross(mLookAt, mUp).Normalized() * mCameraSpeed;
+        CurrentCamera->mEye += Vector3::Cross(CurrentCamera->mLookAt, CurrentCamera->mUp).Normalized() * CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_SPACE))
     {
-        mEye.y += mCameraSpeed;
+        CurrentCamera->mEye.y += CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_LEFT_SHIFT))
     {
-        mEye.y -= mCameraSpeed;
+        CurrentCamera->mEye.y -= CurrentCamera->mCameraSpeed;
     }
 }
 

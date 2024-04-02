@@ -94,37 +94,39 @@ void Application::Update()
 
     ServiceLocator::Get<Renderer>()->SetClearColor();
 
-    mWindowManager->GetCamera()->ProcessInput();
-    mWindowManager->GetCamera()->Update();
-
     // modify the camera in the shader
     BaseShader->Use();
 
-    BaseShader->SetMat4("vp", mWindowManager->GetCamera()->GetVP());
-    BaseShader->SetVec3("viewPos", mWindowManager->GetCamera()->mEye);
-    
-    //pickingShader->SetVec3("PickingColor", T);
-
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
-
-    glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[0].GetFBO_ID());
-    glEnable(GL_DEPTH_TEST);
-
-    glClearColor(0.3f, 0.3f, 0.3f, 1);
-
-    BaseShader->UnUse();
-    mRenderer->ClearBuffer();
-    BaseShader->Use();
 
     ActualScene.Update();
 
-    mRenderer->UseShader(BaseShader->ID);
-    Draw();
-    mRenderer->UnUseShader();
-
     Skybox::Update();
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    Interface::EditorViewports[0]->ViewportCamera->ProcessInput();
+
+    for (int i = 0; i < Interface::EditorViewports.size(); i++)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
+        glEnable(GL_DEPTH_TEST);
+
+        glClearColor(0.3f, 0.3f, 0.3f, 1);
+
+        Interface::EditorViewports[i]->ViewportCamera->Update();
+
+        BaseShader->UnUse();
+        mRenderer->ClearBuffer();
+        BaseShader->Use();
+
+        BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
+        BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
+
+        mRenderer->UseShader(BaseShader->ID);
+        Draw();
+        mRenderer->UnUseShader();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
 
     Interface::Update();
 
@@ -144,4 +146,7 @@ void Application::Clear()
 void Application::Draw()
 {
     ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
+
+    // Last draw
+    Skybox::Draw();
 }
