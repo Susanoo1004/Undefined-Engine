@@ -57,7 +57,6 @@ void EditorViewport::ShowWindow()
 
 	// we get the screen position of the window
 	ImVec2 screenPos = ImGui::GetCursorScreenPos();
-	temp = ImGui::GetCursorPos();
 	
 	ImGui::GetWindowDrawList()->AddImage(
 		Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
@@ -98,5 +97,7 @@ void EditorViewport::RescaleViewport()
 	}
 
 	mFramebuffer->RescaleFramebuffer((unsigned int)mWidth, (unsigned int)mHeight);
+
+	// TODO add to Renderer
 	glViewport(0, 0, (GLsizei)mWidth, (GLsizei)mHeight);
 }

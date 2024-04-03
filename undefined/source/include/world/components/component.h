@@ -13,6 +13,7 @@ public:
 
 	void Enable();
 	void Disable();
+
 	const bool IsEnable() const;
 	
 	virtual void Start() {};
