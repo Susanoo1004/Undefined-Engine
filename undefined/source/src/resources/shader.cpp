@@ -58,11 +58,11 @@ void Shader::SetFloat(const std::string& name, float value) const
 {
     ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), value);
 }
-void Shader::SetVec3(const std::string& name, Vector3 v) const
+void Shader::SetVec3(const std::string& name, const Vector3& v) const
 {
     ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), v);
 }
-void Shader::SetMat4(const std::string& name, Matrix4x4 m) const
+void Shader::SetMat4(const std::string& name, const Matrix4x4& m) const
 {
     ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), m);
 }

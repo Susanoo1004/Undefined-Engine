@@ -10,15 +10,15 @@
 class UNDEFINED_ENGINE Texture : public Resource
 {
 public:
-	Texture(const unsigned int width, const unsigned int height);
+	Texture(unsigned int width, unsigned int height);
 	Texture(const char* filepath, bool isFlipped = false);
 	~Texture();
 
-	const unsigned int GetID();
-	const void SetID(unsigned int newID);
-	const unsigned int GetWidth();
-	const unsigned int GetHeight();
-	bool IsValid();
+	unsigned int GetID() const;
+	void SetID(unsigned int newID);
+	unsigned int GetWidth() const;
+	unsigned int GetHeight() const;
+	bool IsValid() const;
 
 	const void* Data;
 
@@ -28,5 +28,5 @@ private:
 	int mHeight;
 
 public:
-	static unsigned int LoadCubeMap(std::vector<std::string> faces);
+	static unsigned int LoadCubeMap(const std::vector<std::string>& faces));
 };

@@ -69,7 +69,5 @@ public:
 	std::list<Component*> Components;
 
 private:
-
 	bool mIsEnable = true;
-
 };

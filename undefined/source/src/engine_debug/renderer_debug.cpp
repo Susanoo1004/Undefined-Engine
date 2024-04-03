@@ -83,15 +83,13 @@ void RendererDebug::DebugInit()
             switch (severity) 
             {
             case GL_DEBUG_SEVERITY_HIGH:
-                Logger::Error("[{}] {} {}", sourceMessage, typeMessage, message);
+                Logger::Error("{}:[{}] {} {}", id, typeMessage, sourceMessage, message);
                 break;
 
             case GL_DEBUG_SEVERITY_MEDIUM:
-                Logger::Warning("[{}] {} {}", sourceMessage, typeMessage, message);
+                Logger::Warning("{}: [{}] {} {}", id, typeMessage, sourceMessage, message);
                 break;
-
             }
-
     },
     nullptr
     );

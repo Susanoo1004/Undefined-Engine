@@ -79,7 +79,7 @@ void Application::Update()
         BaseShader->Use();
 
         BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
-        BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
+        BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
 
         mRenderer->UseShader(BaseShader->ID);
         Draw();

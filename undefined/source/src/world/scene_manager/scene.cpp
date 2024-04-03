@@ -12,7 +12,7 @@ void Scene::Start()
 	}
 }
 
-UNDEFINED_ENGINE void Scene::FixedUpdate()
+void Scene::FixedUpdate()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
@@ -34,7 +34,7 @@ void Scene::Update()
 	}
 }
 
-UNDEFINED_ENGINE void Scene::LateUpdate()
+void Scene::LateUpdate()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
@@ -45,7 +45,7 @@ UNDEFINED_ENGINE void Scene::LateUpdate()
 	}
 }
 
-Object* Scene::AddObject(std::string name)
+Object* Scene::AddObject(const std::string& name)
 {
 	Object* obj = new Object(name);
 

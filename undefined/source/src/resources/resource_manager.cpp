@@ -58,7 +58,7 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 	}
 }
 
-std::vector<std::string> ResourceManager::LoadFolder(std::filesystem::path path)
+std::vector<std::string> ResourceManager::LoadFolder(const std::filesystem::path& path)
 {
 	std::vector<std::string> vectorArray;
 	for (const auto& entry : std::filesystem::directory_iterator(path))
@@ -85,7 +85,7 @@ std::vector<std::string> ResourceManager::LoadFolder(std::filesystem::path path)
 	return vectorArray;
 }
 
-bool ResourceManager::Contains(std::string name)
+bool ResourceManager::Contains(const std::string& name)
 {
 	if (mResources.find(name) != mResources.end())
 	{
