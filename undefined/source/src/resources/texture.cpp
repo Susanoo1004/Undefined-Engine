@@ -9,19 +9,23 @@
 Texture::Texture(const unsigned int width, const unsigned int height)
 	: mWidth(width), mHeight(height)
 {
-	glGenTextures(1, &mID);
-	glBindTexture(GL_TEXTURE_2D, mID);
+	mRenderer = ServiceLocator::Get<Renderer>();
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	mRenderer->GenTexture(1, &mID);
+	mRenderer->BindTexture(mID);
+
+	mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 }
 
 Texture::Texture(const char* filepath, bool isFlipped)
 {
-	glGenTextures(1, &mID);
-	glBindTexture(GL_TEXTURE_2D, mID);
+	mRenderer = ServiceLocator::Get<Renderer>();
+
+	mRenderer->GenTexture(1, &mID);
+	mRenderer->BindTexture(mID);
 
 	stbi_set_flip_vertically_on_load(isFlipped);
 
@@ -45,13 +49,14 @@ Texture::Texture(const char* filepath, bool isFlipped)
 			format = GL_RGBA;
 		}
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, Data);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		mRenderer->GenerateMipMap(GL_TEXTURE_2D);
 	}
 	else
 	{
@@ -63,7 +68,7 @@ Texture::Texture(const char* filepath, bool isFlipped)
 
 Texture::~Texture()
 {
-	glDeleteTextures(1, &mID);
+	mRenderer->DeleteTexture(1, &mID);
 }
 
 unsigned int Texture::GetID() const

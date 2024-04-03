@@ -28,8 +28,8 @@ Application::Application()
 void Application::Init()
 {
     mWindowManager->Init();
-
     mRenderer->Init();
+
     ResourceManager::Load("assets/", true);
     ResourceManager::Load("../Undefined/resource_manager/", true);
 
@@ -50,9 +50,9 @@ void Application::Update()
 {
     T += 0.016f;
 
-    ServiceLocator::Get<Renderer>()->SetClearColor();
+    mRenderer->SetClearColor();
 
-    // modify the camera in the shader
+    // Modify the camera in the shader
     BaseShader->Use();
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
@@ -66,10 +66,11 @@ void Application::Update()
     {
         Interface::EditorViewports[i]->RescaleViewport();
 
-        glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
+        mRenderer->BindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
+
         glEnable(GL_DEPTH_TEST);
 
-        glClearColor(0.3f, 0.3f, 0.3f, 1);
+        mRenderer->SetClearColor();
 
         Interface::EditorViewports[i]->ViewportCamera->Update();
         Skybox::Update(Interface::EditorViewports[i]->ViewportCamera);
@@ -85,7 +86,7 @@ void Application::Update()
         Draw();
         mRenderer->UnUseShader();
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     Interface::Render();

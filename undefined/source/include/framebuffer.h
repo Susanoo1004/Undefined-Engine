@@ -14,9 +14,6 @@ public:
     Framebuffer();
 	~Framebuffer();
 
-	template <size_t TextureNumber>
-    static Framebuffer* Create(unsigned int width, unsigned int height);
-
     void RescaleFramebuffer(unsigned int width, unsigned int height);
 
 	unsigned int Width;
@@ -29,6 +26,10 @@ public:
 
 private:
     Renderer* mRenderer = nullptr;
+
+public:
+    template <size_t TextureNumber>
+    static Framebuffer* Create(unsigned int width, unsigned int height);
 };
 
 template <size_t TextureNumber>

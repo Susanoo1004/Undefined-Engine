@@ -35,6 +35,16 @@ void Renderer::GenerateVertexArray(int index, unsigned int* buffer)
     glGenVertexArrays(index, buffer);
 }
 
+void Renderer::GenTexture(unsigned int texNumber, unsigned int* ID)
+{
+    glGenTextures(texNumber, ID);
+}
+
+void Renderer::GenerateMipMap(unsigned int target)
+{
+    glGenerateMipmap(target);
+}
+
 void Renderer::ActiveTexture(unsigned int ID)
 {
     glActiveTexture(ID);
@@ -50,7 +60,7 @@ void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int 
     glFramebufferTexture2D(framebufferTarget, attachement, format, ID, 0);
 }
 
-void Renderer::BindFramebuffer(int target, unsigned int framebufferID)
+void Renderer::BindFramebuffer(unsigned int target, unsigned int framebufferID)
 {
     glBindFramebuffer(target, framebufferID);
 }
@@ -86,6 +96,11 @@ void Renderer::SetBufferData(unsigned int target, int size, const void* data, un
 void Renderer::SetRenderBufferStorageData(int target, int format, float width, float height)
 {
     glRenderbufferStorage(target, format, (GLsizei)width, (GLsizei)height);
+}
+
+void Renderer::SetTextureParameteri(unsigned int target, unsigned int texParam, unsigned int texValue)
+{
+    glTexParameteri(target, texParam, texValue);
 }
 
 void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* indices)
@@ -193,6 +208,11 @@ void Renderer::DeleteFramebuffers(int number, unsigned int* framebuffersID)
 void Renderer::DeleteRenderbuffers(int number, unsigned int* renderbuffersID)
 {
     glDeleteRenderbuffers(number, renderbuffersID);
+}
+
+void Renderer::DeleteTexture(int number, unsigned int* ID)
+{
+    glDeleteTextures(number, ID);
 }
 
 void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)

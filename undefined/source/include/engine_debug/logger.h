@@ -8,7 +8,6 @@
 
 #include "utils/flag.h"
 
-
 class Logger
 {
 public:
@@ -77,8 +76,8 @@ public:
 
 private:
 	static std::string CurrentDateTime();
-	static void CreateDebugFile(std::string path, std::string name);
-	static void SetupLogEntry(LogLevel level, std::string log);
+	static void CreateDebugFile(const std::string& path, const std::string& name);
+	static void SetupLogEntry(LogLevel level, const std::string& log);
 
 	UNDEFINED_ENGINE static inline std::fstream mFile;
 

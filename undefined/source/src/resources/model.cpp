@@ -10,7 +10,7 @@
 
 Model::Model()
 {
-    Render = nullptr;
+
 }
 
 Model::Model(const char* path)
@@ -41,6 +41,12 @@ void Model::Init()
 
     Render->BindBuffers(0, 0, 0);
 }
+
+bool Model::IsValid()
+{
+    return false;
+}
+
 void Model::Draw()
 {
     Render->BindBuffers(mVAO, mVBO, mEBO);
@@ -64,7 +70,6 @@ void Model::Draw()
     
     Render->BindBuffers(0, 0, 0);
     Render->BindTexture(0);
-
 }
 
 void Model::SetTexture(int index, std::shared_ptr<Texture> tex)
@@ -72,7 +77,7 @@ void Model::SetTexture(int index, std::shared_ptr<Texture> tex)
     mModel[index].second = tex;
 }
 
-void Model::LoadModel(std::string path)
+void Model::LoadModel(const std::string& path)
 {
     Assimp::Importer import;
     const aiScene * scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);

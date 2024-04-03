@@ -12,5 +12,5 @@ Resource::~Resource()
 
 bool Resource::IsValid()
 {
-    return true;
+    return false;
 }

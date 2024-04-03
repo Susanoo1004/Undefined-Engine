@@ -26,7 +26,7 @@ private:
 	std::shared_ptr<Shader> mShader;
 
 	unsigned int mEBO = 0, mVBO = 0, mVAO = 0;
-	int mID ;
+	int mID = 0;
 
 	float mWidth = 0.f;
 	float mHeight = 0.f;
