@@ -42,8 +42,59 @@ void Application::Init()
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-   Object* light = ActualScene.AddObject("Light");
-   light->AddComponent<Light>();
+   ActualScene.AddObject("Light")->AddComponent<Light>();
+
+   Object* object = ActualScene.AddObject("test1");
+   Object* object2 = ActualScene.AddObject("test2");
+   object2->SetParent(object);
+
+   object->GameTransform->Position = { 12, 0, 0 };
+   for (size_t i = 0; i < 4; i++)
+   {
+       auto test1 = object->GameTransform->WorldToLocalMatrix()[i][0];
+       auto test2 = object->GameTransform->WorldToLocalMatrix()[i][1];
+       auto test3 = object->GameTransform->WorldToLocalMatrix()[i][2];
+       auto test4 = object->GameTransform->WorldToLocalMatrix()[i][3];
+       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+   }
+   Logger::Debug("");
+   object->GameTransform->Position += { 12, 0, 0 };
+   for (size_t i = 0; i < 4; i++)
+   {
+       auto test1 = object->GameTransform->WorldToLocalMatrix()[i][0];
+       auto test2 = object->GameTransform->WorldToLocalMatrix()[i][1];
+       auto test3 = object->GameTransform->WorldToLocalMatrix()[i][2];
+       auto test4 = object->GameTransform->WorldToLocalMatrix()[i][3];
+       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+   }
+   Logger::Debug(""); 
+   object2->GameTransform->LocalPosition = { 12, 0, 0 };
+   for (size_t i = 0; i < 4; i++)
+   {
+       auto test1 = object2->GameTransform->LocalToWorldMatrix()[i][0];
+       auto test2 = object2->GameTransform->LocalToWorldMatrix()[i][1];
+       auto test3 = object2->GameTransform->LocalToWorldMatrix()[i][2];
+       auto test4 = object2->GameTransform->LocalToWorldMatrix()[i][3];
+       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+   }
+   Logger::Debug("");
+   for (size_t i = 0; i < 4; i++)
+   {
+       auto test1 = object2->GameTransform->WorldToLocalMatrix()[i][0];
+       auto test2 = object2->GameTransform->WorldToLocalMatrix()[i][1];
+       auto test3 = object2->GameTransform->WorldToLocalMatrix()[i][2];
+       auto test4 = object2->GameTransform->WorldToLocalMatrix()[i][3];
+       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+   }
+   Logger::Debug("");
+   for (size_t i = 0; i < 4; i++)
+   {
+       auto test1 = object->GameTransform->WorldToLocalMatrix()[i][0];
+       auto test2 = object->GameTransform->WorldToLocalMatrix()[i][1];
+       auto test3 = object->GameTransform->WorldToLocalMatrix()[i][2];
+       auto test4 = object->GameTransform->WorldToLocalMatrix()[i][3];
+       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+   }
 }
 
 // move to RENDERER
@@ -141,4 +192,6 @@ void Application::Clear()
 void Application::Draw()
 {
     ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
+
+    ActualScene.Draw();
 }

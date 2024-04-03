@@ -45,6 +45,17 @@ UNDEFINED_ENGINE void Scene::LateUpdate()
 	}
 }
 
+UNDEFINED_ENGINE void Scene::Draw()
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		for (Component* comp : Objects[i]->Components)
+		{
+			comp->Draw();
+		}
+	}
+}
+
 Object* Scene::AddObject(std::string name)
 {
 	Object* obj = new Object(name);

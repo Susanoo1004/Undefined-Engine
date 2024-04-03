@@ -161,6 +161,7 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\include\world\components\transform.cpp" />
     <ClCompile Include="source\src\framebuffer.cpp" />
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
     <ClCompile Include="source\src\resources\mesh.cpp" />
@@ -178,6 +179,8 @@
     <ClCompile Include="source\src\world\scene_manager\object.cpp" />
     <ClCompile Include="source\src\world\scene_manager\scene.cpp" />
     <ClCompile Include="source\src\world\scene_manager\scene_manager.cpp" />
+    <ClCompile Include="source\src\world\scene_manager\scene_serializer.cpp" />
+    <ClCompile Include="source\src\world\scene_manager\transform.cpp" />
     <ClCompile Include="source\src\wrapper\key_input.cpp" />
     <ClCompile Include="source\src\service_locator.cpp" />
     <ClCompile Include="source\src\engine_debug\logger.cpp" />
@@ -235,9 +238,10 @@
     <ClInclude Include="source\include\world\components\mono_behaviour.h" />
     <ClInclude Include="source\include\world\components\player_test.h" />
     <ClInclude Include="source\include\world\components\skybox.h" />
-    <ClInclude Include="source\include\world\components\transform.h" />
+    <ClInclude Include="source\include\world\scene_manager\transform.h" />
     <ClInclude Include="source\include\world\scene_manager\object.h" />
     <ClInclude Include="source\include\world\scene_manager\scene.h" />
+    <ClInclude Include="source\include\world\scene_manager\scene_serializer.h" />
     <ClInclude Include="source\include\world\scene_manager\scene_manager.h" />
     <ClInclude Include="source\include\wrapper\key_input.h" />
     <ClInclude Include="source\include\wrapper\input_manager.h" />
