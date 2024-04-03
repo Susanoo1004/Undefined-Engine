@@ -48,49 +48,55 @@ void EditorViewport::ShowWindow()
 		ImGui::EndPopup();
 	}
 
-	const float windowWidth = ImGui::GetContentRegionAvail().x;
-	const float windowHeight = ImGui::GetContentRegionAvail().y;
+	mWidth = ImGui::GetContentRegionAvail().x;
+	mHeight = ImGui::GetContentRegionAvail().y;
 
-	ViewportCamera->Width = windowWidth;
-	ViewportCamera->Height = windowHeight;
+	ViewportCamera->Width = mWidth;
+	ViewportCamera->Height = mHeight;
 
-	Matrix4x4 result;
-	if (windowHeight <= 0)
-	{
-		result = Matrix4x4::Identity();
-	}
-	else
-	{
-		result = Matrix4x4::ProjectionMatrix(calc::PI / 2.0f, windowWidth / windowHeight, 0.1f, 20.0f);
-	}
-	ViewportCamera->SetPerspective(result);
-
-	mFramebuffer->RescaleFramebuffer((unsigned int)windowWidth, (unsigned int)windowHeight);
-
-	// We get the screen position of the window
-	ImVec2 pos = ImGui::GetCursorScreenPos();
+	// we get the screen position of the window
+	ImVec2 screenPos = ImGui::GetCursorScreenPos();
 	
 	ImGui::GetWindowDrawList()->AddImage(
 		Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
-		ImVec2(pos.x, pos.y),
-		ImVec2(pos.x + windowWidth, pos.y + windowHeight),
+		ImVec2(screenPos.x, screenPos.y),
+		ImVec2(screenPos.x + mWidth, screenPos.y + mHeight),
 		ImVec2(0, 1),
 		ImVec2(1, 0)
 	);
 	
-	glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer->FBO_ID);
-	glUseProgram(mShader->ID);
-	glBindVertexArray(mVAO);
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	glBindVertexArray(0);
-	glUseProgram(0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	ImGui::End();
 }
 
 unsigned int EditorViewport::GetFBO_ID() const
 {
 	return mFramebuffer->FBO_ID;
+}
+
+void EditorViewport::RescaleViewport()
+{
+	if (mWidth <= 0 || mHeight <= 0)
+	{
+		return;
+	}
+
+	Matrix4x4 result;
+	if (mHeight <= 0)
+	{
+		result = Matrix4x4::Identity();
+	}
+	else
+	{
+		float aspect = mWidth / mHeight;
+		if (aspect < 1.0f)
+			aspect = mHeight / mWidth;
+
+		result = Matrix4x4::ProjectionMatrix(calc::PI / 2.0f, aspect, 0.1f, 20.0f);
+		ViewportCamera->SetPerspective(result);
+	}
+
+	mFramebuffer->RescaleFramebuffer((unsigned int)mWidth, (unsigned int)mHeight);
+
+	// TODO add to Renderer
+	glViewport(0, 0, (GLsizei)mWidth, (GLsizei)mHeight);
 }

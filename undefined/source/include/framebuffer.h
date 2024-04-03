@@ -26,6 +26,9 @@ public:
 	unsigned int RBO_ID;
 
 	std::vector<std::unique_ptr<Texture>> RenderedTextures;
+
+private:
+    Renderer* mRenderer = nullptr;
 };
 
 template <size_t TextureNumber>

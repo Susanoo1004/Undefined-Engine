@@ -1,5 +1,7 @@
 #pragma once
 
+#include <imgui/imgui.h>
+
 #include "framebuffer.h"
 
 #include "resources/shader.h"
@@ -15,6 +17,8 @@ public:
 
 	unsigned int GetFBO_ID() const;
 
+	void RescaleViewport();
+
 	Camera* ViewportCamera;
 
 private:
@@ -22,7 +26,10 @@ private:
 	std::shared_ptr<Shader> mShader;
 
 	unsigned int mEBO = 0, mVBO = 0, mVAO = 0;
-	int mID;
+	int mID ;
+
+	float mWidth = 0.f;
+	float mHeight = 0.f;
 
 private:
 	static inline int mEditorNumber = 0;

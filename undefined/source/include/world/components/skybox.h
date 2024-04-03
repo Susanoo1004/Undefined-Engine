@@ -16,10 +16,10 @@ class Skybox : public Component
 {
 public:
 	UNDEFINED_ENGINE static void Setup();
-	UNDEFINED_ENGINE static void Update();
+	UNDEFINED_ENGINE static void Update(Camera* cam);
 	UNDEFINED_ENGINE static void Draw();
 
-	static inline float cubeVertices[] = {
+	static inline float CubeVertices[] = {
 		// positions          // texture Coords
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -64,7 +64,7 @@ public:
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	static inline std::vector<std::string> faces
+	static inline std::vector<std::string> Faces
 	{
 		"../undefined/resource_manager/skybox/right.jpg",
 		"../undefined/resource_manager/skybox/left.jpg",
@@ -75,12 +75,13 @@ public:
 	};
 	
 
-	static inline unsigned int cubeVAO = 0, cubeVBO = 0;
-	static inline unsigned int cubemapTexture = 0;
+	static inline unsigned int CubeVAO = 0, CubeVBO = 0;
+	static inline unsigned int CubemapTexture = 0;
 
-	static inline Matrix4x4 view;
-	static inline Matrix4x4 projection;
+	static inline Matrix4x4 View;
+	static inline Matrix4x4 Projection;
 
+private:
 	static inline std::shared_ptr<Shader> mSkyboxShader;
 	static inline Renderer* mRenderer;
 };

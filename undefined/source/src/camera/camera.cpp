@@ -6,6 +6,8 @@
 
 #include "service_locator.h"
 
+#include "engine_debug/logger.h"
+
 Camera* Camera::CurrentCamera;
 
 Camera::Camera(const float width, const float height)
