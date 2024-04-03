@@ -4,6 +4,8 @@
 
 #include <toolbox/calc.h>
 
+#include <vector>
+
 #include "utils/utils.h"
 
 #include "resources/resource_manager.h"
@@ -102,19 +104,20 @@ void EditorViewport::ShowWindow()
 	glUseProgram(mShader->ID);
 	glBindVertexArray(mVAO);
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
 	
-	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y || true)
 	{
 		std::shared_ptr<Shader> picking = ResourceManager::Get<Shader>("picking_shader");
-		Texture test(mFramebuffer->Width, mFramebuffer->Height, GL_RED);
-		mFramebuffer->AttachTexture(1, GL_RED, test.GetID());
+
+		mFramebuffer->AttachTexture(1, GL_RED, mFramebuffer->RenderedTextures[1]->GetID());
 		picking->Use();
+		// picking->SetInt("color", 50);
+		picking->SetInt("PickingColor", 50);
 		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(1, mouseX, mouseY);
-		Logger::Debug("Pixel data = {}", pixelData);
 		picking->UnUse();
-		mFramebuffer->AttachTexture(0, GL_RGB, mFramebuffer->RenderedTextures[0]->GetID());
-		glUseProgram(mShader->ID);
+		Logger::Debug("Pixel data = {}", pixelData);
+		//mFramebuffer->AttachTexture(0, GL_RGB, mFramebuffer->RenderedTextures[0]->GetID());
+		//glUseProgram(mShader->ID);
 	}
 
 	glBindVertexArray(0);

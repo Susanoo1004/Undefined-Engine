@@ -38,7 +38,7 @@ void Application::Init()
 
     Interface::Init();
 
-    Skybox::Setup();
+    // Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     pickingShader = ResourceManager::Get<Shader>("picking_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
@@ -101,7 +101,7 @@ void Application::Update()
 
     ActualScene.Update();
 
-    Skybox::Update();
+    //Skybox::Update();
     Interface::EditorViewports[0]->ViewportCamera->ProcessInput();
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
@@ -120,9 +120,21 @@ void Application::Update()
         BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
 
-        mRenderer->UseShader(BaseShader->ID);
-        Draw();
-        mRenderer->UnUseShader();
+        for (int j = 0; j < Interface::EditorViewports[i]->mFramebuffer->RenderedTextures.size(); j++)
+        {
+            if (j == 0)
+            {
+                mRenderer->UseShader(BaseShader->ID);
+            }
+
+            else 
+            {
+                mRenderer->UseShader(ResourceManager::Get<Shader>("picking_shader")->ID);
+            }
+
+            Draw(); 
+            mRenderer->UnUseShader();
+        }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
@@ -147,5 +159,5 @@ void Application::Draw()
     ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
 
     // Last draw
-    Skybox::Draw();
+    // Skybox::Draw();
 }

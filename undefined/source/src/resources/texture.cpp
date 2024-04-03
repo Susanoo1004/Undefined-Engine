@@ -6,7 +6,7 @@
 
 #include "engine_debug/logger.h"
 
-Texture::Texture(const unsigned int width, const unsigned int height, const unsigned int format)
+Texture::Texture(const unsigned int width, const unsigned int height, const int format)
 	: mWidth(width), mHeight(height)
 {
 	glGenTextures(1, &mID);

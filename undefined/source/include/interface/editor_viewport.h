@@ -18,8 +18,8 @@ public:
 	unsigned int GetFBO_ID();
 
 	Camera* ViewportCamera;
-private:
 	Framebuffer* mFramebuffer;
+private:
 	std::shared_ptr<Shader> mShader;
 	Vector2 mViewportBounds[2];
 

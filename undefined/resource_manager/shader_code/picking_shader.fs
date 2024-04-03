@@ -1,8 +1,13 @@
 #version 450 core
 
-layout (location = 0) out int color;
+
+// Ouput data
+out int color;
+
+// Values that stay constant for the whole mesh.
+uniform int PickingColor;
 
 void main()
 {
-	color = 50;
+    color = PickingColor;
 }
