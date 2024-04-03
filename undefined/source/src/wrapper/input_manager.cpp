@@ -14,7 +14,7 @@ InputManager::InputManager()
 {
 }
 
-void InputManager::CreateKeyInput(std::string keyInputName, std::vector<int> keysToMonitor)
+void InputManager::CreateKeyInput(const std::string& keyInputName, const std::vector<int>& keysToMonitor)
 {
 	std::shared_ptr<KeyInput> keyInput = std::make_shared<KeyInput>(keysToMonitor);
 
@@ -30,7 +30,7 @@ void InputManager::CreateKeyInput(std::string keyInputName, std::vector<int> key
 	mInstances.push_back(keyInput);
 }
 
-UNDEFINED_ENGINE void InputManager::DeleteKeyInput(std::string keyInputName)
+void InputManager::DeleteKeyInput(const std::string& keyInputName)
 {
 	mInstances.erase(std::remove(mInstances.begin(), mInstances.end(), GetKeyInput(keyInputName)), mInstances.end());
 }
@@ -40,7 +40,7 @@ void InputManager::SetInputMode(GLFWwindow* window, int mode, int value)
 	glfwSetInputMode(window, mode, value);
 }
 
-std::shared_ptr<KeyInput> InputManager::GetKeyInput(std::string keyInputName)
+std::shared_ptr<KeyInput> InputManager::GetKeyInput(const std::string& keyInputName)
 {
 	auto&& p = KeyInputsMap.find(keyInputName);
 

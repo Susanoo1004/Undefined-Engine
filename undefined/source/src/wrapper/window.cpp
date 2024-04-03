@@ -10,7 +10,6 @@
 #include "service_locator.h"
 
 Window::Window()
-    : mCam(1200,800)
 {
     mWindow = NULL;
 }
@@ -87,11 +86,6 @@ GLFWwindow* Window::GetWindowVar()
     return mWindow;
 }
 
-Camera* Window::GetCamera()
-{
-    return &mCam;
-}
-
 bool Window::IsWindowOpen()
 {
     return !glfwWindowShouldClose(mWindow) && glfwGetKey(mWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS;
@@ -115,13 +109,7 @@ void Window::WindowSizeCallback(GLFWwindow* , int width, int height)
         return;
     }
 
-    Matrix4x4 result;
-    if (w->Height)
-    {
-        result = Matrix4x4::ProjectionMatrix(calc::PI / 2, (float)w->Width / (float)w->Height, 0.1f, 20.0f);
-        w->GetCamera()->SetPerspective(result);
-    }
-    glViewport(0, 0, w->Width, w->Height);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Window::SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback)

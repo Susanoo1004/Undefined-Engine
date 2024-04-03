@@ -1,8 +1,19 @@
 #version 450
 
-layout (location = 0) in vec3 pos;
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aTexCoord;
+
+out vec3 Normal;
+out vec2 TexCoord;
+out vec3 FragPos;
 
 void main()
 {
-	gl_Position = vec4(0.9 * pos.x, 0.9 * pos.y, 0.5 * pos.z, 1.0);
+	FragPos = aPos;
+	Normal = aNormal;
+	TexCoord = aTexCoord;
+
+	gl_Position = vec4(FragPos, 1.0);
 }
+

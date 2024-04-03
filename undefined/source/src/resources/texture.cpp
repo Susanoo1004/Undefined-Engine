@@ -9,26 +9,30 @@
 Texture::Texture(const unsigned int width, const unsigned int height)
 	: mWidth(width), mHeight(height)
 {
-	glGenTextures(1, &mID);
-	glBindTexture(GL_TEXTURE_2D, mID);
+	mRenderer = ServiceLocator::Get<Renderer>();
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	mRenderer->GenTexture(1, &mID);
+	mRenderer->BindTexture(mID);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
 }
 
 Texture::Texture(const char* filepath, bool isFlipped)
 {
-	glGenTextures(1, &mID);
-	glBindTexture(GL_TEXTURE_2D, mID);
+	mRenderer = ServiceLocator::Get<Renderer>();
+
+	mRenderer->GenTexture(1, &mID);
+	mRenderer->BindTexture(mID);
 
 	stbi_set_flip_vertically_on_load(isFlipped);
 
 	int channelCount;
-	const unsigned char* data = stbi_load(filepath, &mWidth, &mHeight, &channelCount, 0);
+	Data = stbi_load(filepath, &mWidth, &mHeight, &channelCount, 0);
 
-	if (data)
+	if (Data)
 	{
 		GLenum format = 0;
 
@@ -45,53 +49,54 @@ Texture::Texture(const char* filepath, bool isFlipped)
 			format = GL_RGBA;
 		}
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, Data);
+		mRenderer->GenerateMipMap(GL_TEXTURE_2D);
 	}
 	else
 	{
 		Logger::Warning("Failed to load {} texture", filepath);
 	}
 
-	stbi_image_free((void*)data);
+	stbi_image_free((void*)Data);
 }
 
 Texture::~Texture()
 {
-	glDeleteTextures(1, &mID);
+	mRenderer->DeleteTexture(1, &mID);
 }
 
-const unsigned int Texture::GetID()
+unsigned int Texture::GetID() const
 {
 	return mID;
 }
 
-const void Texture::SetID(unsigned int newID)
+void Texture::SetID(unsigned int newID)
 {
 	mID = newID;
 }
 
-const unsigned int Texture::GetWidth()
+unsigned int Texture::GetWidth() const
 {
 	return mWidth;
 }
 
-const unsigned int Texture::GetHeight()
+unsigned int Texture::GetHeight() const
 {
 	return mHeight;
 }
 
-bool Texture::IsValid()
+bool Texture::IsValid() const
 {
 	return (mWidth > 0 && mHeight > 0);
 }
 
-unsigned int Texture::LoadCubeMap(std::vector<std::string> faces)
+unsigned int Texture::LoadCubeMap(const std::vector<std::string>& faces)
 {
 	unsigned int textureID;
 

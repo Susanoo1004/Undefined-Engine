@@ -23,9 +23,10 @@ void Interface::Init()
     ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<Window>()->GetWindowVar(), true);
     ImGui_ImplOpenGL3_Init(glslVersion);
 
-    Framebuffer* framebuffer = Framebuffer::Create<1>(200,200);
+    std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
+    ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
 
-    EditorViewports.emplace_back(framebuffer);
+    CreateEditorViewport();
 }
 
 void Interface::NewFrame()
@@ -87,10 +88,12 @@ void Interface::Update()
     ContentBrowser::DisplayWindow();
     Inspector::ShowWindow();
 
-    EditorViewports[0].ShowWindow();
+    for (int i = 0; i < EditorViewports.size(); i++)
+    {
+        EditorViewports[i]->ShowWindow();
+    }
 
     ImGui::End();
-    Render();
 }
 
 void Interface::Delete()
@@ -101,4 +104,12 @@ void Interface::Delete()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyPlatformWindows();
     ImGui::DestroyContext();
+}
+
+UNDEFINED_ENGINE void Interface::CreateEditorViewport()
+{
+    Framebuffer* framebuffer = Framebuffer::Create<1>(200, 200);
+    Camera* camera = new Camera(200, 200);
+
+    EditorViewports.push_back(new EditorViewport(framebuffer, camera));
 }

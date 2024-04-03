@@ -16,14 +16,16 @@ class Interface
 	STATIC_CLASS(Interface)
 
 public:
-	UNDEFINED_ENGINE static void Init();
+	UNDEFINED_ENGINE static void CreateEditorViewport();
 
-	UNDEFINED_ENGINE static void Update();
-	UNDEFINED_ENGINE static void NewFrame();
-	UNDEFINED_ENGINE static void BeginDockSpace();
-	UNDEFINED_ENGINE static void Render();
+	static void Init();
+	static void Update();
+	static void Render();
+	static void Delete();
 
-	static inline std::vector<EditorViewport> EditorViewports;
+	static inline std::vector<EditorViewport*> EditorViewports;
 
-	UNDEFINED_ENGINE static void Delete();
+private:
+	static void NewFrame();
+	static void BeginDockSpace();
 };

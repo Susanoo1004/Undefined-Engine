@@ -13,28 +13,26 @@ public:
     Camera(float width, float height);
     ~Camera();
 
-    void SetPerspective(Matrix4x4& perspectiveView);
-    Matrix4x4 GetView();
-    Matrix4x4 GetProjection();
+    void SetPerspective(const Matrix4x4& perspectiveView);
+    void SetCurrentCamera();
 
     void Update();
 
-    void ProcessInput();
+    const Matrix4x4& GetView() const;
+    const Matrix4x4& GetProjection() const;
+    const Matrix4x4& GetVP() const;
 
-    const Matrix4x4& GetVP();
-
-    Vector3 mEye;
-    Vector3 mLookAt;
-    Vector3 mUp;
+    Vector3 Eye;
+    Vector3 LookAt;
+    Vector3 Up;
   
-private:
+    float Width;
+    float Height;
 
+private:
     Matrix4x4 mVP;
     Matrix4x4 mView;
     Matrix4x4 mPerspective;
-
-    float mWidth;
-    float mHeight;
 
     float mCameraSpeed = 0.05f;
     float mMouseSensitivity = 0.05f;
@@ -52,10 +50,7 @@ private:
 public:
     static void MouseCallback(GLFWwindow* window, double xposIn, double yposIn);
     static void ChangeSpeedCam(GLFWwindow* window, double xposIn, double yposIn);
+    static void ProcessInput();
 
     static Camera* CurrentCamera;
-
-
-private:
-    // friend class DirLight;
 };
