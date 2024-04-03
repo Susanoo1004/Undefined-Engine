@@ -11,7 +11,6 @@ void Renderer::Init()
 	gladLoadGL();
 	SetClearColor();
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_SCISSOR_TEST);
 
     Debug.DebugInit();
 }

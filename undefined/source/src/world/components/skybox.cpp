@@ -29,10 +29,6 @@ void Skybox::Setup()
 
 	mRenderer->ActiveTexture(GL_TEXTURE0);
 	mRenderer->BindTexture(cubemapTexture, GL_TEXTURE_CUBE_MAP);
-
-	mRenderer->UseShader(mSkyboxShader->ID);
-	mRenderer->SetUniform(mSkyboxShader->ID, "skybox", 0);
-	mRenderer->UnUseShader();
 	mRenderer->BindBuffers(0, 0, 0);
 }
 
