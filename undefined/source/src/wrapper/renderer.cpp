@@ -45,11 +45,31 @@ void Renderer::BindTexture(unsigned int ID, unsigned int type)
 	glBindTexture(type, ID);
 }
 
+void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int ID, int format)
+{
+    glFramebufferTexture2D(framebufferTarget, attachement, format, ID, 0);
+}
+
+void Renderer::BindFramebuffer(int target, unsigned int framebufferID)
+{
+    glBindFramebuffer(target, framebufferID);
+}
+
+void Renderer::BindRenderbuffer(unsigned int renderbufferID)
+{
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbufferID);
+}
+
 void Renderer::BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO)
 {
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+}
+
+void Renderer::BindRenderbuffersToFramebuffers(int framebufferTarget, int attachements, unsigned int renderbufferID)
+{
+	glFramebufferRenderbuffer(framebufferTarget, attachements, GL_RENDERBUFFER, renderbufferID);
 }
 
 void Renderer::AttributePointers(unsigned int index, int size, unsigned int type, int stride, const void* pointer, bool isNormalized)
@@ -61,6 +81,11 @@ void Renderer::AttributePointers(unsigned int index, int size, unsigned int type
 void Renderer::SetBufferData(unsigned int target, int size, const void* data, unsigned int usage)
 {
     glBufferData(target, size, data, usage);
+}
+
+void Renderer::SetRenderBufferStorageData(int target, int format, float width, float height)
+{
+    glRenderbufferStorage(target, format, (GLsizei)width, (GLsizei)height);
 }
 
 void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* indices)
@@ -158,6 +183,16 @@ void Renderer::SetUniform(unsigned int ID, const std::string& name, const Matrix
 void Renderer::DeleteShader(unsigned int shader)
 {
     glDeleteShader(shader);
+}
+
+void Renderer::DeleteFramebuffers(int number, unsigned int* framebuffersID)
+{
+    glDeleteFramebuffers(number, framebuffersID);
+}
+
+void Renderer::DeleteRenderbuffers(int number, unsigned int* renderbuffersID)
+{
+    glDeleteRenderbuffers(number, renderbuffersID);
 }
 
 void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)

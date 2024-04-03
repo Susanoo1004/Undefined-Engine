@@ -17,18 +17,18 @@ void Skybox::Setup()
 	mRenderer = ServiceLocator::Get<Renderer>();
 
 	//Cube setup
-	mRenderer->GenerateVertexArray(1, &cubeVAO);
-	mRenderer->GenerateBuffer(1, &cubeVBO);
-	mRenderer->BindBuffers(cubeVAO, cubeVBO, 0);
-	mRenderer->SetBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
+	mRenderer->GenerateVertexArray(1, &CubeVAO);
+	mRenderer->GenerateBuffer(1, &CubeVBO);
+	mRenderer->BindBuffers(CubeVAO, CubeVBO, 0);
+	mRenderer->SetBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), &CubeVertices, GL_STATIC_DRAW);
 	mRenderer->AttributePointers(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
 	mRenderer->AttributePointers(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	
 	//faces = ResourceManager::LoadFolder("../undefined/resource_manager/skybox");
-	cubemapTexture = Texture::LoadCubeMap(faces);
+	CubemapTexture = Texture::LoadCubeMap(Faces);
 
 	mRenderer->ActiveTexture(GL_TEXTURE0);
-	mRenderer->BindTexture(cubemapTexture, GL_TEXTURE_CUBE_MAP);
+	mRenderer->BindTexture(CubemapTexture, GL_TEXTURE_CUBE_MAP);
 	mRenderer->BindBuffers(0, 0, 0);
 }
 
@@ -38,8 +38,8 @@ void Skybox::Update(Camera* cam)
 
 	for (int i = 0; i < Interface::EditorViewports.size(); i++)
 	{
-		view = Matrix4x4(Matrix3x3(cam->GetView())); // remove translation from the view matrix
-		mRenderer->SetUniform(mSkyboxShader->ID, "view", view);
+		View = Matrix4x4(Matrix3x3(cam->GetView())); // remove translation from the view matrix
+		mRenderer->SetUniform(mSkyboxShader->ID, "view", View);
 		mRenderer->SetUniform(mSkyboxShader->ID, "projection", cam->GetProjection());
 	}
 
@@ -50,11 +50,15 @@ void Skybox::Draw()
 {
 	// skybox cube
 	mRenderer->UseShader(mSkyboxShader->ID);
+
+	// Has to be put in Renderer
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-	mRenderer->BindBuffers(cubeVAO, 0, 0);
+	mRenderer->BindBuffers(CubeVAO, 0, 0);
 	mRenderer->ActiveTexture(GL_TEXTURE0);
 	mRenderer->Draw(GL_TRIANGLES, 0, 36);
 	mRenderer->BindBuffers(0, 0, 0);
+
+	// Same as above
 	glDepthFunc(GL_LESS); // set depth function back to default
 
 	mRenderer->UnUseShader();
