@@ -28,5 +28,5 @@ private:
 	int mHeight;
 
 public:
-	static unsigned int LoadCubeMap(const std::vector<std::string>& faces));
+	static unsigned int LoadCubeMap(const std::vector<std::string>& faces);
 };
