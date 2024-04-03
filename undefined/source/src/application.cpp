@@ -59,7 +59,6 @@ void Application::Update()
     ActualScene.Update();
     BaseShader->UnUse();
 
-    Skybox::Update();
     Camera::ProcessInput();
     Interface::Update();
 
@@ -73,10 +72,10 @@ void Application::Update()
         glClearColor(0.3f, 0.3f, 0.3f, 1);
 
         Interface::EditorViewports[i]->ViewportCamera->Update();
+        Skybox::Update(Interface::EditorViewports[i]->ViewportCamera);
 
-        // fix to remove a warning were the shader program was recompilating
-        BaseShader->UnUse();
         mRenderer->ClearBuffer();
+        
         BaseShader->Use();
 
         BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());

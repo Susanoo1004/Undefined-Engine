@@ -32,15 +32,15 @@ void Skybox::Setup()
 	mRenderer->BindBuffers(0, 0, 0);
 }
 
-void Skybox::Update()
+void Skybox::Update(Camera* cam)
 {
 	mRenderer->UseShader(mSkyboxShader->ID);
 
 	for (int i = 0; i < Interface::EditorViewports.size(); i++)
 	{
-		view = Matrix4x4(Matrix3x3(Interface::EditorViewports[i]->ViewportCamera->GetView())); // remove translation from the view matrix
+		view = Matrix4x4(Matrix3x3(cam->GetView())); // remove translation from the view matrix
 		mRenderer->SetUniform(mSkyboxShader->ID, "view", view);
-		mRenderer->SetUniform(mSkyboxShader->ID, "projection", Interface::EditorViewports[i]->ViewportCamera->GetProjection());
+		mRenderer->SetUniform(mSkyboxShader->ID, "projection", cam->GetProjection());
 	}
 
 	mRenderer->UnUseShader();

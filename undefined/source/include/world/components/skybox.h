@@ -16,7 +16,7 @@ class Skybox : public Component
 {
 public:
 	UNDEFINED_ENGINE static void Setup();
-	UNDEFINED_ENGINE static void Update();
+	UNDEFINED_ENGINE static void Update(Camera* cam);
 	UNDEFINED_ENGINE static void Draw();
 
 	static inline float cubeVertices[] = {
