@@ -13,9 +13,10 @@ public:
 	void Init();
 	void ShowWindow();
 
-	unsigned int GetFBO_ID();
+	unsigned int GetFBO_ID() const;
 
 	Camera* ViewportCamera;
+
 private:
 	Framebuffer* mFramebuffer;
 	std::shared_ptr<Shader> mShader;

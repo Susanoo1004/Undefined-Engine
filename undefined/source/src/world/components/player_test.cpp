@@ -3,6 +3,4 @@
 
 void Player::Update()
 {
-	Chiffre++;
-	Logger::Debug("test {}", Chiffre);
 }

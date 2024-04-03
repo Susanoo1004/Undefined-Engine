@@ -13,13 +13,13 @@ class InputManager : public ServiceType
 public:
 	UNDEFINED_ENGINE InputManager();
 
-	UNDEFINED_ENGINE void CreateKeyInput(std::string keyInputName, std::vector<int> keysToMonitor);
+	UNDEFINED_ENGINE void CreateKeyInput(const std::string& keyInputName, const std::vector<int>& keysToMonitor);
 
-	UNDEFINED_ENGINE void DeleteKeyInput(std::string keyInputName);
+	UNDEFINED_ENGINE void DeleteKeyInput(const std::string& keyInputName);
 
 	UNDEFINED_ENGINE void SetInputMode(GLFWwindow* window, int mode, int value);
 
-	UNDEFINED_ENGINE std::shared_ptr<KeyInput> GetKeyInput(std::string keyInputName);
+	UNDEFINED_ENGINE std::shared_ptr<KeyInput> GetKeyInput(const std::string& keyInputName);
 
 	std::unordered_map<std::string, std::shared_ptr<KeyInput>> KeyInputsMap;
 

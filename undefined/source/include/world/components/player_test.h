@@ -4,11 +4,5 @@
 class Player : public MonoBehaviour
 {
 public:
-
-	int Chiffre = 0;
-
 	void Update();
-
-private:
-
 };

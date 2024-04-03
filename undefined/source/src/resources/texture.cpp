@@ -66,32 +66,32 @@ Texture::~Texture()
 	glDeleteTextures(1, &mID);
 }
 
-const unsigned int Texture::GetID()
+unsigned int Texture::GetID() const
 {
 	return mID;
 }
 
-const void Texture::SetID(unsigned int newID)
+void Texture::SetID(unsigned int newID)
 {
 	mID = newID;
 }
 
-const unsigned int Texture::GetWidth()
+unsigned int Texture::GetWidth() const
 {
 	return mWidth;
 }
 
-const unsigned int Texture::GetHeight()
+unsigned int Texture::GetHeight() const
 {
 	return mHeight;
 }
 
-bool Texture::IsValid()
+bool Texture::IsValid() const
 {
 	return (mWidth > 0 && mHeight > 0);
 }
 
-unsigned int Texture::LoadCubeMap(std::vector<std::string> faces)
+unsigned int Texture::LoadCubeMap(const std::vector<std::string>& faces)
 {
 	unsigned int textureID;
 

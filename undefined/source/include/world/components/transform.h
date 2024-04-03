@@ -4,11 +4,7 @@
 class Transform
 {
 public:
-
 	Vector3 Position;
 	Vector3 Rotation;
 	Vector3 Scale;
-
-private:
-
 };

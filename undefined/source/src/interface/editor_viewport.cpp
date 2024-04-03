@@ -31,8 +31,7 @@ void EditorViewport::Init()
 
 void EditorViewport::ShowWindow()
 {
-
-	ImGui::Begin(((std::string)"Editor " + std::to_string(mID)).c_str());
+	ImGui::Begin((std::string("Editor ") + std::to_string(mID)).c_str());
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
@@ -52,8 +51,6 @@ void EditorViewport::ShowWindow()
 	const float windowWidth = ImGui::GetContentRegionAvail().x;
 	const float windowHeight = ImGui::GetContentRegionAvail().y;
 
-	Logger::Debug("ID {} ; width {} ; height {}", mID, windowWidth, windowHeight);
-
 	ViewportCamera->Width = windowWidth;
 	ViewportCamera->Height = windowHeight;
 
@@ -69,9 +66,8 @@ void EditorViewport::ShowWindow()
 	ViewportCamera->SetPerspective(result);
 
 	mFramebuffer->RescaleFramebuffer((unsigned int)windowWidth, (unsigned int)windowHeight);
-	//glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
 
-	// we get the screen position of the window
+	// We get the screen position of the window
 	ImVec2 pos = ImGui::GetCursorScreenPos();
 	
 	ImGui::GetWindowDrawList()->AddImage(
@@ -94,7 +90,7 @@ void EditorViewport::ShowWindow()
 	ImGui::End();
 }
 
-unsigned int EditorViewport::GetFBO_ID()
+unsigned int EditorViewport::GetFBO_ID() const
 {
 	return mFramebuffer->FBO_ID;
 }

@@ -5,4 +5,3 @@
 class UNDEFINED_ENGINE ServiceType
 {
 };
-

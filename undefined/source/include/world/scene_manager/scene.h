@@ -6,13 +6,12 @@
 class Scene
 {
 public:
-
 	UNDEFINED_ENGINE void Start();
 	UNDEFINED_ENGINE void FixedUpdate();
 	UNDEFINED_ENGINE void Update();
 	UNDEFINED_ENGINE void LateUpdate();
 
-	Object* AddObject(std::string name = "Default");
+	Object* AddObject(const std::string& name = "Default");
 
 	std::vector<Object*> Objects;
 };

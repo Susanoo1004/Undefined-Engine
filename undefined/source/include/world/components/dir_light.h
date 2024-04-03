@@ -7,14 +7,14 @@
 class DirLight : public Light
 {
 public:
-	UNDEFINED_ENGINE DirLight();
-	UNDEFINED_ENGINE DirLight(const Vector3& ambient, const Vector3& diffuse, const Vector3& specular);
-	UNDEFINED_ENGINE ~DirLight();
+	DirLight();
+	DirLight(const Vector3& ambient, const Vector3& diffuse, const Vector3& specular);
+	~DirLight();
 
-	UNDEFINED_ENGINE void Update() override;
-	UNDEFINED_ENGINE int GetNbrOfDirLight();
+	void Update() override;
+	int GetNbrOfDirLight() const;
 
 private:
-	UNDEFINED_ENGINE static inline int mNbrOfDirLight;
-	UNDEFINED_ENGINE static inline std::vector<DirLight*> DirLightsArray;
+	static inline int mNbrOfDirLight;
+	static inline std::vector<DirLight*> mDirLightsArray;
 };
