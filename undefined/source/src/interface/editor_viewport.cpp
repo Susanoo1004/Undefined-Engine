@@ -45,6 +45,14 @@ void EditorViewport::ShowWindow()
 			Interface::CreateEditorViewport();
 			ImGui::CloseCurrentPopup();
 		}
+		if (ImGui::Button("Delete Editor Viewport"))
+		{
+			Interface::DeleteEditorViewport(mID);
+			ImGui::CloseCurrentPopup();
+			ImGui::EndPopup();
+			ImGui::End();
+			return;
+		}
 		ImGui::EndPopup();
 	}
 
@@ -71,6 +79,11 @@ void EditorViewport::ShowWindow()
 unsigned int EditorViewport::GetFBO_ID() const
 {
 	return mFramebuffer->FBO_ID;
+}
+
+int EditorViewport::GetEditorID() const
+{
+	return mID;
 }
 
 void EditorViewport::RescaleViewport()

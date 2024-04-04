@@ -17,6 +17,7 @@ class Interface
 
 public:
 	UNDEFINED_ENGINE static void CreateEditorViewport();
+	UNDEFINED_ENGINE static void DeleteEditorViewport(int ID);
 
 	static void Init();
 	static void Update();
