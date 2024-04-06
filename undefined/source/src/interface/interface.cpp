@@ -113,3 +113,20 @@ UNDEFINED_ENGINE void Interface::CreateEditorViewport()
 
     EditorViewports.push_back(new EditorViewport(framebuffer, camera));
 }
+
+UNDEFINED_ENGINE void Interface::DeleteEditorViewport(int ID)
+{
+    std::vector<EditorViewport*>::iterator it = EditorViewports.begin();
+
+    for (EditorViewport* e : EditorViewports)
+    {
+        if (ID == e->GetEditorID())
+        {
+            EditorViewports.erase(it);
+            delete e;
+            break;
+        }
+
+        it++;
+    }
+}

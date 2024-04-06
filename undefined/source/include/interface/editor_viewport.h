@@ -16,6 +16,7 @@ public:
 	void ShowWindow();
 
 	unsigned int GetFBO_ID() const;
+	int GetEditorID() const;
 
 	void RescaleViewport();
 
