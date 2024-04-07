@@ -28,7 +28,7 @@ void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)
 		if (i == 0)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)Width, (GLsizei)Height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + 0, GL_TEXTURE_2D, RenderedTextures[0]->GetID(), 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, RenderedTextures[0]->GetID(), 0);
 		}
 		else
 		{

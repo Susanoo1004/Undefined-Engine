@@ -19,12 +19,14 @@ public:
 
 	Camera* ViewportCamera;
 	Framebuffer* mFramebuffer;
+
 private:
 	std::shared_ptr<Shader> mShader;
 	Vector2 mViewportBounds[2];
 
 	unsigned int mEBO = 0, mVBO = 0, mVAO = 0;
 	int mID;
+	bool ff = false;
 
 private:
 	static inline int mEditorNumber = 0;

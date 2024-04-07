@@ -35,7 +35,6 @@ void EditorViewport::Init()
 
 void EditorViewport::ShowWindow()
 {
-
 	ImGui::Begin(((std::string)"Editor " + std::to_string(mID)).c_str());
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
@@ -80,6 +79,7 @@ void EditorViewport::ShowWindow()
 	{
 		result = Matrix4x4::Identity();
 	}
+
 	else
 	{
 		result = Matrix4x4::ProjectionMatrix(calc::PI / 2.0f, windowWidth / windowHeight, 0.1f, 20.0f);
@@ -91,31 +91,48 @@ void EditorViewport::ShowWindow()
 
 	// we get the screen position of the window
 	ImVec2 pos = ImGui::GetCursorScreenPos();
-	
-	ImGui::GetWindowDrawList()->AddImage(
-		Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
-		ImVec2(pos.x, pos.y),
-		ImVec2(pos.x + windowWidth, pos.y + windowHeight),
-		ImVec2(0, 1),
-		ImVec2(1, 0)
-	);
+
+	if (ff)
+	{
+		ImGui::GetWindowDrawList()->AddImage(
+			Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[1]->GetID()),
+			ImVec2(pos.x, pos.y),
+			ImVec2(pos.x + windowWidth, pos.y + windowHeight),
+			ImVec2(0, 1),
+			ImVec2(1, 0)
+		);
+	}
+
+	else
+	{
+		ImGui::GetWindowDrawList()->AddImage(
+			Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
+			ImVec2(pos.x, pos.y),
+			ImVec2(pos.x + windowWidth, pos.y + windowHeight),
+			ImVec2(0, 1),
+			ImVec2(1, 0)
+		);
+	}
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer->FBO_ID);
 	glUseProgram(mShader->ID);
 	glBindVertexArray(mVAO);
-
 	
-	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y || true)
+	if (ImGui::IsKeyDown(ImGuiKey_V))
 	{
-		std::shared_ptr<Shader> picking = ResourceManager::Get<Shader>("picking_shader");
+		ff = true;
+	}
+	else
+	{
+		ff = false;
+	}
 
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+	{
 		mFramebuffer->AttachTexture(1, GL_RED, mFramebuffer->RenderedTextures[1]->GetID());
-		picking->Use();
-		// picking->SetInt("color", 50);
-		picking->SetInt("PickingColor", 50);
 		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(1, mouseX, mouseY);
-		picking->UnUse();
 		Logger::Debug("Pixel data = {}", pixelData);
+
 		//mFramebuffer->AttachTexture(0, GL_RGB, mFramebuffer->RenderedTextures[0]->GetID());
 		//glUseProgram(mShader->ID);
 	}
