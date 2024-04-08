@@ -30,8 +30,8 @@ void Application::Init()
     mWindowManager->Init();
     mRenderer->Init();
 
-    ResourceManager::Load("assets/", true);
     ResourceManager::Load("../Undefined/resource_manager/", true);
+    ResourceManager::Load("assets/", true);
 
     // Callback
     ServiceLocator::SetupCallbacks();
