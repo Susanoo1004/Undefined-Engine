@@ -95,8 +95,10 @@ void Application::Update()
     ServiceLocator::Get<Renderer>()->SetClearColor(0,0,0);
 
     // modify the camera in the shader
-    BaseShader->Use();
+    pickingShader->Use();
+    pickingShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
+    BaseShader->Use();
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
     ActualScene.Update();
@@ -109,7 +111,7 @@ void Application::Update()
         glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
         glEnable(GL_DEPTH_TEST);
 
-        glClearColor(0.f, 0.f, 0.f, 1);
+        glClearColor(0.3f, 0.3f, 0.3f, 1);
 
         Interface::EditorViewports[i]->ViewportCamera->Update();
 
@@ -120,6 +122,10 @@ void Application::Update()
         BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
 
+        BaseShader->Use();
+        pickingShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
+        pickingShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
+       
         for (int j = 0; j < Interface::EditorViewports[i]->mFramebuffer->RenderedTextures.size(); j++)
         {
             if (j == 0)
@@ -129,7 +135,7 @@ void Application::Update()
 
             else 
             {
-                mRenderer->UseShader(ResourceManager::Get<Shader>("picking_shader")->ID);
+                mRenderer->UseShader(pickingShader->ID);
             }
 
             Draw(); 
