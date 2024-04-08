@@ -31,8 +31,8 @@ void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)
 	}
 
 	mRenderer->BindRenderbuffer(RBO_ID);
-	mRenderer->SetRenderBufferStorageData(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (float)Width, (float)Height);
-	mRenderer->BindRenderbuffersToFramebuffers(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, RBO_ID);
+	mRenderer->SetRenderBufferStorageData(GL_DEPTH24_STENCIL8, (float)Width, (float)Height);
+	mRenderer->BindRenderbufferToFramebuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, RBO_ID);
 	
 	mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
 }

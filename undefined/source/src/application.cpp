@@ -68,7 +68,7 @@ void Application::Update()
 
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
 
-        glEnable(GL_DEPTH_TEST);
+        mRenderer->EnableTest(GL_DEPTH_TEST);
 
         mRenderer->SetClearColor(0,0,0);
 

@@ -1,7 +1,6 @@
 #include "wrapper/renderer.h"
 
 #include <iostream>
-#include <glad/glad.h>
 
 #include"resources/resource_manager.h"
 #include"resources/texture.h"
@@ -13,7 +12,7 @@ void Renderer::Init()
 {
 	gladLoadGL();
 	SetClearColor(0,0,0);
-    glEnable(GL_DEPTH_TEST);
+    EnableTest(GL_DEPTH_TEST);
 
     Debug.DebugInit();
 }
@@ -58,9 +57,9 @@ void Renderer::BindTexture(unsigned int ID, unsigned int type)
 	glBindTexture(type, ID);
 }
 
-void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int ID, int format)
+void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int ID, int type)
 {
-    glFramebufferTexture2D(framebufferTarget, attachement, format, ID, 0);
+    glFramebufferTexture2D(framebufferTarget, attachement, type, ID, 0);
 }
 
 void Renderer::BindFramebuffer(unsigned int target, unsigned int framebufferID)
@@ -80,7 +79,7 @@ void Renderer::BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 }
 
-void Renderer::BindRenderbuffersToFramebuffers(int framebufferTarget, int attachements, unsigned int renderbufferID)
+void Renderer::BindRenderbufferToFramebuffer(int framebufferTarget, int attachements, unsigned int renderbufferID)
 {
 	glFramebufferRenderbuffer(framebufferTarget, attachements, GL_RENDERBUFFER, renderbufferID);
 }
@@ -96,9 +95,9 @@ void Renderer::SetBufferData(unsigned int target, int size, const void* data, un
     glBufferData(target, size, data, usage);
 }
 
-void Renderer::SetRenderBufferStorageData(int target, int format, float width, float height)
+void Renderer::SetRenderBufferStorageData(int format, float width, float height)
 {
-    glRenderbufferStorage(target, format, (GLsizei)width, (GLsizei)height);
+    glRenderbufferStorage(GL_RENDERBUFFER, format, (GLsizei)width, (GLsizei)height);
 }
 
 void Renderer::SetTextureParameteri(unsigned int target, unsigned int texParam, unsigned int texValue)
