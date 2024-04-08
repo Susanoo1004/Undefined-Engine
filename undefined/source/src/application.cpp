@@ -42,59 +42,134 @@ void Application::Init()
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-   ActualScene.AddObject("Light")->AddComponent<Light>();
+    ActualScene.AddObject("Light")->AddComponent<Light>();
 
-   Object* object = ActualScene.AddObject("test1");
-   Object* object2 = ActualScene.AddObject("test2");
-   object2->SetParent(object);
+    Object* object = ActualScene.AddObject("test1");
+    Object* object2 = ActualScene.AddObject("test2");
+    object2->SetParent(object);
 
-   object->GameTransform->Position = { 12, 0, 0 };
-   for (size_t i = 0; i < 4; i++)
-   {
-       auto test1 = object->GameTransform->WorldToLocalMatrix()[i][0];
-       auto test2 = object->GameTransform->WorldToLocalMatrix()[i][1];
-       auto test3 = object->GameTransform->WorldToLocalMatrix()[i][2];
-       auto test4 = object->GameTransform->WorldToLocalMatrix()[i][3];
-       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
-   }
-   Logger::Debug("");
-   object->GameTransform->Position += { 12, 0, 0 };
-   for (size_t i = 0; i < 4; i++)
-   {
-       auto test1 = object->GameTransform->WorldToLocalMatrix()[i][0];
-       auto test2 = object->GameTransform->WorldToLocalMatrix()[i][1];
-       auto test3 = object->GameTransform->WorldToLocalMatrix()[i][2];
-       auto test4 = object->GameTransform->WorldToLocalMatrix()[i][3];
-       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
-   }
-   Logger::Debug(""); 
-   object2->GameTransform->LocalPosition = { 12, 0, 0 };
-   for (size_t i = 0; i < 4; i++)
-   {
-       auto test1 = object2->GameTransform->LocalToWorldMatrix()[i][0];
-       auto test2 = object2->GameTransform->LocalToWorldMatrix()[i][1];
-       auto test3 = object2->GameTransform->LocalToWorldMatrix()[i][2];
-       auto test4 = object2->GameTransform->LocalToWorldMatrix()[i][3];
-       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
-   }
-   Logger::Debug("");
-   for (size_t i = 0; i < 4; i++)
-   {
-       auto test1 = object2->GameTransform->WorldToLocalMatrix()[i][0];
-       auto test2 = object2->GameTransform->WorldToLocalMatrix()[i][1];
-       auto test3 = object2->GameTransform->WorldToLocalMatrix()[i][2];
-       auto test4 = object2->GameTransform->WorldToLocalMatrix()[i][3];
-       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
-   }
-   Logger::Debug("");
-   for (size_t i = 0; i < 4; i++)
-   {
-       auto test1 = object->GameTransform->WorldToLocalMatrix()[i][0];
-       auto test2 = object->GameTransform->WorldToLocalMatrix()[i][1];
-       auto test3 = object->GameTransform->WorldToLocalMatrix()[i][2];
-       auto test4 = object->GameTransform->WorldToLocalMatrix()[i][3];
-       Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
-   }
+    object->GameTransform->Rotation = { 90.f, 0.f, 0.f };
+    for (size_t i = 0; i < 4; i++)
+    {
+        Matrix4x4 mat = object->GameTransform->WorldToLocalMatrix();
+        auto test1 = mat[i][0];
+        auto test2 = mat[i][1];
+        auto test3 = mat[i][2];
+        auto test4 = mat[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+    for (size_t i = 0; i < 4; i++)
+    {
+        Matrix4x4 mat = object2->GameTransform->WorldToLocalMatrix();
+        auto test1 = mat[i][0];
+        auto test2 = mat[i][1];
+        auto test3 = mat[i][2];
+        auto test4 = mat[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+
+    Logger::Debug("world");
+    Logger::Debug("{}, {}, {}", object->GameTransform->Rotation.x, object->GameTransform->Rotation.y, object->GameTransform->Rotation.z);
+    Logger::Debug("{}, {}, {}", object2->GameTransform->Rotation.x, object2->GameTransform->Rotation.y, object2->GameTransform->Rotation.z);
+
+    Logger::Debug("local");
+    Logger::Debug("{}, {}, {}", object->GameTransform->LocalRotation.x, object->GameTransform->LocalRotation.y, object->GameTransform->LocalRotation.z);
+    Logger::Debug("{}, {}, {}", object2->GameTransform->LocalRotation.x, object2->GameTransform->LocalRotation.y, object2->GameTransform->LocalRotation.z);
+
+    object2->GameTransform->Rotation = { 0.f, 90.f, 0.f };
+
+    Logger::Debug("");
+    for (size_t i = 0; i < 4; i++)
+    {
+        Matrix4x4 mat = object->GameTransform->WorldToLocalMatrix();
+        auto test1 = mat[i][0];
+        auto test2 = mat[i][1];
+        auto test3 = mat[i][2];
+        auto test4 = mat[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+    for (size_t i = 0; i < 4; i++)
+    {
+        Matrix4x4 mat = object2->GameTransform->WorldToLocalMatrix();
+        auto test1 = mat[i][0];
+        auto test2 = mat[i][1];
+        auto test3 = mat[i][2];
+        auto test4 = mat[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+
+    Logger::Debug("world");
+    Logger::Debug("{}, {}, {}", object->GameTransform->Rotation.x, object->GameTransform->Rotation.y, object->GameTransform->Rotation.z);
+    Logger::Debug("{}, {}, {}", object2->GameTransform->Rotation.x, object2->GameTransform->Rotation.y, object2->GameTransform->Rotation.z);
+
+    Logger::Debug("local");
+    Logger::Debug("{}, {}, {}", object->GameTransform->LocalRotation.x, object->GameTransform->LocalRotation.y, object->GameTransform->LocalRotation.z);
+    Logger::Debug("{}, {}, {}", object2->GameTransform->LocalRotation.x, object2->GameTransform->LocalRotation.y, object2->GameTransform->LocalRotation.z);
+    Logger::Debug("");
+    /*
+    object->GameTransform->Position = { 12, 0, 0 };
+    for (size_t i = 0; i < 4; i++)
+    {
+        auto test1 = object->GameTransform->LocalToWorldMatrix()[i][0];
+        auto test2 = object->GameTransform->LocalToWorldMatrix()[i][1];
+        auto test3 = object->GameTransform->LocalToWorldMatrix()[i][2];
+        auto test4 = object->GameTransform->LocalToWorldMatrix()[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+    object->GameTransform->Position = { 12, 0, 0 };
+    object->GameTransform->Rotation = { 90, 0, 0 };
+    for (size_t i = 0; i < 4; i++)
+    {
+        auto test1 = object->GameTransform->WorldToLocalMatrix()[i][0];
+        auto test2 = object->GameTransform->WorldToLocalMatrix()[i][1];
+        auto test3 = object->GameTransform->WorldToLocalMatrix()[i][2];
+        auto test4 = object->GameTransform->WorldToLocalMatrix()[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+    object->GameTransform->Position += { 12, 0, 0 };
+    for (size_t i = 0; i < 4; i++)
+    {
+        auto test1 = object->GameTransform->LocalToWorldMatrix()[i][0];
+        auto test2 = object->GameTransform->LocalToWorldMatrix()[i][1];
+        auto test3 = object->GameTransform->LocalToWorldMatrix()[i][2];
+        auto test4 = object->GameTransform->LocalToWorldMatrix()[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+    for (size_t i = 0; i < 4; i++)
+    {
+        auto test1 = object2->GameTransform->LocalToWorldMatrix()[i][0];
+        auto test2 = object2->GameTransform->LocalToWorldMatrix()[i][1];
+        auto test3 = object2->GameTransform->LocalToWorldMatrix()[i][2];
+        auto test4 = object2->GameTransform->LocalToWorldMatrix()[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+    object2->GameTransform->Position = { 12, 0, 0 };
+    for (size_t i = 0; i < 4; i++)
+    {
+        auto test1 = object2->GameTransform->WorldToLocalMatrix()[i][0];
+        auto test2 = object2->GameTransform->WorldToLocalMatrix()[i][1];
+        auto test3 = object2->GameTransform->WorldToLocalMatrix()[i][2];
+        auto test4 = object2->GameTransform->WorldToLocalMatrix()[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    Logger::Debug("");
+    for (size_t i = 0; i < 4; i++)
+    {
+        auto test1 = object2->GameTransform->LocalToWorldMatrix()[i][0];
+        auto test2 = object2->GameTransform->LocalToWorldMatrix()[i][1];
+        auto test3 = object2->GameTransform->LocalToWorldMatrix()[i][2];
+        auto test4 = object2->GameTransform->LocalToWorldMatrix()[i][3];
+        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
+    }
+    */
 }
 
 // move to RENDERER

@@ -34,17 +34,17 @@ public:
 	void SetLocalScale(Vector3 newLocalScale);
 
 private:
-	/*
+
 	Vector3 mLocalPosition;
 	Vector3 mLocalRotation;
 	Vector3 mLocalScale = {1, 1, 1};
-
+	/*
 	Vector3 mWorldPosition;
 	Vector3 mWorldRotation;
 	Vector3 mWorldScale = {1, 1, 1};
 	*/
 
-	Matrix4x4 mLocalTRS;
+	Matrix4x4 mLocalTRS = Matrix4x4::TRS({0,0,0}, {0,0,0}, {1,1,1});
 	//Matrix4x4 mWorldTRS;
 	friend class Object;
 	Transform* mParentTransform;
