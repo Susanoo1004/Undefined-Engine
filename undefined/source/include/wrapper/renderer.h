@@ -7,6 +7,9 @@
 #include "wrapper/service_type.h"
 #include "utils/flag.h"
 
+class Texture;
+class Model;
+
 class UNDEFINED_ENGINE Renderer : public ServiceType
 {
 public:
@@ -57,7 +60,8 @@ public:
 	void DeleteRenderbuffers(int number, unsigned int* renderbuffersID);
 	void DeleteTexture(int number, unsigned int* ID);
 
-	void CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO);
+	void SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO);
+	inline std::shared_ptr<Model> CreateCube();
 
 	RendererDebug Debug;
 };

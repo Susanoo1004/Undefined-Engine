@@ -43,6 +43,7 @@
     <ClCompile Include="source\src\world\components\player_test.cpp" />
     <ClCompile Include="source\src\framebuffer.cpp" />
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
+    <ClCompile Include="source\src\resources\material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -110,6 +111,7 @@
     <ClInclude Include="source\include\world\components\transform.h" />
     <ClInclude Include="source\include\framebuffer.h" />
     <ClInclude Include="source\include\interface\editor_viewport.h" />
+    <ClInclude Include="source\include\resources\material.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

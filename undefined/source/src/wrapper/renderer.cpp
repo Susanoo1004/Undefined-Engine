@@ -3,6 +3,9 @@
 #include <iostream>
 #include <glad/glad.h>
 
+#include"resources/resource_manager.h"
+#include"resources/texture.h"
+#include"resources/model.h"
 
 #include "engine_debug/logger.h"
 
@@ -215,7 +218,7 @@ void Renderer::DeleteTexture(int number, unsigned int* ID)
     glDeleteTextures(number, ID);
 }
 
-void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
+void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
 {
     float Vertices[] = {
         // positions          // normal           // texture coords
@@ -256,4 +259,9 @@ void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+std::shared_ptr<Model> Renderer::CreateCube()
+{
+    return ResourceManager::Create<Model>("Cube", "assets/cube.obj");
 }

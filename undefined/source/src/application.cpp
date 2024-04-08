@@ -97,10 +97,10 @@ void Application::Update()
 
 void Application::Clear()
 {
+    mRenderer->UnUseShader();
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
     Interface::Delete();
-    skyboxShader->UnUse();
     Logger::Stop();
 }
 

@@ -51,14 +51,14 @@ void Model::Draw()
 {
     Render->BindBuffers(mVAO, mVBO, mEBO);
 
-    for (std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Texture>> pair : mModel)
+    for (std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Material>> pair : mModel)
     {
         Render->SetBufferData(GL_ARRAY_BUFFER, (int)pair.first->Vertices.size() * sizeof(Vertex), &pair.first->Vertices[0], GL_STATIC_DRAW);
         Render->SetBufferData(GL_ELEMENT_ARRAY_BUFFER, (int)pair.first->Indices.size() * sizeof(unsigned int), &pair.first->Indices[0], GL_STATIC_DRAW);
 
         if (pair.second)
         {
-            Render->BindTexture(pair.second->GetID());
+            Render->BindTexture(pair.second->MatTex->GetID());
         }
         else
         {
@@ -74,7 +74,7 @@ void Model::Draw()
 
 void Model::SetTexture(int index, std::shared_ptr<Texture> tex)
 {
-    mModel[index].second = tex;
+    mModel[index].second->MatTex = tex;
 }
 
 void Model::LoadModel(const std::string& path)
@@ -97,7 +97,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        mModel.push_back(std::make_pair<std::shared_ptr<Mesh>, std::shared_ptr<Texture>>(std::make_shared<Mesh>(ProcessMesh(mesh)), nullptr));
+        mModel.push_back(std::make_pair<std::shared_ptr<Mesh>, std::shared_ptr<Material>>(std::make_shared<Mesh>(ProcessMesh(mesh)), std::make_shared<Material>(nullptr)));
     }
     // then do the same for each of its children
     for (unsigned int i = 0; i < node->mNumChildren; i++)

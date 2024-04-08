@@ -171,6 +171,7 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\resources\material.cpp" />
     <ClCompile Include="source\src\framebuffer.cpp" />
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
     <ClCompile Include="source\src\resources\mesh.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\framebuffer.h" />
     <ClInclude Include="source\include\interface\editor_viewport.h" />
+    <ClInclude Include="source\include\resources\material.h" />
     <ClInclude Include="source\include\resources\mesh.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="source\include\interface\content_browser.h" />

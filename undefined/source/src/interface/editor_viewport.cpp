@@ -25,7 +25,7 @@ EditorViewport::~EditorViewport()
 
 void EditorViewport::Init()
 {
-	ServiceLocator::Get<Renderer>()->CreateQuad(mVBO, mEBO, mVAO);
+	ServiceLocator::Get<Renderer>()->SetQuad(mVBO, mEBO, mVAO);
 }
 
 void EditorViewport::ShowWindow()

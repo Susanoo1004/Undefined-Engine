@@ -3,6 +3,7 @@
 #include <assimp/scene.h>
 
 #include "resources/mesh.h"
+#include "resources/material.h"
 
 class Renderer;
 
@@ -20,7 +21,7 @@ public:
     UNDEFINED_ENGINE void SetTexture(int index, std::shared_ptr<Texture> tex);
 private:
     // model data
-    std::vector<std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Texture>>> mModel;
+    std::vector<std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Material>>> mModel;
 
     UNDEFINED_ENGINE void LoadModel(const std::string& path);
     UNDEFINED_ENGINE void ProcessNode(aiNode* node, const aiScene* scene);
