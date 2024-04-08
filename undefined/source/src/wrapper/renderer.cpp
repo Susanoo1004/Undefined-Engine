@@ -9,7 +9,7 @@
 void Renderer::Init()
 {
 	gladLoadGL();
-	SetClearColor();
+	SetClearColor(0,0,0);
     glEnable(GL_DEPTH_TEST);
 
     Debug.DebugInit();
