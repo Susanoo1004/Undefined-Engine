@@ -63,7 +63,7 @@ Framebuffer* Framebuffer::Create(unsigned int width, unsigned int height)
 
         else
         {
-            f->RenderedTextures[i] = std::make_unique<Texture>(f->Width, f->Height, GL_RED);
+            f->RenderedTextures[i] = std::make_unique<Texture>(f->Width, f->Height, GL_RED, GL_RED);
         }
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, f->RenderedTextures[i]->GetID(), 0);

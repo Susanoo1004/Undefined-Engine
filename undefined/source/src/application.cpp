@@ -92,7 +92,7 @@ void Application::Update()
 {
     T += 0.016f;
 
-    ServiceLocator::Get<Renderer>()->SetClearColor();
+    ServiceLocator::Get<Renderer>()->SetClearColor(0,0,0);
 
     // modify the camera in the shader
     BaseShader->Use();
@@ -109,7 +109,7 @@ void Application::Update()
         glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
         glEnable(GL_DEPTH_TEST);
 
-        glClearColor(0.3f, 0.3f, 0.3f, 1);
+        glClearColor(0.f, 0.f, 0.f, 1);
 
         Interface::EditorViewports[i]->ViewportCamera->Update();
 

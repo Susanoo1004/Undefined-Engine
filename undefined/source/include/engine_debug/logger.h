@@ -5,9 +5,30 @@
 #include <format>
 #include <iostream>
 #include <ts_queue/tsqueue.hpp>
+#include <toolbox/Vector3.h>
 
 #include "utils/flag.h"
 
+template <>
+struct std::formatter<Vector3, char> 
+{
+	template<class ParseContext>
+	constexpr ParseContext::iterator parse(ParseContext& ctx)
+	{
+		auto it = ctx.begin();
+		if (it == ctx.end())
+			return it;
+		if (*it != '}')
+			throw std::format_error("Invalid format args for Vector3");
+		return it;
+	}
+
+	template<class FmtContext>
+	typename FmtContext::iterator format(const Vector3& vec, FmtContext& ctx) const
+	{
+		return std::format_to(ctx.out(), "({}, {}, {})", vec.x, vec.y, vec.z);
+	}
+};
 
 class Logger
 {
@@ -37,7 +58,7 @@ public:
 
 	template<class... Types>
 	static void Debug(std::string string, Types... args)
-	{
+	{	
 		std::string log = std::vformat(string, std::make_format_args(args...));
 
 		SetupLogEntry(LogLevel::DEBUG, log);

@@ -11,7 +11,7 @@ class UNDEFINED_ENGINE Texture : public Resource
 {
 public:
 	Texture(const char* filepath, bool isFlipped = false);
-	Texture(const unsigned int width, const unsigned int height, const int format = 0x1908);
+	Texture(const unsigned int width, const unsigned int height, const int internalFormat = 0x1908, const int format = 0x1908);
 	~Texture();
 
 	const unsigned int GetID();

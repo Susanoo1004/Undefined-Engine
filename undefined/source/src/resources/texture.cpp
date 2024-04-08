@@ -6,7 +6,7 @@
 
 #include "engine_debug/logger.h"
 
-Texture::Texture(const unsigned int width, const unsigned int height, const int format)
+Texture::Texture(const unsigned int width, const unsigned int height, const int internalFormat, const int format)
 	: mWidth(width), mHeight(height)
 {
 	glGenTextures(1, &mID);
@@ -15,7 +15,7 @@ Texture::Texture(const unsigned int width, const unsigned int height, const int 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, NULL);
 }
 
 Texture::Texture(const char* filepath, bool isFlipped)

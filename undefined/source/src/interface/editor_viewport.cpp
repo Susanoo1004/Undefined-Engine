@@ -113,7 +113,7 @@ void EditorViewport::ShowWindow()
 			ImVec2(1, 0)
 		);
 	}
-	
+
 	glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer->FBO_ID);
 	glUseProgram(mShader->ID);
 	glBindVertexArray(mVAO);
@@ -129,12 +129,11 @@ void EditorViewport::ShowWindow()
 
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
-		mFramebuffer->AttachTexture(1, GL_RED, mFramebuffer->RenderedTextures[1]->GetID());
 		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(1, mouseX, mouseY);
 		Logger::Debug("Pixel data = {}", pixelData);
 
-		//mFramebuffer->AttachTexture(0, GL_RGB, mFramebuffer->RenderedTextures[0]->GetID());
-		//glUseProgram(mShader->ID);
+		mFramebuffer->AttachTexture(0, GL_RGB, mFramebuffer->RenderedTextures[0]->GetID());
+		glUseProgram(mShader->ID);
 	}
 
 	glBindVertexArray(0);

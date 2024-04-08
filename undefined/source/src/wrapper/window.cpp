@@ -109,10 +109,6 @@ void Window::WindowSizeCallback(GLFWwindow* , int width, int height)
         return;
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    
-    
-    
-    (0, 0, w->Width, w->Height);
 }
 
 void Window::SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback)

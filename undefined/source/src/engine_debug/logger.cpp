@@ -8,7 +8,6 @@
 
 #undef ERROR
 
-
 Logger::Logger()
 {
     CreateDebugFile(std::string("../log/"), CurrentDateTime());
