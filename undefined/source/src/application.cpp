@@ -42,15 +42,15 @@ void Application::Init()
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-   Object* light = ActualScene.AddObject("Light");
-   light->AddComponent<Light>();
+   Object* light = ActualScene.AddObject("dirLight");
+   light->AddComponent<DirLight>();
 }
 
 void Application::Update()
 {
     T += 0.016f;
 
-    mRenderer->SetClearColor();
+    mRenderer->SetClearColor(0,0,0);
 
     // Modify the camera in the shader
     BaseShader->Use();
@@ -70,7 +70,7 @@ void Application::Update()
 
         glEnable(GL_DEPTH_TEST);
 
-        mRenderer->SetClearColor();
+        mRenderer->SetClearColor(0,0,0);
 
         Interface::EditorViewports[i]->ViewportCamera->Update();
         Skybox::Update(Interface::EditorViewports[i]->ViewportCamera);

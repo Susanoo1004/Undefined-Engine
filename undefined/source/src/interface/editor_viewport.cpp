@@ -19,7 +19,6 @@ EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
 
 EditorViewport::~EditorViewport()
 {
-	mEditorNumber--;
 	delete mFramebuffer;
 	delete ViewportCamera;
 }
@@ -45,13 +44,16 @@ void EditorViewport::ShowWindow()
 			Interface::CreateEditorViewport();
 			ImGui::CloseCurrentPopup();
 		}
-		if (ImGui::Button("Delete Editor Viewport"))
+		if (Interface::EditorViewports.size() > 1)
 		{
-			Interface::DeleteEditorViewport(mID);
-			ImGui::CloseCurrentPopup();
-			ImGui::EndPopup();
-			ImGui::End();
-			return;
+			if (ImGui::Button("Delete Editor Viewport"))
+			{
+				Interface::DeleteEditorViewport(mID);
+				ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+				ImGui::End();
+				return;
+			}
 		}
 		ImGui::EndPopup();
 	}
