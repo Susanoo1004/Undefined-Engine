@@ -42,8 +42,8 @@ void Application::Init()
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-   Object* light = ActualScene.AddObject("Light");
-   light->AddComponent<Light>();
+   Object* light = ActualScene.AddObject("dirLight");
+   light->AddComponent<DirLight>();
 }
 
 void Application::Update()
