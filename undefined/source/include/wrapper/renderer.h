@@ -142,40 +142,128 @@ public:
 	/// <param name="type">: Type of data that need to be draw (e.g : GL_UNSIGNED_INT, GL_SHORT)</param>
 	/// <param name="indices">: Pointer to the start of the data in the EBO (0 for the begining)</param>
 	void Draw(unsigned int mode, int size, unsigned int type, const void* indices);
-	void Draw(unsigned int mode, int start, int end);
+	/// <summary>
+	/// Draw by using the array
+	/// </summary>
+	/// <param name="mode">: Drawing mode (e.g : GL_TRIANGLES, GL_LINES, ...)</param>
+	/// <param name="start">: Start index in the actual array</param>
+	/// <param name="count">: Number of indices</param>
+	void Draw(unsigned int mode, int start, int count);
 
+	/// <summary>
+	/// Set a shader
+	/// </summary>
+	/// <param name="shaderType">: Shader type (GL_FRAGMENT_SHADER or GL_VERTEX_SHADER)</param>
+	/// <param name="vShaderCode">: Code of the shader</param>
+	/// <returns>Return the Shader source ID</returns>
 	unsigned int SetShader(int shaderType, const char* vShaderCode);
-	unsigned int LinkShader(unsigned int ID, unsigned int vertex, unsigned int fragment);
+	/// <summary>
+	/// Link the vertex and the fragment shader together
+	/// </summary>
+	/// <param name="ID">: Shader ID</param>
+	/// <param name="vertex">: Vertex Shader source ID</param>
+	/// <param name="fragment">: Fragment Shader source ID</param>
+	/// <returns></returns>
+	void LinkShader(unsigned int &ID, unsigned int vertex, unsigned int fragment);
 	
+	/// <summary>
+	/// Use a Shader
+	/// </summary>
+	/// <param name="ID">: Shader ID</param>
 	void UseShader(int ID);
+	/// <summary>
+	/// Un use the current Shader (which mean we are not using any shader)
+	/// </summary>
 	void UnUseShader();
 
+	/// <summary>
+	/// Set a Uniform in the shader
+	/// </summary>
+	/// <param name="ID">: Shader ID</param>
+	/// <param name="name">: Name of the Uniform</param>
+	/// <param name="value">: Value of the uniform</param>
 	void SetUniform(unsigned int ID, const std::string& name, bool value) const;
+	/// <summary>
+	/// Set a Uniform in the shader
+	/// </summary>
+	/// <param name="ID">: Shader ID</param>
+	/// <param name="name">: Name of the Uniform</param>
+	/// <param name="value">: Value of the uniform</param>
 	void SetUniform(unsigned int ID, const std::string& name, int value) const;
+	/// <summary>
+	/// Set a Uniform in the shader
+	/// </summary>
+	/// <param name="ID">: Shader ID</param>
+	/// <param name="name">: Name of the Uniform</param>
+	/// <param name="value">: Value of the uniform</param>
 	void SetUniform(unsigned int ID, const std::string& name, float value) const;
+	/// <summary>
+	/// Set a Uniform in the shader
+	/// </summary>
+	/// <param name="ID">: Shader ID</param>
+	/// <param name="name">: Name of the Uniform</param>
+	/// <param name="v">: Value of the uniform</param>
 	void SetUniform(unsigned int ID, const std::string& name, const Vector3& v) const;
+	/// <summary>
+	/// Set a Uniform in the shader
+	/// </summary>
+	/// <param name="ID">: Shader ID</param>
+	/// <param name="name">: Name of the Uniform</param>
+	/// <param name="m">: Value of the uniform</param>
 	void SetUniform(unsigned int ID, const std::string& name, const Matrix4x4& m) const;
 
+	/// <summary>
+	/// Delete a Shader
+	/// </summary>
+	/// <param name="shader">: Shader ID</param>
 	void DeleteShader(unsigned int shader);
-
+	/// <summary>
+	/// Delete one or more Framebuffer
+	/// </summary>
+	/// <param name="number">: Number of Framebuffer to delete</param>
+	/// <param name="framebuffersID">: Pointer to the array of framebuffers you want to delete</param>
 	void DeleteFramebuffers(int number, unsigned int* framebuffersID);
+	/// <summary>
+	/// Delete one or more Renderbuffer
+	/// </summary>
+	/// <param name="number">: Number of Renderbuffer to delete</param>
+	/// <param name="renderbuffersID">: Pointer to the array of renderbuffers you want to delete</param>
 	void DeleteRenderbuffers(int number, unsigned int* renderbuffersID);
-	void DeleteTexture(int number, unsigned int* ID);
+	/// <summary>
+	/// Delete one or more Texture
+	/// </summary>
+	/// <param name="number">: Number of Texture</param>
+	/// <param name="ID">: Pointer to the array of Texture ID you want to delete</param>
+	void DeleteTextures(int number, unsigned int* ID);
 
+	/// <summary>
+	/// Set a Quad data in the VBO, EBO, VAO
+	/// </summary>
+	/// <param name="VBO">: VBO</param>
+	/// <param name="EBO">: EBO</param>
+	/// <param name="VAO">: VAO</param>
 	void SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO);
+	/// <summary>
+	/// Create a Cube
+	/// </summary>
+	/// <returns>return a model of a Cube with a light grey texture</returns>
 	inline std::shared_ptr<Model> CreateCube();
 
-	// Pass the GL_TEST here
+	/// <summary>
+	/// Enable the OpenGL Test
+	/// </summary>
+	/// <typeparam name="...Args"></typeparam>
+	/// <param name="...rendererTest">: All the test you want to pass (e.g : GL_DEPTH_TEST, GL_STENCIL_TEST, GL_SCISSOR_TEST)</param>
 	template<class... Args>
-	void EnableTest(Args... test);
+	void EnableTest(Args... rendererTest);
 
 	RendererDebug Debug;
 };
 
 template<class ...Args>
-inline void Renderer::EnableTest(Args ...test)
+inline void Renderer::EnableTest(Args ...rendererTest)
 {
-	for (const int p : { test... })
+	for (const int p : { rendererTest... })
 	{
 		glEnable(p);
 	}
