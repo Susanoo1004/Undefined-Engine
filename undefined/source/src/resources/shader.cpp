@@ -43,7 +43,7 @@ unsigned int Shader::SetFragmentShader(unsigned int fragment, const char* fShade
 
 void Shader::Link(unsigned int vertex, unsigned int fragment)
 {
-    ID = ServiceLocator::Get<Renderer>()->LinkShader(ID, vertex, fragment);
+    ServiceLocator::Get<Renderer>()->LinkShader(ID, vertex, fragment);
 }
 
 void Shader::SetBool(const std::string& name, bool value) const

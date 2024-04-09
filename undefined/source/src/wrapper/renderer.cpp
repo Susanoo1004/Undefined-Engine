@@ -110,9 +110,9 @@ void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* 
     glDrawElements(mode, size, type, indices);
 }
 
-void Renderer::Draw(unsigned int mode, int start, int end)
+void Renderer::Draw(unsigned int mode, int start, int count)
 {
-    glDrawArrays(mode, start, end);
+    glDrawArrays(mode, start, count);
 }
 
 unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
@@ -150,7 +150,7 @@ void Renderer::UnUseShader()
 	glUseProgram(0);
 }
 
-unsigned int Renderer::LinkShader(unsigned int ID, unsigned int vertex, unsigned int fragment)
+void Renderer::LinkShader(unsigned int &ID, unsigned int vertex, unsigned int fragment)
 {
     int success;
     char infoLog[512];
@@ -166,10 +166,8 @@ unsigned int Renderer::LinkShader(unsigned int ID, unsigned int vertex, unsigned
     {
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
         Logger::Error("SHADER_LINKING_FAILED {}", infoLog);
-        return 0;
+        return;
     }
-
-    return ID;
 }
 
 void Renderer::SetUniform(unsigned int ID, const std::string& name, bool value) const
@@ -212,7 +210,7 @@ void Renderer::DeleteRenderbuffers(int number, unsigned int* renderbuffersID)
     glDeleteRenderbuffers(number, renderbuffersID);
 }
 
-void Renderer::DeleteTexture(int number, unsigned int* ID)
+void Renderer::DeleteTextures(int number, unsigned int* ID)
 {
     glDeleteTextures(number, ID);
 }

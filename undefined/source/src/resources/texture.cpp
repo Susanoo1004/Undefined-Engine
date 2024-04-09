@@ -68,7 +68,7 @@ Texture::Texture(const char* filepath, bool isFlipped)
 
 Texture::~Texture()
 {
-	mRenderer->DeleteTexture(1, &mID);
+	mRenderer->DeleteTextures(1, &mID);
 }
 
 unsigned int Texture::GetID() const
