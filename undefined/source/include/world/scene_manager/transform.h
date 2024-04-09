@@ -16,6 +16,9 @@ public:
 	__declspec(property(get = GetRotation, put = SetRotation)) Vector3 Rotation;
 	Vector3 GetRotation();
 	void SetRotation(Vector3 newRotation);
+	__declspec(property(get = GetRotationRad, put = SetRotationRad)) Vector3 RotationRad;
+	Vector3 GetRotationRad();
+	void SetRotationRad(Vector3 newRotationRad);
 
 	__declspec(property(get = GetScale, put = SetScale)) Vector3 Scale;
 	Vector3 GetScale();
@@ -28,6 +31,9 @@ public:
 	__declspec(property(get = GetLocalRotation, put = SetLocalRotation)) Vector3 LocalRotation;
 	Vector3 GetLocalRotation();
 	void SetLocalRotation(Vector3 newLocalRotation);
+	__declspec(property(get = GetLocalRotationRad, put = SetLocalRotationRad)) Vector3 LocalRotationRad;
+	Vector3 GetLocalRotationRad();
+	void SetLocalRotationRad(Vector3 newLocalRotationRad);
 
 	__declspec(property(get = GetLocalScale, put = SetLocalScale)) Vector3 LocalScale;
 	Vector3 GetLocalScale();
@@ -38,14 +44,8 @@ private:
 	Vector3 mLocalPosition;
 	Vector3 mLocalRotation;
 	Vector3 mLocalScale = {1, 1, 1};
-	/*
-	Vector3 mWorldPosition;
-	Vector3 mWorldRotation;
-	Vector3 mWorldScale = {1, 1, 1};
-	*/
 
 	Matrix4x4 mLocalTRS = Matrix4x4::TRS({0,0,0}, {0,0,0}, {1,1,1});
-	//Matrix4x4 mWorldTRS;
 	friend class Object;
 	Transform* mParentTransform;
 
