@@ -65,7 +65,7 @@ public:
 	/// Bind a Texture to the actual active Texture
 	/// </summary>
 	/// <param name="ID">: Texture ID</param>
-	/// <param name="type">: Texture type (by default is : 0x0DE1 = 3553U = GL_TEXTURE_2D)</param>
+	/// <param name="type">: Texture type (by default : 0x0DE1 = 3553U = GL_TEXTURE_2D)</param>
 	void BindTexture(unsigned int ID, unsigned int type = 0x0DE1);
 	/// <summary>
 	/// Bind a Texture to a framebuffer

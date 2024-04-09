@@ -1,14 +1,12 @@
 #include "camera/camera.h"
 
-#include <glfw/glfw3.h>
 #include <iostream>
+#include <glfw/glfw3.h>
 #include <toolbox/calc.h>
 
 #include "service_locator.h"
 
 #include "engine_debug/logger.h"
-
-Camera* Camera::CurrentCamera;
 
 Camera::Camera(const float width, const float height)
     : Width(width), Height(height)
@@ -24,7 +22,6 @@ Camera::Camera(const float width, const float height)
 
 Camera::~Camera()
 {
-
 }
 
 void Camera::SetPerspective(const Matrix4x4& perspectiveMat)

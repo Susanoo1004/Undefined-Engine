@@ -24,6 +24,9 @@ private:
 		FATALERROR,
 	};
 
+	/// <summary>
+	/// Struct used to set the level, the string log and the time offset of the Entry
+	/// </summary>
 	struct LogEntry
 	{
 		LogLevel Level;
@@ -32,6 +35,9 @@ private:
 	};
 
 public:
+	/// <summary>
+	/// Stop the Logger thread
+	/// </summary>
 	UNDEFINED_ENGINE static void Stop();
 
 	template<class... Types>
@@ -43,9 +49,9 @@ public:
 	}
 
 	template<class... Types>
-	static void Info(std::string string, Types... args)
+	static void Info(std::string entryString, Types... args)
 	{
-		std::string log = std::vformat(string, std::make_format_args(args...));
+		std::string log = std::vformat(entryString, std::make_format_args(args...));
 
 		SetupLogEntry(LogLevel::INFO, log);
 	}

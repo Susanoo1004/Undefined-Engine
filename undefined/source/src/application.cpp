@@ -99,6 +99,7 @@ void Application::Update()
 
 void Application::Clear()
 {
+    delete Camera::CurrentCamera;
     mRenderer->UnUseShader();
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
