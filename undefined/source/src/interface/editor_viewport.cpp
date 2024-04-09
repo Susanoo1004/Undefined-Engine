@@ -92,41 +92,18 @@ void EditorViewport::ShowWindow()
 	// we get the screen position of the window
 	ImVec2 pos = ImGui::GetCursorScreenPos();
 
-	if (ff)
-	{
-		ImGui::GetWindowDrawList()->AddImage(
-			Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[1]->GetID()),
-			ImVec2(pos.x, pos.y),
-			ImVec2(pos.x + windowWidth, pos.y + windowHeight),
-			ImVec2(0, 1),
-			ImVec2(1, 0)
-		);
-	}
-
-	else
-	{
-		ImGui::GetWindowDrawList()->AddImage(
-			Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
-			ImVec2(pos.x, pos.y),
-			ImVec2(pos.x + windowWidth, pos.y + windowHeight),
-			ImVec2(0, 1),
-			ImVec2(1, 0)
-		);
-	}
+	ImGui::GetWindowDrawList()->AddImage(
+		Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
+		ImVec2(pos.x, pos.y),
+		ImVec2(pos.x + windowWidth, pos.y + windowHeight),
+		ImVec2(0, 1),
+		ImVec2(1, 0)
+	);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer->FBO_ID);
 	glUseProgram(mShader->ID);
 	glBindVertexArray(mVAO);
 	
-	if (ImGui::IsKeyDown(ImGuiKey_V))
-	{
-		ff = true;
-	}
-	else
-	{
-		ff = false;
-	}
-
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
 		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(1, mouseX, mouseY);

@@ -26,7 +26,6 @@ private:
 
 	unsigned int mEBO = 0, mVBO = 0, mVAO = 0;
 	int mID;
-	bool ff = false;
 
 private:
 	static inline int mEditorNumber = 0;

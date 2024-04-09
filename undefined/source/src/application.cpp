@@ -96,7 +96,7 @@ void Application::Update()
 
     //// modify the camera in the shader
     BaseShader->Use();
-    BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
+    mRenderer->SetUniform(BaseShader->ID, "model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
     ActualScene.Update();
 
@@ -116,9 +116,9 @@ void Application::Update()
         mRenderer->ClearBuffer();
 
         mRenderer->UseShader(BaseShader->ID);
-        BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
-        BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
-        BaseShader->SetInt("EntityID", 2);
+        mRenderer->SetUniform(BaseShader->ID, "vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
+        mRenderer->SetUniform(BaseShader->ID, "viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
+        mRenderer->SetUniform(BaseShader->ID, "EntityID", 2);
 
         Draw(); 
         mRenderer->UnUseShader();
