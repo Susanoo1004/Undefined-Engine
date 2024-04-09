@@ -24,6 +24,9 @@ private:
 		FATALERROR,
 	};
 
+	/// <summary>
+	/// 
+	/// </summary>
 	struct LogEntry
 	{
 		LogLevel Level;
@@ -33,6 +36,7 @@ private:
 
 public:
 	UNDEFINED_ENGINE static void Stop();
+
 
 	template<class... Types>
 	static void Debug(std::string string, Types... args)
