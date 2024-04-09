@@ -10,18 +10,43 @@
 
 #include "utils/flag.h"
 
+/// <summary>
+/// 
+/// </summary>
 template<class T>
 concept ResourceType = std::is_base_of_v<Resource, T>;
 
+/// <summary>
+/// Manage Resources
+/// </summary>
 class ResourceManager
 {
 	STATIC_CLASS(ResourceManager)
 
 public:
+	/// <summary>
+	/// Load a resource
+	/// </summary>
+	/// <param name="path">: Resource path</param>
+	/// <param name="recursivity">: Is the load recursive</param>
 	UNDEFINED_ENGINE static void Load(const std::filesystem::path& path, bool recursivity = false);
+	// TO MOVE TO skybox
 	UNDEFINED_ENGINE static std::vector<std::string> LoadFolder(const std::filesystem::path& path);
+	/// <summary>
+	/// Check if the resource manager contains the resource by the name
+	/// </summary>
+	/// <param name="name">: Name of the resource</param>
+	/// <returns>Return true or false wheither the resource manager contains the resource or not</returns>
 	UNDEFINED_ENGINE static bool Contains(const std::string& name);
 
+	/// <summary>
+	/// Create a resource
+	/// </summary>
+	/// <typeparam name="...Args"></typeparam>
+	/// <typeparam name="Resource"></typeparam>
+	/// <param name="name"></param>
+	/// <param name="...args"></param>
+	/// <returns></returns>
 	template<ResourceType Resource, typename... Args>
 	static std::shared_ptr<Resource> Create(const std::string& name, Args... args)
 	{
