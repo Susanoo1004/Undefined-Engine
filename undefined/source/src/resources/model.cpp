@@ -15,7 +15,7 @@ Model::Model()
 
 Model::Model(const char* path)
 {
-    Render = ServiceLocator::Get<Renderer>();
+    mRenderer = ServiceLocator::Get<Renderer>();
 
 	LoadModel(path);
 
@@ -24,22 +24,22 @@ Model::Model(const char* path)
 
 void Model::Init()
 {
-    Render->GenerateVertexArray(1, &mVAO);
-    Render->GenerateBuffer(1, &mVBO);
-    Render->GenerateBuffer(1, &mEBO);
+    mRenderer->GenerateVertexArray(1, &mVAO);
+    mRenderer->GenerateBuffer(1, &mVBO);
+    mRenderer->GenerateBuffer(1, &mEBO);
 
-    Render->BindBuffers(mVAO, mVBO, mEBO);
+    mRenderer->BindBuffers(mVAO, mVBO, mEBO);
 
     // vertex positions
-    Render->AttributePointers(0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
+    mRenderer->AttributePointers(0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
 
     // vertex normals
-    Render->AttributePointers(1, 3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    mRenderer->AttributePointers(1, 3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
 
     // vertex texture coords
-    Render->AttributePointers(2, 2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+    mRenderer->AttributePointers(2, 2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-    Render->BindBuffers(0, 0, 0);
+    mRenderer->BindBuffers(0, 0, 0);
 }
 
 bool Model::IsValid()
@@ -49,27 +49,27 @@ bool Model::IsValid()
 
 void Model::Draw()
 {
-    Render->BindBuffers(mVAO, mVBO, mEBO);
+    mRenderer->BindBuffers(mVAO, mVBO, mEBO);
 
     for (std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Material>> pair : mModel)
     {
-        Render->SetBufferData(GL_ARRAY_BUFFER, (int)pair.first->Vertices.size() * sizeof(Vertex), &pair.first->Vertices[0], GL_STATIC_DRAW);
-        Render->SetBufferData(GL_ELEMENT_ARRAY_BUFFER, (int)pair.first->Indices.size() * sizeof(unsigned int), &pair.first->Indices[0], GL_STATIC_DRAW);
+        mRenderer->SetBufferData(GL_ARRAY_BUFFER, (int)pair.first->Vertices.size() * sizeof(Vertex), &pair.first->Vertices[0], GL_STATIC_DRAW);
+        mRenderer->SetBufferData(GL_ELEMENT_ARRAY_BUFFER, (int)pair.first->Indices.size() * sizeof(unsigned int), &pair.first->Indices[0], GL_STATIC_DRAW);
 
         if (pair.second)
         {
-            Render->BindTexture(pair.second->MatTex->GetID());
+            mRenderer->BindTexture(pair.second->MatTex->GetID());
         }
         else
         {
-            Render->BindTexture(ResourceManager::Get<Texture>("assets/missing_texture.jpg")->GetID());
+            mRenderer->BindTexture(ResourceManager::Get<Texture>("assets/missing_texture.jpg")->GetID());
         }
 
-        Render->Draw(GL_TRIANGLES, (GLsizei)pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
+        mRenderer->Draw(GL_TRIANGLES, (GLsizei)pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
     }
     
-    Render->BindBuffers(0, 0, 0);
-    Render->BindTexture(0);
+    mRenderer->BindBuffers(0, 0, 0);
+    mRenderer->BindTexture(0);
 }
 
 void Model::SetTexture(int index, std::shared_ptr<Texture> tex)

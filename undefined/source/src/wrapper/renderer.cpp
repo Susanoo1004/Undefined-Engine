@@ -226,7 +226,7 @@ void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     };
 
     unsigned int Indices[] =
-    {  // note that we start from 0!
+    {  
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
     };
@@ -256,9 +256,4 @@ void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-std::shared_ptr<Model> Renderer::CreateCube()
-{
-    return ResourceManager::Create<Model>("Cube", "assets/cube.obj");
 }

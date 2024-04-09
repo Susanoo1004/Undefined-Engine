@@ -29,5 +29,5 @@ private:
 
     unsigned int mVBO = 0, mEBO = 0, mVAO = 0;
 
-    Renderer* Render = nullptr; 
+    Renderer* mRenderer = nullptr; 
 };

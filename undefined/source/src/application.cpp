@@ -41,6 +41,8 @@ void Application::Init()
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
+    // Don't uncomment this
+    // ResourceManager::Get<Model>("assets/cube.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/grey.jpg"));
 
    Object* light = ActualScene.AddObject("dirLight");
    light->AddComponent<DirLight>();
@@ -107,6 +109,9 @@ void Application::Clear()
 void Application::Draw()
 {
     ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
+    
+    // Don't uncomment this
+    // ResourceManager::Get<Model>("assets/cube.obj")->Draw();
 
     // Last draw
     Skybox::Draw();

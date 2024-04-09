@@ -243,11 +243,6 @@ public:
 	/// <param name="EBO">: EBO</param>
 	/// <param name="VAO">: VAO</param>
 	void SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO);
-	/// <summary>
-	/// Create a Cube
-	/// </summary>
-	/// <returns>return a model of a Cube with a light grey texture</returns>
-	inline std::shared_ptr<Model> CreateCube();
 
 	/// <summary>
 	/// Enable the OpenGL Test
