@@ -1,16 +1,27 @@
 #pragma once
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "toolbox/Matrix4x4.h"
-#include "toolbox/Vector3.h"
+#include <toolbox/Matrix4x4.h>
+#include <toolbox/Vector3.h>
+
 #include "utils/flag.h"
 
+/// <summary>
+/// Camera Class
+/// </summary>
 class UNDEFINED_ENGINE Camera
 {
 public:
+    /// <summary>
+    /// Constructor of Camera
+    /// </summary>
+    /// <param name="width">: Width of the camera</param>
+    /// <param name="height">: Height of the camera</param>
     Camera(float width, float height);
+    /// <summary>
+    /// Destructor of Camera
+    /// </summary>
     ~Camera();
 
     /// <summary>
@@ -44,29 +55,80 @@ public:
     /// <returns>Return the VP matrix</returns>
     const Matrix4x4& GetVP() const;
 
+    /// <summary>
+    /// Vector3 for the camera eye
+    /// </summary>
     Vector3 Eye;
+    /// <summary>
+    /// Vector3 for the camera LookAt
+    /// </summary>
     Vector3 LookAt;
+    /// <summary>
+    /// Vector3 for the camera Up
+    /// </summary>
     Vector3 Up;
   
+    /// <summary>
+    /// Camera width
+    /// </summary>
     float Width;
+    /// <summary>
+    /// Camera height
+    /// </summary>
     float Height;
 
 private:
+    /// <summary>
+    /// Matrix4x4 for the VP (Perspective * View)
+    /// </summary>
     Matrix4x4 mVP;
+    /// <summary>
+    /// Matrix4x4 for the View
+    /// </summary>
     Matrix4x4 mView;
+    /// <summary>
+    /// Matrix4x4 for the Perspective
+    /// </summary>
     Matrix4x4 mPerspective;
 
+    /// <summary>
+    /// Speed of the camera
+    /// </summary>
     float mCameraSpeed = 0.05f;
+    /// <summary>
+    /// Sensivity of the mouse when using the camera
+    /// </summary>
     float mMouseSensitivity = 0.05f;
 
+    /// <summary>
+    /// Eular angle yaw of the camera
+    /// </summary>
     float mYaw = 90.f;
+    /// <summary>
+    /// Eular angle pitch of the camera
+    /// </summary>
     float mPitch = 0.f;
 
+    /// <summary>
+    /// Last position X of the mouse
+    /// </summary>
     float mLastX = 0.f;
+    /// <summary>
+    /// Last position Y of the mouse
+    /// </summary>
     float mLastY = 0.f;
     
+    /// <summary>
+    /// Boolean to know if the camera is active
+    /// </summary>
     bool mIsActive = true;
+    /// <summary>
+    /// Boolean to know if it is the first time we move the camera since we stop mooving it
+    /// </summary>
     bool mIsFirstMouse = true;
+    /// <summary>
+    /// Boolean to know if we are using the camera for the mouse or if we are using it to navigate through the Editor
+    /// </summary>
     bool mIsMouseForCam = false;
 
 public:
@@ -89,5 +151,8 @@ public:
     /// </summary>
     static void ProcessInput();
 
-    static Camera* CurrentCamera;
+    /// <summary>
+    /// Pointer to the current camera used
+    /// </summary>
+    static inline Camera* CurrentCamera;
 };

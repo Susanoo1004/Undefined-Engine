@@ -43,6 +43,9 @@ public:
 	/// </summary>
 	static void Delete();
 
+	/// <summary>
+	/// std::vector of pointers of EditorViewport that store all of the editor viewports
+	/// </summary>
 	static inline std::vector<EditorViewport*> EditorViewports;
 
 private:
