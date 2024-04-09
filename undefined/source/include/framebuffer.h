@@ -13,9 +13,8 @@ class Framebuffer
 public:
     Framebuffer();
 	~Framebuffer();
-    
-    void AttachTexture(size_t attachment, unsigned int format, unsigned int id);
 
+    // TO MOVE DOWN
 	template <size_t TextureNumber>
     static Framebuffer* Create(unsigned int width, unsigned int height);
 
@@ -63,7 +62,7 @@ Framebuffer* Framebuffer::Create(unsigned int width, unsigned int height)
 
         else
         {
-            f->RenderedTextures[i] = std::make_unique<Texture>(f->Width, f->Height, GL_RED, GL_RED);
+            f->RenderedTextures[i] = std::make_unique<Texture>(f->Width, f->Height, GL_R32I, GL_RED_INTEGER);
         }
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, f->RenderedTextures[i]->GetID(), 0);

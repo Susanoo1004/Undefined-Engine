@@ -1,6 +1,7 @@
 #version 450 core
 
 layout (location = 0) out vec4 FragColor;
+layout (location = 1) out int PickingFragColor;
 
 struct DirLight 
 {
@@ -20,6 +21,7 @@ in vec3 Normal;
 
 uniform vec3 viewPos;
 uniform DirLight dirLights[NBR_OF_DIR_LIGHT];
+uniform int EntityID;
 
 // TEXTURE
 uniform sampler2D texture0;
@@ -56,4 +58,5 @@ void main()
     }
     
     FragColor = vec4(result, 1.0);
+    PickingFragColor = EntityID;
 }

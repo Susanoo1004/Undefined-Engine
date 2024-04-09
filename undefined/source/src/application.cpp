@@ -94,13 +94,9 @@ void Application::Update()
 
     ServiceLocator::Get<Renderer>()->SetClearColor(0,0,0);
 
-    // modify the camera in the shader
-    pickingShader->Use();
-    pickingShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
-
     //// modify the camera in the shader
-    //BaseShader->Use();
-    //BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
+    BaseShader->Use();
+    BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
     ActualScene.Update();
 
@@ -112,37 +108,20 @@ void Application::Update()
         glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
         glEnable(GL_DEPTH_TEST);
 
-        glClearColor(0.f, 0.f, 0.f, 1);
+        mRenderer->SetClearColor(0.f, 0.f, 0.f);
 
         Interface::EditorViewports[i]->ViewportCamera->Update();
 
+        BaseShader->UnUse();
         mRenderer->ClearBuffer();
-        /*BaseShader->UnUse();
-        BaseShader->Use();
 
+        mRenderer->UseShader(BaseShader->ID);
         BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
-        BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);*/
+        BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
+        BaseShader->SetInt("EntityID", 2);
 
-        pickingShader->UnUse();
-        pickingShader->Use();
-        pickingShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
-        pickingShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->mEye);
-
-        for (int j = 0; j < Interface::EditorViewports[i]->mFramebuffer->RenderedTextures.size(); j++)
-        {
-           /* if (j == 0)
-            {
-                mRenderer->UseShader(BaseShader->ID);
-            }
-
-            else 
-            {*/
-                mRenderer->UseShader(pickingShader->ID);
-            //}
-
-            Draw(); 
-            mRenderer->UnUseShader();
-        }
+        Draw(); 
+        mRenderer->UnUseShader();
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
