@@ -56,7 +56,7 @@ void Scene::Draw()
 	}
 }
 
-Object* Scene::AddObject(std::string name)
+Object* Scene::AddObject(const std::string& name)
 {
 	Object* obj = new Object(name);
 

@@ -44,7 +44,7 @@ void Application::Init()
     // Don't uncomment this
     // ResourceManager::Get<Model>("assets/cube.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/grey.jpg"));
 
-    ActualScene.AddObject("Light")->AddComponent<Light>();
+    ActualScene.AddObject("DirLight")->AddComponent<DirLight>();
 }
 
 void Application::Update()
@@ -57,8 +57,8 @@ void Application::Update()
     BaseShader->Use();
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
+    mRenderer->UnUseShader();
     ActualScene.Update();
-    BaseShader->UnUse();
 
     Camera::ProcessInput();
     Interface::Update();
@@ -78,7 +78,7 @@ void Application::Update()
 
         mRenderer->ClearBuffer();
         
-        BaseShader->Use();
+        mRenderer->UseShader(BaseShader->ID);
 
         BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
