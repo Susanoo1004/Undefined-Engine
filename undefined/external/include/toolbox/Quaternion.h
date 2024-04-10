@@ -4,6 +4,7 @@
 
 #include "Vector3.h"
 #include "flag.h"
+#include <format>
 
 class Matrix4x4;
 
@@ -128,3 +129,24 @@ bool operator<=(const Quaternion& q, const float value);
 bool operator>=(const Quaternion& q, const float value);
 
 std::ostream& operator<<(std::ostream& out, const Quaternion& q);
+
+template <>
+struct std::formatter<Quaternion, char>
+{
+	template<class ParseContext>
+	constexpr ParseContext::iterator parse(ParseContext& ctx)
+	{
+		auto it = ctx.begin();
+		if (it == ctx.end())
+			return it;
+		if (*it != '}')
+			throw std::format_error("Invalid format args for Quaternion");
+		return it;
+	}
+
+	template<class FmtContext>
+	typename FmtContext::iterator format(const Quaternion& quat, FmtContext& ctx) const
+	{
+		return std::format_to(ctx.out(), "({}, {}, {}, {})", quat.x, quat.y, quat.z, quat.w);
+	}
+};

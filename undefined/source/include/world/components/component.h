@@ -2,7 +2,7 @@
 
 #include "utils/flag.h"
 
-#include "world/components/transform.h"
+#include "world/scene_manager/transform.h"
 
 class Object;
 
