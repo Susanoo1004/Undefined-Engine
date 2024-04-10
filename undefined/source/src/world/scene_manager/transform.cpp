@@ -129,6 +129,7 @@ void Transform::SetRotationRad(Vector3 newRotationRad)
 
 	float scalingFactor = std::sqrt(mLocalTRS[0][0] * mLocalTRS[0][0] + mLocalTRS[0][1] * mLocalTRS[0][1] + mLocalTRS[0][2] * mLocalTRS[0][2]);
 	Matrix3x3 rotMat = (1.f / scalingFactor) * Matrix3x3(mLocalTRS);
+
 	float sy = std::sqrt(rotMat[0][0] * rotMat[0][0] + rotMat[1][0] * rotMat[1][0]);
 
 	float x, y, z;

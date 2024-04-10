@@ -70,7 +70,6 @@ public:
 	const Object* GetParent() const;
 	void SetParent(Object* parent);
 
-
 	const std::list<Object*> GetChildren() const;
 	void DetachChildren();
 	const Object* GetChild(unsigned int index) const;

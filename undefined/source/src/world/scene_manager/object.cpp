@@ -51,6 +51,13 @@ void Object::SetParent(Object* parent)
 		mParent->mChildren.emplace_back(this);
 		mTransform.mParentTransform = &parent->mTransform;
 	}
+	else
+	{
+		if (mParent)
+		{
+			mParent->DetachChild(this);
+		}
+	}
 }
 
 const std::list<Object*> Object::GetChildren() const

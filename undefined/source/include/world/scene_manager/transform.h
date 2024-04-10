@@ -40,6 +40,11 @@ public:
 	void SetLocalScale(Vector3 newLocalScale);
 
 private:
+	/**/
+	bool HasChanged;
+	Vector3 mPosition;
+	Vector3 mRotation;
+	Vector3 mScale = { 1, 1, 1 };
 
 	Vector3 mLocalPosition;
 	Vector3 mLocalRotation;
