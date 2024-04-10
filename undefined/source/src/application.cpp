@@ -9,6 +9,7 @@
 
 #include "resources/texture.h"
 #include "resources/model.h"
+#include "resources/model_renderer.h"
 #include "resources/resource_manager.h"
 
 #include "world/components/skybox.h"
@@ -41,10 +42,10 @@ void Application::Init()
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
-    // Don't uncomment this
-    // ResourceManager::Get<Model>("assets/cube.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/grey.jpg"));
 
     ActualScene.AddObject("DirLight")->AddComponent<DirLight>();
+    ActualScene.AddObject("PikingRoom")->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
+
 }
 
 void Application::Update()
@@ -53,38 +54,30 @@ void Application::Update()
 
     mRenderer->SetClearColor(0,0,0);
 
-    // Modify the camera in the shader
-    BaseShader->Use();
-    BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
-
-    mRenderer->UnUseShader();
     ActualScene.Update();
-
     Camera::ProcessInput();
     Interface::Update();
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();
+        Interface::EditorViewports[i]->ViewportCamera->Update();
+        Skybox::Update(Interface::EditorViewports[i]->ViewportCamera);
 
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
 
         mRenderer->EnableTest(GL_DEPTH_TEST);
 
         mRenderer->SetClearColor(0,0,0);
-
-        Interface::EditorViewports[i]->ViewportCamera->Update();
-        Skybox::Update(Interface::EditorViewports[i]->ViewportCamera);
-
         mRenderer->ClearBuffer();
         
         mRenderer->UseShader(BaseShader->ID);
 
-        BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
-        BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
+        mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
+        mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
 
-        mRenderer->UseShader(BaseShader->ID);
-        Draw();
+        ActualScene.Draw();
+
         mRenderer->UnUseShader();
 
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -104,17 +97,4 @@ void Application::Clear()
     ResourceManager::UnloadAll();
     Interface::Delete();
     Logger::Stop();
-}
-
-void Application::Draw()
-{
-    ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
-    
-    // Don't uncomment this
-    // ResourceManager::Get<Model>("assets/cube.obj")->Draw();
-
-    // Last draw
-    Skybox::Draw();
-
-    ActualScene.Draw();
 }

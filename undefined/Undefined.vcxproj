@@ -171,6 +171,7 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\include\resources\model_renderer.cpp" />
     <ClCompile Include="source\src\resources\material.cpp" />
     <ClCompile Include="source\src\framebuffer.cpp" />
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="source\include\interface\fps_graph.h" />
     <ClInclude Include="source\include\interface\inspector.h" />
     <ClInclude Include="source\include\interface\interface.h" />
+    <ClInclude Include="source\include\resources\model_renderer.h" />
     <ClInclude Include="source\include\utils\utils.h" />
     <ClInclude Include="source\include\world\components\component.h" />
     <ClInclude Include="source\include\world\components\dir_light.h" />

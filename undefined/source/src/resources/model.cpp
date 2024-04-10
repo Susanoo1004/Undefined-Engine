@@ -47,12 +47,14 @@ bool Model::IsValid()
     return false;
 }
 
-void Model::Draw()
+void Model::Draw(Matrix4x4 TRS)
 {
     mRenderer->BindBuffers(mVAO, mVBO, mEBO);
 
     for (std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Material>> pair : mModel)
     {
+        mRenderer->UseShader(pair.second->MatShader->ID);
+        mRenderer->SetUniform(pair.second->MatShader->ID, "model", TRS);
         mRenderer->SetBufferData(GL_ARRAY_BUFFER, (int)pair.first->Vertices.size() * sizeof(Vertex), &pair.first->Vertices[0], GL_STATIC_DRAW);
         mRenderer->SetBufferData(GL_ELEMENT_ARRAY_BUFFER, (int)pair.first->Indices.size() * sizeof(unsigned int), &pair.first->Indices[0], GL_STATIC_DRAW);
 
@@ -64,8 +66,8 @@ void Model::Draw()
         {
             mRenderer->BindTexture(ResourceManager::Get<Texture>("assets/missing_texture.jpg")->GetID());
         }
-
         mRenderer->Draw(GL_TRIANGLES, (GLsizei)pair.first->Indices.size(), GL_UNSIGNED_INT, 0);
+        mRenderer->UnUseShader();
     }
     
     mRenderer->BindBuffers(0, 0, 0);

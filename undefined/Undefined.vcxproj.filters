@@ -46,6 +46,7 @@
     <ClCompile Include="source\src\resources\material.cpp" />
     <ClCompile Include="source\src\world\scene_manager\scene_serializer.cpp" />
     <ClCompile Include="source\src\world\scene_manager\transform.cpp" />
+    <ClCompile Include="source\include\resources\model_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -115,6 +116,7 @@
     <ClInclude Include="source\include\interface\editor_viewport.h" />
     <ClInclude Include="source\include\resources\material.h" />
     <ClInclude Include="source\include\world\scene_manager\scene_serializer.h" />
+    <ClInclude Include="source\include\resources\model_renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

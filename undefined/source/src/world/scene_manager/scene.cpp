@@ -1,5 +1,6 @@
 #include "world/scene_manager/scene.h"
 
+#include "world/components/skybox.h"
 
 void Scene::Start()
 {
@@ -54,6 +55,8 @@ void Scene::Draw()
 			comp->Draw();
 		}
 	}
+
+	Skybox::Draw();
 }
 
 Object* Scene::AddObject(const std::string& name)
