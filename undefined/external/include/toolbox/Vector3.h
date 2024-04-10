@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include <vector>
+#include <format>
 
 #include "flag.h"
 
@@ -121,3 +122,24 @@ bool operator<=(const Vector3& v, const float f);
 bool operator>=(const Vector3& v, const float f);
 
 std::ostream& operator<<(std::ostream& out, const Vector3& v);
+
+template <>
+struct std::formatter<Vector3, char>
+{
+	template<class ParseContext>
+	constexpr ParseContext::iterator parse(ParseContext& ctx)
+	{
+		auto it = ctx.begin();
+		if (it == ctx.end())
+			return it;
+		if (*it != '}')
+			throw std::format_error("Invalid format args for Vector3");
+		return it;
+	}
+
+	template<class FmtContext>
+	typename FmtContext::iterator format(const Vector3& vec, FmtContext& ctx) const
+	{
+		return std::format_to(ctx.out(), "({}, {}, {})", vec.x, vec.y, vec.z);
+	}
+};

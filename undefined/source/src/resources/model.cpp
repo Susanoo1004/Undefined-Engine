@@ -56,7 +56,7 @@ void Model::Draw()
         mRenderer->SetBufferData(GL_ARRAY_BUFFER, (int)pair.first->Vertices.size() * sizeof(Vertex), &pair.first->Vertices[0], GL_STATIC_DRAW);
         mRenderer->SetBufferData(GL_ELEMENT_ARRAY_BUFFER, (int)pair.first->Indices.size() * sizeof(unsigned int), &pair.first->Indices[0], GL_STATIC_DRAW);
 
-        if (pair.second)
+        if (pair.second->MatTex)
         {
             mRenderer->BindTexture(pair.second->MatTex->GetID());
         }
