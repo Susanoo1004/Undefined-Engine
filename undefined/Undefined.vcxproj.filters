@@ -43,8 +43,8 @@
     <ClCompile Include="source\src\world\components\player_test.cpp" />
     <ClCompile Include="source\src\framebuffer.cpp" />
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
+    <ClCompile Include="source\src\resources\material.cpp" />
     <ClCompile Include="source\src\world\scene_manager\scene_serializer.cpp" />
-    <ClCompile Include="source\include\world\components\transform.cpp" />
     <ClCompile Include="source\src\world\scene_manager\transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +113,7 @@
     <ClInclude Include="source\include\world\scene_manager\transform.h" />
     <ClInclude Include="source\include\framebuffer.h" />
     <ClInclude Include="source\include\interface\editor_viewport.h" />
+    <ClInclude Include="source\include\resources\material.h" />
     <ClInclude Include="source\include\world\scene_manager\scene_serializer.h" />
   </ItemGroup>
   <ItemGroup>

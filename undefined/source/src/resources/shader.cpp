@@ -43,7 +43,7 @@ unsigned int Shader::SetFragmentShader(unsigned int fragment, const char* fShade
 
 void Shader::Link(unsigned int vertex, unsigned int fragment)
 {
-    ID = ServiceLocator::Get<Renderer>()->LinkShader(ID, vertex, fragment);
+    ServiceLocator::Get<Renderer>()->LinkShader(ID, vertex, fragment);
 }
 
 void Shader::SetBool(const std::string& name, bool value) const
@@ -58,11 +58,11 @@ void Shader::SetFloat(const std::string& name, float value) const
 {
     ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), value);
 }
-void Shader::SetVec3(const std::string& name, Vector3 v) const
+void Shader::SetVec3(const std::string& name, const Vector3& v) const
 {
     ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), v);
 }
-void Shader::SetMat4(const std::string& name, Matrix4x4 m) const
+void Shader::SetMat4(const std::string& name, const Matrix4x4& m) const
 {
     ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), m);
 }

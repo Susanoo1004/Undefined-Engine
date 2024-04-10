@@ -137,7 +137,7 @@ public:
     [[nodiscard]]
     Quaternion ToQuaternion() const;
 
-    static Matrix4x4 ViewMatrix(const Vector3& eye, const Vector3& center, const Vector3& up);
+    static Matrix4x4 ViewMatrix(const Vector3& Eye, const Vector3& center, const Vector3& Up);
     static Matrix4x4 ProjectionMatrix(const float fovY, const float aspectRatio, const float zNear, const float zFar);
 
     [[nodiscard]]

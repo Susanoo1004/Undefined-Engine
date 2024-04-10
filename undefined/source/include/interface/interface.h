@@ -16,14 +16,45 @@ class Interface
 	STATIC_CLASS(Interface)
 
 public:
-	UNDEFINED_ENGINE static void Init();
+	/// <summary>
+	/// Create a new editor viewport
+	/// </summary>
+	UNDEFINED_ENGINE static void CreateEditorViewport();
+	/// <summary>
+	/// Delete an editor viewport by is ID
+	/// </summary>
+	/// <param name="ID">: ID of the editor viewport</param>
+	UNDEFINED_ENGINE static void DeleteEditorViewport(int ID);
 
-	UNDEFINED_ENGINE static void Update();
-	UNDEFINED_ENGINE static void NewFrame();
-	UNDEFINED_ENGINE static void BeginDockSpace();
-	UNDEFINED_ENGINE static void Render();
+	/// <summary>
+	/// Init the interface sytem
+	/// </summary>
+	static void Init();
+	/// <summary>
+	/// Update the interface system
+	/// </summary>
+	static void Update();
+	/// <summary>
+	/// Render the interface system
+	/// </summary>
+	static void Render();
+	/// <summary>
+	/// Delete the interface system
+	/// </summary>
+	static void Delete();
 
-	static inline std::vector<EditorViewport> EditorViewports;
+	/// <summary>
+	/// std::vector of pointers of EditorViewport that store all of the editor viewports
+	/// </summary>
+	static inline std::vector<EditorViewport*> EditorViewports;
 
-	UNDEFINED_ENGINE static void Delete();
+private:
+	/// <summary>
+	/// 
+	/// </summary>
+	static void NewFrame();
+	/// <summary>
+	/// 
+	/// </summary>
+	static void BeginDockSpace();
 };

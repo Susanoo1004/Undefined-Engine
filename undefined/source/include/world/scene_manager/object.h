@@ -91,5 +91,4 @@ private:
 	std::list<Object*> mChildren;
 
 	bool mIsEnable = true;
-
 };

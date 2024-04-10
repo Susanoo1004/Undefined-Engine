@@ -28,10 +28,10 @@ Application::Application()
 void Application::Init()
 {
     mWindowManager->Init();
-
     mRenderer->Init();
-    ResourceManager::Load("assets/", true);
+
     ResourceManager::Load("../Undefined/resource_manager/", true);
+    ResourceManager::Load("assets/", true);
 
     // Callback
     ServiceLocator::SetupCallbacks();
@@ -41,88 +41,56 @@ void Application::Init()
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
+    // Don't uncomment this
+    // ResourceManager::Get<Model>("assets/cube.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/grey.jpg"));
 
     ActualScene.AddObject("Light")->AddComponent<Light>();
 }
-
-// move to RENDERER
-void Application::InitQuad()
-{
-    float Vertices[] = {
-        // positions          // normal           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-    };
-
-    unsigned int Indices[] = 
-    {  // note that we start from 0!
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-    };
-
-    glGenVertexArrays(1, &mVAO);
-    glGenBuffers(1, &mVBO);
-    glGenBuffers(1, &mEBO);
-
-    glBindVertexArray(mVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), &Vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), &Indices, GL_STATIC_DRAW);
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-}
-
 
 void Application::Update()
 {
     T += 0.016f;
 
-    ServiceLocator::Get<Renderer>()->SetClearColor();
+    mRenderer->SetClearColor(0,0,0);
 
-    mWindowManager->GetCamera()->ProcessInput();
-    mWindowManager->GetCamera()->Update();
-
-    // modify the camera in the shader
+    // Modify the camera in the shader
     BaseShader->Use();
-
-    BaseShader->SetMat4("vp", mWindowManager->GetCamera()->GetVP());
-    BaseShader->SetVec3("viewPos", mWindowManager->GetCamera()->mEye);
-
     BaseShader->SetMat4("model", Matrix4x4::TRS(Vector3(0), sin(T), Vector3(1.f, 0.f, 0.f), Vector3(1)));
 
-    glBindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[0].GetFBO_ID());
-    glEnable(GL_DEPTH_TEST);
-
-    glClearColor(0.3f, 0.3f, 0.3f, 1);
-
-    BaseShader->UnUse();
-    mRenderer->ClearBuffer();
-    BaseShader->Use();
-
     ActualScene.Update();
+    BaseShader->UnUse();
 
-    mRenderer->UseShader(BaseShader->ID);
-    Draw();
-    mRenderer->UnUseShader();
-
-    Skybox::Update();
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+    Camera::ProcessInput();
     Interface::Update();
+
+    for (int i = 0; i < Interface::EditorViewports.size(); i++)
+    {
+        Interface::EditorViewports[i]->RescaleViewport();
+
+        mRenderer->BindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
+
+        mRenderer->EnableTest(GL_DEPTH_TEST);
+
+        mRenderer->SetClearColor(0,0,0);
+
+        Interface::EditorViewports[i]->ViewportCamera->Update();
+        Skybox::Update(Interface::EditorViewports[i]->ViewportCamera);
+
+        mRenderer->ClearBuffer();
+        
+        BaseShader->Use();
+
+        BaseShader->SetMat4("vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
+        BaseShader->SetVec3("viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
+
+        mRenderer->UseShader(BaseShader->ID);
+        Draw();
+        mRenderer->UnUseShader();
+
+        mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    Interface::Render();
 
     mWindowManager->SwapBuffers();
     mRenderer->ClearBuffer();
@@ -130,16 +98,23 @@ void Application::Update()
 
 void Application::Clear()
 {
+    delete Camera::CurrentCamera;
+    mRenderer->UnUseShader();
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
     Interface::Delete();
-    skyboxShader->UnUse();
     Logger::Stop();
 }
 
 void Application::Draw()
 {
     ResourceManager::Get<Model>("assets/viking_room.obj")->Draw();
+    
+    // Don't uncomment this
+    // ResourceManager::Get<Model>("assets/cube.obj")->Draw();
+
+    // Last draw
+    Skybox::Draw();
 
     ActualScene.Draw();
 }
