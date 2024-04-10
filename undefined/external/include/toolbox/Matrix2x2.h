@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include <vector>
+#include <format>
 
 #include "Vector2.h"
 #include "flag.h"
@@ -106,3 +107,24 @@ Matrix2x2& operator*=(Matrix2x2& m, const float scalar);
 Matrix2x2& operator*=(Matrix2x2& m1, const Matrix2x2& m2);
 
 std::ostream& operator<<(std::ostream& out, const Matrix2x2& m);
+
+template <>
+struct std::formatter<Matrix2x2, char>
+{
+    template<class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx)
+    {
+        auto it = ctx.begin();
+        if (it == ctx.end())
+            return it;
+        if (*it != '}')
+            throw std::format_error("Invalid format args for Matrix2x2");
+        return it;
+    }
+
+    template<class FmtContext>
+    typename FmtContext::iterator format(const Matrix2x2& mat, FmtContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{}\n{}", mat[0], mat[1], mat[2]);
+    }
+};
