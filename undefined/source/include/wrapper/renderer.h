@@ -30,7 +30,7 @@ public:
 	/// Clear the framebuffer
 	/// </summary>
 	void ClearBuffer();
-	
+
 	/// <summary>
 	/// Generate a texture
 	/// </summary>
@@ -60,13 +60,22 @@ public:
 	/// </summary>
 	/// <param name="ID">: texture ID</param>
 	void ActiveTexture(unsigned int ID);
-	
+
 	/// <summary>
 	/// Bind a Texture to the actual active Texture
 	/// </summary>
 	/// <param name="ID">: Texture ID</param>
 	/// <param name="type">: Texture type (by default : 0x0DE1 = 3553U = GL_TEXTURE_2D)</param>
 	void BindTexture(unsigned int ID, unsigned int type = 0x0DE1);
+
+	/// <summary>
+	/// Read pixels on a certain color attachment
+	/// </summary>
+	/// <param name="attachmentIndex">: Which attachment index to read pixels on</param>
+	/// <param name="x">: x pos to read on</param>
+	/// <param name="y">: y pos to read on</param>
+	int ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y);
+
 	/// <summary>
 	/// Bind a Texture to a framebuffer
 	/// </summary>
@@ -164,8 +173,8 @@ public:
 	/// <param name="vertex">: Vertex Shader source ID</param>
 	/// <param name="fragment">: Fragment Shader source ID</param>
 	/// <returns></returns>
-	void LinkShader(unsigned int &ID, unsigned int vertex, unsigned int fragment);
-	
+	void LinkShader(unsigned int& ID, unsigned int vertex, unsigned int fragment);
+
 	/// <summary>
 	/// Use a Shader
 	/// </summary>

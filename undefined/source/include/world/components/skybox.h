@@ -74,7 +74,6 @@ public:
 		"../undefined/resource_manager/skybox/back.jpg"
 	};
 	
-
 	static inline unsigned int CubeVAO = 0, CubeVBO = 0;
 	static inline unsigned int CubemapTexture = 0;
 

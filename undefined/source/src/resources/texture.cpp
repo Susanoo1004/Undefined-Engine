@@ -6,7 +6,7 @@
 
 #include "engine_debug/logger.h"
 
-Texture::Texture(const unsigned int width, const unsigned int height)
+Texture::Texture(const unsigned int width, const unsigned int height, const int internalFormat, const int format)
 	: mWidth(width), mHeight(height)
 {
 	mRenderer = ServiceLocator::Get<Renderer>();
@@ -14,10 +14,7 @@ Texture::Texture(const unsigned int width, const unsigned int height)
 	mRenderer->GenTexture(1, &mID);
 	mRenderer->BindTexture(mID);
 
-	mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, Data);
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, NULL);
 }
 
 Texture::Texture(const char* filepath, bool isFlipped)
