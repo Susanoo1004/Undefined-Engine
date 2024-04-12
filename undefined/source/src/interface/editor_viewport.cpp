@@ -52,27 +52,14 @@ void EditorViewport::ShowWindow()
 		ImGui::EndPopup();
 	}
 
-	const float windowWidth = ImGui::GetContentRegionAvail().x;
-	const float windowHeight = ImGui::GetContentRegionAvail().y;
-	auto viewportOffset = ImGui::GetCursorPos();
+	float windowWidth;
+	float windowHeight;
+	Vector2 viewportOffset;
+	Vector2 viewportSize;
+	int mouseX;
+	int mouseY;
 
-	//min and max size of the framebuffer and mouse pos
-	ImVec2 minBound = ImGui::GetWindowPos();
-	minBound.x += viewportOffset.x;
-	minBound.y += viewportOffset.y;
-	ImVec2 maxBound = { minBound.x + windowWidth, minBound.y + windowHeight };
-	mViewportBounds[0] = { minBound.x, minBound.y };
-	mViewportBounds[1] = { maxBound.x, maxBound.y };
-	auto [mx, my] = ImGui::GetMousePos();
-	mx -= mViewportBounds[0].x;
-	my -= mViewportBounds[0].y;
-	Vector2 viewportSize = mViewportBounds[1] - mViewportBounds[0];
-	my = viewportSize.y - my;
-	int mouseX = (int)mx;
-	int mouseY = (int)my;
-
-	ViewportCamera->Width = windowWidth;
-	ViewportCamera->Height = windowHeight;
+	SetMouseMinMaxBounds(mouseX, mouseY, windowWidth, windowHeight, viewportOffset, viewportSize);
 
 	Matrix4x4 result;
 	if (windowHeight <= 0)
@@ -119,4 +106,31 @@ void EditorViewport::ShowWindow()
 unsigned int EditorViewport::GetFBO_ID()
 {
 	return mFramebuffer->FBO_ID;
+}
+
+void EditorViewport::SetMouseMinMaxBounds(int& mouseX, int& mouseY, float& windowWidth, float& windowHeight, Vector2& viewportOffset, Vector2& viewportSize)
+{
+	windowWidth = ImGui::GetContentRegionAvail().x;
+	windowHeight = ImGui::GetContentRegionAvail().y;
+	viewportOffset.x = ImGui::GetCursorPos().x;
+	viewportOffset.y = ImGui::GetCursorPos().y;
+
+	ViewportCamera->Width = windowWidth;
+	ViewportCamera->Height = windowHeight;
+
+	//min and max size of the framebuffer and mouse pos
+	ImVec2 minBound = ImGui::GetWindowPos();
+	minBound.x += viewportOffset.x;
+	minBound.y += viewportOffset.y;
+	ImVec2 maxBound = { minBound.x + windowWidth, minBound.y + windowHeight };
+	mViewportBounds[0] = { minBound.x, minBound.y };
+	mViewportBounds[1] = { maxBound.x, maxBound.y };
+	auto [mx, my] = ImGui::GetMousePos();
+	mx -= mViewportBounds[0].x;
+	my -= mViewportBounds[0].y;
+	viewportSize = mViewportBounds[1] - mViewportBounds[0];
+	my = viewportSize.y - my;
+
+	mouseX = (int)mx;
+	mouseY = (int)my;
 }

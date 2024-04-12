@@ -21,6 +21,8 @@ public:
 	Framebuffer* mFramebuffer;
 
 private:
+	void SetMouseMinMaxBounds(int& mouseX, int& mouseY, float& windowWidth, float& windowHeight, Vector2& viewportOffset, Vector2& viewportSize);
+
 	std::shared_ptr<Shader> mShader;
 	Vector2 mViewportBounds[2];
 
