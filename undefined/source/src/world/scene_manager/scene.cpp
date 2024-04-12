@@ -2,6 +2,14 @@
 
 #include "world/components/skybox.h"
 
+Scene::~Scene()
+{
+	for (Object* object : Objects)
+	{
+		delete object;
+	}
+}
+
 void Scene::Start()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
@@ -56,7 +64,7 @@ void Scene::Draw()
 		}
 	}
 
-	Skybox::Draw();
+	// Skybox::Draw();
 }
 
 Object* Scene::AddObject(const std::string& name)

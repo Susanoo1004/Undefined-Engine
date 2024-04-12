@@ -11,7 +11,7 @@
 Camera::Camera(const float width, const float height)
     : Width(width), Height(height)
 {
-    Eye = Vector3(0, 0, -1);
+    Eye = Vector3(1, 0, -1);
     LookAt = Vector3(0, 0, 1);
     Up = Vector3(0, 1, 0);
 

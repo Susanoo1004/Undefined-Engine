@@ -28,11 +28,15 @@ Vector3 Transform::GetPosition()
 
 void Transform::SetPosition(Vector3 newPosition)
 {
-	mLocalTRS = Matrix4x4::TRS(newPosition, GetRotationRad(), GetScale());
+	Matrix4x4 worldMat = Matrix4x4::TRS(newPosition, GetRotationRad(), GetScale());
 
 	if (mParentTransform)
 	{
-		mLocalTRS *= Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+	}
+	else
+	{
+		mLocalTRS = worldMat;
 	}
 
 	mLocalPosition = { mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3] };
@@ -40,116 +44,41 @@ void Transform::SetPosition(Vector3 newPosition)
 
 Vector3 Transform::GetRotation()
 {
-	Matrix4x4 trs = LocalToWorldMatrix();
+	Vector3 rot = GetRotationRad();
 
-	float sy = std::sqrt(trs[0][0] * trs[0][0] + trs[1][0] * trs[1][0]);
-	bool singular = sy < 1e-6; // If
-
-	float x, y, z;
-	if (!singular)
-	{
-		x = std::atan2(trs[2][1], trs[2][2]);
-		y = std::atan2(-trs[2][0], sy);
-		z = std::atan2(trs[1][0], trs[0][0]);
-	}
-	else
-	{
-		x = std::atan2(-trs[1][2], trs[1][1]);
-		y = std::atan2(-trs[2][0], sy);
-		z = 0;
-	}
-	return { calc::ToDeg(x), calc::ToDeg(y), calc::ToDeg(z) };
+	return { calc::ToDeg(rot.x), calc::ToDeg(rot.y), calc::ToDeg(rot.z) };
 }
 
 void Transform::SetRotation(Vector3 newRotation)
 {
-	mLocalTRS = Matrix4x4::TRS(GetPosition(), { calc::ToRad(newRotation.x), calc::ToRad(newRotation.y), calc::ToRad(newRotation.z) }, GetScale());
-
-	if (mParentTransform)
-	{
-		mLocalTRS *= Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
-	}
-
-	float scalingFactor = std::sqrt(mLocalTRS[0][0] * mLocalTRS[0][0] + mLocalTRS[0][1] * mLocalTRS[0][1] + mLocalTRS[0][2] * mLocalTRS[0][2]);
-	Matrix3x3 rotMat = (1.f / scalingFactor) * Matrix3x3(mLocalTRS);
-	float sy = std::sqrt(rotMat[0][0] * rotMat[0][0] + rotMat[1][0] * rotMat[1][0]);
-
-	float x, y, z;
-	if (!calc::IsZero(sy))
-	{
-		x = std::atan2(rotMat[2][1], rotMat[2][2]);
-		y = std::atan2(-rotMat[2][0], sy);
-		z = std::atan2(rotMat[1][0], rotMat[0][0]);
-	}
-	else
-	{
-		x = std::atan2(-rotMat[1][2], rotMat[1][1]);
-		y = std::atan2(-rotMat[2][0], sy);
-		z = 0;
-	}
-	x = std::fmodf(x, 2.f * calc::PI);
-	y = std::fmodf(y, 2.f * calc::PI);
-	z = std::fmodf(z, 2.f * calc::PI);
-
-	mLocalRotation = { x, y, z };
+	SetRotationRad({ calc::ToRad(newRotation.x), calc::ToRad(newRotation.y), calc::ToRad(newRotation.z) });
 }
 
 Vector3 Transform::GetRotationRad()
 {
-	Matrix4x4 trs = LocalToWorldMatrix();
-
-	float scalingFactor = std::sqrt(trs[0][0] * trs[0][0] + trs[0][1] * trs[0][1] + trs[0][2] * trs[0][2]);
-	float sy = std::sqrt(trs[0][0] * trs[0][0] + trs[1][0] * trs[1][0]);
-	bool singular = sy < 1e-6; // If
-
-	float x, y, z;
-	if (!calc::IsZero(sy))
-	{
-		x = std::atan2(trs[2][1], trs[2][2]);
-		y = std::atan2(-trs[2][0], scalingFactor);
-		z = std::atan2(trs[1][0], trs[0][0]);
-	}
-	else
-	{
-		x = std::atan2(-trs[1][2], trs[1][1]);
-		y = std::atan2(-trs[2][0], scalingFactor);
-		z = 0;
-	}
-	return { x, y, z };
+	return MatrixToEuler(LocalToWorldMatrix());
 }
 
 void Transform::SetRotationRad(Vector3 newRotationRad)
 {
-	mLocalTRS = Matrix4x4::TRS(GetPosition(), { newRotationRad.x, newRotationRad.y, newRotationRad.z }, GetScale());
+	Matrix4x4 worldMat = Matrix4x4::TRS(GetPosition(), { newRotationRad.x, newRotationRad.y, newRotationRad.z }, GetScale());
 
 	if (mParentTransform)
 	{
-		mLocalTRS *= Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
-	}
-
-	float scalingFactor = std::sqrt(mLocalTRS[0][0] * mLocalTRS[0][0] + mLocalTRS[0][1] * mLocalTRS[0][1] + mLocalTRS[0][2] * mLocalTRS[0][2]);
-	Matrix3x3 rotMat = (1.f / scalingFactor) * Matrix3x3(mLocalTRS);
-
-	float sy = std::sqrt(rotMat[0][0] * rotMat[0][0] + rotMat[1][0] * rotMat[1][0]);
-
-	float x, y, z;
-	if (!calc::IsZero(sy))
-	{
-		x = std::atan2(rotMat[2][1], rotMat[2][2]);
-		y = std::atan2(-rotMat[2][0], sy);
-		z = std::atan2(rotMat[1][0], rotMat[0][0]);
+		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
 	}
 	else
 	{
-		x = std::atan2(-rotMat[1][2], rotMat[1][1]);
-		y = std::atan2(-rotMat[2][0], sy);
-		z = 0;
+		mLocalTRS = worldMat;
 	}
-	x = std::fmodf(x, 2.f * calc::PI);
-	y = std::fmodf(y, 2.f * calc::PI);
-	z = std::fmodf(z, 2.f * calc::PI);
 
-	mLocalRotation = { x, y, z };
+	Vector3 rot = MatrixToEuler(mLocalTRS);
+
+	rot.x = std::fmodf(rot.x, 2.f * calc::PI);
+	rot.y = std::fmodf(rot.y, 2.f * calc::PI);
+	rot.z = std::fmodf(rot.z, 2.f * calc::PI);
+
+	mLocalRotation = rot;
 }
 
 Vector3 Transform::GetScale()
@@ -159,12 +88,12 @@ Vector3 Transform::GetScale()
 	//// gram_schimdt orthoNormalization
 	Matrix3x3 orthoNormal = trs;
 
-	for (int i = 1; i < 3; i++) 
+	for (int i = 1; i < 3; i++)
 	{
-		for (int j = 0; j < i; j++) 
-{
+		for (int j = 0; j < i; j++)
+		{
 			double scaling_factor = Vector3::Dot(orthoNormal[j], orthoNormal[i])
-									/ Vector3::Dot(orthoNormal[j], orthoNormal[j]);
+				/ Vector3::Dot(orthoNormal[j], orthoNormal[j]);
 
 			// Subtract each scaled component of orthoNormal_j from orthoNormal_i
 			for (int k = 0; k < 3; k++)
@@ -181,17 +110,20 @@ Vector3 Transform::GetScale()
 	}
 	///////
 
-
 	return Vector3((Matrix3x3(trs) * Matrix3x3::Inverse(orthoNormal)) * Vector3(1, 1, 1));
 }
 
 void Transform::SetScale(Vector3 newScale)
 {
-	mLocalTRS = Matrix4x4::TRS(GetPosition(), GetRotationRad(), newScale);
+	Matrix4x4 worldMat = Matrix4x4::TRS(GetPosition(), GetRotationRad(), newScale);
 
 	if (mParentTransform)
 	{
-		mLocalTRS *= Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+	}
+	else
+	{
+		mLocalTRS = worldMat;
 	}
 
 	//// gram_schimdt orthoNormalization
@@ -237,9 +169,9 @@ Vector3 Transform::GetLocalRotation()
 
 void Transform::SetLocalRotation(Vector3 newLocalRotation)
 {
-	newLocalRotation.x = calc::ToRad(std::fmodf(newLocalRotation.x, 2.f * calc::PI));
-	newLocalRotation.y = calc::ToRad(std::fmodf(newLocalRotation.y, 2.f * calc::PI));
-	newLocalRotation.z = calc::ToRad(std::fmodf(newLocalRotation.z, 2.f * calc::PI));
+	newLocalRotation.x = std::fmodf(calc::ToRad(newLocalRotation.x), 2.f * calc::PI);
+	newLocalRotation.y = std::fmodf(calc::ToRad(newLocalRotation.y), 2.f * calc::PI);
+	newLocalRotation.z = std::fmodf(calc::ToRad(newLocalRotation.z), 2.f * calc::PI);
 	mLocalTRS = Matrix4x4::TRS(mLocalPosition, newLocalRotation, mLocalScale);
 	mLocalRotation = newLocalRotation;
 }
@@ -267,4 +199,24 @@ void Transform::SetLocalScale(Vector3 newLocalScale)
 {
 	mLocalTRS = Matrix4x4::TRS(mLocalPosition, mLocalRotation, newLocalScale);
 	mLocalScale = newLocalScale;
+}
+
+Vector3 Transform::MatrixToEuler(const Matrix4x4& mat)
+{
+	float sy = std::sqrt(mat[0][0] * mat[0][0] + mat[1][0] * mat[1][0]);
+
+	float x, y, z;
+	if (!(sy < calc::ZERO))
+	{
+		x = std::atan2(mat[2][1], mat[2][2]);
+		y = std::atan2(-mat[2][0], sy);
+		z = std::atan2(mat[1][0], mat[0][0]);
+	}
+	else
+	{
+		x = std::atan2(-mat[1][2], mat[1][1]);
+		y = std::atan2(-mat[2][0], sy);
+		z = 0;
+	}
+	return Vector3(x, y, z);
 }
