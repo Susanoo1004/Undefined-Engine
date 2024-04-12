@@ -7,7 +7,7 @@ class Transform
 public:
 
 	const Matrix4x4& WorldToLocalMatrix() const;
-	const Matrix4x4& LocalToWorldMatrix() const;
+	const Matrix4x4 LocalToWorldMatrix() const;
 
 	__declspec(property(get = GetPosition, put = SetPosition)) Vector3 Position;
 	Vector3 GetPosition();
@@ -40,7 +40,6 @@ public:
 	void SetLocalScale(Vector3 newLocalScale);
 
 private:
-	/**/
 	bool HasChanged;
 	Vector3 mPosition;
 	Vector3 mRotation;
