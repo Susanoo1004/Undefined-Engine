@@ -4,6 +4,8 @@
 
 #include "framebuffer.h"
 
+#include <toolbox/Vector2.h>
+
 #include "resources/shader.h"
 
 class EditorViewport
@@ -45,6 +47,8 @@ public:
 	/// </summary>
 	void RescaleViewport();
 
+	void SetMouseMinMaxBounds(int& mouseX, int& mouseY, Vector2& viewportOffset, Vector2& viewportSize);
+
 	/// <summary>
 	/// Pointer to the camera bind to the viewport
 	/// </summary>
@@ -59,6 +63,7 @@ private:
 	/// Pointer to the shader use by the viewport
 	/// </summary>
 	std::shared_ptr<Shader> mShader;
+	Vector2 mViewportBounds[2];
 
 	/// <summary>
 	/// EBO of the editor viewport
