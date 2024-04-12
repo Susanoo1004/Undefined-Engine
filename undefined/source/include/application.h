@@ -32,7 +32,6 @@ public:
 
 	// TODO: del
 	Scene ActualScene;
-	float T = 0;
 
 private:
 	unsigned int mVAO = 0, mVBO = 0, mEBO = 0;

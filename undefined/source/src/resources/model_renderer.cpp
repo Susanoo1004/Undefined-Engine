@@ -1,4 +1,4 @@
-#include "model_renderer.h"
+#include "resources/model_renderer.h"
 
 #include "resources/model.h"
 

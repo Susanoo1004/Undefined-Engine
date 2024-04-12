@@ -7,7 +7,7 @@
 /// <summary>
 /// Material Class
 /// </summary>
-class Material
+class Material : public Resource
 {
 public:
 	/// <summary>

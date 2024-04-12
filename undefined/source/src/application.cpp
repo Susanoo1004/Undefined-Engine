@@ -50,8 +50,6 @@ void Application::Init()
 
 void Application::Update()
 {
-    T += 0.016f;
-
     mRenderer->SetClearColor(0,0,0);
 
     ActualScene.Update();

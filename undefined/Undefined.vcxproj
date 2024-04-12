@@ -171,7 +171,7 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
-    <ClCompile Include="source\include\resources\model_renderer.cpp" />
+    <ClCompile Include="source\src\resources\model_renderer.cpp" />
     <ClCompile Include="source\src\resources\material.cpp" />
     <ClCompile Include="source\src\framebuffer.cpp" />
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
