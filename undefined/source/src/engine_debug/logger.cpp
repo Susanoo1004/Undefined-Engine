@@ -30,7 +30,7 @@ std::string Logger::CurrentDateTime()
     return buffer;
 }
 
-void Logger::CreateDebugFile(std::string path, std::string name)
+void Logger::CreateDebugFile(const std::string& path, const std::string& name)
 {
     std::filesystem::path const& filename = path + name + ".txt";
     int fileCount = 0;
@@ -65,7 +65,7 @@ void Logger::CreateDebugFile(std::string path, std::string name)
     }
 }
 
-void Logger::SetupLogEntry(LogLevel level, std::string log)
+void Logger::SetupLogEntry(LogLevel level, const std::string& log)
 {
     LogEntry entry;
     entry.Level = level;

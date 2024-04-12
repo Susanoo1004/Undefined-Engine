@@ -3,6 +3,7 @@
 #include <compare>
 #include <ostream>
 #include <vector>
+#include <format>
 
 #include "Vector4.h"
 #include "flag.h"
@@ -136,7 +137,7 @@ public:
     [[nodiscard]]
     Quaternion ToQuaternion() const;
 
-    static Matrix4x4 ViewMatrix(const Vector3& eye, const Vector3& center, const Vector3& up);
+    static Matrix4x4 ViewMatrix(const Vector3& Eye, const Vector3& center, const Vector3& Up);
     static Matrix4x4 ProjectionMatrix(const float fovY, const float aspectRatio, const float zNear, const float zFar);
 
     [[nodiscard]]
@@ -177,3 +178,24 @@ Matrix4x4& operator*=(Matrix4x4& m, const float scalar);
 Matrix4x4& operator*=(Matrix4x4& m1, const Matrix4x4& m2);
 
 std::ostream& operator<<(std::ostream& out, const Matrix4x4& m);
+
+template <>
+struct std::formatter<Matrix4x4, char>
+{
+    template<class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx)
+    {
+        auto it = ctx.begin();
+        if (it == ctx.end())
+            return it;
+        if (*it != '}')
+            throw std::format_error("Invalid format args for Matrix4x4");
+        return it;
+    }
+
+    template<class FmtContext>
+    typename FmtContext::iterator format(const Matrix4x4& mat, FmtContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{}\n{}\n{}\n{}", mat[0], mat[1], mat[2], mat[3]);
+    }
+};

@@ -3,6 +3,7 @@
 #include <compare>
 #include <ostream>
 #include <vector>
+#include <format>
 
 #include "Vector3.h"
 #include "flag.h"
@@ -110,3 +111,24 @@ Matrix3x3& operator*=(Matrix3x3& m, const float scalar);
 Matrix3x3& operator*=(Matrix3x3& m1, const Matrix3x3& m2);
 
 std::ostream& operator<<(std::ostream& out, const Matrix3x3& m);
+
+template <>
+struct std::formatter<Matrix3x3, char>
+{
+    template<class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx)
+    {
+        auto it = ctx.begin();
+        if (it == ctx.end())
+            return it;
+        if (*it != '}')
+            throw std::format_error("Invalid format args for Matrix3x3");
+        return it;
+    }
+
+    template<class FmtContext>
+    typename FmtContext::iterator format(const Matrix3x3& mat, FmtContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{}\n{}\n{}", mat[0], mat[1], mat[2]);
+    }
+};

@@ -14,10 +14,6 @@ public:
     Framebuffer();
 	~Framebuffer();
 
-    // TO MOVE DOWN
-	template <size_t TextureNumber>
-    static Framebuffer* Create(unsigned int width, unsigned int height);
-
     void RescaleFramebuffer(unsigned int width, unsigned int height);
 
 	unsigned int Width;
@@ -27,6 +23,13 @@ public:
 	unsigned int RBO_ID;
 
 	std::vector<std::unique_ptr<Texture>> RenderedTextures;
+
+private:
+    Renderer* mRenderer = nullptr;
+
+public:
+    template <size_t TextureNumber>
+    static Framebuffer* Create(unsigned int width, unsigned int height);
 };
 
 template <size_t TextureNumber>

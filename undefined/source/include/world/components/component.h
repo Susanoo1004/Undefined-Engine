@@ -2,47 +2,48 @@
 
 #include "utils/flag.h"
 
-#include "world/components/transform.h"
+#include "world/scene_manager/transform.h"
 
 class Object;
 
 class Component
 {
 public:
-	virtual ~Component() {};
+	virtual ~Component();
 
 	void Enable();
 	void Disable();
+
 	const bool IsEnable() const;
 	
-	virtual void Start() {};
+	virtual void Start();
 
-	virtual void FixedUpdate() {};
+	virtual void FixedUpdate();
 
-	virtual void Update() {};
+	virtual void Update();
 
-	virtual void LateUpdate() {};
+	virtual void LateUpdate();
 
-	virtual void Draw() {};
+	virtual void Draw();
 
-	virtual void OnEnable() {};
+	virtual void OnEnable();
 
-	virtual void OnDisable() {};
+	virtual void OnDisable();
 
-	friend class ::Object;
-	__declspec(property(get = GetObject, put = SetObject)) ::Object* GameObject;
-	::Object* GetObject() const { return mObject; };
+	friend class Object;
+	__declspec(property(get = GetObject, put = SetObject)) Object* GameObject;
+	Object* GetObject() const { return mObject; };
 
-	__declspec(property(get = GetTransform, put = SetTransform)) ::Transform* GameTransform;
-	::Transform* GetTransform() const { return mTransform; };
+	__declspec(property(get = GetTransform, put = SetTransform)) Transform* GameTransform;
+	Transform* GetTransform() const { return mTransform; };
 
 
 private:
-	void SetObject(::Object* newObject) { mObject = newObject; };
-	void SetTransform(::Transform* newTransform) { mTransform = newTransform; };
+	void SetObject(Object* newObject) { mObject = newObject; };
+	void SetTransform(Transform* newTransform) { mTransform = newTransform; };
 
 	bool mIsEnable = true;
 	
-	::Object* mObject;
-	::Transform* mTransform;
+	Object* mObject;
+	Transform* mTransform;
 };

@@ -25,6 +25,6 @@ public:
 	Vector3 Diffuse;
 	Vector3 Specular;
 
-private:
+protected:
 	std::shared_ptr<Shader> mBaseShader;
 };

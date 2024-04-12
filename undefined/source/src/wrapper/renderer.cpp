@@ -1,16 +1,18 @@
 #include "wrapper/renderer.h"
 
 #include <iostream>
-#include <glad/glad.h>
 
+#include"resources/resource_manager.h"
+#include"resources/texture.h"
+#include"resources/model.h"
 
 #include "engine_debug/logger.h"
 
 void Renderer::Init()
 {
-	gladLoadGL();
-	SetClearColor(0,0,0);
-    glEnable(GL_DEPTH_TEST);
+    gladLoadGL();
+    SetClearColor(0, 0, 0);
+    EnableTest(GL_DEPTH_TEST);
 
     Debug.DebugInit();
 }
@@ -35,6 +37,16 @@ void Renderer::GenerateVertexArray(int index, unsigned int* buffer)
     glGenVertexArrays(index, buffer);
 }
 
+void Renderer::GenTexture(unsigned int texNumber, unsigned int* ID)
+{
+    glGenTextures(texNumber, ID);
+}
+
+void Renderer::GenerateMipMap(unsigned int target)
+{
+    glGenerateMipmap(target);
+}
+
 void Renderer::ActiveTexture(unsigned int ID)
 {
     glActiveTexture(ID);
@@ -42,16 +54,32 @@ void Renderer::ActiveTexture(unsigned int ID)
 
 void Renderer::BindTexture(unsigned int ID, unsigned int type)
 {
-	glBindTexture(type, ID);
+    glBindTexture(type, ID);
 }
 
-int Renderer::ReadPixels(uint32_t attachmentIndex, int x, int y)
+void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int ID, int type)
 {
+    glFramebufferTexture2D(framebufferTarget, attachement, type, ID, 0);
+}
+
+int Renderer::ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
     glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
     int pixelData;
     glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
-    
+
     return pixelData;
+}
+
+void Renderer::BindFramebuffer(unsigned int target, unsigned int framebufferID)
+{
+    glBindFramebuffer(target, framebufferID);
+}
+
+void Renderer::BindRenderbuffer(unsigned int renderbufferID)
+{
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbufferID);
 }
 
 void Renderer::BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO)
@@ -59,6 +87,11 @@ void Renderer::BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO)
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+}
+
+void Renderer::BindRenderbufferToFramebuffer(int framebufferTarget, int attachements, unsigned int renderbufferID)
+{
+    glFramebufferRenderbuffer(framebufferTarget, attachements, GL_RENDERBUFFER, renderbufferID);
 }
 
 void Renderer::AttributePointers(unsigned int index, int size, unsigned int type, int stride, const void* pointer, bool isNormalized)
@@ -72,14 +105,24 @@ void Renderer::SetBufferData(unsigned int target, int size, const void* data, un
     glBufferData(target, size, data, usage);
 }
 
+void Renderer::SetRenderBufferStorageData(int format, float width, float height)
+{
+    glRenderbufferStorage(GL_RENDERBUFFER, format, (GLsizei)width, (GLsizei)height);
+}
+
+void Renderer::SetTextureParameteri(unsigned int target, unsigned int texParam, unsigned int texValue)
+{
+    glTexParameteri(target, texParam, texValue);
+}
+
 void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* indices)
 {
     glDrawElements(mode, size, type, indices);
 }
 
-void Renderer::Draw(unsigned int mode, int start, int end)
+void Renderer::Draw(unsigned int mode, int start, int count)
 {
-    glDrawArrays(mode, start, end);
+    glDrawArrays(mode, start, count);
 }
 
 unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
@@ -109,15 +152,15 @@ unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
 
 void Renderer::UseShader(int ID)
 {
-	glUseProgram(ID);
+    glUseProgram(ID);
 }
 
 void Renderer::UnUseShader()
 {
-	glUseProgram(0);
+    glUseProgram(0);
 }
 
-unsigned int Renderer::LinkShader(unsigned int ID, unsigned int vertex, unsigned int fragment)
+void Renderer::LinkShader(unsigned int& ID, unsigned int vertex, unsigned int fragment)
 {
     int success;
     char infoLog[512];
@@ -133,10 +176,8 @@ unsigned int Renderer::LinkShader(unsigned int ID, unsigned int vertex, unsigned
     {
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
         Logger::Error("SHADER_LINKING_FAILED {}", infoLog);
-        return 0;
+        return;
     }
-
-    return ID;
 }
 
 void Renderer::SetUniform(unsigned int ID, const std::string& name, bool value) const
@@ -169,7 +210,22 @@ void Renderer::DeleteShader(unsigned int shader)
     glDeleteShader(shader);
 }
 
-void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
+void Renderer::DeleteFramebuffers(int number, unsigned int* framebuffersID)
+{
+    glDeleteFramebuffers(number, framebuffersID);
+}
+
+void Renderer::DeleteRenderbuffers(int number, unsigned int* renderbuffersID)
+{
+    glDeleteRenderbuffers(number, renderbuffersID);
+}
+
+void Renderer::DeleteTextures(int number, unsigned int* ID)
+{
+    glDeleteTextures(number, ID);
+}
+
+void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
 {
     float Vertices[] = {
         // positions          // normal           // texture coords
@@ -180,7 +236,7 @@ void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     };
 
     unsigned int Indices[] =
-    {  // note that we start from 0!
+    {
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
     };
@@ -198,18 +254,16 @@ void Renderer::CreateQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), &Indices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
     // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
     // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    // entity id attribute
-    glVertexAttribPointer(3, 1, GL_INT, GL_FALSE, 9 * sizeof(int), (void*)(8 * sizeof(float)));
-    glEnableVertexAttribArray(3);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

@@ -89,9 +89,7 @@ void RendererDebug::DebugInit()
             case GL_DEBUG_SEVERITY_MEDIUM:
                 Logger::Warning("[{}] {} {} {}", sourceMessage, id, typeMessage, message);
                 break;
-
             }
-
     },
     nullptr
     );

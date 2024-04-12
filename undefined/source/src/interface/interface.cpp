@@ -26,11 +26,6 @@ void Interface::Init()
     std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
     ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
 
-    /*
-    Framebuffer* framebuffer = Framebuffer::Create<1>(200,200);
-
-    EditorViewports.push_back(std::make_unique<EditorViewport>(framebuffer));
-    */
     CreateEditorViewport();
 }
 
@@ -99,7 +94,6 @@ void Interface::Update()
     }
 
     ImGui::End();
-    Render();
 }
 
 void Interface::Delete()
@@ -118,4 +112,21 @@ UNDEFINED_ENGINE void Interface::CreateEditorViewport()
     Camera* camera = new Camera(200, 200);
 
     EditorViewports.push_back(new EditorViewport(framebuffer, camera));
+}
+
+UNDEFINED_ENGINE void Interface::DeleteEditorViewport(int ID)
+{
+    std::vector<EditorViewport*>::iterator it = EditorViewports.begin();
+
+    for (EditorViewport* e : EditorViewports)
+    {
+        if (ID == e->GetEditorID())
+        {
+            EditorViewports.erase(it);
+            delete e;
+            break;
+        }
+
+        it++;
+    }
 }

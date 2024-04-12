@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-KeyInput::KeyInput(std::vector<int> keysToMonitor) : mIsEnabled(true)
+KeyInput::KeyInput(const std::vector<int>& keysToMonitor) : mIsEnabled(true)
 {
     for (int key : keysToMonitor)
     {

@@ -50,13 +50,14 @@ void main()
     vec3 result;
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
-
+    
     // dirlight
     for (int i = 0; i < NBR_OF_DIR_LIGHT; i++)
     {
         result += CalcDirLight(dirLights[i], norm, viewDir);
     }
     
+    result = vec3(texture(texture0, TexCoord));
     FragColor = vec4(result, 1.0);
     PickingFragColor = EntityID;
 }

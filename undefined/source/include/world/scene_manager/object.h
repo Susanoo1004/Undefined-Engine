@@ -62,14 +62,33 @@ public:
 		return nullptr;
 	}
 
-	std::string Name = "empty";
 
-	Transform* GameTransform = new Transform;
+	__declspec(property(get = GetTransform, put = SetTransform)) Transform* GameTransform;
+	Transform* GetTransform() { return &mTransform; };
+
+	__declspec(property(get = GetParent, put = SetParent)) Object* Parent; // TODO: See if necessary and useful
+	const Object* GetParent() const;
+	void SetParent(Object* parent);
+
+	const std::list<Object*> GetChildren() const;
+	void DetachChildren();
+	const Object* GetChild(unsigned int index) const;
+	const Object* GetChild(std::string name) const;
+	void DetachChild(unsigned int index);
+	void DetachChild(std::string name);
+	void DetachChild(Object* child);
+
+	std::string Name = "empty";
 
 	std::list<Component*> Components;
 
 private:
+	void SetTransform(Transform newTransform) { mTransform = newTransform; };
+	void SetTransform(Transform* newTransform) { mTransform = *newTransform; };
+
+	Transform mTransform;
+	Object* mParent;
+	std::list<Object*> mChildren;
 
 	bool mIsEnable = true;
-
 };

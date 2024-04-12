@@ -9,27 +9,6 @@
 
 #include "utils/flag.h"
 
-template <>
-struct std::formatter<Vector3, char> 
-{
-	template<class ParseContext>
-	constexpr ParseContext::iterator parse(ParseContext& ctx)
-	{
-		auto it = ctx.begin();
-		if (it == ctx.end())
-			return it;
-		if (*it != '}')
-			throw std::format_error("Invalid format args for Vector3");
-		return it;
-	}
-
-	template<class FmtContext>
-	typename FmtContext::iterator format(const Vector3& vec, FmtContext& ctx) const
-	{
-		return std::format_to(ctx.out(), "({}, {}, {})", vec.x, vec.y, vec.z);
-	}
-};
-
 class Logger
 {
 public:
@@ -46,6 +25,9 @@ private:
 		FATALERROR,
 	};
 
+	/// <summary>
+	/// Struct used to set the level, the string log and the time offset of the Entry
+	/// </summary>
 	struct LogEntry
 	{
 		LogLevel Level;
@@ -54,6 +36,9 @@ private:
 	};
 
 public:
+	/// <summary>
+	/// Stop the Logger thread
+	/// </summary>
 	UNDEFINED_ENGINE static void Stop();
 
 	template<class... Types>
@@ -65,9 +50,9 @@ public:
 	}
 
 	template<class... Types>
-	static void Info(std::string string, Types... args)
+	static void Info(std::string entryString, Types... args)
 	{
-		std::string log = std::vformat(string, std::make_format_args(args...));
+		std::string log = std::vformat(entryString, std::make_format_args(args...));
 
 		SetupLogEntry(LogLevel::INFO, log);
 	}
@@ -98,8 +83,8 @@ public:
 
 private:
 	static std::string CurrentDateTime();
-	static void CreateDebugFile(std::string path, std::string name);
-	static void SetupLogEntry(LogLevel level, std::string log);
+	static void CreateDebugFile(const std::string& path, const std::string& name);
+	static void SetupLogEntry(LogLevel level, const std::string& log);
 
 	UNDEFINED_ENGINE static inline std::fstream mFile;
 

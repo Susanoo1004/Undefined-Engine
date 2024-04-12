@@ -25,9 +25,6 @@ public:
 	UNDEFINED_ENGINE void Update();
 	UNDEFINED_ENGINE void Clear();
 
-	UNDEFINED_ENGINE void InitQuad();
-	UNDEFINED_ENGINE void Draw();
-
 	std::shared_ptr<Shader> BaseShader;
 	std::shared_ptr<Shader> skyboxShader;
 	std::shared_ptr<Shader> pickingShader;

@@ -1,19 +1,19 @@
 #include "camera/camera.h"
 
-#include <glfw/glfw3.h>
 #include <iostream>
+#include <glfw/glfw3.h>
 #include <toolbox/calc.h>
 
 #include "service_locator.h"
 
-Camera* Camera::CurrentCamera;
+#include "engine_debug/logger.h"
 
-Camera::Camera(float width, float height)
+Camera::Camera(const float width, const float height)
     : Width(width), Height(height)
 {
-    mEye = Vector3(0, 0, -1);
-    mLookAt = Vector3(0, 0, 1);
-    mUp = Vector3(0, 1, 0);
+    Eye = Vector3(0, 0, -1);
+    LookAt = Vector3(0, 0, 1);
+    Up = Vector3(0, 1, 0);
 
     mPerspective = Matrix4x4::ProjectionMatrix(calc::PI / 2, Width / Height, 0.1f, 20.0f);
 
@@ -22,37 +22,36 @@ Camera::Camera(float width, float height)
 
 Camera::~Camera()
 {
-
 }
 
-void Camera::SetPerspective(Matrix4x4& perspectiveMat)
+void Camera::SetPerspective(const Matrix4x4& perspectiveMat)
 {
     mPerspective = perspectiveMat;
 }
 
-Matrix4x4 Camera::GetView()
+const Matrix4x4& Camera::GetView() const
 {
     return mView;
 }
 
-Matrix4x4 Camera::GetProjection()
+const Matrix4x4& Camera::GetProjection() const
 {
     return mPerspective;
 }
 
-const Matrix4x4& Camera::GetVP()
+const Matrix4x4& Camera::GetVP() const
 {
     return mVP;
 }
 
-const void Camera::SetCurrentCamera()
+void Camera::SetCurrentCamera()
 {
     CurrentCamera = this;
 }
 
 void Camera::Update()
 {
-    mView = Matrix4x4::ViewMatrix(mEye, mEye + mLookAt, mUp);
+    mView = Matrix4x4::ViewMatrix(Eye, Eye + LookAt, Up);
     mVP = mPerspective * mView;
 }
 
@@ -64,31 +63,31 @@ void Camera::ProcessInput()
 
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_W))
     {
-        CurrentCamera->mEye += CurrentCamera->mLookAt * CurrentCamera->mCameraSpeed;
+        CurrentCamera->Eye += CurrentCamera->LookAt * CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_S))
     {
-        CurrentCamera->mEye -= CurrentCamera->mLookAt * CurrentCamera->mCameraSpeed;
+        CurrentCamera->Eye -= CurrentCamera->LookAt * CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_A))
     {
-        CurrentCamera->mEye -= Vector3::Cross(CurrentCamera->mLookAt, CurrentCamera->mUp).Normalized() * CurrentCamera->mCameraSpeed;
+        CurrentCamera->Eye -= Vector3::Cross(CurrentCamera->LookAt, CurrentCamera->Up).Normalized() * CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_D))
     {
-        CurrentCamera->mEye += Vector3::Cross(CurrentCamera->mLookAt, CurrentCamera->mUp).Normalized() * CurrentCamera->mCameraSpeed;
+        CurrentCamera->Eye += Vector3::Cross(CurrentCamera->LookAt, CurrentCamera->Up).Normalized() * CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_SPACE))
     {
-        CurrentCamera->mEye.y += CurrentCamera->mCameraSpeed;
+        CurrentCamera->Eye.y += CurrentCamera->mCameraSpeed;
     }
     if (editorCameraInput->GetIsKeyDown(GLFW_KEY_LEFT_SHIFT))
     {
-        CurrentCamera->mEye.y -= CurrentCamera->mCameraSpeed;
+        CurrentCamera->Eye.y -= CurrentCamera->mCameraSpeed;
     }
 }
 
-void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
+void Camera::MouseCallback(GLFWwindow* const window, const double xposIn, const double yposIn)
 {
     InputManager* inputManager = ServiceLocator::Get<InputManager>();
 
@@ -137,7 +136,7 @@ void Camera::MouseCallback(GLFWwindow* window, double xposIn, double yposIn)
     direction.x = cosf((CurrentCamera->mYaw * (calc::PI / 180.f))) * cosf((CurrentCamera->mPitch * (calc::PI / 180.f)));
     direction.y = sinf((CurrentCamera->mPitch * (calc::PI / 180.f)));
     direction.z = sinf((CurrentCamera->mYaw * (calc::PI / 180.f))) * cosf((CurrentCamera->mPitch * (calc::PI / 180.f)));
-    CurrentCamera->mLookAt = direction.Normalized();
+    CurrentCamera->LookAt = direction.Normalized();
 }
 
 void Camera::ChangeSpeedCam(GLFWwindow* , double , double yposIn)
@@ -149,7 +148,4 @@ void Camera::ChangeSpeedCam(GLFWwindow* , double , double yposIn)
     {
         CurrentCamera->mCameraSpeed = 0.0001f;
     }
-
-    // TEMP
-    std::cout << "Camera speed = " << CurrentCamera->mCameraSpeed << std::endl;
 }

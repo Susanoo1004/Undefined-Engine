@@ -1,5 +1,6 @@
 #include "world/scene_manager/scene.h"
 
+#include "world/components/skybox.h"
 
 void Scene::Start()
 {
@@ -12,7 +13,7 @@ void Scene::Start()
 	}
 }
 
-UNDEFINED_ENGINE void Scene::FixedUpdate()
+void Scene::FixedUpdate()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
@@ -34,7 +35,7 @@ void Scene::Update()
 	}
 }
 
-UNDEFINED_ENGINE void Scene::LateUpdate()
+void Scene::LateUpdate()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
@@ -45,7 +46,20 @@ UNDEFINED_ENGINE void Scene::LateUpdate()
 	}
 }
 
-Object* Scene::AddObject(std::string name)
+void Scene::Draw()
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		for (Component* comp : Objects[i]->Components)
+		{
+			comp->Draw();
+		}
+	}
+
+	Skybox::Draw();
+}
+
+Object* Scene::AddObject(const std::string& name)
 {
 	Object* obj = new Object(name);
 
