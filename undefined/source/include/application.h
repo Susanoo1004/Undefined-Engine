@@ -25,16 +25,14 @@ public:
 	UNDEFINED_ENGINE void Update();
 	UNDEFINED_ENGINE void Clear();
 
-	UNDEFINED_ENGINE void Draw();
-
 	std::shared_ptr<Shader> BaseShader;
 	std::shared_ptr<Shader> skyboxShader;
+	std::shared_ptr<Shader> pickingShader;
 
 	Logger Log;
 
 	// TODO: del
 	Scene ActualScene;
-	float T = 0;
 
 private:
 	unsigned int mVAO = 0, mVBO = 0, mEBO = 0;

@@ -1,5 +1,6 @@
 #include "world/scene_manager/scene.h"
 
+#include "world/components/skybox.h"
 
 void Scene::Start()
 {
@@ -43,6 +44,19 @@ void Scene::LateUpdate()
 			comp->LateUpdate();
 		}
 	}
+}
+
+void Scene::Draw()
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		for (Component* comp : Objects[i]->Components)
+		{
+			comp->Draw();
+		}
+	}
+
+	Skybox::Draw();
 }
 
 Object* Scene::AddObject(const std::string& name)

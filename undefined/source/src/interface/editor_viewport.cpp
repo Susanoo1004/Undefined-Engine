@@ -4,9 +4,15 @@
 
 #include <toolbox/calc.h>
 
+#include <vector>
+
 #include "utils/utils.h"
 
+#include "engine_debug/logger.h"
+
 #include "resources/resource_manager.h"
+
+#include "resources/texture.h"
 
 #include "interface/interface.h"
 
@@ -19,19 +25,18 @@ EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
 
 EditorViewport::~EditorViewport()
 {
-	mEditorNumber--;
 	delete mFramebuffer;
 	delete ViewportCamera;
 }
 
 void EditorViewport::Init()
 {
-	ServiceLocator::Get<Renderer>()->CreateQuad(mVBO, mEBO, mVAO);
+	ServiceLocator::Get<Renderer>()->SetQuad(mVBO, mEBO, mVAO);
 }
 
 void EditorViewport::ShowWindow()
 {
-	ImGui::Begin((std::string("Editor ") + std::to_string(mID)).c_str());
+	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str());
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
@@ -45,14 +50,39 @@ void EditorViewport::ShowWindow()
 			Interface::CreateEditorViewport();
 			ImGui::CloseCurrentPopup();
 		}
+		if (Interface::EditorViewports.size() > 1)
+		{
+			if (ImGui::Button("Delete Editor Viewport"))
+			{
+				Interface::DeleteEditorViewport(mID);
+				ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+				ImGui::End();
+				return;
+			}
+		}
 		ImGui::EndPopup();
 	}
 
 	mWidth = ImGui::GetContentRegionAvail().x;
 	mHeight = ImGui::GetContentRegionAvail().y;
-
 	ViewportCamera->Width = mWidth;
 	ViewportCamera->Height = mHeight;
+
+	Vector2 viewportOffset;
+	Vector2 viewportSize;
+	int mouseX;
+	int mouseY;
+
+	SetMouseMinMaxBounds(mouseX, mouseY, viewportOffset, viewportSize);
+
+
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && 
+		mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+	{
+		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
+		Logger::Debug("Pixel data = {}", pixelData);
+	}
 
 	// we get the screen position of the window
 	ImVec2 screenPos = ImGui::GetCursorScreenPos();
@@ -71,6 +101,11 @@ void EditorViewport::ShowWindow()
 unsigned int EditorViewport::GetFBO_ID() const
 {
 	return mFramebuffer->FBO_ID;
+}
+
+int EditorViewport::GetEditorID() const
+{
+	return mID;
 }
 
 void EditorViewport::RescaleViewport()
@@ -99,4 +134,26 @@ void EditorViewport::RescaleViewport()
 
 	// TODO add to Renderer
 	glViewport(0, 0, (GLsizei)mWidth, (GLsizei)mHeight);
+}
+
+void EditorViewport::SetMouseMinMaxBounds(int& mouseX, int& mouseY, Vector2& viewportOffset, Vector2& viewportSize)
+{
+	viewportOffset.x = ImGui::GetCursorPos().x;
+	viewportOffset.y = ImGui::GetCursorPos().y;
+
+	//min and max size of the framebuffer and mouse pos
+	ImVec2 minBound = ImGui::GetWindowPos();
+	minBound.x += viewportOffset.x;
+	minBound.y += viewportOffset.y;
+	ImVec2 maxBound = { minBound.x + mWidth, minBound.y + mHeight };
+	mViewportBounds[0] = { minBound.x, minBound.y };
+	mViewportBounds[1] = { maxBound.x, maxBound.y };
+	auto [mx, my] = ImGui::GetMousePos();
+	mx -= mViewportBounds[0].x;
+	my -= mViewportBounds[0].y;
+	viewportSize = mViewportBounds[1] - mViewportBounds[0];
+	my = viewportSize.y - my;
+
+	mouseX = (int)mx;
+	mouseY = (int)my;
 }
