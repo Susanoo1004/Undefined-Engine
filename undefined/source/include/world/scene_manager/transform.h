@@ -1,6 +1,7 @@
 #pragma once
 #include <toolbox/Vector3.h>
 #include <toolbox/Matrix4x4.h>
+#include <refl.hpp>
 
 class Transform
 {
@@ -40,7 +41,6 @@ public:
 	void SetLocalScale(Vector3 newLocalScale);
 
 private:
-	/**/
 	bool HasChanged;
 	Vector3 mPosition;
 	Vector3 mRotation;
@@ -52,6 +52,12 @@ private:
 
 	Matrix4x4 mLocalTRS = Matrix4x4::TRS({0,0,0}, {0,0,0}, {1,1,1});
 	friend class Object;
+	friend struct refl_impl::metadata::type_info__ <Transform>;
 	Transform* mParentTransform;
-
 };
+
+REFL_AUTO(type(Transform),
+	field(mPosition),
+	field(mRotation),
+	field(mScale)
+)

@@ -6,6 +6,7 @@
 #include "interface/fps_graph.h"
 #include "interface/content_browser.h"
 #include "interface/inspector.h"
+#include "world/scene_manager/scene.h"
 
 void Interface::Init()
 {
@@ -79,14 +80,14 @@ void Interface::BeginDockSpace()
     ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 }
 
-void Interface::Update()
+void Interface::Update(Scene scene)
 {
     NewFrame();
     BeginDockSpace();
 
     FPSGraph::ShowWindow();
     ContentBrowser::DisplayWindow();
-    Inspector::ShowWindow();
+    Inspector::ShowWindow(scene);
 
     for (int i = 0; i < EditorViewports.size(); i++)
     {

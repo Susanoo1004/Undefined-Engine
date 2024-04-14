@@ -33,7 +33,7 @@ public:
 	/// <summary>
 	/// Update the interface system
 	/// </summary>
-	static void Update();
+	static void Update(Scene scene);
 	/// <summary>
 	/// Render the interface system
 	/// </summary>

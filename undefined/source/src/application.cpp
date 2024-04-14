@@ -73,8 +73,8 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-        mRenderer->SetUniform(BaseShader->ID, "EntityID", 1);
-
+        mRenderer->SetUniform(BaseShader->ID, "EntityID", ActualScene.Objects[i]);
+        
         ActualScene.Draw();
 
         mRenderer->UnUseShader();
