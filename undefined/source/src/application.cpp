@@ -17,6 +17,9 @@
 #include "memory_leak.h"
 
 #include "interface/interface.h"
+#include "interface/inspector.h"
+
+#include <toolbox/calc.h>
 
 Application::Application()
 {
@@ -38,23 +41,24 @@ void Application::Init()
     ServiceLocator::SetupCallbacks();
 
     Interface::Init();
+    Inspector::Init();
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
     ActualScene.AddObject("DirLight")->AddComponent<DirLight>();
-    ActualScene.AddObject("PikingRoom")->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-
+    Object* object = ActualScene.AddObject("PikingRoom");
+    object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
+    
 }
 
 void Application::Update()
 {
     mRenderer->SetClearColor(0,0,0);
 
-    ActualScene.Update();
     Camera::ProcessInput();
-    Interface::Update();
+    Interface::Update(&ActualScene);
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
@@ -73,8 +77,8 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-        mRenderer->SetUniform(BaseShader->ID, "EntityID", 1);
-
+        mRenderer->SetUniform(BaseShader->ID, "EntityID", ActualScene.Objects[i]);
+        
         ActualScene.Draw();
 
         mRenderer->UnUseShader();

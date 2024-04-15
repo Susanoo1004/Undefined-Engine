@@ -446,3 +446,7 @@ editor/Undefined_Engine.lib
 editor/imgui.ini
 !editor/assimp-vc142-mtd.dll
 *.exp
+
+**/bin/**
+**/bin-int/**
+*.idb

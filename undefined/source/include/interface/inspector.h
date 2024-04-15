@@ -1,5 +1,9 @@
 #pragma once
-#include "utils/flag.h"	
+#include "utils/flag.h"
+#include <refl.hpp>
+#include "resources/model.h"
+#include "world/scene_manager/scene.h"
+#include <type_traits>
 
 class UNDEFINED_ENGINE Inspector
 {
@@ -7,5 +11,8 @@ class UNDEFINED_ENGINE Inspector
 
 public:
 	static void Init();
-	static void ShowWindow();
+	static void ShowWindow(Scene* scene);
+
+private:
+    static inline Renderer* mRenderer;
 };
