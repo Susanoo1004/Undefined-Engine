@@ -6,13 +6,25 @@
 #include <toolbox/Calc.h>
 
 
-const Matrix4x4& Transform::WorldToLocalMatrix() const
+const Matrix4x4& Transform::WorldToLocalMatrix()
 {
+	if (HasChanged)
+	{
+		HasChanged = false;
+		mLocalTRS = Matrix4x4::TRS(mPosition, mRotation, mScale);
+	}
+
 	return mLocalTRS;
 }
 
-const Matrix4x4& Transform::LocalToWorldMatrix() const
+const Matrix4x4& Transform::LocalToWorldMatrix()
 {
+	if (HasChanged)
+	{
+		HasChanged = false;
+		mLocalTRS = Matrix4x4::TRS(mPosition, mRotation, mScale);
+	}
+
 	if (mParentTransform)
 	{
 		return mLocalTRS * mParentTransform->LocalToWorldMatrix();

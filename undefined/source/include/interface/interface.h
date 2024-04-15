@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "utils/flag.h"
-
+#include "world/scene_manager/scene.h"
 #include "interface/editor_viewport.h"
 
 class Interface
@@ -33,7 +33,7 @@ public:
 	/// <summary>
 	/// Update the interface system
 	/// </summary>
-	static void Update(Scene scene);
+	static void Update(Scene* scene);
 	/// <summary>
 	/// Render the interface system
 	/// </summary>

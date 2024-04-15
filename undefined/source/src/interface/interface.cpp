@@ -80,7 +80,7 @@ void Interface::BeginDockSpace()
     ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 }
 
-void Interface::Update(Scene scene)
+void Interface::Update(Scene* scene)
 {
     NewFrame();
     BeginDockSpace();

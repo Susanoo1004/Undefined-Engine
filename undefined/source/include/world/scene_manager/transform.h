@@ -1,14 +1,16 @@
 #pragma once
+
 #include <toolbox/Vector3.h>
 #include <toolbox/Matrix4x4.h>
 #include <refl.hpp>
+#include "interface/attributes.h"
 
 class Transform
 {
 public:
 
-	const Matrix4x4& WorldToLocalMatrix() const;
-	const Matrix4x4& LocalToWorldMatrix() const;
+	const Matrix4x4& WorldToLocalMatrix();
+	const Matrix4x4& LocalToWorldMatrix();
 
 	__declspec(property(get = GetPosition, put = SetPosition)) Vector3 Position;
 	Vector3 GetPosition();
@@ -57,7 +59,7 @@ private:
 };
 
 REFL_AUTO(type(Transform),
-	field(mPosition),
-	field(mRotation),
-	field(mScale)
+	field(mPosition, NotifyChange(&Transform::HasChanged)),
+	field(mRotation, NotifyChange(&Transform::HasChanged)),
+	field(mScale, NotifyChange(&Transform::HasChanged))
 )

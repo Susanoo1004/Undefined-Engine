@@ -117,6 +117,8 @@
     <ClInclude Include="source\include\resources\material.h" />
     <ClInclude Include="source\include\world\scene_manager\scene_serializer.h" />
     <ClInclude Include="source\include\resources\model_renderer.h" />
+    <ClInclude Include="source\include\interface\attributes.h" />
+    <ClInclude Include="source\include\interface\utils_reflection.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

@@ -17,6 +17,7 @@
 #include "memory_leak.h"
 
 #include "interface/interface.h"
+#include "interface/inspector.h"
 
 Application::Application()
 {
@@ -38,6 +39,7 @@ void Application::Init()
     ServiceLocator::SetupCallbacks();
 
     Interface::Init();
+    Inspector::Init();
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
@@ -54,7 +56,7 @@ void Application::Update()
 
     ActualScene.Update();
     Camera::ProcessInput();
-    Interface::Update();
+    Interface::Update(&ActualScene);
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {

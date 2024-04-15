@@ -6,6 +6,7 @@
 
 #include "world/components/component.h"
 #include "engine_debug/logger.h"
+#include "interface/attributes.h"
 
 template<class Comp>
 concept ComponentType = std::is_base_of<Component, Comp>::value;
@@ -62,7 +63,6 @@ public:
 		return nullptr;
 	}
 
-
 	__declspec(property(get = GetTransform, put = SetTransform)) Transform* GameTransform;
 	Transform* GetTransform() { return &mTransform; };
 
@@ -91,4 +91,12 @@ private:
 	std::list<Object*> mChildren;
 
 	bool mIsEnable = true;
+
+	friend struct refl_impl::metadata::type_info__ <Object>;
 };
+
+REFL_AUTO(type(Object),
+	field(mIsEnable, DontDisplayName()),
+	field(Name, SameLine()),
+	field(mTransform)
+)
