@@ -2,8 +2,19 @@
 
 #include "world/components/skybox.h"
 
+Scene::~Scene()
+{
+	for (Object* object : Objects)
+	{
+		delete object;
+	}
+	delete Object::mRoot;
+}
+
 void Scene::Start()
 {
+	Object::mRoot = new Object("Root");
+
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
 		for (Component* comp : Objects[i]->Components)
@@ -62,9 +73,48 @@ void Scene::Draw()
 Object* Scene::AddObject(const std::string& name)
 {
 	Object* obj = new Object(name);
-
 	Objects.push_back(obj);
 
 	return obj;
 }
+
+Object* Scene::AddObject(Object* parent, const std::string& name)
+{
+	Object* obj = new Object(name);
+	Objects.push_back(obj);
+	obj->SetParent(parent);
+
+	return obj;
+}
+
+Object* Scene::AddObject(Vector3 position, Vector3 rotation, const std::string& name)
+{
+	Object* obj = new Object(name);
+	Objects.push_back(obj);
+	obj->GameTransform->Position = position;
+	obj->GameTransform->Rotation = rotation;
+
+	return obj;
+}
+
+Object* Scene::AddObject(Vector3 position, Vector3 rotation, Object* parent, bool world, const std::string& name)
+{
+
+	Object* obj = new Object(name);
+	Objects.push_back(obj);
+	obj->SetParent(parent);
+	if (world)
+	{
+		obj->GameTransform->Position = position;
+		obj->GameTransform->Rotation = rotation;
+	}
+	else
+	{
+		obj->GameTransform->LocalPosition = position;
+		obj->GameTransform->LocalRotation = rotation;
+	}
+
+	return obj;
+}
+
 

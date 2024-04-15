@@ -19,6 +19,8 @@
 #include "interface/interface.h"
 #include "interface/inspector.h"
 
+#include <toolbox/calc.h>
+
 Application::Application()
 {
     ServiceLocator::Setup();
@@ -46,15 +48,15 @@ void Application::Init()
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
     ActualScene.AddObject("DirLight")->AddComponent<DirLight>();
-    ActualScene.AddObject("PikingRoom")->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-
+    Object* object = ActualScene.AddObject("PikingRoom");
+    object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
+    
 }
 
 void Application::Update()
 {
     mRenderer->SetClearColor(0,0,0);
 
-    ActualScene.Update();
     Camera::ProcessInput();
     Interface::Update(&ActualScene);
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "utils/flag.h"
 
 #include <toolbox/Vector3.h>
 #include <toolbox/Matrix4x4.h>
@@ -9,38 +10,38 @@ class Transform
 {
 public:
 
-	const Matrix4x4& WorldToLocalMatrix();
-	const Matrix4x4& LocalToWorldMatrix();
+	UNDEFINED_ENGINE const Matrix4x4& LocalMatrix();
+	UNDEFINED_ENGINE const Matrix4x4& WorldMatrix();
 
 	__declspec(property(get = GetPosition, put = SetPosition)) Vector3 Position;
-	Vector3 GetPosition();
-	void SetPosition(Vector3 newPosition);
+	UNDEFINED_ENGINE Vector3 GetPosition();
+	UNDEFINED_ENGINE void SetPosition(Vector3 newPosition);
 
 	__declspec(property(get = GetRotation, put = SetRotation)) Vector3 Rotation;
-	Vector3 GetRotation();
-	void SetRotation(Vector3 newRotation);
+	UNDEFINED_ENGINE Vector3 GetRotation();
+	UNDEFINED_ENGINE void SetRotation(Vector3 newRotation);
 	__declspec(property(get = GetRotationRad, put = SetRotationRad)) Vector3 RotationRad;
-	Vector3 GetRotationRad();
-	void SetRotationRad(Vector3 newRotationRad);
+	UNDEFINED_ENGINE Vector3 GetRotationRad();
+	UNDEFINED_ENGINE void SetRotationRad(Vector3 newRotationRad);
 
 	__declspec(property(get = GetScale, put = SetScale)) Vector3 Scale;
-	Vector3 GetScale();
-	void SetScale(Vector3 newScale);
+	UNDEFINED_ENGINE Vector3 GetScale();
+	UNDEFINED_ENGINE void SetScale(Vector3 newScale);
 
 	__declspec(property(get = GetLocalPosition, put = SetLocalPosition)) Vector3 LocalPosition;
-	Vector3 GetLocalPosition();
-	void SetLocalPosition(Vector3 newLocalPosition);
+	UNDEFINED_ENGINE Vector3 GetLocalPosition();
+	UNDEFINED_ENGINE void SetLocalPosition(Vector3 newLocalPosition);
 
 	__declspec(property(get = GetLocalRotation, put = SetLocalRotation)) Vector3 LocalRotation;
-	Vector3 GetLocalRotation();
-	void SetLocalRotation(Vector3 newLocalRotation);
+	UNDEFINED_ENGINE Vector3 GetLocalRotation();
+	UNDEFINED_ENGINE void SetLocalRotation(Vector3 newLocalRotation);
 	__declspec(property(get = GetLocalRotationRad, put = SetLocalRotationRad)) Vector3 LocalRotationRad;
-	Vector3 GetLocalRotationRad();
-	void SetLocalRotationRad(Vector3 newLocalRotationRad);
+	UNDEFINED_ENGINE Vector3 GetLocalRotationRad();
+	UNDEFINED_ENGINE void SetLocalRotationRad(Vector3 newLocalRotationRad);
 
 	__declspec(property(get = GetLocalScale, put = SetLocalScale)) Vector3 LocalScale;
-	Vector3 GetLocalScale();
-	void SetLocalScale(Vector3 newLocalScale);
+	UNDEFINED_ENGINE Vector3 GetLocalScale();
+	UNDEFINED_ENGINE void SetLocalScale(Vector3 newLocalScale);
 
 private:
 	bool HasChanged;

@@ -66,7 +66,10 @@ public:
     Matrix3x3& LoadIdentity();
     /// @brief Switches the matrix by its diagonal elements.
     Matrix3x3& Transpose();
+    /// @brief Computes the inverse of the given matrix using the Gauss-Jordan pivot.
     Matrix3x3& Inverse();
+    /// @brief Computes the ortho normal of the given matrix using Gram Schimdt method.
+    Matrix3x3& OrthoNormalise();
 
     /// @brief Switches the given matrix by its diagonal elements.
     [[nodiscard]]
@@ -74,6 +77,8 @@ public:
     /// @brief Computes the inverse of the given matrix using the Gauss-Jordan pivot.
     [[nodiscard]]
     static Matrix3x3 Inverse(const Matrix3x3& matrix);
+    /// @brief Computes the ortho normal of the given matrix using Gram Schimdt method.
+    static Matrix3x3 OrthoNormalise(const Matrix3x3& matrix);
 
     [[nodiscard]]
     constexpr const Vector3& operator[](const size_t row) const;

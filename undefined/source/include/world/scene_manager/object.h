@@ -14,12 +14,13 @@ concept ComponentType = std::is_base_of<Component, Comp>::value;
 class Object
 {
 public:
-	Object(const std::string& name);
-	~Object();
+	UNDEFINED_ENGINE Object();
+	UNDEFINED_ENGINE Object(const std::string& name);
+	UNDEFINED_ENGINE ~Object();
 
-	void Enable();
-	void Disable();
-	const bool IsEnable() const;
+	UNDEFINED_ENGINE void Enable();
+	UNDEFINED_ENGINE void Disable();
+	UNDEFINED_ENGINE const bool IsEnable() const;
 
 	template <ComponentType Comp, typename... Args>
 	Comp* AddComponent(Args... args)
@@ -64,19 +65,19 @@ public:
 	}
 
 	__declspec(property(get = GetTransform, put = SetTransform)) Transform* GameTransform;
-	Transform* GetTransform() { return &mTransform; };
+	UNDEFINED_ENGINE Transform* GetTransform() { return &mTransform; };
 
 	__declspec(property(get = GetParent, put = SetParent)) Object* Parent; // TODO: See if necessary and useful
-	const Object* GetParent() const;
-	void SetParent(Object* parent);
+	UNDEFINED_ENGINE const Object* GetParent() const;
+	UNDEFINED_ENGINE void SetParent(Object* parent);
 
-	const std::list<Object*> GetChildren() const;
-	void DetachChildren();
-	const Object* GetChild(unsigned int index) const;
-	const Object* GetChild(std::string name) const;
-	void DetachChild(unsigned int index);
-	void DetachChild(std::string name);
-	void DetachChild(Object* child);
+	UNDEFINED_ENGINE const std::list<Object*> GetChildren() const;
+	UNDEFINED_ENGINE void DetachChildren();
+	UNDEFINED_ENGINE const Object* GetChild(unsigned int index) const;
+	UNDEFINED_ENGINE const Object* GetChild(std::string name) const;
+	UNDEFINED_ENGINE void DetachChild(unsigned int index);
+	UNDEFINED_ENGINE void DetachChild(std::string name);
+	UNDEFINED_ENGINE void DetachChild(Object* child);
 
 	std::string Name = "empty";
 
@@ -93,6 +94,11 @@ private:
 	bool mIsEnable = true;
 
 	friend struct refl_impl::metadata::type_info__ <Object>;
+
+private:
+
+	friend class Scene;
+	static inline Object* mRoot;
 };
 
 REFL_AUTO(type(Object),
