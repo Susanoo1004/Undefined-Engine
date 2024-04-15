@@ -21,8 +21,15 @@ void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)
 	for (int i = 0; i < RenderedTextures.size(); i++)
 	{
 		mRenderer->BindTexture(RenderedTextures[i]->GetID());
-		// TODO add to renderer
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)Width , (GLsizei)Height, 0, GL_RGB, GL_UNSIGNED_BYTE, RenderedTextures[i]->Data);
+		if (i == 0)
+		{
+			// TODO add to renderer
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)Width , (GLsizei)Height, 0, GL_RGB, GL_UNSIGNED_BYTE, RenderedTextures[i]->Data);
+		}
+		else
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_R32I, (GLsizei)Width, (GLsizei)Height, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, RenderedTextures[i]->Data);
+		}
 
 		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		mRenderer->SetTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

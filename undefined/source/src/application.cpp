@@ -17,6 +17,7 @@
 #include "memory_leak.h"
 
 #include "interface/interface.h"
+#include "interface/inspector.h"
 
 #include <toolbox/calc.h>
 
@@ -40,8 +41,9 @@ void Application::Init()
     ServiceLocator::SetupCallbacks();
 
     Interface::Init();
+    Inspector::Init();
 
-    // Skybox::Setup();
+    Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
@@ -49,67 +51,20 @@ void Application::Init()
     Object* object = ActualScene.AddObject("PikingRoom");
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
     
-    object->GameTransform->Rotation = { -90, 0, 0 };
-    //object->GameTransform->Scale = { 2, 1, 1 };
 }
 
 void Application::Update()
 {
-    T += 0.016f;
-
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
-    Interface::Update();
-    // To del
-    Transform* trans = ActualScene.Objects[1]->GameTransform;
-    //trans->Position = { std::sinf(T), -1, std::cosf(T) };
-    ActualScene.Update();
-    
-    Logger::Debug("World Transform :\n{}\n{}\n{}\n", trans->Position, trans->Rotation, trans->Scale);
-    
-    Logger::Debug("Local Transform :\n{}\n{}\n{}", trans->LocalPosition, trans->LocalRotation, trans->LocalScale);
-    Logger::Debug("Local");
-    for (size_t i = 0; i < 4; i++)
-    {
-        Matrix4x4 mat = ActualScene.Objects[1]->GameTransform->WorldToLocalMatrix();
-        auto test1 = mat[i][0];
-        auto test2 = mat[i][1];
-        auto test3 = mat[i][2];
-        auto test4 = mat[i][3];
-        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
-    }
-    Logger::Debug("World");
-    for (size_t i = 0; i < 4; i++)
-    {
-        Matrix4x4 mat = ActualScene.Objects[1]->GameTransform->LocalToWorldMatrix();
-        auto test1 = mat[i][0];
-        auto test2 = mat[i][1];
-        auto test3 = mat[i][2];
-        auto test4 = mat[i][3];
-        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
-    }
-    /*
-
-    Logger::Debug("World");
-    for (size_t i = 0; i < 4; i++)
-    {
-        Matrix4x4 mat = ActualScene.Objects[1]->GameTransform->LocalToWorldMatrix();
-        auto test1 = mat[i][0];
-        auto test2 = mat[i][1];
-        auto test3 = mat[i][2];
-        auto test4 = mat[i][3];
-        Logger::Debug("{},{},{},{}", test1, test2, test3, test4);
-    }
-    Logger::Debug("");
-    Logger::Debug("");
-    */
+    Interface::Update(&ActualScene);
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();
         Interface::EditorViewports[i]->ViewportCamera->Update();
-        // Skybox::Update(Interface::EditorViewports[i]->ViewportCamera);
+        Skybox::Update(Interface::EditorViewports[i]->ViewportCamera);
 
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
 
@@ -122,7 +77,8 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-
+        mRenderer->SetUniform(BaseShader->ID, "EntityID", ActualScene.Objects[i]);
+        
         ActualScene.Draw();
 
         mRenderer->UnUseShader();

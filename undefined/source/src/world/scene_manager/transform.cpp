@@ -6,23 +6,51 @@
 #include <toolbox/Calc.h>
 
 
-const Matrix4x4& Transform::WorldToLocalMatrix() const
+const Matrix4x4& Transform::LocalMatrix()
 {
+	if (HasChanged)
+	{
+		HasChanged = false;
+		Matrix4x4 worldMat = Matrix4x4::TRS(mPosition, mRotation, mScale);
+		if (mParentTransform)
+		{
+			mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
+		}
+		else
+		{
+			mLocalTRS = worldMat;
+		}
+	}
+
 	return mLocalTRS;
 }
 
-const Matrix4x4& Transform::LocalToWorldMatrix() const
+const Matrix4x4& Transform::WorldMatrix()
 {
+	if (HasChanged)
+	{
+		HasChanged = false;
+		Matrix4x4 worldMat = Matrix4x4::TRS(mPosition, mRotation, mScale);
+		if (mParentTransform)
+		{
+			mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
+		}
+		else
+		{
+			mLocalTRS = worldMat;
+		}
+	}
+
 	if (mParentTransform)
 	{
-		return mLocalTRS * mParentTransform->LocalToWorldMatrix();
+		return mLocalTRS * mParentTransform->WorldMatrix();
 	}
 	return mLocalTRS;
 }
 
 Vector3 Transform::GetPosition()
 {
-	Matrix4x4 trs = LocalToWorldMatrix();
+	Matrix4x4 trs = WorldMatrix();
 	return { trs[0][3], trs[1][3], trs[2][3] };
 }
 
@@ -32,7 +60,7 @@ void Transform::SetPosition(Vector3 newPosition)
 
 	if (mParentTransform)
 	{
-		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
 	}
 	else
 	{
@@ -56,7 +84,7 @@ void Transform::SetRotation(Vector3 newRotation)
 
 Vector3 Transform::GetRotationRad()
 {
-	return MatrixToEuler(LocalToWorldMatrix());
+	return WorldMatrix().ToEuler();
 }
 
 void Transform::SetRotationRad(Vector3 newRotationRad)
@@ -65,14 +93,14 @@ void Transform::SetRotationRad(Vector3 newRotationRad)
 
 	if (mParentTransform)
 	{
-		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
 	}
 	else
 	{
 		mLocalTRS = worldMat;
 	}
 
-	Vector3 rot = MatrixToEuler(mLocalTRS);
+	Vector3 rot = mLocalTRS.ToEuler();
 
 	rot.x = std::fmodf(rot.x, 2.f * calc::PI);
 	rot.y = std::fmodf(rot.y, 2.f * calc::PI);
@@ -83,17 +111,17 @@ void Transform::SetRotationRad(Vector3 newRotationRad)
 
 Vector3 Transform::GetScale()
 {
-	Matrix4x4 trs = LocalToWorldMatrix();
+	Matrix4x4 trs = WorldMatrix();
 
 	//// gram_schimdt orthoNormalization
 	Matrix3x3 orthoNormal = trs;
 
 	for (int i = 1; i < 3; i++)
 	{
-		for (int j = 0; j < i; j++)
-		{
-			double scaling_factor = Vector3::Dot(orthoNormal[j], orthoNormal[i])
-				/ Vector3::Dot(orthoNormal[j], orthoNormal[j]);
+		for (int j = 0; j < i; j++) 
+{
+			float scaling_factor = Vector3::Dot(orthoNormal[j], orthoNormal[i])
+									/ Vector3::Dot(orthoNormal[j], orthoNormal[j]);
 
 			// Subtract each scaled component of orthoNormal_j from orthoNormal_i
 			for (int k = 0; k < 3; k++)
@@ -119,7 +147,7 @@ void Transform::SetScale(Vector3 newScale)
 
 	if (mParentTransform)
 	{
-		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+		mLocalTRS = worldMat * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
 	}
 	else
 	{
@@ -129,9 +157,11 @@ void Transform::SetScale(Vector3 newScale)
 	//// gram_schimdt orthoNormalization
 	Matrix3x3 orthoNormal = mLocalTRS;
 
-	for (int i = 1; i < 3; i++) {
-		for (int j = 0; j < i; j++) {
-			double scaling_factor = Vector4::Dot(orthoNormal[j], orthoNormal[i])
+	for (int i = 1; i < 3; i++) 
+	{
+		for (int j = 0; j < i; j++) 
+		{
+			float scaling_factor = Vector4::Dot(orthoNormal[j], orthoNormal[i])
 				/ Vector4::Dot(orthoNormal[j], orthoNormal[j]);
 
 			// Subtract each scaled component of orthoNormal_j from orthoNormal_i
@@ -199,24 +229,4 @@ void Transform::SetLocalScale(Vector3 newLocalScale)
 {
 	mLocalTRS = Matrix4x4::TRS(mLocalPosition, mLocalRotation, newLocalScale);
 	mLocalScale = newLocalScale;
-}
-
-Vector3 Transform::MatrixToEuler(const Matrix4x4& mat)
-{
-	float sy = std::sqrt(mat[0][0] * mat[0][0] + mat[1][0] * mat[1][0]);
-
-	float x, y, z;
-	if (!(sy < calc::ZERO))
-	{
-		x = std::atan2(mat[2][1], mat[2][2]);
-		y = std::atan2(-mat[2][0], sy);
-		z = std::atan2(mat[1][0], mat[0][0]);
-	}
-	else
-	{
-		x = std::atan2(-mat[1][2], mat[1][1]);
-		y = std::atan2(-mat[2][0], sy);
-		z = 0;
-	}
-	return Vector3(x, y, z);
 }

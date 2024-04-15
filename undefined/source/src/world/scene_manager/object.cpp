@@ -1,9 +1,12 @@
 #include "world/scene_manager/object.h"
 
-
+Object::Object()
+	: Name("Default"), mParent(mRoot)
+{
+}
 
 Object::Object(const std::string& name)
-	: Name(name), mParent(nullptr)
+	: Name(name), mParent(mRoot)
 {
 }
 
@@ -40,7 +43,7 @@ const bool Object::IsEnable() const
 
 const Object* Object::GetParent() const
 {
-	if (mParent == &mRoot)
+	if (mParent == mRoot)
 	{
 		return nullptr;
 	}
@@ -62,7 +65,7 @@ void Object::SetParent(Object* parent)
 	if (parent)
 	{
 		Object* current = parent;
-		while (current->mParent != &mRoot || current->mParent != nullptr)
+		while (current->mParent != mRoot || current->mParent != nullptr)
 		{
 			if (current->mParent == this)
 			{
@@ -87,7 +90,7 @@ void Object::DetachChildren()
 {
 	for (auto it = mChildren.begin(); it != mChildren.end(); ++it)
 	{
-		(*it)->mParent = &mRoot;
+		(*it)->mParent = mRoot;
 	}
 	mChildren.clear();
 }
@@ -123,7 +126,7 @@ void Object::DetachChild(unsigned int index)
 	}
 	auto it = mChildren.begin();
 	std::advance(it, index);
-	(*it)->mParent = &mRoot;
+	(*it)->mParent = mRoot;
 	(*it)->mTransform.mParentTransform = nullptr;
 	mChildren.remove(*it);
 }
@@ -134,7 +137,7 @@ void Object::DetachChild(std::string name)
 	{
 		if (child->Name == name)
 		{
-			child->mParent = &mRoot;
+			child->mParent = mRoot;
 			child->mTransform.mParentTransform = nullptr;
 			mChildren.remove(child);
 		}
@@ -149,7 +152,7 @@ void Object::DetachChild(Object* child)
 		return;
 	}
 
-	child->mParent = &mRoot;
+	child->mParent = mRoot;
 	child->mTransform.mParentTransform = nullptr;
 	mChildren.remove(child);
 }

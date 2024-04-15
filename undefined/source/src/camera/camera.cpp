@@ -11,7 +11,7 @@
 Camera::Camera(const float width, const float height)
     : Width(width), Height(height)
 {
-    Eye = Vector3(1, 0, -1);
+    Eye = Vector3(0, 0, -1);
     LookAt = Vector3(0, 0, 1);
     Up = Vector3(0, 1, 0);
 
@@ -136,16 +136,19 @@ void Camera::MouseCallback(GLFWwindow* const window, const double xposIn, const 
     direction.x = cosf((CurrentCamera->mYaw * (calc::PI / 180.f))) * cosf((CurrentCamera->mPitch * (calc::PI / 180.f)));
     direction.y = sinf((CurrentCamera->mPitch * (calc::PI / 180.f)));
     direction.z = sinf((CurrentCamera->mYaw * (calc::PI / 180.f))) * cosf((CurrentCamera->mPitch * (calc::PI / 180.f)));
+
     CurrentCamera->LookAt = direction.Normalized();
 }
 
 void Camera::ChangeSpeedCam(GLFWwindow* , double , double yposIn)
 {
-    CurrentCamera->mCameraSpeed += calc::Sign((float)yposIn) * 0.005f;
+    CurrentCamera->mCameraSpeed += calc::Sign((float)yposIn) * 0.0025f;
 
-    // verify is camera speed is not negative so that we dont go opposite of where we want
+    // verify if camera speed is not negative so that we don't go opposite of where we want
     if (CurrentCamera->mCameraSpeed < 0.f)
     {
         CurrentCamera->mCameraSpeed = 0.0001f;
     }
+
+    Logger::Info("Camera speed : {}", CurrentCamera->mCameraSpeed);
 }

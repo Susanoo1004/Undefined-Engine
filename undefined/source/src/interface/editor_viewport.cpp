@@ -4,9 +4,15 @@
 
 #include <toolbox/calc.h>
 
+#include <vector>
+
 #include "utils/utils.h"
 
+#include "engine_debug/logger.h"
+
 #include "resources/resource_manager.h"
+
+#include "resources/texture.h"
 
 #include "interface/interface.h"
 
@@ -60,9 +66,23 @@ void EditorViewport::ShowWindow()
 
 	mWidth = ImGui::GetContentRegionAvail().x;
 	mHeight = ImGui::GetContentRegionAvail().y;
-
 	ViewportCamera->Width = mWidth;
 	ViewportCamera->Height = mHeight;
+
+	Vector2 viewportOffset;
+	Vector2 viewportSize;
+	int mouseX;
+	int mouseY;
+
+	SetMouseMinMaxBounds(mouseX, mouseY, viewportOffset, viewportSize);
+
+
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && 
+		mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+	{
+		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
+		Logger::Debug("Pixel data = {}", pixelData);
+	}
 
 	// we get the screen position of the window
 	ImVec2 screenPos = ImGui::GetCursorScreenPos();
@@ -114,4 +134,26 @@ void EditorViewport::RescaleViewport()
 
 	// TODO add to Renderer
 	glViewport(0, 0, (GLsizei)mWidth, (GLsizei)mHeight);
+}
+
+void EditorViewport::SetMouseMinMaxBounds(int& mouseX, int& mouseY, Vector2& viewportOffset, Vector2& viewportSize)
+{
+	viewportOffset.x = ImGui::GetCursorPos().x;
+	viewportOffset.y = ImGui::GetCursorPos().y;
+
+	//min and max size of the framebuffer and mouse pos
+	ImVec2 minBound = ImGui::GetWindowPos();
+	minBound.x += viewportOffset.x;
+	minBound.y += viewportOffset.y;
+	ImVec2 maxBound = { minBound.x + mWidth, minBound.y + mHeight };
+	mViewportBounds[0] = { minBound.x, minBound.y };
+	mViewportBounds[1] = { maxBound.x, maxBound.y };
+	auto [mx, my] = ImGui::GetMousePos();
+	mx -= mViewportBounds[0].x;
+	my -= mViewportBounds[0].y;
+	viewportSize = mViewportBounds[1] - mViewportBounds[0];
+	my = viewportSize.y - my;
+
+	mouseX = (int)mx;
+	mouseY = (int)my;
 }

@@ -39,7 +39,13 @@ public:
 	/// <param name="indices">: std::vector of the indices of our mesh</param>
 	UNDEFINED_ENGINE Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 
+	/// <summary>
+	/// std::vector of Vertex for the vertices of the Mesh
+	/// </summary>
 	std::vector<Vertex> Vertices;
+	/// <summary>
+	/// std::vector of unsigned int for the indices of the Mesh
+	/// </summary>
 	std::vector<unsigned int> Indices;
 };
 

@@ -6,6 +6,7 @@
 
 #include "world/components/component.h"
 #include "engine_debug/logger.h"
+#include "interface/attributes.h"
 
 template<class Comp>
 concept ComponentType = std::is_base_of<Component, Comp>::value;
@@ -13,6 +14,7 @@ concept ComponentType = std::is_base_of<Component, Comp>::value;
 class Object
 {
 public:
+	UNDEFINED_ENGINE Object();
 	UNDEFINED_ENGINE Object(const std::string& name);
 	UNDEFINED_ENGINE ~Object();
 
@@ -62,7 +64,6 @@ public:
 		return nullptr;
 	}
 
-
 	__declspec(property(get = GetTransform, put = SetTransform)) Transform* GameTransform;
 	UNDEFINED_ENGINE Transform* GetTransform() { return &mTransform; };
 
@@ -92,7 +93,16 @@ private:
 
 	bool mIsEnable = true;
 
+	friend struct refl_impl::metadata::type_info__ <Object>;
+
 private:
 
-	static Object mRoot;
+	friend class Scene;
+	static inline Object* mRoot;
 };
+
+REFL_AUTO(type(Object),
+	field(mIsEnable, DontDisplayName()),
+	field(Name, SameLine()),
+	field(mTransform)
+)

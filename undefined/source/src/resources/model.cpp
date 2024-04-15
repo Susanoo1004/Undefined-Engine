@@ -47,7 +47,7 @@ bool Model::IsValid()
     return false;
 }
 
-void Model::Draw(Matrix4x4 TRS)
+void Model::Draw(const Matrix4x4& TRS)
 {
     mRenderer->BindBuffers(mVAO, mVBO, mEBO);
 

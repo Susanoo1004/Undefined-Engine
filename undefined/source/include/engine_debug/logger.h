@@ -5,6 +5,7 @@
 #include <format>
 #include <iostream>
 #include <ts_queue/tsqueue.hpp>
+#include <toolbox/Vector3.h>
 
 #include "utils/flag.h"
 
@@ -42,7 +43,7 @@ public:
 
 	template<class... Types>
 	static void Debug(std::string string, Types... args)
-	{
+	{	
 		std::string log = std::vformat(string, std::make_format_args(args...));
 
 		SetupLogEntry(LogLevel::DEBUG, log);

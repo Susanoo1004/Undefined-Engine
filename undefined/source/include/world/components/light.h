@@ -26,5 +26,5 @@ public:
 	Vector3 Specular;
 
 protected:
-	std::shared_ptr<Shader> mBaseShader;
+	std::shared_ptr<Shader> mShader;
 };

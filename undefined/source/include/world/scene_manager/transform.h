@@ -1,13 +1,17 @@
 #pragma once
+#include "utils/flag.h"
+
 #include <toolbox/Vector3.h>
 #include <toolbox/Matrix4x4.h>
+#include <refl.hpp>
+#include "interface/attributes.h"
 
 class Transform
 {
 public:
 
-	UNDEFINED_ENGINE const Matrix4x4& WorldToLocalMatrix() const;
-	UNDEFINED_ENGINE const Matrix4x4& LocalToWorldMatrix() const;
+	UNDEFINED_ENGINE const Matrix4x4& LocalMatrix();
+	UNDEFINED_ENGINE const Matrix4x4& WorldMatrix();
 
 	__declspec(property(get = GetPosition, put = SetPosition)) Vector3 Position;
 	UNDEFINED_ENGINE Vector3 GetPosition();
@@ -39,9 +43,11 @@ public:
 	UNDEFINED_ENGINE Vector3 GetLocalScale();
 	UNDEFINED_ENGINE void SetLocalScale(Vector3 newLocalScale);
 
-	Vector3 MatrixToEuler(const Matrix4x4& mat);
-
 private:
+	bool HasChanged;
+	Vector3 mPosition;
+	Vector3 mRotation;
+	Vector3 mScale = { 1, 1, 1 };
 
 	Vector3 mLocalPosition;
 	Vector3 mLocalRotation;
@@ -49,6 +55,12 @@ private:
 
 	Matrix4x4 mLocalTRS = Matrix4x4::TRS({0,0,0}, {0,0,0}, {1,1,1});
 	friend class Object;
+	friend struct refl_impl::metadata::type_info__ <Transform>;
 	Transform* mParentTransform;
-
 };
+
+REFL_AUTO(type(Transform),
+	field(mPosition, NotifyChange(&Transform::HasChanged)),
+	field(mRotation, NotifyChange(&Transform::HasChanged)),
+	field(mScale, NotifyChange(&Transform::HasChanged))
+)

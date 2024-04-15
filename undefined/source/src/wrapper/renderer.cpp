@@ -10,8 +10,8 @@
 
 void Renderer::Init()
 {
-	gladLoadGL();
-	SetClearColor(0,0,0);
+    gladLoadGL();
+    SetClearColor(0, 0, 0);
     EnableTest(GL_DEPTH_TEST);
 
     Debug.DebugInit();
@@ -54,12 +54,21 @@ void Renderer::ActiveTexture(unsigned int ID)
 
 void Renderer::BindTexture(unsigned int ID, unsigned int type)
 {
-	glBindTexture(type, ID);
+    glBindTexture(type, ID);
 }
 
 void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int ID, int type)
 {
     glFramebufferTexture2D(framebufferTarget, attachement, type, ID, 0);
+}
+
+int Renderer::ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
+    glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+    glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+
+    return pixelData;
 }
 
 void Renderer::BindFramebuffer(unsigned int target, unsigned int framebufferID)
@@ -81,7 +90,7 @@ void Renderer::BindBuffers(unsigned int VAO, unsigned int VBO, unsigned int EBO)
 
 void Renderer::BindRenderbufferToFramebuffer(int framebufferTarget, int attachements, unsigned int renderbufferID)
 {
-	glFramebufferRenderbuffer(framebufferTarget, attachements, GL_RENDERBUFFER, renderbufferID);
+    glFramebufferRenderbuffer(framebufferTarget, attachements, GL_RENDERBUFFER, renderbufferID);
 }
 
 void Renderer::AttributePointers(unsigned int index, int size, unsigned int type, int stride, const void* pointer, bool isNormalized)
@@ -142,15 +151,15 @@ unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
 
 void Renderer::UseShader(int ID)
 {
-	glUseProgram(ID);
+    glUseProgram(ID);
 }
 
 void Renderer::UnUseShader()
 {
-	glUseProgram(0);
+    glUseProgram(0);
 }
 
-void Renderer::LinkShader(unsigned int &ID, unsigned int vertex, unsigned int fragment)
+void Renderer::LinkShader(unsigned int& ID, unsigned int vertex, unsigned int fragment)
 {
     int success;
     char infoLog[512];
@@ -226,7 +235,7 @@ void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     };
 
     unsigned int Indices[] =
-    {  
+    {
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
     };
