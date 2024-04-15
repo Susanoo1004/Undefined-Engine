@@ -70,9 +70,49 @@ void Scene::Draw()
 Object* Scene::AddObject(const std::string& name)
 {
 	Object* obj = new Object(name);
-
 	Objects.push_back(obj);
 
 	return obj;
 }
+
+Object* Scene::AddObject(Object* parent, const std::string& name)
+{
+	Object* obj = new Object(name);
+	Objects.push_back(obj);
+	obj->SetParent(parent);
+
+	return obj;
+}
+
+Object* Scene::AddObject(Vector3 position, Vector3 rotation, const std::string& name)
+{
+	Object* obj = new Object(name);
+	Objects.push_back(obj);
+	obj->GameTransform->Position = position;
+	obj->GameTransform->Rotation = rotation;
+
+	return obj;
+}
+
+UNDEFINED_ENGINE Object* Scene::AddObject(Vector3 position, Vector3 rotation, Object* parent, bool world, const std::string& name)
+{
+
+	Object* obj = new Object(name);
+	Objects.push_back(obj);
+	obj->SetParent(parent);
+	if (world)
+	{
+		obj->GameTransform->Position = position;
+		obj->GameTransform->Rotation = rotation;
+	}
+	else
+	{
+		obj->GameTransform->LocalPosition = position;
+		obj->GameTransform->LocalRotation = rotation;
+	}
+
+
+	return obj;
+}
+
 

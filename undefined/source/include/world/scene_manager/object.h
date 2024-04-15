@@ -91,4 +91,8 @@ private:
 	std::list<Object*> mChildren;
 
 	bool mIsEnable = true;
+
+private:
+
+	static Object mRoot;
 };
