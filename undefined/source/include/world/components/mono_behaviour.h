@@ -2,6 +2,8 @@
 
 #include "world/components/component.h"
 
+#include <refl.hpp>
+
 class MonoBehaviour : public Component
 {
 public:
@@ -27,3 +29,5 @@ public:
 	virtual void OnDestroy();
 };
 
+REFL_AUTO(type(MonoBehaviour, bases<Component>)
+);

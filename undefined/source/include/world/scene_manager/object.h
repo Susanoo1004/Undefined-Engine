@@ -98,5 +98,6 @@ private:
 REFL_AUTO(type(Object),
 	field(mIsEnable, DontDisplayName()),
 	field(Name, SameLine()),
-	field(mTransform)
+	field(mTransform),
+	field(Components)
 )

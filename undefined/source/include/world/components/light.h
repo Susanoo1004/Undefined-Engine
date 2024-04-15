@@ -8,6 +8,8 @@
 
 #include "utils/flag.h"
 
+#include <refl.hpp>
+
 #define BASE_AMBIENT Vector3{ 0.4f, 0.4f, 0.4f }
 #define BASE_DIFFUSE Vector3{ 0.8f, 0.8f, 0.8f }
 #define BASE_SPECULAR Vector3{ 0.5f, 0.5f, 0.5f }
@@ -28,3 +30,9 @@ public:
 protected:
 	std::shared_ptr<Shader> mShader;
 };
+
+REFL_AUTO(type(Light, bases<Component>),
+	field(Ambient),
+	field(Diffuse),
+	field(Specular)
+	);

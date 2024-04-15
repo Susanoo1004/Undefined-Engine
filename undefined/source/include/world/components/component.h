@@ -1,7 +1,7 @@
 #pragma once
 
+#include <refl.hpp>
 #include "utils/flag.h"
-
 #include "world/scene_manager/transform.h"
 
 class Object;
@@ -47,3 +47,7 @@ private:
 	Object* mObject;
 	Transform* mTransform;
 };
+
+REFL_AUTO(type(Component),
+	field(mIsEnable)
+);

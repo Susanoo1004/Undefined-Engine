@@ -4,5 +4,8 @@
 class Player : public MonoBehaviour
 {
 public:
-	void Update();
+	void Update() override;
 };
+
+REFL_AUTO(type(Player, bases<MonoBehaviour>)
+);

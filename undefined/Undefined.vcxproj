@@ -187,6 +187,7 @@
     <ClCompile Include="source\src\world\components\mono_behaviour.cpp" />
     <ClCompile Include="source\src\world\components\player_test.cpp" />
     <ClCompile Include="source\src\world\components\skybox.cpp" />
+    <ClCompile Include="source\src\world\components\transform.cpp" />
     <ClCompile Include="source\src\world\scene_manager\object.cpp" />
     <ClCompile Include="source\src\world\scene_manager\scene.cpp" />
     <ClCompile Include="source\src\world\scene_manager\scene_manager.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="source\include\wrapper\renderer.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
+    <ClInclude Include="source\src\interface\runtime_classes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />

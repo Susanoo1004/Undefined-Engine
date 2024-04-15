@@ -1,6 +1,8 @@
 #pragma once
 
 #include <refl.hpp>
+#include <toolbox/Vector2.h>
+#include <imgui/imgui.h>
 
 using FieldAttribute = refl::attr::usage::field;
 
@@ -12,6 +14,14 @@ struct SameLine : FieldAttribute
 {
 };
 
+struct Spacing : FieldAttribute
+{
+	ImVec2 size;
+
+	constexpr Spacing(const ImVec2 s)
+		: size(s) {}
+};
+
 template <typename T>
 struct NotifyChange : FieldAttribute
 {
@@ -19,7 +29,7 @@ struct NotifyChange : FieldAttribute
 
 	PtrT ptr;
 
-	constexpr NotifyChange(PtrT p)
+	constexpr NotifyChange(const PtrT p)
 		: ptr(p) {}
 };
 

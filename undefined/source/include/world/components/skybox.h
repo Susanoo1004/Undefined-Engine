@@ -84,3 +84,6 @@ private:
 	static inline std::shared_ptr<Shader> mSkyboxShader;
 	static inline Renderer* mRenderer;
 };
+
+REFL_AUTO(type(Skybox, bases<Component>)
+);
