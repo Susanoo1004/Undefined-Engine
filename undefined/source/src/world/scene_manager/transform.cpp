@@ -27,7 +27,7 @@ const Matrix4x4& Transform::LocalToWorldMatrix()
 
 	if (mParentTransform)
 	{
-		return mLocalTRS * mParentTransform->LocalToWorldMatrix();
+		return (mLocalTRS * mParentTransform->LocalToWorldMatrix());
 	}
 	return mLocalTRS;
 }
@@ -112,7 +112,7 @@ Vector3 Transform::GetRotationRad()
 
 	float scalingFactor = std::sqrt(trs[0][0] * trs[0][0] + trs[0][1] * trs[0][1] + trs[0][2] * trs[0][2]);
 	float sy = std::sqrt(trs[0][0] * trs[0][0] + trs[1][0] * trs[1][0]);
-	bool singular = sy < 1e-6; // If
+
 
 	float x, y, z;
 	if (!calc::IsZero(sy))
@@ -175,7 +175,7 @@ Vector3 Transform::GetScale()
 	{
 		for (int j = 0; j < i; j++) 
 {
-			double scaling_factor = Vector3::Dot(orthoNormal[j], orthoNormal[i])
+			float scaling_factor = Vector3::Dot(orthoNormal[j], orthoNormal[i])
 									/ Vector3::Dot(orthoNormal[j], orthoNormal[j]);
 
 			// Subtract each scaled component of orthoNormal_j from orthoNormal_i
@@ -209,9 +209,11 @@ void Transform::SetScale(Vector3 newScale)
 	//// gram_schimdt orthoNormalization
 	Matrix3x3 orthoNormal = mLocalTRS;
 
-	for (int i = 1; i < 3; i++) {
-		for (int j = 0; j < i; j++) {
-			double scaling_factor = Vector4::Dot(orthoNormal[j], orthoNormal[i])
+	for (int i = 1; i < 3; i++) 
+	{
+		for (int j = 0; j < i; j++) 
+		{
+			float scaling_factor = Vector4::Dot(orthoNormal[j], orthoNormal[i])
 				/ Vector4::Dot(orthoNormal[j], orthoNormal[j]);
 
 			// Subtract each scaled component of orthoNormal_j from orthoNormal_i
