@@ -94,7 +94,7 @@ Object* Scene::AddObject(Vector3 position, Vector3 rotation, const std::string& 
 	return obj;
 }
 
-UNDEFINED_ENGINE Object* Scene::AddObject(Vector3 position, Vector3 rotation, Object* parent, bool world, const std::string& name)
+Object* Scene::AddObject(Vector3 position, Vector3 rotation, Object* parent, bool world, const std::string& name)
 {
 
 	Object* obj = new Object(name);
@@ -110,7 +110,6 @@ UNDEFINED_ENGINE Object* Scene::AddObject(Vector3 position, Vector3 rotation, Ob
 		obj->GameTransform->LocalPosition = position;
 		obj->GameTransform->LocalRotation = rotation;
 	}
-
 
 	return obj;
 }
