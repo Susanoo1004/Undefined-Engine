@@ -17,7 +17,7 @@ concept ComponentType = std::is_base_of<Component, Comp>::value;
 class Object
 {
 public:
-	Object()
+	Object();
 	/// <summary>
 	/// Constructor of Object
 	/// </summary>
@@ -102,7 +102,6 @@ public:
 	UNDEFINED_ENGINE const Object* GetParent() const;
 	UNDEFINED_ENGINE void SetParent(Object* parent);
 
-<<<<<<< HEAD
 	/// <summary>
 	/// Get all the Children on this Object 
 	/// </summary>
@@ -139,15 +138,7 @@ public:
 	/// </summary>
 	/// <param name="child">: Pointer to the child</param>
 	void DetachChild(Object* child);
-=======
-	UNDEFINED_ENGINE const std::list<Object*> GetChildren() const;
-	UNDEFINED_ENGINE void DetachChildren();
-	UNDEFINED_ENGINE const Object* GetChild(unsigned int index) const;
-	UNDEFINED_ENGINE const Object* GetChild(std::string name) const;
-	UNDEFINED_ENGINE void DetachChild(unsigned int index);
-	UNDEFINED_ENGINE void DetachChild(std::string name);
-	UNDEFINED_ENGINE void DetachChild(Object* child);
->>>>>>> fc87807b23b0386a36795d10bcd0a129092394da
+
 
 	/// <summary>
 	/// Name of the Object
