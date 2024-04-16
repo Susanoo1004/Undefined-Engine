@@ -37,7 +37,7 @@ void Renderer::GenerateVertexArray(int index, unsigned int* buffer)
     glGenVertexArrays(index, buffer);
 }
 
-void Renderer::GenTexture(unsigned int texNumber, unsigned int* ID)
+void Renderer::GenerateTexture(unsigned int texNumber, unsigned int* ID)
 {
     glGenTextures(texNumber, ID);
 }

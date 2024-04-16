@@ -39,7 +39,7 @@ public:
 	/// </summary>
 	/// <param name="texNumber">: Number of texture generated</param>
 	/// <param name="ID">: Texture ID</param>
-	void GenTexture(unsigned int texNumber, unsigned int* ID);
+	void GenerateTexture(unsigned int texNumber, unsigned int* ID);
 	/// <summary>
 	/// Generate a VBO or a EBO
 	/// </summary>
@@ -70,15 +70,6 @@ public:
 	/// <param name="ID">: Texture ID</param>
 	/// <param name="type">: Texture type (by default : 0x0DE1 = 3553U = GL_TEXTURE_2D)</param>
 	void BindTexture(unsigned int ID, unsigned int type = 0x0DE1);
-
-	/// <summary>
-	/// Read pixels on a certain color attachment
-	/// </summary>
-	/// <param name="attachmentIndex">: Which attachment index to read pixels on</param>
-	/// <param name="x">: x pos to read on</param>
-	/// <param name="y">: y pos to read on</param>
-	int ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y);
-
 	/// <summary>
 	/// Bind a Texture to a framebuffer
 	/// </summary>
@@ -87,6 +78,7 @@ public:
 	/// <param name="ID">: Texture ID</param>
 	/// <param name="type">: Texture type (by default : 0x0DE1 = 3553U = GL_TEXTURE_2D)</param>
 	void BindTexture(int framebufferTarget, int attachement, unsigned int ID, int type = 0x0DE1);
+		
 	/// <summary>
 	/// Bind the framebuffer given as the one used
 	/// </summary>
@@ -112,6 +104,14 @@ public:
 	/// <param name="attachements">: attachements (e.g : COLOR, DEPTH, STENCIL or DEPTH and STENCIL)</param>
 	/// <param name="renderbufferID">: Renderbuffer ID</param>
 	void BindRenderbufferToFramebuffer(int framebufferTarget, int attachements, unsigned int renderbufferID);
+
+	/// <summary>
+	/// Read pixels on a certain color attachment
+	/// </summary>
+	/// <param name="attachmentIndex">: Which attachment index to read pixels on</param>
+	/// <param name="x">: x pos to read on</param>
+	/// <param name="y">: y pos to read on</param>
+	int ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y);
 
 	/// <summary>
 	/// Attribute Pointers of data in the VAO

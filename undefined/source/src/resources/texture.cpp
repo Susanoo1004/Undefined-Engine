@@ -11,7 +11,7 @@ Texture::Texture(const unsigned int width, const unsigned int height, const int 
 {
 	mRenderer = ServiceLocator::Get<Renderer>();
 
-	mRenderer->GenTexture(1, &mID);
+	mRenderer->GenerateTexture(1, &mID);
 	mRenderer->BindTexture(mID);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, NULL);
@@ -21,7 +21,7 @@ Texture::Texture(const char* filepath, bool isFlipped)
 {
 	mRenderer = ServiceLocator::Get<Renderer>();
 
-	mRenderer->GenTexture(1, &mID);
+	mRenderer->GenerateTexture(1, &mID);
 	mRenderer->BindTexture(mID);
 
 	stbi_set_flip_vertically_on_load(isFlipped);
