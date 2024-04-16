@@ -3,26 +3,30 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
 #include <type_traits>
+#include <list>
+#include <refl.hpp>
+#include "engine_debug/logger.h"
+#include "interface/attributes.h"
+#include <toolbox/Vector3.h>
 
 namespace Reflection
 {
 	template<typename T, typename MemberT, typename DescriptorT>
-	void DisplayObj(T* obj);
+	void DisplayObj(MemberT* obj);
 
 	template<typename T>
 	void ReflectionObj(T* obj);
 
-	//Create in cpp and call addtype from
 	void DisplayWithHash(void* obj, size_t hash);
 
 	template <typename T>
-	struct is_list : public std::false_type {};
+	struct is_vector : public std::false_type {};
+
+	template <typename T, typename A>
+	struct is_vector<std::vector<T, A>> : public std::true_type {};
 
 	template <typename T>
-	struct is_list<std::list<T>> : public std::true_type {};
-
-	template <typename T>
-	constexpr bool is_list_v = is_list<T>::value;
+	constexpr bool is_vector_v = is_vector<T>::value;
 }
 
 template<typename T>
@@ -38,7 +42,7 @@ void Reflection::ReflectionObj(T* obj)
 			if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>())
 			{
 				const MemberT oldValue = DescriptorT::get(obj);
-				DisplayObj<T, MemberT, DescriptorT>(obj);
+				DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
 
 				if (oldValue != DescriptorT::get(obj))
 				{
@@ -48,16 +52,17 @@ void Reflection::ReflectionObj(T* obj)
 			}
 			else
 			{
-				DisplayObj<T, MemberT, DescriptorT>(obj);
+				DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
 			}
 		}
 	});
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::DisplayObj(T* obj)
+void Reflection::DisplayObj(MemberT* obj)
 {
 	std::string name = DescriptorT::name.c_str();
+
 	if constexpr (HasAttribute<DescriptorT, DontDisplayName>())
 	{
 		name = "##" + name;
@@ -75,31 +80,34 @@ void Reflection::DisplayObj(T* obj)
 
 	if constexpr (std::is_same_v<bool, MemberT>)
 	{
-		ImGui::Checkbox(name.c_str(), &DescriptorT::get(obj));
+		ImGui::Checkbox(name.c_str(), obj);
 	}
 	else if constexpr (std::is_same_v<std::string, MemberT>)
 	{
-		ImGui::InputText(name.c_str(), &DescriptorT::get(obj));
+		ImGui::InputText(name.c_str(), obj);
 	}
 	else if constexpr (std::is_same_v<Vector3, MemberT>)
 	{
-		ImGui::DragFloat3(name.c_str(), &DescriptorT::get(obj).x, .1f);
+		ImGui::DragFloat3(name.c_str(), &obj->x, .1f);
 	}
-	else if constexpr (Reflection::is_list_v<MemberT>)
+	else if constexpr (Reflection::is_vector_v<MemberT>)
 	{
-		ImGui::Text(name.c_str(), &DescriptorT::get(obj));
-		
-		for (auto it : DescriptorT::get(obj))
-			Logger::Info("{}", typeid(*it).hash_code());
+		ImGui::Text(name.c_str(), obj);
 
-		for (size_t i = 0; i < DescriptorT::get(obj).size(); i++)
+		using ListT = typename MemberT::value_type;
+
+		for (size_t i = 0; i < obj->size(); i++)
 		{
-			// ReflectionObj<ListT>(&(DescriptorT::get(obj)[i]));
+			Reflection::DisplayObj<T, ListT, DescriptorT>(&(*obj)[i]);
 		}
+	}
+	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
+	{
+		Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
 	}
 
 	if constexpr (refl::is_reflectable<MemberT>())
 	{
-		ReflectionObj<MemberT>(&DescriptorT::get(obj));
+		ReflectionObj<MemberT>(obj);
 	}
 }

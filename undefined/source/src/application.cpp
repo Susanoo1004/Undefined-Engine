@@ -19,6 +19,8 @@
 #include "interface/interface.h"
 #include "interface/inspector.h"
 
+#include "interface/runtime_classes.h"
+
 Application::Application()
 {
     ServiceLocator::Setup();
@@ -31,6 +33,11 @@ void Application::Init()
 {
     mWindowManager->Init();
     mRenderer->Init();
+
+    RuntimeClasses::AddType<Component>();
+    RuntimeClasses::AddType<Light>();
+    RuntimeClasses::AddType<DirLight>();
+    RuntimeClasses::AddType<ModelRenderer>();
 
     ResourceManager::Load("../Undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
@@ -47,7 +54,6 @@ void Application::Init()
 
     ActualScene.AddObject("DirLight")->AddComponent<DirLight>();
     ActualScene.AddObject("PikingRoom")->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-
 }
 
 void Application::Update()
@@ -57,6 +63,8 @@ void Application::Update()
     ActualScene.Update();
     Camera::ProcessInput();
     Interface::Update(&ActualScene);
+
+ 
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
@@ -75,8 +83,12 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-        mRenderer->SetUniform(BaseShader->ID, "EntityID", ActualScene.Objects[i]);
-        
+
+        for (int j = 0; j < ActualScene.Objects.size(); j++)
+        {
+            mRenderer->SetUniform(BaseShader->ID, "EntityID", j + 1);
+        }
+
         ActualScene.Draw();
 
         mRenderer->UnUseShader();

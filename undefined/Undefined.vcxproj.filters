@@ -47,8 +47,8 @@
     <ClCompile Include="source\src\world\scene_manager\scene_serializer.cpp" />
     <ClCompile Include="source\src\world\scene_manager\transform.cpp" />
     <ClCompile Include="source\src\resources\model_renderer.cpp" />
-    <ClCompile Include="source\src\world\components\transform.cpp" />
     <ClCompile Include="source\src\interface\runtime_classes.cpp" />
+    <ClCompile Include="source\src\interface\utils_reflection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />

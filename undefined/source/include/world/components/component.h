@@ -43,7 +43,9 @@ private:
 	void SetTransform(Transform* newTransform) { mTransform = newTransform; };
 
 	bool mIsEnable = true;
-	
+
+	friend struct refl_impl::metadata::type_info__ <Component>;
+
 	Object* mObject;
 	Transform* mTransform;
 };

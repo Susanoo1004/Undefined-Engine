@@ -39,6 +39,11 @@ public:
 			Logger::Error("Component {} already exist in object {}", typeid(Comp).name(), Name);
 			return nullptr;
 		}
+
+		else
+		{
+			Logger::Debug("Component {} added in object {}", typeid(Comp).name(), Name);
+		}
 		comp = new Comp(args...);
 
 		comp->GameObject = this;
@@ -80,7 +85,7 @@ public:
 
 	std::string Name = "empty";
 
-	std::list<Component*> Components;
+	std::vector<Component*> Components;
 
 private:
 	void SetTransform(Transform newTransform) { mTransform = newTransform; };
@@ -99,5 +104,5 @@ REFL_AUTO(type(Object),
 	field(mIsEnable, DontDisplayName()),
 	field(Name, SameLine()),
 	field(mTransform),
-	field(Components)
+	field(Components, Spacing(ImVec2(0, 30)))
 )

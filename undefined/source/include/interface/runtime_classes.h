@@ -29,8 +29,10 @@ void RuntimeClasses::AddType()
 {
 	RuntimeClass info = 
 	{
-		.display = [](void* obj) -> void { ReflectionObj<T>(static_cast<T*>(obj)); }
+		.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); }
 	};
 
 	mHashClasses.emplace(typeid(T).hash_code(), info);
+
+	Logger::Debug("Added type : {}", typeid(T).hash_code());
 }

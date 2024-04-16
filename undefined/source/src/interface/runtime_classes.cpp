@@ -7,11 +7,12 @@ void RuntimeClasses::Display(void* obj, size_t hash)
 
 	if (flipping == mHashClasses.end())
 	{
-		Logger::Error("Could not find hashClass");
+		Logger::Error("Could not find hashClass {}", hash);
 	}
 
 	else
 	{
 		flipping->second.display(obj);
+		Logger::Debug("Found hashClass {}", hash);
 	}
 }
