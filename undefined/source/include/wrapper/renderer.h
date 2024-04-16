@@ -11,6 +11,9 @@
 class Texture;
 class Model;
 
+/// <summary>
+/// Class for our Renderer (works with OpenGL)
+/// </summary>
 class UNDEFINED_ENGINE Renderer : public ServiceType
 {
 public:
@@ -261,6 +264,9 @@ public:
 	template<class... Args>
 	void EnableTest(Args... rendererTest);
 
+	/// <summary>
+	/// Instance of our debug Class for our Renderer
+	/// </summary>
 	RendererDebug Debug;
 };
 

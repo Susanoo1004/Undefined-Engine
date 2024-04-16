@@ -8,26 +8,65 @@
 
 #include "engine_debug/logger.h"
 
+/// <summary>
+/// Class to store all our framebuffer data
+/// </summary>
 class Framebuffer
 {
 public:
+    /// <summary>
+    /// Constructor for Framebuffer
+    /// </summary>
     Framebuffer();
+	/// <summary>
+	/// Destructor for Framebuffer
+	/// </summary>
 	~Framebuffer();
 
+    /// <summary>
+    /// Rescale the framebuffer at the good window size
+    /// </summary>
+    /// <param name="width">: New width of the franebuffer</param>
+    /// <param name="height">: New height of the framebuffer</param>
     void RescaleFramebuffer(unsigned int width, unsigned int height);
 
+	/// <summary>
+	/// Width of the framebuffer
+	/// </summary>
 	unsigned int Width;
+	/// <summary>
+	/// Height of the framebuffer
+	/// </summary>
 	unsigned int Height;
 
+	/// <summary>
+	/// ID of the framebuffer
+	/// </summary>
 	unsigned int FBO_ID;
+	/// <summary>
+	/// ID of the renderbuffer
+	/// </summary>
 	unsigned int RBO_ID;
 
-	std::vector<std::unique_ptr<Texture>> RenderedTextures;
+	/// <summary>
+	/// Framebuffer textures
+	/// </summary>
+	std::vector<std::unique_ptr<Texture>> FramebufferTextures;
 
 private:
+    /// <summary>
+    /// Pointer to our Renderer to simplify the calls from the ServiceLocator
+    /// </summary>
     Renderer* mRenderer = nullptr;
 
 public:
+    /// <summary>
+    /// Create a Framebuffer
+    /// </summary>
+    /// <typeparam name="TextureNumber">: Number of Texture our framebuffer can store</typeparam>
+    /// <param name="width">: Base width of the framebuffer</param>
+    /// <param name="height">: Base height of the framebuffer</param>
+    /// <returns>Return a pointer to the Framebuffer created</returns>
     template <size_t TextureNumber>
     static Framebuffer* Create(unsigned int width, unsigned int height);
 };
@@ -54,21 +93,21 @@ Framebuffer* Framebuffer::Create(unsigned int width, unsigned int height)
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, f->RBO_ID);
 
-    f->RenderedTextures.resize(TextureNumber);
+    f->FramebufferTextures.resize(TextureNumber);
 
     for (int i = 0; i < TextureNumber; i++)
     {
         if (i == 0)
         {
-            f->RenderedTextures[0] = std::make_unique<Texture>(f->Width, f->Height);
+            f->FramebufferTextures[0] = std::make_unique<Texture>(f->Width, f->Height);
         }
 
         else
         {
-            f->RenderedTextures[i] = std::make_unique<Texture>(f->Width, f->Height, GL_R32I, GL_RED_INTEGER);
+            f->FramebufferTextures[i] = std::make_unique<Texture>(f->Width, f->Height, GL_R32I, GL_RED_INTEGER);
         }
 
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, f->RenderedTextures[i]->GetID(), 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, f->FramebufferTextures[i]->GetID(), 0);
         attachments[i] = GL_COLOR_ATTACHMENT0 + i;
     }
 

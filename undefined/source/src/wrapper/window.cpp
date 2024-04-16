@@ -22,14 +22,14 @@ Window::~Window()
 
 void Window::Init()
 {
-    SetupGlfw();
+    SetupWindowLibrary();
 
     CreateWindow(1200, 800);
 
     SetupWindow();
 }
 
-void Window::SetupGlfw()
+void Window::SetupWindowLibrary()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
