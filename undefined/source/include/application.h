@@ -7,12 +7,6 @@
 
 #include "utils/flag.h"
 
-#include "world/components/dir_light.h"
-
-#include "resources/model.h"
-
-#include "world/scene_manager/scene.h"
-
 class Window;
 class Renderer;
 
@@ -30,9 +24,6 @@ public:
 	std::shared_ptr<Shader> pickingShader;
 
 	Logger Log;
-
-	// TODO: del
-	Scene ActualScene;
 
 private:
 	unsigned int mVAO = 0, mVBO = 0, mEBO = 0;
