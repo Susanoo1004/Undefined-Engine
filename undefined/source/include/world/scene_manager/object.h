@@ -176,7 +176,8 @@ private:
 
 private:
 
-	friend class Scene;
+	friend class SceneManager;
+	friend class SceneGraph;
 	static inline Object* mRoot;
 };
 

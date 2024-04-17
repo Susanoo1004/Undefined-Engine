@@ -5,6 +5,7 @@
 
 #include "interface/fps_graph.h"
 #include "interface/content_browser.h"
+#include "interface/scene_graph.h"
 #include "interface/inspector.h"
 #include "world/scene_manager/scene.h"
 
@@ -87,6 +88,7 @@ void Interface::Update(Scene* scene)
 
     FPSGraph::ShowWindow();
     ContentBrowser::DisplayWindow();
+    SceneGraph::DisplayWindow();
     Inspector::ShowWindow(scene);
 
     for (int i = 0; i < EditorViewports.size(); i++)

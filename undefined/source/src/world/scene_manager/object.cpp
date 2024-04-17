@@ -1,12 +1,12 @@
 #include "world/scene_manager/object.h"
 
 Object::Object()
-	: Name("Default"), mParent(mRoot)
+	: Name("Default")
 {
 }
 
 Object::Object(const std::string& name)
-	: Name(name), mParent(mRoot)
+	: Name(name)
 {
 }
 
@@ -52,7 +52,7 @@ const Object* Object::GetParent() const
 
 void Object::SetParent(Object* parent)
 {
-	if (mParent == parent || this == parent)
+	if ((mParent && mParent == parent) || this == parent)
 	{
 		return;
 	}
@@ -65,11 +65,11 @@ void Object::SetParent(Object* parent)
 	if (parent)
 	{
 		Object* current = parent;
-		while (current->mParent != mRoot || current->mParent != nullptr)
+		while (current->mParent != mRoot && current->mParent != nullptr)
 		{
 			if (current->mParent == this)
 			{
-				break;
+				return;
 			}
 
 			current = current->mParent;
@@ -78,6 +78,12 @@ void Object::SetParent(Object* parent)
 		mParent = parent;
 		mParent->mChildren.emplace_back(this);
 		mTransform.mParentTransform = &parent->mTransform;
+	}
+	else
+	{
+		mParent = mRoot;
+		mParent->mChildren.emplace_back(this);
+		mTransform.mParentTransform = nullptr;
 	}
 }
 

@@ -44,23 +44,24 @@ public:
 	UNDEFINED_ENGINE void SetLocalScale(Vector3 newLocalScale);
 
 private:
-	bool HasChanged;
+	bool mHasChanged;
 	Vector3 mPosition;
 	Vector3 mRotation;
 	Vector3 mScale = { 1, 1, 1 };
 
 	Vector3 mLocalPosition;
 	Vector3 mLocalRotation;
-	Vector3 mLocalScale = {1, 1, 1};
+	Vector3 mLocalScale = { 1, 1, 1 };
 
-	Matrix4x4 mLocalTRS = Matrix4x4::TRS({0,0,0}, {0,0,0}, {1,1,1});
+	Matrix4x4 mWorldTRS = Matrix4x4::TRS({ 0,0,0 }, { 0,0,0 }, { 1,1,1 });
+	Matrix4x4 mLocalTRS = Matrix4x4::TRS({ 0,0,0 }, { 0,0,0 }, { 1,1,1 });
 	friend class Object;
 	friend struct refl_impl::metadata::type_info__ <Transform>;
 	Transform* mParentTransform;
 };
 
 REFL_AUTO(type(Transform),
-	field(mPosition, NotifyChange(&Transform::HasChanged)),
-	field(mRotation, NotifyChange(&Transform::HasChanged)),
-	field(mScale, NotifyChange(&Transform::HasChanged))
+	field(mPosition, NotifyChange(&Transform::mHasChanged)),
+	field(mRotation, NotifyChange(&Transform::mHasChanged)),
+	field(mScale, NotifyChange(&Transform::mHasChanged))
 )

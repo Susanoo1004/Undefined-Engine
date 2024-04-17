@@ -6,6 +6,8 @@
 class Scene
 {
 public:
+	UNDEFINED_ENGINE Scene();
+	UNDEFINED_ENGINE Scene(const std::string& name);
 	UNDEFINED_ENGINE ~Scene();
 
 	UNDEFINED_ENGINE void Start();

@@ -12,9 +12,12 @@
 #include "resources/model_renderer.h"
 #include "resources/resource_manager.h"
 
+#include "world/components/dir_light.h"
 #include "world/components/skybox.h"
 
 #include "memory_leak.h"
+
+#include "world/scene_manager/scene_manager.h"
 
 #include "interface/interface.h"
 #include "interface/inspector.h"
@@ -47,10 +50,13 @@ void Application::Init()
     BaseShader = ResourceManager::Get<Shader>("base_shader");
     ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
 
-    ActualScene.AddObject("DirLight")->AddComponent<DirLight>();
-    Object* object = ActualScene.AddObject("PikingRoom");
+    SceneManager::Init();
+
+    SceneManager::ActualScene->AddObject("DirLight")->AddComponent<DirLight>();
+    Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
     
+    SceneManager::ActualScene->AddObject(object, "Test Child");
 }
 
 void Application::Update()
@@ -58,7 +64,11 @@ void Application::Update()
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
-    Interface::Update(&ActualScene);
+    Interface::Update(SceneManager::ActualScene);
+
+    SceneManager::ActualScene->Objects[1]->GameTransform->Position += Vector3{ 0.1f, 0, 0 } * 0.016;
+    SceneManager::ActualScene->Objects[1]->GameTransform->Rotation += Vector3{ 72.f, 0, 0 } * 0.016;
+
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
@@ -77,9 +87,9 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-        mRenderer->SetUniform(BaseShader->ID, "EntityID", ActualScene.Objects[i]);
+        mRenderer->SetUniform(BaseShader->ID, "EntityID", SceneManager::ActualScene->Objects[i]);
         
-        ActualScene.Draw();
+        SceneManager::ActualScene->Draw();
 
         mRenderer->UnUseShader();
 
@@ -94,6 +104,7 @@ void Application::Update()
 
 void Application::Clear()
 {
+    SceneManager::Delete();
     delete Camera::CurrentCamera;
     mRenderer->UnUseShader();
     ServiceLocator::CleanServiceLocator();
