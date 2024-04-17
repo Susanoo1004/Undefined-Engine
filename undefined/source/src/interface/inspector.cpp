@@ -13,7 +13,7 @@ void Inspector::ShowWindow(Scene* scene)
 {
 	ImGui::Begin("Inspector");
 	
-	if (mRenderer->pixelData > 0)
+	if (mRenderer->pixelData >= 0)
 	{
 		Object* obj = scene->Objects[mRenderer->pixelData];
 		Reflection::ReflectionObj<Object>(obj);
