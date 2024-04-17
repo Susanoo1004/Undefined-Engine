@@ -15,7 +15,7 @@ void Inspector::ShowWindow(Scene* scene)
 	
 	if (mRenderer->pixelData > 0)
 	{
-		Object* obj = scene->Objects[mRenderer->pixelData - 1];
+		Object* obj = scene->Objects[mRenderer->pixelData];
 		Reflection::ReflectionObj<Object>(obj);
 	}
 	

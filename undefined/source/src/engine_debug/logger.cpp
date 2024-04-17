@@ -39,7 +39,7 @@ void Logger::CreateDebugFile(const std::string& path, const std::string& name)
     {
         std::filesystem::create_directory(path);
 
-        Logger::Debug("Directory {} created", path);
+        Logger::Info("Directory {} created", path);
     }
 
     for ([[maybe_unused]]auto& p : std::filesystem::directory_iterator(path))
@@ -57,7 +57,7 @@ void Logger::CreateDebugFile(const std::string& path, const std::string& name)
     mFile.open(filename, std::fstream::out);
     if (mFile.is_open())
     {
-        Logger::Debug("File {} created", filename.string());
+        Logger::Info("File {} created", filename.string());
     }
     else
     {
@@ -106,12 +106,12 @@ void Logger::PrintEntry(LogEntry entry)
     switch (entry.Level)
     {
     case LogLevel::DEBUG:
-        color = ANSI_COLOR_GRAY;
+        color = ANSI_RESET;
         log = "[DEBUG] " + log;
         break;
 
     case LogLevel::INFO:
-        color = ANSI_RESET;
+        color = ANSI_COLOR_GRAY;
         log = "[INFO] " + log;
         break;
 

@@ -108,11 +108,11 @@ unsigned int Texture::LoadCubeMap(const std::vector<std::string>& faces)
 		{
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 			stbi_image_free(data);
-			Logger::Debug("Cubemap texture {} loaded", faces[i].c_str());
+			Logger::Info("Cubemap texture {} loaded", faces[i].c_str());
 		}
 		else
 		{
-			Logger::Debug("Cubemap texture failed to load at path: {}", faces[i].c_str());
+			Logger::Info("Cubemap texture failed to load at path: {}", faces[i].c_str());
 			stbi_image_free(data);
 		}
 	}

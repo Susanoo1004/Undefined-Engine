@@ -11,12 +11,29 @@
 
 namespace Reflection
 {
+	/// <summary>
+	/// Display the variables we added to the reflection struct to display i 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="MemberT"> type of the variable we wish to reflect </typeparam>
+	/// <typeparam name="DescriptorT"></typeparam>
+	/// <param name="obj"></param>
 	template<typename T, typename MemberT, typename DescriptorT>
 	void DisplayObj(MemberT* obj);
 
+	/// <summary>
+	/// Object we wish to reflect
+	/// </summary>
+	/// <typeparam name="T"> type of the object we want to reflect </typeparam>
+	/// <param name="obj"> object we reflect </param>
 	template<typename T>
 	void ReflectionObj(T* obj);
 
+	/// <summary>
+	/// Get a class that inherits from Component with it's hash code
+	/// </summary>
+	/// <param name="obj"> </param>
+	/// <param name="hash"></param>
 	void DisplayWithHash(void* obj, size_t hash);
 
 	template <typename T>
@@ -63,6 +80,7 @@ void Reflection::DisplayObj(MemberT* obj)
 {
 	std::string name = DescriptorT::name.c_str();
 
+	//Attributes
 	if constexpr (HasAttribute<DescriptorT, DontDisplayName>())
 	{
 		name = "##" + name;
@@ -78,17 +96,36 @@ void Reflection::DisplayObj(MemberT* obj)
 		ImGui::Dummy(GetAttribute<DescriptorT, Spacing>().size);
 	}
 
+	//Bases types
 	if constexpr (std::is_same_v<bool, MemberT>)
 	{
 		ImGui::Checkbox(name.c_str(), obj);
 	}
+	else if constexpr (std::is_same_v<float, MemberT>)
+	{
+		ImGui::DragFloat(name.c_str(), &obj->x, .1f);
+	}
+	else if constexpr (std::is_same_v<int, MemberT>)
+	{
+		ImGui::DragInt(name.c_str(), &obj->x, .1f);
+	}
+	//Standard lib
 	else if constexpr (std::is_same_v<std::string, MemberT>)
 	{
 		ImGui::InputText(name.c_str(), obj);
 	}
+	//Math Toolbox
+	else if constexpr (std::is_same_v<Vector4, MemberT>)
+	{
+		ImGui::DragFloat4(name.c_str(), &obj->x, .1f);
+	}
 	else if constexpr (std::is_same_v<Vector3, MemberT>)
 	{
 		ImGui::DragFloat3(name.c_str(), &obj->x, .1f);
+	}
+	else if constexpr (std::is_same_v<Vector2, MemberT>)
+	{
+		ImGui::DragFloat2(name.c_str(), &obj->x, .1f);
 	}
 	else if constexpr (Reflection::is_vector_v<MemberT>)
 	{
@@ -105,7 +142,7 @@ void Reflection::DisplayObj(MemberT* obj)
 	{
 		Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
 	}
-
+	//Recursivity if there's a reflectable type
 	if constexpr (refl::is_reflectable<MemberT>())
 	{
 		ReflectionObj<MemberT>(obj);

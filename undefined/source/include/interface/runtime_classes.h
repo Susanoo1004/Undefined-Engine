@@ -34,5 +34,5 @@ void RuntimeClasses::AddType()
 
 	mHashClasses.emplace(typeid(T).hash_code(), info);
 
-	Logger::Debug("Added type : {}", typeid(T).hash_code());
+	Logger::Info("Added type : {}", typeid(T).hash_code());
 }

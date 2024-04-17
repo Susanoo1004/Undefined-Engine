@@ -42,7 +42,7 @@ public:
 
 		else
 		{
-			Logger::Debug("Component {} added in object {}", typeid(Comp).name(), Name);
+			Logger::Info("Component {} added in object {}", typeid(Comp).name(), Name);
 		}
 		comp = new Comp(args...);
 

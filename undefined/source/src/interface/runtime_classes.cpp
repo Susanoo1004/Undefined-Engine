@@ -13,6 +13,5 @@ void RuntimeClasses::Display(void* obj, size_t hash)
 	else
 	{
 		flipping->second.display(obj);
-		Logger::Debug("Found hashClass {}", hash);
 	}
 }

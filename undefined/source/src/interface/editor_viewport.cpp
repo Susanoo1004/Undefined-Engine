@@ -81,7 +81,7 @@ void EditorViewport::ShowWindow()
 		mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
 		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
-		Logger::Debug("Pixel data = {}", pixelData);
+		Logger::Info("Pixel data = {}", pixelData);
 	}
 
 	// we get the screen position of the window

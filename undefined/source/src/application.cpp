@@ -64,8 +64,6 @@ void Application::Update()
     Camera::ProcessInput();
     Interface::Update(&ActualScene);
 
- 
-
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();
@@ -86,7 +84,7 @@ void Application::Update()
 
         for (int j = 0; j < ActualScene.Objects.size(); j++)
         {
-            mRenderer->SetUniform(BaseShader->ID, "EntityID", j + 1);
+            mRenderer->SetUniform(BaseShader->ID, "EntityID", j);
         }
 
         ActualScene.Draw();
