@@ -4,5 +4,5 @@
 class Player : public MonoBehaviour
 {
 public:
-	void Update();
+	void FixedUpdate();
 };

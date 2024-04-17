@@ -1,6 +1,8 @@
 #include "world/components/player_test.h"
+
+#include "wrapper/time.h"
 #include "engine_debug/logger.h"
 
-void Player::Update()
+void Player::FixedUpdate()
 {
 }

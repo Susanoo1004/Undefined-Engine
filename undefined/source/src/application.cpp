@@ -4,8 +4,11 @@
 #include <iostream>
 #include <filesystem>
 #include <stb_image/stb_image.h>
+#include <toolbox/calc.h>
 
 #include "service_locator.h"
+
+#include "wrapper/time.h"
 
 #include "resources/texture.h"
 #include "resources/model.h"
@@ -22,7 +25,8 @@
 #include "interface/interface.h"
 #include "interface/inspector.h"
 
-#include <toolbox/calc.h>
+// to del
+#include "world/components/player_test.h"
 
 Application::Application()
 {
@@ -55,19 +59,24 @@ void Application::Init()
     SceneManager::ActualScene->AddObject("DirLight")->AddComponent<DirLight>();
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
+    object->AddComponent<Player>();
     
     SceneManager::ActualScene->AddObject(object, "Test Child");
+
+    SceneManager::Start();
 }
 
 void Application::Update()
 {
+    Time::SetTimeVariables();
+    Logger::Debug("before {}", Time::FixedStep);
+
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
     Interface::Update(SceneManager::ActualScene);
 
-    SceneManager::ActualScene->Objects[1]->GameTransform->Position += Vector3{ 0.1f, 0, 0 } * 0.016;
-    SceneManager::ActualScene->Objects[1]->GameTransform->Rotation += Vector3{ 72.f, 0, 0 } * 0.016;
+    SceneManager::GlobalUpdate();
 
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
@@ -89,12 +98,14 @@ void Application::Update()
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
         mRenderer->SetUniform(BaseShader->ID, "EntityID", SceneManager::ActualScene->Objects[i]);
         
-        SceneManager::ActualScene->Draw();
+        SceneManager::Draw();
 
         mRenderer->UnUseShader();
 
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+    Logger::Debug("after {}", Time::FixedStep);
+    Logger::Debug("");
 
     Interface::Render();
 
