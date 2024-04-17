@@ -13,12 +13,12 @@
 namespace Reflection
 {
 	/// <summary>
-	/// Display the variables we added to the reflection struct to display i 
+	/// Display the variables we added to the reflection struct 
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="T"> base type </typeparam>
 	/// <typeparam name="MemberT"> type of the variable we wish to reflect </typeparam>
-	/// <typeparam name="DescriptorT"></typeparam>
-	/// <param name="obj"></param>
+	/// <typeparam name="DescriptorT"> metadata from the element we want to reflect </typeparam>
+	/// <param name="obj"> object we want to display </param>
 	template<typename T, typename MemberT, typename DescriptorT>
 	void DisplayObj(MemberT* obj);
 
@@ -33,8 +33,8 @@ namespace Reflection
 	/// <summary>
 	/// Get a class that inherits from Component with it's hash code
 	/// </summary>
-	/// <param name="obj"> </param>
-	/// <param name="hash"></param>
+	/// <param name="obj"> object we want to display </param>
+	/// <param name="hash"> hash code of the class </param>
 	void DisplayWithHash(void* obj, size_t hash);
 
 	template <typename T>
@@ -51,12 +51,16 @@ template<typename T>
 void Reflection::ReflectionObj(T* obj)
 {
 	constexpr refl::type_descriptor<T> descriptor = refl::reflect<T>();
+	//Lamba that loops for each element we reflect from a class
 	refl::util::for_each(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
 	{
-		if constexpr (!refl::descriptor::is_function<DescriptorT>(DescriptorT{}) && !HasAttribute<DescriptorT, DontShowInInspector>())
+		//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
+		if constexpr (!refl::descriptor::is_function<DescriptorT>(DescriptorT{}) && !HasAttribute<DescriptorT, HideInInspector>())
 		{
+			//MemberT is the type of the element we reflect
 			using MemberT = typename DescriptorT::value_type;
 
+			//If there's a change we put notify to true
 			if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>())
 			{
 				const MemberT oldValue = DescriptorT::get(obj);
@@ -81,7 +85,7 @@ void Reflection::DisplayObj(MemberT* obj)
 {
 	std::string name = DescriptorT::name.c_str();
 
-	//Attributes
+	//If the Descriptor has a certain attribute
 	if constexpr (HasAttribute<DescriptorT, DontDisplayName>())
 	{
 		name = "##" + name;
@@ -97,7 +101,7 @@ void Reflection::DisplayObj(MemberT* obj)
 		ImGui::Dummy(GetAttribute<DescriptorT, Spacing>().size);
 	}
 
-	//Bases types
+	//We check if MemberT (type of the variable we are reflecting) is the same as one of the bases types
 	if constexpr (std::is_same_v<bool, MemberT>)
 	{
 		ImGui::Checkbox(name.c_str(), obj);
@@ -110,14 +114,19 @@ void Reflection::DisplayObj(MemberT* obj)
 	{
 		ImGui::DragInt(name.c_str(), &obj->x, .1f);
 	}
-	//Standard lib
+	//We check if MemberT (type of the variable we are reflecting) is the same as one of the standard lib
 	else if constexpr (std::is_same_v<std::string, MemberT>)
 	{
 		ImGui::InputText(name.c_str(), obj);
 	}
-	//Math Toolbox
+	else if constexpr (std::is_same_v<std::filesystem::path, MemberT>)
+	{
+		ImGui::InputText(name.c_str(), obj);
+	}
+	//We check if MemberT (type of the variable we are reflecting) is the same as one of the math toolbox
 	else if constexpr (std::is_same_v<Vector4, MemberT>)
 	{
+		//If the field has the attribute ToDeg we use a sliderAngle which convert radiants to degrees else we use DragFloat and send radiants directly
 		if constexpr (HasAttribute<DescriptorT, ToDeg>())
 		{
 			ImGui::SliderAngle4(name.c_str(), &obj->x);
@@ -126,7 +135,6 @@ void Reflection::DisplayObj(MemberT* obj)
 		{
 			ImGui::DragFloat4(name.c_str(), &obj->x, .1f);
 		}
-
 	}
 	else if constexpr (std::is_same_v<Vector3, MemberT>)
 	{
@@ -156,6 +164,7 @@ void Reflection::DisplayObj(MemberT* obj)
 
 		using ListT = typename MemberT::value_type;
 
+		//If it's a std::vector we reflect every element inside it
 		for (size_t i = 0; i < obj->size(); i++)
 		{
 			Reflection::DisplayObj<T, ListT, DescriptorT>(&(*obj)[i]);
