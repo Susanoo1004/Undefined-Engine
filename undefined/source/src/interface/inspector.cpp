@@ -1,4 +1,5 @@
 #include "interface/inspector.h"
+
 #include "interface/attributes.h"
 #include "world/scene.h"
 #include <imgui/imgui.h>
