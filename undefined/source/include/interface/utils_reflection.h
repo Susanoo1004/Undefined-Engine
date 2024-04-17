@@ -37,6 +37,26 @@ namespace Reflection
 	/// <param name="hash"> hash code of the class </param>
 	void DisplayWithHash(void* obj, size_t hash);
 
+	/// <summary>
+	/// Display bases types in inspector
+	/// </summary>
+	/// <typeparam name="T"> base class </typeparam>
+	/// <typeparam name="MemberT"> type of the variable </typeparam>
+	/// <typeparam name="DescriptorT"> metadata from the element we want to reflect </typeparam>
+	/// <param name="obj"> object we want to display </param>
+	/// <param name="name"> name of the object we want to display </param>
+	template<typename T, typename MemberT, typename DescriptorT>
+	void DisplayBaseTypes(MemberT* obj, std::string name);
+
+	template<typename T, typename MemberT, typename DescriptorT>
+	void DisplayStandardTypes(MemberT* obj, std::string name);
+
+	template<typename T, typename MemberT, typename DescriptorT>
+	void DisplayToolboxTypes(MemberT* obj, std::string name);
+
+	template<typename T, typename MemberT, typename DescriptorT>
+	void Attributes(MemberT* obj, std::string& name);
+
 	template <typename T>
 	struct is_vector : public std::false_type {};
 
@@ -81,50 +101,65 @@ void Reflection::ReflectionObj(T* obj)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::DisplayObj(MemberT* obj)
+void Reflection::DisplayBaseTypes(MemberT* obj, std::string name)
 {
-	std::string name = DescriptorT::name.c_str();
-
-	//If the Descriptor has a certain attribute
-	if constexpr (HasAttribute<DescriptorT, DontDisplayName>())
+	if constexpr (std::is_same_v<float, MemberT>)
 	{
-		name = "##" + name;
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_Float, obj, .1f);
 	}
-
-	if constexpr (HasAttribute<DescriptorT, SameLine>())
+	else if constexpr (std::is_same_v<double, MemberT>)
 	{
-		ImGui::SameLine();
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_Double, obj, .1f);
 	}
-
-	if constexpr (HasAttribute<DescriptorT, Spacing>())
+	else if constexpr (std::is_same_v<int8_t, MemberT>)
 	{
-		ImGui::Dummy(GetAttribute<DescriptorT, Spacing>().size);
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_S8, obj, .1f);
 	}
-
-	//We check if MemberT (type of the variable we are reflecting) is the same as one of the bases types
-	if constexpr (std::is_same_v<bool, MemberT>)
+	else if constexpr (std::is_same_v<int16_t, MemberT>)
 	{
-		ImGui::Checkbox(name.c_str(), obj);
-	}
-	else if constexpr (std::is_same_v<float, MemberT>)
-	{
-		ImGui::DragFloat(name.c_str(), &obj->x, .1f);
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_S16, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<int, MemberT>)
 	{
-		ImGui::DragInt(name.c_str(), &obj->x, .1f);
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_S32, obj, .1f);
 	}
+	else if constexpr (std::is_same_v<int64_t, MemberT>)
+	{
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_S64, obj, .1f);
+	}
+	else if constexpr (std::is_same_v<uint8_t, MemberT>)
+	{
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_U8, obj, .1f);
+	}
+	else if constexpr (std::is_same_v<uint16_t, MemberT>)
+	{
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_U16, obj, .1f);
+	}
+	else if constexpr (std::is_same_v<unsigned int, MemberT>)
+	{
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_U32, obj, .1f);
+	}
+	else if constexpr (std::is_same_v<uint64_t, MemberT>)
+	{
+		ImGui::DragScalar(name.c_str(), ImGuiDataType_U64, obj, .1f);
+	}
+}
+
+template<typename T, typename MemberT, typename DescriptorT>
+void Reflection::DisplayStandardTypes(MemberT* obj, std::string name)
+{
 	//We check if MemberT (type of the variable we are reflecting) is the same as one of the standard lib
-	else if constexpr (std::is_same_v<std::string, MemberT>)
+	if constexpr (std::is_same_v<std::string, MemberT>)
 	{
 		ImGui::InputText(name.c_str(), obj);
 	}
-	else if constexpr (std::is_same_v<std::filesystem::path, MemberT>)
-	{
-		ImGui::InputText(name.c_str(), obj);
-	}
+}
+
+template<typename T, typename MemberT, typename DescriptorT>
+void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
+{
 	//We check if MemberT (type of the variable we are reflecting) is the same as one of the math toolbox
-	else if constexpr (std::is_same_v<Vector4, MemberT>)
+	if constexpr (std::is_same_v<Vector4, MemberT>)
 	{
 		//If the field has the attribute ToDeg we use a sliderAngle which convert radiants to degrees else we use DragFloat and send radiants directly
 		if constexpr (HasAttribute<DescriptorT, ToDeg>())
@@ -157,6 +192,52 @@ void Reflection::DisplayObj(MemberT* obj)
 		{
 			ImGui::DragFloat2(name.c_str(), &obj->x, .1f);
 		}
+	}
+}
+
+template<typename T, typename MemberT, typename DescriptorT>
+void Reflection::Attributes(MemberT* obj, std::string& name)
+{
+	//If the Descriptor has a certain attribute
+	if constexpr (HasAttribute<DescriptorT, DontDisplayName>())
+	{
+		name = "##" + name;
+	}
+
+	if constexpr (HasAttribute<DescriptorT, SameLine>())
+	{
+		ImGui::SameLine();
+	}
+
+	if constexpr (HasAttribute<DescriptorT, Spacing>())
+	{
+		ImGui::Dummy(GetAttribute<DescriptorT, Spacing>().size);
+	}
+}
+
+template<typename T, typename MemberT, typename DescriptorT>
+void Reflection::DisplayObj(MemberT* obj)
+{
+	std::string name = DescriptorT::name.c_str();
+
+	Attributes<T, MemberT, DescriptorT>(obj, name);
+
+	//We check if MemberT (type of the variable we are reflecting) is the same as one of the bases types
+	if constexpr (std::is_same_v<bool, MemberT>)
+	{
+		ImGui::Checkbox(name.c_str(), obj);
+	}
+	else if constexpr (std::is_integral_v<MemberT> || std::is_floating_point_v<MemberT>)
+	{
+		DisplayBaseTypes<T, MemberT, DescriptorT>(obj, name);
+	}
+	else if constexpr (std::_Is_any_of_v<MemberT, std::string>)
+	{
+		DisplayStandardTypes<T, MemberT, DescriptorT>(obj, name);
+	}
+	else if constexpr (std::_Is_any_of_v<MemberT, Vector4, Vector3, Vector2>)
+	{
+		DisplayToolboxTypes<T, MemberT, DescriptorT>(obj, name);
 	}
 	else if constexpr (Reflection::is_vector_v<MemberT>)
 	{

@@ -26,7 +26,7 @@ struct ToDeg : FieldAttribute
 {
 };
 
-struct DontShowInInspector : FieldAttribute
+struct HideInInspector : FieldAttribute
 {
 };
 
