@@ -2,7 +2,9 @@
 
 #include "resources/model.h"
 
+#include "imgui/imgui.h"
+
 void ModelRenderer::Draw()
 {
-	ModelObject->Draw(GameTransform->LocalToWorldMatrix());
+	ModelObject->Draw(GameTransform->WorldMatrix());
 }

@@ -1,9 +1,12 @@
 #include "world/scene_manager/object.h"
 
-
+Object::Object()
+	: Name("Default")
+{
+}
 
 Object::Object(const std::string& name)
-	: Name(name), mParent(nullptr)
+	: Name(name)
 {
 }
 
@@ -40,23 +43,47 @@ const bool Object::IsEnable() const
 
 const Object* Object::GetParent() const
 {
+	if (mParent == mRoot)
+	{
+		return nullptr;
+	}
 	return mParent;
 }
 
 void Object::SetParent(Object* parent)
 {
+	if ((mParent && mParent == parent) || this == parent)
+	{
+		return;
+	}
+
+	if (mParent)
+	{
+		mParent->DetachChild(this);
+	}
+
 	if (parent)
 	{
+		Object* current = parent;
+		while (current->mParent != mRoot && current->mParent != nullptr)
+		{
+			if (current->mParent == this)
+			{
+				return;
+			}
+
+			current = current->mParent;
+		}
+
 		mParent = parent;
 		mParent->mChildren.emplace_back(this);
 		mTransform.mParentTransform = &parent->mTransform;
 	}
 	else
 	{
-		if (mParent)
-		{
-			mParent->DetachChild(this);
-		}
+		mParent = mRoot;
+		mParent->mChildren.emplace_back(this);
+		mTransform.mParentTransform = nullptr;
 	}
 }
 
@@ -69,7 +96,7 @@ void Object::DetachChildren()
 {
 	for (auto it = mChildren.begin(); it != mChildren.end(); ++it)
 	{
-		(*it)->mParent = nullptr;
+		(*it)->mParent = mRoot;
 	}
 	mChildren.clear();
 }
@@ -87,7 +114,6 @@ const Object* Object::GetChild(unsigned int index) const
 
 const Object* Object::GetChild(std::string name) const
 {
-	//for (size_t i = 0; i < Children.size(); i++)
 	for (auto it = mChildren.begin(); it != mChildren.end(); ++it)
 	{
 		if ((*it)->Name == name)
@@ -106,7 +132,7 @@ void Object::DetachChild(unsigned int index)
 	}
 	auto it = mChildren.begin();
 	std::advance(it, index);
-	(*it)->mParent = nullptr;
+	(*it)->mParent = mRoot;
 	(*it)->mTransform.mParentTransform = nullptr;
 	mChildren.remove(*it);
 }
@@ -117,7 +143,7 @@ void Object::DetachChild(std::string name)
 	{
 		if (child->Name == name)
 		{
-			child->mParent = nullptr;
+			child->mParent = mRoot;
 			child->mTransform.mParentTransform = nullptr;
 			mChildren.remove(child);
 		}
@@ -132,7 +158,7 @@ void Object::DetachChild(Object* child)
 		return;
 	}
 
-	child->mParent = nullptr;
+	child->mParent = mRoot;
 	child->mTransform.mParentTransform = nullptr;
 	mChildren.remove(child);
 }

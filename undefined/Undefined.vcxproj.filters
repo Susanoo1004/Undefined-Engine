@@ -132,6 +132,8 @@
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />
     <Image Include="assets\undefined_logo.png" />
+    <None Include="source\include\interface\scene_graph.h" />
+    <None Include="source\src\interface\scene_graph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\libs\toolboxMoteur.pdb" />

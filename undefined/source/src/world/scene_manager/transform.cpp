@@ -6,231 +6,130 @@
 #include <toolbox/Calc.h>
 
 
-const Matrix4x4& Transform::WorldToLocalMatrix()
+const Matrix4x4& Transform::LocalMatrix()
 {
-	if (HasChanged)
+	if (mHasChanged)
 	{
-		HasChanged = false;
-		mLocalTRS = Matrix4x4::TRS(mPosition, mRotation, mScale);
+		mHasChanged = false;
+		mWorldTRS = Matrix4x4::TRS(mPosition, mRotation, mScale);
+		if (mParentTransform)
+		{
+			mLocalTRS = mWorldTRS * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
+		}
+		else
+		{
+			mLocalTRS = mWorldTRS;
+		}
 	}
 
 	return mLocalTRS;
 }
 
-const Matrix4x4& Transform::LocalToWorldMatrix()
+const Matrix4x4& Transform::WorldMatrix()
 {
-	if (HasChanged)
+	if (mHasChanged)
 	{
-		HasChanged = false;
-		mLocalTRS = Matrix4x4::TRS(mPosition, mRotation, mScale);
+		mHasChanged = false;
+		mWorldTRS = Matrix4x4::TRS(mPosition, mRotation, mScale);
+		if (mParentTransform)
+		{
+			mLocalTRS = mWorldTRS * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
+		}
+		else
+		{
+			mLocalTRS = mWorldTRS;
+		}
 	}
 
-	if (mParentTransform)
-	{
-		return (mLocalTRS * mParentTransform->LocalToWorldMatrix());
-	}
-	return mLocalTRS;
+	return mWorldTRS;
 }
 
 Vector3 Transform::GetPosition()
 {
-	Matrix4x4 trs = LocalToWorldMatrix();
-	return { trs[0][3], trs[1][3], trs[2][3] };
+	return mPosition;
 }
 
 void Transform::SetPosition(Vector3 newPosition)
 {
-	mLocalTRS = Matrix4x4::TRS(newPosition, GetRotationRad(), GetScale());
+	mWorldTRS = Matrix4x4::TRS(newPosition, GetRotationRad(), GetScale());
 
 	if (mParentTransform)
 	{
-		mLocalTRS *= Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+		mLocalTRS = mWorldTRS * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
+	}
+	else
+	{
+		mLocalTRS = mWorldTRS;
 	}
 
 	mLocalPosition = { mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3] };
+	mPosition = { mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3] };
 }
 
 Vector3 Transform::GetRotation()
 {
-	Matrix4x4 trs = LocalToWorldMatrix();
-
-	float sy = std::sqrt(trs[0][0] * trs[0][0] + trs[1][0] * trs[1][0]);
-	bool singular = sy < 1e-6; // If
-
-	float x, y, z;
-	if (!singular)
-	{
-		x = std::atan2(trs[2][1], trs[2][2]);
-		y = std::atan2(-trs[2][0], sy);
-		z = std::atan2(trs[1][0], trs[0][0]);
-	}
-	else
-	{
-		x = std::atan2(-trs[1][2], trs[1][1]);
-		y = std::atan2(-trs[2][0], sy);
-		z = 0;
-	}
-	return { calc::ToDeg(x), calc::ToDeg(y), calc::ToDeg(z) };
+	return { calc::ToDeg(mRotation.x), calc::ToDeg(mRotation.y), calc::ToDeg(mRotation.z) };
 }
 
 void Transform::SetRotation(Vector3 newRotation)
 {
-	mLocalTRS = Matrix4x4::TRS(GetPosition(), { calc::ToRad(newRotation.x), calc::ToRad(newRotation.y), calc::ToRad(newRotation.z) }, GetScale());
-
-	if (mParentTransform)
-	{
-		mLocalTRS *= Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
-	}
-
-	float scalingFactor = std::sqrt(mLocalTRS[0][0] * mLocalTRS[0][0] + mLocalTRS[0][1] * mLocalTRS[0][1] + mLocalTRS[0][2] * mLocalTRS[0][2]);
-	Matrix3x3 rotMat = (1.f / scalingFactor) * Matrix3x3(mLocalTRS);
-	float sy = std::sqrt(rotMat[0][0] * rotMat[0][0] + rotMat[1][0] * rotMat[1][0]);
-
-	float x, y, z;
-	if (!calc::IsZero(sy))
-	{
-		x = std::atan2(rotMat[2][1], rotMat[2][2]);
-		y = std::atan2(-rotMat[2][0], sy);
-		z = std::atan2(rotMat[1][0], rotMat[0][0]);
-	}
-	else
-	{
-		x = std::atan2(-rotMat[1][2], rotMat[1][1]);
-		y = std::atan2(-rotMat[2][0], sy);
-		z = 0;
-	}
-	x = std::fmodf(x, 2.f * calc::PI);
-	y = std::fmodf(y, 2.f * calc::PI);
-	z = std::fmodf(z, 2.f * calc::PI);
-
-	mLocalRotation = { x, y, z };
+	SetRotationRad({ calc::ToRad(newRotation.x), calc::ToRad(newRotation.y), calc::ToRad(newRotation.z) });
 }
 
 Vector3 Transform::GetRotationRad()
 {
-	Matrix4x4 trs = LocalToWorldMatrix();
-
-	float scalingFactor = std::sqrt(trs[0][0] * trs[0][0] + trs[0][1] * trs[0][1] + trs[0][2] * trs[0][2]);
-	float sy = std::sqrt(trs[0][0] * trs[0][0] + trs[1][0] * trs[1][0]);
-
-
-	float x, y, z;
-	if (!calc::IsZero(sy))
-	{
-		x = std::atan2(trs[2][1], trs[2][2]);
-		y = std::atan2(-trs[2][0], scalingFactor);
-		z = std::atan2(trs[1][0], trs[0][0]);
-	}
-	else
-	{
-		x = std::atan2(-trs[1][2], trs[1][1]);
-		y = std::atan2(-trs[2][0], scalingFactor);
-		z = 0;
-	}
-	return { x, y, z };
+	return mRotation;
 }
 
 void Transform::SetRotationRad(Vector3 newRotationRad)
 {
-	mLocalTRS = Matrix4x4::TRS(GetPosition(), { newRotationRad.x, newRotationRad.y, newRotationRad.z }, GetScale());
+	newRotationRad.x = std::fmodf(newRotationRad.x, 2.f * calc::PI);
+	newRotationRad.y = std::fmodf(newRotationRad.y, 2.f * calc::PI);
+	newRotationRad.z = std::fmodf(newRotationRad.z, 2.f * calc::PI);
+
+	mWorldTRS = Matrix4x4::TRS(GetPosition(), newRotationRad, GetScale());
 
 	if (mParentTransform)
 	{
-		mLocalTRS *= Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
-	}
-
-	float scalingFactor = std::sqrt(mLocalTRS[0][0] * mLocalTRS[0][0] + mLocalTRS[0][1] * mLocalTRS[0][1] + mLocalTRS[0][2] * mLocalTRS[0][2]);
-	Matrix3x3 rotMat = (1.f / scalingFactor) * Matrix3x3(mLocalTRS);
-
-	float sy = std::sqrt(rotMat[0][0] * rotMat[0][0] + rotMat[1][0] * rotMat[1][0]);
-
-	float x, y, z;
-	if (!calc::IsZero(sy))
-	{
-		x = std::atan2(rotMat[2][1], rotMat[2][2]);
-		y = std::atan2(-rotMat[2][0], sy);
-		z = std::atan2(rotMat[1][0], rotMat[0][0]);
+		mLocalTRS = mWorldTRS * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
 	}
 	else
 	{
-		x = std::atan2(-rotMat[1][2], rotMat[1][1]);
-		y = std::atan2(-rotMat[2][0], sy);
-		z = 0;
+		mLocalTRS = mWorldTRS;
 	}
-	x = std::fmodf(x, 2.f * calc::PI);
-	y = std::fmodf(y, 2.f * calc::PI);
-	z = std::fmodf(z, 2.f * calc::PI);
 
-	mLocalRotation = { x, y, z };
+	Vector3 localRot = mLocalTRS.ToEuler();
+
+	mLocalRotation = localRot;
+
+	Vector3 worldRot = mWorldTRS.ToEuler();
+
+	mRotation = worldRot;
 }
 
 Vector3 Transform::GetScale()
 {
-	Matrix4x4 trs = LocalToWorldMatrix();
-
-	//// gram_schimdt orthoNormalization
-	Matrix3x3 orthoNormal = trs;
-
-	for (int i = 1; i < 3; i++) 
-	{
-		for (int j = 0; j < i; j++) 
-{
-			float scaling_factor = Vector3::Dot(orthoNormal[j], orthoNormal[i])
-									/ Vector3::Dot(orthoNormal[j], orthoNormal[j]);
-
-			// Subtract each scaled component of orthoNormal_j from orthoNormal_i
-			for (int k = 0; k < 3; k++)
-			{
-				orthoNormal[i][k] -= scaling_factor * orthoNormal[j][k];
-			}
-		}
-	}
-
-	// Now normalize all the 'n' orthogonal vectors
-	for (int i = 0; i < 3; i++)
-	{
-		orthoNormal[i] = orthoNormal[i].Normalized();
-	}
-	///////
-
-
-	return Vector3((Matrix3x3(trs) * Matrix3x3::Inverse(orthoNormal)) * Vector3(1, 1, 1));
+	return mScale;
 }
 
 void Transform::SetScale(Vector3 newScale)
 {
-	mLocalTRS = Matrix4x4::TRS(GetPosition(), GetRotationRad(), newScale);
+	mWorldTRS = Matrix4x4::TRS(GetPosition(), GetRotationRad(), newScale);
 
 	if (mParentTransform)
 	{
-		mLocalTRS *= Matrix4x4::Inverse(mParentTransform->LocalToWorldMatrix());
+		mLocalTRS = mWorldTRS * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
 	}
-
-	//// gram_schimdt orthoNormalization
-	Matrix3x3 orthoNormal = mLocalTRS;
-
-	for (int i = 1; i < 3; i++) 
+	else
 	{
-		for (int j = 0; j < i; j++) 
-		{
-			float scaling_factor = Vector4::Dot(orthoNormal[j], orthoNormal[i])
-				/ Vector4::Dot(orthoNormal[j], orthoNormal[j]);
-
-			// Subtract each scaled component of orthoNormal_j from orthoNormal_i
-			for (int k = 0; k < 3; k++)
-			{
-				orthoNormal[i][k] -= scaling_factor * orthoNormal[j][k];
-			}
-		}
+		mLocalTRS = mWorldTRS;
 	}
+	
+	Matrix3x3 trans = Matrix4x4::Transpose(mLocalTRS);
+	mLocalScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
 
-	// Now normalize all the 'n' orthogonal vectors
-	for (int i = 0; i < 3; i++)
-	{
-		orthoNormal[i] = orthoNormal[i].Normalized();
-	}
-	///////
-	mLocalScale = Vector3((Matrix3x3(mLocalTRS) * Matrix3x3::Inverse(orthoNormal)) * Vector3(1, 1, 1));
+	trans = Matrix4x4::Transpose(mWorldTRS);
+	mScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
 }
 
 Vector3 Transform::GetLocalPosition()
@@ -241,7 +140,16 @@ Vector3 Transform::GetLocalPosition()
 void Transform::SetLocalPosition(Vector3 newLocalPosition)
 {
 	mLocalTRS = Matrix4x4::TRS(newLocalPosition, mLocalRotation, mLocalScale);
+
 	mLocalPosition = newLocalPosition;
+
+	if (mParentTransform)
+	{
+		mWorldTRS = mLocalTRS * mParentTransform->WorldMatrix();
+	}
+	mWorldTRS = mLocalTRS;
+
+	mPosition = { mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3] };
 }
 
 Vector3 Transform::GetLocalRotation()
@@ -251,11 +159,10 @@ Vector3 Transform::GetLocalRotation()
 
 void Transform::SetLocalRotation(Vector3 newLocalRotation)
 {
-	newLocalRotation.x = calc::ToRad(std::fmodf(newLocalRotation.x, 2.f * calc::PI));
-	newLocalRotation.y = calc::ToRad(std::fmodf(newLocalRotation.y, 2.f * calc::PI));
-	newLocalRotation.z = calc::ToRad(std::fmodf(newLocalRotation.z, 2.f * calc::PI));
-	mLocalTRS = Matrix4x4::TRS(mLocalPosition, newLocalRotation, mLocalScale);
-	mLocalRotation = newLocalRotation;
+	newLocalRotation.x = calc::ToRad(newLocalRotation.x);
+	newLocalRotation.y = calc::ToRad(newLocalRotation.y);
+	newLocalRotation.z = calc::ToRad(newLocalRotation.z);
+	SetLocalRotationRad(newLocalRotation);
 }
 
 Vector3 Transform::GetLocalRotationRad()
@@ -268,8 +175,17 @@ void Transform::SetLocalRotationRad(Vector3 newLocalRotationRad)
 	newLocalRotationRad.x = std::fmodf(newLocalRotationRad.x, 2.f * calc::PI);
 	newLocalRotationRad.y = std::fmodf(newLocalRotationRad.y, 2.f * calc::PI);
 	newLocalRotationRad.z = std::fmodf(newLocalRotationRad.z, 2.f * calc::PI);
+
 	mLocalTRS = Matrix4x4::TRS(mLocalPosition, newLocalRotationRad, mLocalScale);
 	mLocalRotation = newLocalRotationRad;
+
+	if (mParentTransform)
+	{
+		mWorldTRS = mLocalTRS * mParentTransform->WorldMatrix();
+	}
+	mWorldTRS = mLocalTRS;
+	
+	mRotation = mWorldTRS.ToEuler();
 }
 
 Vector3 Transform::GetLocalScale()
@@ -281,4 +197,13 @@ void Transform::SetLocalScale(Vector3 newLocalScale)
 {
 	mLocalTRS = Matrix4x4::TRS(mLocalPosition, mLocalRotation, newLocalScale);
 	mLocalScale = newLocalScale;
+
+	if (mParentTransform)
+	{
+		mWorldTRS = mLocalTRS * mParentTransform->WorldMatrix();
+	}
+	mWorldTRS = mLocalTRS;
+
+	Matrix3x3 trans = Matrix4x4::Transpose(mWorldTRS);
+	mScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
 }

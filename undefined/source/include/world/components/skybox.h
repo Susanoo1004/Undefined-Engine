@@ -12,13 +12,29 @@
 
 class Renderer;
 
+/// <summary>
+/// Skybox Class that inherit from Component
+/// </summary>
 class Skybox : public Component
 {
 public:
+	/// <summary>
+	/// Setup the skybox
+	/// </summary>
 	UNDEFINED_ENGINE static void Setup();
+	/// <summary>
+	/// Update the skybox
+	/// </summary>
+	/// <param name="cam">: Camera viewing the skybox</param>
 	UNDEFINED_ENGINE static void Update(Camera* cam);
+	/// <summary>
+	/// Draw the skybox
+	/// </summary>
 	UNDEFINED_ENGINE static void Draw();
 
+	/// <summary>
+	/// Vertices of a cube
+	/// </summary>
 	static inline float CubeVertices[] = {
 		// positions          // texture Coords
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -64,6 +80,9 @@ public:
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
+	/// <summary>
+	/// Path to the right texture for each face
+	/// </summary>
 	static inline std::vector<std::string> Faces
 	{
 		"../undefined/resource_manager/skybox/right.jpg",
@@ -74,14 +93,30 @@ public:
 		"../undefined/resource_manager/skybox/back.jpg"
 	};
 	
-	static inline unsigned int CubeVAO = 0, CubeVBO = 0;
+	/// <summary>
+	/// VAO
+	/// </summary>
+	static inline unsigned int CubeVAO = 0;
+	/// <summary>
+	/// VBO
+	/// </summary>
+	static inline unsigned int CubeVBO = 0;
+
 	static inline unsigned int CubemapTexture = 0;
 
+	/// <summary>
+	/// Camera View without the translation
+	/// </summary>
 	static inline Matrix4x4 View;
-	static inline Matrix4x4 Projection;
 
 private:
+	/// <summary>
+	/// Shader of the skybox
+	/// </summary>
 	static inline std::shared_ptr<Shader> mSkyboxShader;
+	/// <summary>
+	/// Pointer to our Renderer to simplify the calls from the ServiceLocator
+	/// </summary>
 	static inline Renderer* mRenderer;
 };
 

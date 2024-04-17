@@ -179,6 +179,7 @@
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
     <ClCompile Include="source\src\resources\mesh.cpp" />
     <ClCompile Include="source\src\interface\content_browser.cpp" />
+    <ClCompile Include="source\src\interface\scene_graph.cpp" />
     <ClCompile Include="source\src\interface\fps_graph.cpp" />
     <ClCompile Include="source\src\interface\inspector.cpp" />
     <ClCompile Include="source\src\interface\interface.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="source\include\resources\mesh.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="source\include\interface\content_browser.h" />
+    <ClInclude Include="source\include\interface\scene_graph.h" />
     <ClInclude Include="source\include\interface\fps_graph.h" />
     <ClInclude Include="source\include\interface\inspector.h" />
     <ClInclude Include="source\include\interface\interface.h" />
