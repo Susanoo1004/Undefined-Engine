@@ -3,11 +3,12 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
 #include <type_traits>
-#include <list>
 #include <refl.hpp>
+#include <toolbox/Vector3.h>
+#include <toolbox/calc.h>
+
 #include "engine_debug/logger.h"
 #include "interface/attributes.h"
-#include <toolbox/Vector3.h>
 
 namespace Reflection
 {
@@ -52,7 +53,7 @@ void Reflection::ReflectionObj(T* obj)
 	constexpr refl::type_descriptor<T> descriptor = refl::reflect<T>();
 	refl::util::for_each(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
 	{
-		if constexpr (!refl::descriptor::is_function<DescriptorT>(DescriptorT{}))
+		if constexpr (!refl::descriptor::is_function<DescriptorT>(DescriptorT{}) && !HasAttribute<DescriptorT, DontShowInInspector>())
 		{
 			using MemberT = typename DescriptorT::value_type;
 
@@ -117,15 +118,37 @@ void Reflection::DisplayObj(MemberT* obj)
 	//Math Toolbox
 	else if constexpr (std::is_same_v<Vector4, MemberT>)
 	{
-		ImGui::DragFloat4(name.c_str(), &obj->x, .1f);
+		if constexpr (HasAttribute<DescriptorT, ToDeg>())
+		{
+			ImGui::SliderAngle4(name.c_str(), &obj->x);
+		}
+		else
+		{
+			ImGui::DragFloat4(name.c_str(), &obj->x, .1f);
+		}
+
 	}
 	else if constexpr (std::is_same_v<Vector3, MemberT>)
 	{
-		ImGui::DragFloat3(name.c_str(), &obj->x, .1f);
+		if constexpr (HasAttribute<DescriptorT, ToDeg>())
+		{
+			ImGui::SliderAngle3(name.c_str(), &obj->x);
+		}
+		else
+		{
+			ImGui::DragFloat3(name.c_str(), &obj->x, .1f);
+		}
 	}
 	else if constexpr (std::is_same_v<Vector2, MemberT>)
 	{
-		ImGui::DragFloat2(name.c_str(), &obj->x, .1f);
+		if constexpr (HasAttribute<DescriptorT, ToDeg>())
+		{
+			ImGui::SliderAngle2(name.c_str(), &obj->x);
+		}
+		else
+		{
+			ImGui::DragFloat2(name.c_str(), &obj->x, .1f);
+		}
 	}
 	else if constexpr (Reflection::is_vector_v<MemberT>)
 	{

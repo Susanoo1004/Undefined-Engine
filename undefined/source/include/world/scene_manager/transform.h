@@ -62,6 +62,6 @@ private:
 
 REFL_AUTO(type(Transform),
 	field(mPosition, NotifyChange(&Transform::mHasChanged), Spacing(ImVec2(0, 20))),
-	field(mRotation, NotifyChange(&Transform::mHasChanged)),
+	field(mRotation, NotifyChange(&Transform::mHasChanged), ToDeg()),
 	field(mScale, NotifyChange(&Transform::mHasChanged))
 )

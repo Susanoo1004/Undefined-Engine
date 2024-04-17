@@ -71,7 +71,7 @@ void SceneGraph::ClickSelectObject(Object* object)
         {
             if (object == SceneManager::ActualScene->Objects[i]) // temp TODO: change Objects to vector
             {
-                ServiceLocator::Get<Renderer>()->pixelData = i;
+                ServiceLocator::Get<Renderer>()->PixelData = i;
             }
         }
     }

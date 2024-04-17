@@ -22,6 +22,14 @@ struct Spacing : FieldAttribute
 		: size(s) {}
 };
 
+struct ToDeg : FieldAttribute
+{
+};
+
+struct DontShowInInspector : FieldAttribute
+{
+};
+
 template <typename T>
 struct NotifyChange : FieldAttribute
 {
