@@ -11,7 +11,9 @@ class Transform
 public:
 
 	UNDEFINED_ENGINE const Matrix4x4& LocalMatrix();
+	UNDEFINED_ENGINE void SetLocalMatrix(const Matrix4x4& matrix);
 	UNDEFINED_ENGINE const Matrix4x4& WorldMatrix();
+	UNDEFINED_ENGINE void SetWorldMatrix(const Matrix4x4& matrix);
 
 	__declspec(property(get = GetPosition, put = SetPosition)) Vector3 Position;
 	UNDEFINED_ENGINE Vector3 GetPosition();

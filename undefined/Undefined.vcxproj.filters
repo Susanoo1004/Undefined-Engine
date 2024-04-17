@@ -51,7 +51,7 @@
     <ClCompile Include="source\src\interface\utils_reflection.cpp" />
     <ClCompile Include="source\src\interface\scene_graph.cpp" />
     <ClCompile Include="external\src\ImGuizmo\ImGuizmo.cpp" />
-    <ClCompile Include="source\src\world\guizmo.cpp" />
+    <ClCompile Include="source\src\world\gizmo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -127,7 +127,7 @@
     <ClInclude Include="source\include\interface\runtime_classes.h" />
     <ClInclude Include="source\include\interface\scene_graph.h" />
     <ClInclude Include="external\include\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="source\include\world\guizmo.h" />
+    <ClInclude Include="source\include\world\gizmo.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

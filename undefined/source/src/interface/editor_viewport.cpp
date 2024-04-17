@@ -6,6 +6,9 @@
 
 #include <vector>
 
+#include "world/scene_manager.h"
+#include "world/gizmo.h"
+
 #include "utils/utils.h"
 
 #include "engine_debug/logger.h"
@@ -15,6 +18,7 @@
 #include "resources/texture.h"
 
 #include "interface/interface.h"
+
 
 EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
 	: mFramebuffer(framebuffer), ViewportCamera(camera), mShader(ResourceManager::Get<Shader>("viewport_shader"))
@@ -37,6 +41,10 @@ void EditorViewport::Init()
 void EditorViewport::ShowWindow()
 {
 	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str());
+
+	Gizmo g;
+
+	g.ChangeGizmoOperation();
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
@@ -76,7 +84,6 @@ void EditorViewport::ShowWindow()
 
 	SetMouseMinMaxBounds(mouseX, mouseY, viewportOffset, viewportSize);
 
-
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && 
 		mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
@@ -95,6 +102,8 @@ void EditorViewport::ShowWindow()
 		ImVec2(1, 0)
 	);
 	
+	g.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[1]->GameTransform);
+
 	ImGui::End();
 }
 

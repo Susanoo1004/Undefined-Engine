@@ -49,6 +49,11 @@ void Camera::SetCurrentCamera()
     CurrentCamera = this;
 }
 
+void Camera::SetView(const Matrix4x4& viewMatrix)
+{
+    mView = viewMatrix;
+}
+
 void Camera::Update()
 {
     mView = Matrix4x4::ViewMatrix(Eye, Eye + LookAt, Up);

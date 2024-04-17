@@ -73,10 +73,6 @@ void Application::Update()
     Camera::ProcessInput();
     Interface::Update(SceneManager::ActualScene);
 
-    SceneManager::ActualScene->Objects[1]->GameTransform->Position += Vector3{ 0.1f, 0, 0 } * 0.016;
-    SceneManager::ActualScene->Objects[1]->GameTransform->Rotation += Vector3{ 72.f, 0, 0 } * 0.016;
-
-
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();
