@@ -4,7 +4,7 @@
 
 #include "utils/flag.h"
 
-#include "world/components/component.h"
+#include "world/component.h"
 #include "engine_debug/logger.h"
 #include "interface/attributes.h"
 

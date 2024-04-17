@@ -1,4 +1,4 @@
-#include "world/scene_manager/object.h"
+#include "world/object.h"
 
 Object::Object()
 	: Name("Default")

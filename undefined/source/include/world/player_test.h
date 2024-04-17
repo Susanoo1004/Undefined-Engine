@@ -1,5 +1,5 @@
 #pragma once
-#include "world/components/mono_behaviour.h"
+#include "world/mono_behaviour.h"
 
 class Player : public MonoBehaviour
 {

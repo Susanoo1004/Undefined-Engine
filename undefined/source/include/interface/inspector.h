@@ -2,7 +2,7 @@
 #include "utils/flag.h"
 #include <refl.hpp>
 #include "resources/model.h"
-#include "world/scene_manager/scene.h"
+#include "world/scene.h"
 #include <type_traits>
 
 class UNDEFINED_ENGINE Inspector

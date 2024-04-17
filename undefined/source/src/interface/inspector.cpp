@@ -1,6 +1,6 @@
 #include "interface/inspector.h"
 #include "interface/attributes.h"
-#include "world/scene_manager/scene.h"
+#include "world/scene.h"
 #include <imgui/imgui.h>
 #include "interface/utils_reflection.h"
 

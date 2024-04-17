@@ -1,6 +1,6 @@
-#include "world/scene_manager/scene.h"
+#include "world/scene.h"
 
-#include "world/components/skybox.h"
+#include "world/skybox.h"
 
 Scene::Scene()
 {

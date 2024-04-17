@@ -1,6 +1,6 @@
-#include "world/components/component.h"
+#include "world/component.h"
 
-#include "world/scene_manager/object.h"
+#include "world/object.h"
 
 Component::~Component()
 {

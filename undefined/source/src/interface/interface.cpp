@@ -7,7 +7,7 @@
 #include "interface/content_browser.h"
 #include "interface/scene_graph.h"
 #include "interface/inspector.h"
-#include "world/scene_manager/scene.h"
+#include "world/scene.h"
 
 void Interface::Init()
 {
