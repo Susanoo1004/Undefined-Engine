@@ -71,7 +71,7 @@ void Application::Update()
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
-    Interface::Update(SceneManager::ActualScene);
+    Interface::Update();
 
     SceneManager::ActualScene->Objects[1]->GameTransform->Position += Vector3{ 0.1f, 0, 0 } * 0.016;
     SceneManager::ActualScene->Objects[1]->GameTransform->Rotation += Vector3{ 72.f, 0, 0 } * 0.016;

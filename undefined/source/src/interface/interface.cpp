@@ -81,7 +81,7 @@ void Interface::BeginDockSpace()
     ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 }
 
-void Interface::Update(Scene* scene)
+void Interface::Update()
 {
     NewFrame();
     BeginDockSpace();
@@ -89,7 +89,7 @@ void Interface::Update(Scene* scene)
     FPSGraph::ShowWindow();
     ContentBrowser::DisplayWindow();
     SceneGraph::DisplayWindow();
-    Inspector::ShowWindow(scene);
+    Inspector::ShowWindow();
 
     for (int i = 0; i < EditorViewports.size(); i++)
     {
