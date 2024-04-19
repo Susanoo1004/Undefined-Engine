@@ -73,8 +73,8 @@ void Application::Update()
     Camera::ProcessInput();
     Interface::Update();
 
-    SceneManager::ActualScene->Objects[1]->GameTransform->Position += Vector3{ 0.1f, 0, 0 } * 0.016;
-    SceneManager::ActualScene->Objects[1]->GameTransform->Rotation += Vector3{ 72.f, 0, 0 } * 0.016;
+    SceneManager::ActualScene->Objects[1]->GameTransform->Position += Vector3{ 0.1f, 0, 0 } * 0.016f;
+    SceneManager::ActualScene->Objects[1]->GameTransform->Rotation += Vector3{ 72.f, 0, 0 } * 0.016f;
 
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)

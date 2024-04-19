@@ -55,7 +55,7 @@ namespace Reflection
 	void DisplayToolboxTypes(MemberT* obj, std::string name);
 
 	template<typename T, typename MemberT, typename DescriptorT>
-	void Attributes(MemberT* obj, std::string& name);
+	void Attributes(std::string& name);
 
 	template <typename T>
 	struct is_vector : public std::false_type {};
@@ -196,7 +196,7 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::Attributes(MemberT* obj, std::string& name)
+void Reflection::Attributes(std::string& name)
 {
 	//If the Descriptor has a certain attribute
 	if constexpr (HasAttribute<DescriptorT, DontDisplayName>())
@@ -220,7 +220,7 @@ void Reflection::DisplayObj(MemberT* obj)
 {
 	std::string name = DescriptorT::name.c_str();
 
-	Attributes<T, MemberT, DescriptorT>(obj, name);
+	Attributes<T, MemberT, DescriptorT>(name);
 
 	//We check if MemberT (type of the variable we are reflecting) is the same as one of the bases types
 	if constexpr (std::is_same_v<bool, MemberT>)

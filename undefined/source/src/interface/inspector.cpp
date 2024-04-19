@@ -4,7 +4,7 @@
 #include <imgui/imgui.h>
 
 #include "interface/attributes.h"
-#include "world/scene_manager/scene_manager.h"
+#include "world/scene_manager.h"
 #include "interface/utils_reflection.h"
 
 void Inspector::Init()
