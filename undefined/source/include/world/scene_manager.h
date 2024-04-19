@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "world/scene_manager/scene.h"
+#include "world/scene.h"
 #include "utils/flag.h"
 
 class SceneManager

@@ -1,4 +1,4 @@
-#include "world/scene_manager/scene_manager.h"
+#include "world/scene_manager.h"
 
 void SceneManager::Init()
 {

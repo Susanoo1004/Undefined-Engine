@@ -12,12 +12,12 @@
 #include "resources/model_renderer.h"
 #include "resources/resource_manager.h"
 
-#include "world/components/dir_light.h"
-#include "world/components/skybox.h"
+#include "world/dir_light.h"
+#include "world/skybox.h"
 
 #include "memory_leak.h"
 
-#include "world/scene_manager/scene_manager.h"
+#include "world/scene_manager.h"
 
 #include "interface/interface.h"
 #include "interface/inspector.h"

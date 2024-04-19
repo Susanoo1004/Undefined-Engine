@@ -1,4 +1,4 @@
-#include "world/components/dir_light.h"
+#include "world/dir_light.h"
 
 #include "resources/resource_manager.h"
 #include "resources/shader.h"

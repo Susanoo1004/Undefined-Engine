@@ -1,4 +1,4 @@
-#include "world/components/light.h"
+#include "world/light.h"
 
 #include "resources/resource_manager.h"
 

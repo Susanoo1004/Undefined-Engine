@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "utils/flag.h"
-#include "world/scene_manager/scene.h"
+#include "world/scene.h"
 #include "interface/editor_viewport.h"
 
 class Interface

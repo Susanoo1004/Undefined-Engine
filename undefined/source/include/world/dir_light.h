@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "world/components/light.h"
+#include "world/light.h"
 
 /// <summary>
 /// Class for the Directional Light that inherit from Light

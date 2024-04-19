@@ -2,7 +2,7 @@
 
 #include <toolbox/Vector3.h>
 
-#include "world/components/component.h"
+#include "world/component.h"
 
 #include "resources/shader.h"
 

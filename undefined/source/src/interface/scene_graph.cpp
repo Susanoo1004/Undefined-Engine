@@ -2,7 +2,7 @@
 
 #include <imgui/imgui.h>
 
-#include "world/scene_manager/scene_manager.h"
+#include "world/scene_manager.h"
 #include "service_locator.h"
 
 void SceneGraph::DisplayWindow()
@@ -71,7 +71,7 @@ void SceneGraph::ClickSelectObject(Object* object)
         {
             if (object == SceneManager::ActualScene->Objects[i]) // temp TODO: change Objects to vector
             {
-                ServiceLocator::Get<Renderer>()->PixelData = i;
+                ServiceLocator::Get<Renderer>()->PixelData = (int)i;
             }
         }
     }

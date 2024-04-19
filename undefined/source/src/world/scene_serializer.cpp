@@ -1,7 +1,5 @@
-#include "world/scene_manager/scene_serializer.h"
+#include "world/scene_serializer.h"
 
-//#include <rfl.hpp>
-//#include <rfl/json.hpp>
 
 
 SceneSerializer::SceneSerializer(Scene& scene)
@@ -15,8 +13,7 @@ SceneSerializer::~SceneSerializer()
 
 void SceneSerializer::Serialize(const std::filesystem::path& path)
 {
-	//const std::string json_string = rfl::json::write(mScene);
-	//rfl::json::save("/assets/scenes/" + mScene.Name + std::string(".json"), json_string);
+
 
 	
 }

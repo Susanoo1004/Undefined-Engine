@@ -1,5 +1,6 @@
 #include "interface/inspector.h"
 
+#include "interface/attributes.h"
 #include <imgui/imgui.h>
 
 #include "interface/attributes.h"

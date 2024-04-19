@@ -1,6 +1,6 @@
 #pragma once
 
-#include "world/scene_manager/object.h"
+#include "world/object.h"
 #include "utils/flag.h"
 
 class Scene

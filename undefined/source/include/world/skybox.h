@@ -6,7 +6,7 @@
 #include <array>
 
 #include "utils/flag.h"
-#include "world/components/component.h"
+#include "world/component.h"
 #include "camera/camera.h"
 #include "resources/shader.h"
 

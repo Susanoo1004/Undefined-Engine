@@ -1,6 +1,6 @@
 #pragma once
 
-#include "world/scene_manager/scene.h"
+#include "world/scene.h"
 
 class SceneSerializer
 {

@@ -1,10 +1,12 @@
-#include "world/components/skybox.h"
+#include "world/skybox.h"
 
 #include <glad/glad.h>
 #include <stb_image/stb_image.h>
 
 #include "engine_debug/logger.h"
+
 #include "service_locator.h"
+
 #include "resources/texture.h"
 #include "resources/resource_manager.h"
 
