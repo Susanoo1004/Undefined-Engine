@@ -1,8 +1,9 @@
-#include "interface/content_browser.h"
-
-#include "Resources/resource_manager.h"
 #include <Resources/texture.h>
+#include <imgui/imgui.h>
+#include <imgui/imgui_stdlib.h>
 
+#include "interface/content_browser.h"
+#include "Resources/resource_manager.h"
 #include "utils/utils.h"
 
 void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
@@ -12,39 +13,7 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding;
 
-    if (mIsDirectory)
-    {
-        bool isAnyFolder = false;
-        for (const auto& entry : std::filesystem::directory_iterator(path))
-        {
-            if (entry.is_directory())
-            {
-                isAnyFolder = true;
-                flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-                break;
-            }
-
-            else
-            {
-                continue;
-            }
-        }
-
-        if (!isAnyFolder)
-        {
-            flags |= ImGuiTreeNodeFlags_Leaf;
-        }
-
-        if (mCurrentPath == path)
-        {
-            flags |= ImGuiTreeNodeFlags_Selected;
-        }
-
-        if (path == mPath)
-        {
-            flags |= ImGuiTreeNodeFlags_DefaultOpen;
-        }
-    }
+    SetupTreeNodeFlags(flags, path);
 
     if (mRenamingPath == path)
     {
@@ -56,6 +25,7 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
 
     if (ImGui::TreeNodeEx(name.c_str(), flags))
     {
+        RightClickInteractions(path);
         if (ImGui::IsItemHovered() && !ImGui::IsItemToggledOpen() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
         {
             std::string file = "start explorer ";
@@ -88,14 +58,54 @@ void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
         {
             mCurrentPath = path;
         }
+        RightClickInteractions(path);
     }
+}
 
+void ContentBrowser::RightClickInteractions(const std::filesystem::path& path)
+{
     RightClickWindow(path);
-
     if (mRenamingPath == path)
     {
         ImGui::SameLine();
         RenameItem();
+    }
+}
+
+void ContentBrowser::SetupTreeNodeFlags(ImGuiTreeNodeFlags& flags, const std::filesystem::path& path)
+{
+    if (mIsDirectory)
+    {
+        bool isAnyFolder = false;
+        for (const auto& entry : std::filesystem::directory_iterator(path))
+        {
+            if (entry.is_directory())
+            {
+                isAnyFolder = true;
+                flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+                break;
+            }
+
+            else
+            {
+                continue;
+            }
+        }
+
+        if (!isAnyFolder)
+        {
+            flags |= ImGuiTreeNodeFlags_Leaf;
+        }
+
+        if (mCurrentPath == path)
+        {
+            flags |= ImGuiTreeNodeFlags_Selected;
+        }
+
+        if (path == mPath)
+        {
+            flags |= ImGuiTreeNodeFlags_DefaultOpen;
+        }
     }
 }
 
@@ -304,32 +314,32 @@ void ContentBrowser::LoadFiles(const std::filesystem::path& path)
 
 void ContentBrowser::RenameItem()
 {
-    ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
-    std::string name = mRenamingPath.filename().string();
-    std::string oldName = mRenamingPath.filename().string();
-    std::filesystem::path path = mRenamingPath.parent_path();
+    ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | 
+        ImGuiInputTextFlags_EscapeClearsAll;
 
-    char* newName = (char*)name.c_str();
+    mRenamingName = mRenamingPath.filename().string();
+    std::string oldName = mRenamingName;
+    std::filesystem::path path = mRenamingPath;
 
     ImGui::SetKeyboardFocusHere();
-    ImGui::PushItemWidth(ImGui::CalcTextSize(name.c_str()).x + 5);
-    if (ImGui::InputText("##label", (char*)name.c_str(), 256, flags))
+    ImGui::PushItemWidth(ImGui::CalcTextSize(mRenamingName.c_str()).x + 5);
+    if (ImGui::InputText(oldName.c_str(), &mRenamingName))
     {
         if (std::filesystem::is_directory(mRenamingPath))
         {
-            mCurrentPath = (char*)name.c_str();
+            mCurrentPath = (char*)mRenamingName.c_str();
         }
 
         std::filesystem::path newPath = path.generic_string();
         newPath += "/";
-        newPath += (char*)name.c_str();
+        newPath += (char*)mRenamingName.c_str();
 
         if (std::filesystem::is_directory(mRenamingPath))
         {
-            ResourceManager::RenameFolder(oldName, (char*)name.c_str());
+            ResourceManager::RenameFolder(oldName, (char*)mRenamingName.c_str());
             //Change current path to the new path so the back folder does not crash (since the current path does not exist it doesn't have a parent)
             std::string newCurrentPath = mRenamingPath.parent_path().generic_string() + "/";
-            newCurrentPath += newName;
+            newCurrentPath += mRenamingName;
             mCurrentPath = newCurrentPath;
         }
 

@@ -25,6 +25,10 @@ private:
 	/// <param name="path">: Path of the directory</param>
 	static void DisplayDirectories(const std::filesystem::path& path);
 
+	static void RightClickInteractions(const std::filesystem::path& path);
+
+	static void SetupTreeNodeFlags(ImGuiTreeNodeFlags& flags, const std::filesystem::path& path);
+
 	/// <summary>
 	/// Display the right side of the content browser who shows an image for a file/folder in a directory
 	/// </summary>
@@ -139,6 +143,8 @@ private:
 	/// Renaming path
 	/// </summary>
 	static inline std::filesystem::path mRenamingPath = "";
+
+	static inline std::string mRenamingName = "";
 
 	/// <summary>
 	/// Back folder name
