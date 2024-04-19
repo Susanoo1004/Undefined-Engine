@@ -71,7 +71,7 @@ void Application::Update()
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
-    Interface::Update(SceneManager::ActualScene);
+    Interface::Update();
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
