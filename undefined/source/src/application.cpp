@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <stb_image/stb_image.h>
+#include <stdlib.h>
 
 #include "service_locator.h"
 
@@ -24,7 +25,7 @@
 
 #include <toolbox/calc.h>
 
-#include "interface/runtime_classes.h"
+#include "reflection/runtime_classes.h"
 
 Application::Application()
 {
@@ -73,8 +74,8 @@ void Application::Update()
     Camera::ProcessInput();
     Interface::Update();
 
-    SceneManager::ActualScene->Objects[1]->GameTransform->Position += Vector3{ 0.1f, 0, 0 } * 0.016;
-    SceneManager::ActualScene->Objects[1]->GameTransform->Rotation += Vector3{ 72.f, 0, 0 } * 0.016;
+    SceneManager::ActualScene->Objects[1]->GameTransform->Position += Vector3{ 0.1f, 0, 0 } * 0.016f;
+    SceneManager::ActualScene->Objects[1]->GameTransform->Rotation += Vector3{ 72.f, 0, 0 } * 0.016f;
 
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
@@ -111,6 +112,7 @@ void Application::Update()
 
     mWindowManager->SwapBuffers();
     mRenderer->ClearBuffer();
+    Logger::CheckForExit();
 }
 
 void Application::Clear()

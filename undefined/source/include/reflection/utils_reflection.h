@@ -8,7 +8,8 @@
 #include <toolbox/calc.h>
 
 #include "engine_debug/logger.h"
-#include "interface/attributes.h"
+#include "reflection/attributes.h"
+#include "wrapper/reflection.h"
 
 namespace Reflection
 {
@@ -55,43 +56,47 @@ namespace Reflection
 	void DisplayToolboxTypes(MemberT* obj, std::string name);
 
 	template<typename T, typename MemberT, typename DescriptorT>
-	void Attributes(MemberT* obj, std::string& name);
-
-	template <typename T>
-	struct is_vector : public std::false_type {};
-
-	template <typename T, typename A>
-	struct is_vector<std::vector<T, A>> : public std::true_type {};
-
-	template <typename T>
-	constexpr bool is_vector_v = is_vector<T>::value;
+	void Attributes(std::string& name);
 }
 
 template<typename T>
 void Reflection::ReflectionObj(T* obj)
 {
-	constexpr refl::type_descriptor<T> descriptor = refl::reflect<T>();
+	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
 	//Lamba that loops for each element we reflect from a class
-	refl::util::for_each(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
+	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
 	{
 		//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
-		if constexpr (!refl::descriptor::is_function<DescriptorT>(DescriptorT{}) && !HasAttribute<DescriptorT, HideInInspector>())
+		if constexpr (!Reflection::IsFunction<DescriptorT>() &&
+			!HasAttribute<DescriptorT, HideInInspector>())
 		{
 			//MemberT is the type of the element we reflect
 			using MemberT = typename DescriptorT::value_type;
 
 			//If there's a change we put notify to true
-			if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>())
+			if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>() || HasAttribute<DescriptorT, Callback<T>>())
 			{
 				const MemberT oldValue = DescriptorT::get(obj);
 				DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
 
-				if (oldValue != DescriptorT::get(obj))
+				if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>())
 				{
-					constexpr NotifyChange<T> notify = GetAttribute<DescriptorT, NotifyChange<T>>();
-					obj->*notify.ptr = true;
+					if (oldValue != DescriptorT::get(obj))
+					{
+						constexpr NotifyChange<T> notify = GetAttribute<DescriptorT, NotifyChange<T>>();
+						obj->*notify.ptr = true;
+					}
+				}
+				else if constexpr (HasAttribute<DescriptorT, Callback<T>>())
+				{
+					if (oldValue != DescriptorT::get(obj))
+					{
+						constexpr Callback<T> notify = GetAttribute<DescriptorT, Callback<T>>();
+						(obj->*notify.func)();
+					}
 				}
 			}
+
 			else
 			{
 				DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
@@ -196,7 +201,7 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::Attributes(MemberT* obj, std::string& name)
+void Reflection::Attributes(std::string& name)
 {
 	//If the Descriptor has a certain attribute
 	if constexpr (HasAttribute<DescriptorT, DontDisplayName>())
@@ -220,7 +225,7 @@ void Reflection::DisplayObj(MemberT* obj)
 {
 	std::string name = DescriptorT::name.c_str();
 
-	Attributes<T, MemberT, DescriptorT>(obj, name);
+	Attributes<T, MemberT, DescriptorT>(name);
 
 	//We check if MemberT (type of the variable we are reflecting) is the same as one of the bases types
 	if constexpr (std::is_same_v<bool, MemberT>)
@@ -256,7 +261,7 @@ void Reflection::DisplayObj(MemberT* obj)
 		Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
 	}
 	//Recursivity if there's a reflectable type
-	if constexpr (refl::is_reflectable<MemberT>())
+	if constexpr (Reflection::IsReflectable<MemberT>())
 	{
 		ReflectionObj<MemberT>(obj);
 	}

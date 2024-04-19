@@ -1,11 +1,10 @@
 #include "interface/inspector.h"
 
-#include "interface/attributes.h"
 #include <imgui/imgui.h>
 
-#include "interface/attributes.h"
-#include "world/scene_manager/scene_manager.h"
-#include "interface/utils_reflection.h"
+#include "reflection/attributes.h"
+#include "world/scene_manager.h"
+#include "reflection/utils_reflection.h"
 
 void Inspector::Init()
 {

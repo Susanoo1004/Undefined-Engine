@@ -3,7 +3,7 @@
 #include "utils/utils.h"
 #include <unordered_map>
 #include <functional>
-#include "interface/utils_reflection.h"
+#include "reflection/utils_reflection.h"
 
 struct RuntimeClass
 {
@@ -33,6 +33,4 @@ void RuntimeClasses::AddType()
 	};
 
 	mHashClasses.emplace(typeid(T).hash_code(), info);
-
-	Logger::Info("Added type : {}", typeid(T).hash_code());
 }

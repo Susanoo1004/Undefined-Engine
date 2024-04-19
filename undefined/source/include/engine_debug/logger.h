@@ -40,6 +40,7 @@ public:
 	/// Stop the Logger thread
 	/// </summary>
 	UNDEFINED_ENGINE static void Stop();
+	UNDEFINED_ENGINE static void CheckForExit();
 
 	template<class... Types>
 	static void Debug(std::string string, Types... args)
