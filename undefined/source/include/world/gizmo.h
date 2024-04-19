@@ -15,11 +15,12 @@ public:
 
 	void ChangeGizmoOperation();
 
-	ImGuiIO* Io;
-	float viewManipulateRight ;
-	float viewManipulateTop;
 	static inline ImGuiWindowFlags gizmoWindowFlags;
 
 	static inline ImGuizmo::OPERATION CurrentGizmoOperation;
 	static inline ImGuizmo::MODE CurrentGizmoMode;
+
+public:
+	static void DrawGrid(Camera* camera);
+	static void InitGizmo();
 };

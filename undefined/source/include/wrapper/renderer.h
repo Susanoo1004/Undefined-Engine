@@ -261,7 +261,7 @@ public:
 	template<class... Args>
 	void EnableTest(Args... rendererTest);
 
-	int pixelData;
+	int pixelData = -1;
 
 	RendererDebug Debug;
 };

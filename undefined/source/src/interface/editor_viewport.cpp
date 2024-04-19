@@ -40,9 +40,10 @@ void EditorViewport::Init()
 
 void EditorViewport::ShowWindow()
 {
-	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, g.gizmoWindowFlags);
 
-	g.ChangeGizmoOperation();
+	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.gizmoWindowFlags);
+
+	SceneGizmo.ChangeGizmoOperation();
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
@@ -99,8 +100,13 @@ void EditorViewport::ShowWindow()
 		ImVec2(0, 1),
 		ImVec2(1, 0)
 	);
-	
-	g.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[1]->GameTransform);
+
+	int objectIndex = ServiceLocator::Get<Renderer>()->pixelData;
+
+	if (objectIndex >= 0)
+	{
+		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->pixelData]->GameTransform);
+	}
 
 	ImGui::End();
 }
@@ -133,7 +139,7 @@ void EditorViewport::RescaleViewport()
 		if (aspect < 1.0f)
 			aspect = mHeight / mWidth;
 
-		result = Matrix4x4::ProjectionMatrix(calc::PI / 2.0f, aspect, 0.1f, 20.0f);
+		result = Matrix4x4::ProjectionMatrix(calc::PI / 2.0f, aspect, 0.1f, 100.0f);
 		ViewportCamera->SetPerspective(result);
 	}
 

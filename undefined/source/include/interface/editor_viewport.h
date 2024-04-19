@@ -59,8 +59,10 @@ public:
 	/// </summary>
 	Camera* ViewportCamera;
 
-	// temp
-	Gizmo g;
+	/// <summary>
+	/// Gizmo for the current scene
+	/// </summary>
+	Gizmo SceneGizmo;
 
 
 private:
