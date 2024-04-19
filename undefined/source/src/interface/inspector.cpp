@@ -1,8 +1,8 @@
 #include "interface/inspector.h"
 
-#include "interface/attributes.h"
 #include <imgui/imgui.h>
 #include <ImGuizmo/ImGuizmo.h>
+#include "interface/attributes.h"
 #include "interface/utils_reflection.h"
 
 void Inspector::Init()

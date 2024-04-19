@@ -6,6 +6,7 @@
 #include "utils/flag.h"
 #include "resources/model.h"
 #include "world/scene.h"
+#include "world/scene_manager.h"
 #include <type_traits>
 
 class UNDEFINED_ENGINE Inspector

@@ -101,11 +101,11 @@ void EditorViewport::ShowWindow()
 		ImVec2(1, 0)
 	);
 
-	int objectIndex = ServiceLocator::Get<Renderer>()->pixelData;
+	int objectIndex = ServiceLocator::Get<Renderer>()->PixelData;
 
 	if (objectIndex >= 0)
 	{
-		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->pixelData]->GameTransform);
+		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->PixelData]->GameTransform);
 	}
 
 	ImGui::End();
