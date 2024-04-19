@@ -40,9 +40,7 @@ void EditorViewport::Init()
 
 void EditorViewport::ShowWindow()
 {
-	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str());
-
-	Gizmo g;
+	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, g.gizmoWindowFlags);
 
 	g.ChangeGizmoOperation();
 

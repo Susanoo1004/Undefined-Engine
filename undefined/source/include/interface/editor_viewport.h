@@ -8,6 +8,11 @@
 
 #include "resources/shader.h"
 
+
+
+#include "world/gizmo.h"
+
+
 class EditorViewport
 {
 public:
@@ -53,6 +58,10 @@ public:
 	/// Pointer to the camera bind to the viewport
 	/// </summary>
 	Camera* ViewportCamera;
+
+	// temp
+	Gizmo g;
+
 
 private:
 	/// <summary>
