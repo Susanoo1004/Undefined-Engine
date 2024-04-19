@@ -1,5 +1,5 @@
-#include "interface/utils_reflection.h"
-#include "interface/runtime_classes.h"
+#include "reflection/utils_reflection.h"
+#include "reflection/runtime_classes.h"
 
 void Reflection::DisplayWithHash(void* obj, size_t hash)
 {

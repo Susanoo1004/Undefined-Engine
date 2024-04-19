@@ -149,3 +149,9 @@ void Logger::Stop()
         Thread.join();
     }
 }
+
+void Logger::CheckForExit()
+{
+    std::atexit(Logger::Stop);
+    std::at_quick_exit(Logger::Stop);
+}

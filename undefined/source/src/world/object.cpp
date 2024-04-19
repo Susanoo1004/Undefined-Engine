@@ -162,3 +162,15 @@ void Object::DetachChild(Object* child)
 	child->mTransform.mParentTransform = nullptr;
 	mChildren.remove(child);
 }
+
+void Object::ChangeEnableStatus()
+{
+	if (mIsEnable)
+	{
+		Enable();
+	}
+	else
+	{
+		Disable();
+	}
+}

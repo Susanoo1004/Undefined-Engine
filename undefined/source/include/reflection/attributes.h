@@ -41,6 +41,17 @@ struct NotifyChange : FieldAttribute
 		: ptr(p) {}
 };
 
+template <typename T>
+struct Callback : FieldAttribute
+{
+	using FuncT = void (T::*)();
+
+	FuncT func;
+
+	constexpr Callback(const FuncT f)
+		: func(f) {}
+};
+
 template <typename DescriptorT, typename AttributeT>
 constexpr bool HasAttribute()
 {

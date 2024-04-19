@@ -4,7 +4,7 @@
 #include <toolbox/Vector3.h>
 #include <toolbox/Matrix4x4.h>
 #include <refl.hpp>
-#include "interface/attributes.h"
+#include "reflection/attributes.h"
 
 class Transform
 {

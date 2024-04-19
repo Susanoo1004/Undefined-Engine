@@ -6,7 +6,7 @@
 
 #include "world/component.h"
 #include "engine_debug/logger.h"
-#include "interface/attributes.h"
+#include "reflection/attributes.h"
 
 template<class Comp>
 concept ComponentType = std::is_base_of<Component, Comp>::value;
@@ -180,6 +180,7 @@ private:
 	friend struct refl_impl::metadata::type_info__ <Object>;
 
 private:
+	void ChangeEnableStatus();
 
 	friend class SceneManager;
 	friend class SceneGraph;
@@ -187,7 +188,7 @@ private:
 };
 
 REFL_AUTO(type(Object),
-	field(mIsEnable, DontDisplayName()),
+	field(mIsEnable, DontDisplayName(), Callback(&Object::ChangeEnableStatus)),
 	field(Name, SameLine()),
 	field(mTransform),
 	field(Components, Spacing(ImVec2(0, 30)))

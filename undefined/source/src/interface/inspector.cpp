@@ -2,8 +2,9 @@
 
 #include <imgui/imgui.h>
 #include <ImGuizmo/ImGuizmo.h>
-#include "interface/attributes.h"
-#include "interface/utils_reflection.h"
+#include "reflection/attributes.h"
+#include "reflection/utils_reflection.h"
+#include "world/scene_manager.h"
 
 void Inspector::Init()
 {
@@ -22,6 +23,5 @@ void Inspector::ShowWindow()
 
 	ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "Not over");
 
-	
 	ImGui::End();
 }

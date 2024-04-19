@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <stb_image/stb_image.h>
+#include <stdlib.h>
 
 #include "service_locator.h"
 
@@ -24,7 +25,7 @@
 
 #include <toolbox/calc.h>
 
-#include "interface/runtime_classes.h"
+#include "reflection/runtime_classes.h"
 
 Application::Application()
 {
@@ -107,6 +108,7 @@ void Application::Update()
 
     mWindowManager->SwapBuffers();
     mRenderer->ClearBuffer();
+    Logger::CheckForExit();
 }
 
 void Application::Clear()
