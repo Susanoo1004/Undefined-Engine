@@ -2,9 +2,7 @@
 
 #include "interface/attributes.h"
 #include <imgui/imgui.h>
-
-#include "interface/attributes.h"
-#include "world/scene_manager.h"
+#include <ImGuizmo/ImGuizmo.h>
 #include "interface/utils_reflection.h"
 
 void Inspector::Init()
@@ -21,6 +19,9 @@ void Inspector::ShowWindow()
 		Object* obj = SceneManager::ActualScene->Objects[mRenderer->PixelData];
 		Reflection::ReflectionObj<Object>(obj);
 	}
+
+	ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "Not over");
+
 	
 	ImGui::End();
 }

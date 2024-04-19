@@ -25,6 +25,30 @@ const Matrix4x4& Transform::LocalMatrix()
 	return mLocalTRS;
 }
 
+void Transform::SetLocalMatrix(const Matrix4x4& matrix)
+{
+	mLocalTRS = matrix;
+
+	mLocalPosition = mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3];
+	mLocalRotation = mLocalTRS.ToEuler();
+	Matrix3x3 trans = Matrix4x4::Transpose(mLocalTRS);
+	mLocalScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
+
+	if (mParentTransform)
+	{
+		mWorldTRS = mLocalTRS * mParentTransform->WorldMatrix();
+	}
+	else
+	{
+		mWorldTRS = mLocalTRS;
+	}
+
+	mPosition = mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3];
+	mRotation = mWorldTRS.ToEuler();
+	trans = Matrix4x4::Transpose(mWorldTRS);
+	mScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
+}
+
 const Matrix4x4& Transform::WorldMatrix()
 {
 	if (mHasChanged)
@@ -42,6 +66,30 @@ const Matrix4x4& Transform::WorldMatrix()
 	}
 
 	return mWorldTRS;
+}
+
+void Transform::SetWorldMatrix(const Matrix4x4& matrix)
+{
+	mWorldTRS = matrix;
+
+	mPosition = mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3];
+	mRotation = mWorldTRS.ToEuler();
+	Matrix3x3 trans = Matrix4x4::Transpose(mWorldTRS);
+	mScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
+
+	if (mParentTransform)
+	{
+		mLocalTRS = mWorldTRS * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
+	}
+	else
+	{
+		mLocalTRS = mWorldTRS;
+	}
+
+	mLocalPosition = mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3];
+	mLocalRotation = mLocalTRS.ToEuler();
+	trans = Matrix4x4::Transpose(mLocalTRS);
+	mLocalScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
 }
 
 Vector3 Transform::GetPosition()
@@ -147,7 +195,10 @@ void Transform::SetLocalPosition(Vector3 newLocalPosition)
 	{
 		mWorldTRS = mLocalTRS * mParentTransform->WorldMatrix();
 	}
-	mWorldTRS = mLocalTRS;
+	else
+	{
+		mWorldTRS = mLocalTRS;
+	}
 
 	mPosition = { mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3] };
 }
@@ -183,7 +234,10 @@ void Transform::SetLocalRotationRad(Vector3 newLocalRotationRad)
 	{
 		mWorldTRS = mLocalTRS * mParentTransform->WorldMatrix();
 	}
-	mWorldTRS = mLocalTRS;
+	else
+	{
+		mWorldTRS = mLocalTRS;
+	}
 	
 	mRotation = mWorldTRS.ToEuler();
 }
@@ -202,7 +256,10 @@ void Transform::SetLocalScale(Vector3 newLocalScale)
 	{
 		mWorldTRS = mLocalTRS * mParentTransform->WorldMatrix();
 	}
-	mWorldTRS = mLocalTRS;
+	else
+	{
+		mWorldTRS = mLocalTRS;
+	}
 
 	Matrix3x3 trans = Matrix4x4::Transpose(mWorldTRS);
 	mScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
