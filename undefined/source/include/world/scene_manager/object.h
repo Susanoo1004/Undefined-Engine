@@ -91,6 +91,8 @@ private:
 	Object* mParent;
 	std::list<Object*> mChildren;
 
+	uint64_t mUUID;
+
 	bool mIsEnable = true;
 
 	friend struct refl_impl::metadata::type_info__ <Object>;

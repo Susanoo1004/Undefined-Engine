@@ -3,6 +3,10 @@
 #include "wrapper/time.h"
 #include "engine_debug/logger.h"
 
-void Player::FixedUpdate()
+//void Player::FixedUpdate()
+//{
+//}
+
+void Player::Update()
 {
 }

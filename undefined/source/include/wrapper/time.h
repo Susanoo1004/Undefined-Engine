@@ -6,6 +6,10 @@ class Time
     
     STATIC_CLASS(Time)
 
+private:
+
+    UNDEFINED_ENGINE static inline float mDeltaTime; // Read Only
+    
 public:
 
     UNDEFINED_ENGINE static double GetTimeSinceLaunch();
@@ -13,7 +17,8 @@ public:
 
     UNDEFINED_ENGINE static inline float TimeScale = 1.f;
 
-    UNDEFINED_ENGINE static inline float DeltaTime; // Read Only
+    UNDEFINED_ENGINE static inline const float& DeltaTime = Time::mDeltaTime; // Read Only
+    //UNDEFINED_ENGINE static float GetDeltaTime;
 
     UNDEFINED_ENGINE static inline float FixedDeltaTime = 1.2f / 60.f; // Read Write
 

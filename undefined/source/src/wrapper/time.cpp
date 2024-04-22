@@ -13,7 +13,7 @@ void Time::SetTimeVariables()
 {
     float delta = float(GetTimeSinceLaunch() - mLastTimeSinceLauch);
 
-    DeltaTime = std::min(delta, MaxDeltaTime) * TimeScale;
+    mDeltaTime = std::min(delta, MaxDeltaTime) * TimeScale;
 
     FixedStep += (delta / FixedDeltaTime) * TimeScale;
 

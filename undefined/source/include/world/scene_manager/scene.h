@@ -28,5 +28,4 @@ public:
 	std::string Name = "Default";
 
 	std::vector<Object*> Objects;
-
 };

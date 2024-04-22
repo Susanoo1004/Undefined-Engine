@@ -69,7 +69,6 @@ void Application::Init()
 void Application::Update()
 {
     Time::SetTimeVariables();
-    Logger::Debug("before {}", Time::FixedStep);
 
     mRenderer->SetClearColor(0,0,0);
 
@@ -104,9 +103,6 @@ void Application::Update()
 
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    Logger::Debug("after {}", Time::FixedStep);
-    Logger::Debug("");
-
     Interface::Render();
 
     mWindowManager->SwapBuffers();

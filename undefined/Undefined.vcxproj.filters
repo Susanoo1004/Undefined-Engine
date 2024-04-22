@@ -129,8 +129,6 @@
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />
     <Image Include="assets\undefined_logo.png" />
-    <None Include="source\include\wrapper\time.h" />
-    <None Include="source\src\wrapper\time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\libs\toolboxMoteur.pdb" />
