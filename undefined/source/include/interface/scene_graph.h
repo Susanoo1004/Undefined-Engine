@@ -15,6 +15,7 @@ private:
 	static void DisplayObject(Object* object);
 
 	static void ClickSelectObject(Object* object);
+	static void RightClickObject(Object* object);
 
 	static inline Object* mSelectedObject;
 };

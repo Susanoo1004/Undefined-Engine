@@ -174,4 +174,3 @@ Object* Scene::AddObject(Vector3 position, Vector3 rotation, Object* parent, boo
 	return obj;
 }
 
-

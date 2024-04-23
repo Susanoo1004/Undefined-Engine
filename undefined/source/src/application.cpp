@@ -9,6 +9,8 @@
 
 #include "service_locator.h"
 
+#include "wrapper/time.h"
+
 #include "resources/texture.h"
 #include "resources/model.h"
 #include "resources/model_renderer.h"
@@ -64,13 +66,18 @@ void Application::Init()
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
     
     SceneManager::ActualScene->AddObject(object, "Test Child");
+
+    SceneManager::Start();
 }
 
 void Application::Update()
 {
+    Time::SetTimeVariables();
+
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
+    SceneManager::GlobalUpdate();
     Interface::Update();
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
@@ -96,7 +103,7 @@ void Application::Update()
             mRenderer->SetUniform(BaseShader->ID, "EntityID", SceneManager::ActualScene->Objects[j]);
         }
 
-        SceneManager::ActualScene->Draw();
+        SceneManager::Draw();
 
         mRenderer->UnUseShader();
 
