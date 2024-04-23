@@ -1,21 +1,27 @@
 #include "interface/inspector.h"
-#include "interface/attributes.h"
-#include "world/scene_manager/scene.h"
+
 #include <imgui/imgui.h>
-#include "interface/utils_reflection.h"
+#include <ImGuizmo/ImGuizmo.h>
+#include "reflection/attributes.h"
+#include "reflection/utils_reflection.h"
+#include "world/scene_manager.h"
 
 void Inspector::Init()
 {
 	mRenderer = ServiceLocator::Get<Renderer>();
 }
 
-void Inspector::ShowWindow(Scene* scene)
+void Inspector::ShowWindow()
 {
 	ImGui::Begin("Inspector");
 	
-	Object* obj = scene->Objects[mRenderer->pixelData];
+	if (mRenderer->PixelData >= 0)
+	{
+		Object* obj = SceneManager::ActualScene->Objects[mRenderer->PixelData];
+		Reflection::ReflectionObj<Object>(obj);
+	}
 
-	ReflectionObj<Object>(obj);
-	
+	ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "Not over");
+
 	ImGui::End();
 }

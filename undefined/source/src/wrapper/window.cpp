@@ -24,7 +24,10 @@ void Window::Init()
 {
     SetupGlfw();
 
-    CreateWindow(1200, 800);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+    CreateWindow(mode->width, mode->height, monitor);
 
     SetupWindow();
 }
@@ -48,9 +51,9 @@ void Window::SetupGlfw()
     }
 }
 
-void Window::CreateWindow(int width, int height)
+void Window::CreateWindow(int width, int height, GLFWmonitor* monitor)
 {
-    mWindow = glfwCreateWindow(width, height, "Undefined Engine", nullptr, nullptr);
+    mWindow = glfwCreateWindow(width, height, "Undefined Engine", monitor, nullptr);
 
     if (!mWindow)
     {

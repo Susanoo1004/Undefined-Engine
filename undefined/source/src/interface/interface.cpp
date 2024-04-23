@@ -1,5 +1,7 @@
 #include "interface/interface.h"
 
+#include <ImGuizmo/ImGuizmo.h>
+
 #include "utils/utils.h"
 #include "service_locator.h"
 
@@ -7,12 +9,13 @@
 #include "interface/content_browser.h"
 #include "interface/scene_graph.h"
 #include "interface/inspector.h"
-#include "world/scene_manager/scene.h"
+#include "world/scene.h"
 
 void Interface::Init()
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -25,6 +28,9 @@ void Interface::Init()
     ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<Window>()->GetWindowVar(), true);
     ImGui_ImplOpenGL3_Init(glslVersion);
 
+    ImGuizmo::SetOrthographic(false);
+    ImGuizmo::Enable(true);
+
     std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
     ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
 
@@ -36,6 +42,7 @@ void Interface::NewFrame()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 }
 
 void Interface::Render()
@@ -81,7 +88,7 @@ void Interface::BeginDockSpace()
     ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 }
 
-void Interface::Update(Scene* scene)
+void Interface::Update()
 {
     NewFrame();
     BeginDockSpace();
@@ -89,7 +96,7 @@ void Interface::Update(Scene* scene)
     FPSGraph::ShowWindow();
     ContentBrowser::DisplayWindow();
     SceneGraph::DisplayWindow();
-    Inspector::ShowWindow(scene);
+    Inspector::ShowWindow();
 
     for (int i = 0; i < EditorViewports.size(); i++)
     {

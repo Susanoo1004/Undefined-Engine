@@ -18,7 +18,7 @@ public:
 
     void SetupGlfw();
 
-    void CreateWindow(int width, int height);
+    void CreateWindow(int width, int height, GLFWmonitor* monitor = nullptr);
 
     void SetupWindow();
 

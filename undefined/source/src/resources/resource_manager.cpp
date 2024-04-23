@@ -101,14 +101,14 @@ void ResourceManager::Unload(const std::string& name)
 	mResources[name].reset();
 	mResources.erase(name);
 
-	Logger::Debug("{} unloaded", name);
+	Logger::Info("{} unloaded", name);
 }
 
 void ResourceManager::UnloadAll()
 {
 	for (auto&& p : mResources)
 	{
-		Logger::Debug("{} {} unloaded", typeid(*p.second.get()).name(), p.first);
+		Logger::Info("{} {} unloaded", typeid(*p.second.get()).name(), p.first);
 	}
 	mResources.clear();
 }
@@ -123,7 +123,7 @@ void ResourceManager::Rename(const std::string& oldName, const std::string& newN
 
 		if (p->second->IsValid())
 		{
-			Logger::Debug("Resource {} renamed to {}", oldName, newName);
+			Logger::Info("Resource {} renamed to {}", oldName, newName);
 		}
 
 		mResources.erase(p);

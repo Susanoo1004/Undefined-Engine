@@ -34,7 +34,7 @@ public:
 		}
 		mResources.emplace(name, resource);
 
-		Logger::Debug("{} {} loaded", typeid(Resource).name(), name);
+		Logger::Info("{} {} loaded", typeid(Resource).name(), name);
 
 		return resource;
 	}

@@ -8,6 +8,11 @@
 
 #include "resources/shader.h"
 
+
+
+#include "world/gizmo.h"
+
+
 class EditorViewport
 {
 public:
@@ -54,6 +59,12 @@ public:
 	/// </summary>
 	Camera* ViewportCamera;
 
+	/// <summary>
+	/// Gizmo for the current scene
+	/// </summary>
+	Gizmo SceneGizmo;
+
+
 private:
 	/// <summary>
 	/// Pointer to the Framebuffer bind to the viewport
@@ -91,9 +102,21 @@ private:
 	/// </summary>
 	float mHeight = 0.f;
 
+public:
+	/// <summary>
+	/// Set mIsGizmoUpdated value
+	/// </summary>
+	/// <param name="value">: New value of mIsGizmoUpdated</param>
+	static void SetIsGizmoUpdated(bool value);
+
 private:
 	/// <summary>
 	/// Number of editor viewport from the beginning
 	/// </summary>
 	static inline int mEditorNumber = 0;
+	
+	/// <summary>
+	/// Boolean vlaue to know if the gizmos has been drawn and updated
+	/// </summary>
+	static inline bool mIsGizmoUpdated = false;
 };

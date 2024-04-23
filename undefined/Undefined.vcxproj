@@ -162,6 +162,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="external\src\glad\glad.c" />
+    <ClCompile Include="external\src\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="external\src\imgui\imgui.cpp" />
     <ClCompile Include="external\src\imgui\imgui_demo.cpp" />
     <ClCompile Include="external\src\imgui\imgui_draw.cpp" />
@@ -171,6 +172,8 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\reflection\utils_reflection.cpp" />
+    <ClCompile Include="source\src\reflection\runtime_classes.cpp" />
     <ClCompile Include="source\src\resources\model_renderer.cpp" />
     <ClCompile Include="source\src\resources\material.cpp" />
     <ClCompile Include="source\src\framebuffer.cpp" />
@@ -182,17 +185,18 @@
     <ClCompile Include="source\src\interface\inspector.cpp" />
     <ClCompile Include="source\src\interface\interface.cpp" />
     <ClCompile Include="source\src\utils\utils.cpp" />
-    <ClCompile Include="source\src\world\components\component.cpp" />
-    <ClCompile Include="source\src\world\components\dir_light.cpp" />
-    <ClCompile Include="source\src\world\components\light.cpp" />
-    <ClCompile Include="source\src\world\components\mono_behaviour.cpp" />
-    <ClCompile Include="source\src\world\components\player_test.cpp" />
-    <ClCompile Include="source\src\world\components\skybox.cpp" />
-    <ClCompile Include="source\src\world\scene_manager\object.cpp" />
-    <ClCompile Include="source\src\world\scene_manager\scene.cpp" />
-    <ClCompile Include="source\src\world\scene_manager\scene_manager.cpp" />
-    <ClCompile Include="source\src\world\scene_manager\scene_serializer.cpp" />
-    <ClCompile Include="source\src\world\scene_manager\transform.cpp" />
+    <ClCompile Include="source\src\world\component.cpp" />
+    <ClCompile Include="source\src\world\dir_light.cpp" />
+    <ClCompile Include="source\src\world\gizmo.cpp" />
+    <ClCompile Include="source\src\world\light.cpp" />
+    <ClCompile Include="source\src\world\mono_behaviour.cpp" />
+    <ClCompile Include="source\src\world\player_test.cpp" />
+    <ClCompile Include="source\src\world\skybox.cpp" />
+    <ClCompile Include="source\src\world\object.cpp" />
+    <ClCompile Include="source\src\world\scene.cpp" />
+    <ClCompile Include="source\src\world\scene_manager.cpp" />
+    <ClCompile Include="source\src\world\scene_serializer.cpp" />
+    <ClCompile Include="source\src\world\transform.cpp" />
     <ClCompile Include="source\src\wrapper\key_input.cpp" />
     <ClCompile Include="source\src\service_locator.cpp" />
     <ClCompile Include="source\src\engine_debug\logger.cpp" />
@@ -217,6 +221,7 @@
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external\include\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="external\include\imgui\imconfig.h" />
     <ClInclude Include="external\include\imgui\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="external\include\imgui\imgui_internal.h" />
@@ -237,9 +242,10 @@
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\framebuffer.h" />
-    <ClInclude Include="source\include\interface\attributes.h" />
+    <ClInclude Include="source\include\reflection\attributes.h" />
     <ClInclude Include="source\include\interface\editor_viewport.h" />
-    <ClInclude Include="source\include\interface\utils_reflection.h" />
+    <ClInclude Include="source\include\reflection\utils_reflection.h" />
+    <ClInclude Include="source\include\wrapper\reflection.h" />
     <ClInclude Include="source\include\resources\material.h" />
     <ClInclude Include="source\include\resources\mesh.h" />
     <ClInclude Include="resource.h" />
@@ -250,17 +256,18 @@
     <ClInclude Include="source\include\interface\interface.h" />
     <ClInclude Include="source\include\resources\model_renderer.h" />
     <ClInclude Include="source\include\utils\utils.h" />
-    <ClInclude Include="source\include\world\components\component.h" />
-    <ClInclude Include="source\include\world\components\dir_light.h" />
-    <ClInclude Include="source\include\world\components\light.h" />
-    <ClInclude Include="source\include\world\components\mono_behaviour.h" />
-    <ClInclude Include="source\include\world\components\player_test.h" />
-    <ClInclude Include="source\include\world\components\skybox.h" />
-    <ClInclude Include="source\include\world\scene_manager\transform.h" />
-    <ClInclude Include="source\include\world\scene_manager\object.h" />
-    <ClInclude Include="source\include\world\scene_manager\scene.h" />
-    <ClInclude Include="source\include\world\scene_manager\scene_serializer.h" />
-    <ClInclude Include="source\include\world\scene_manager\scene_manager.h" />
+    <ClInclude Include="source\include\world\component.h" />
+    <ClInclude Include="source\include\world\dir_light.h" />
+    <ClInclude Include="source\include\world\gizmo.h" />
+    <ClInclude Include="source\include\world\light.h" />
+    <ClInclude Include="source\include\world\mono_behaviour.h" />
+    <ClInclude Include="source\include\world\player_test.h" />
+    <ClInclude Include="source\include\world\skybox.h" />
+    <ClInclude Include="source\include\world\transform.h" />
+    <ClInclude Include="source\include\world\object.h" />
+    <ClInclude Include="source\include\world\scene.h" />
+    <ClInclude Include="source\include\world\scene_serializer.h" />
+    <ClInclude Include="source\include\world\scene_manager.h" />
     <ClInclude Include="source\include\wrapper\key_input.h" />
     <ClInclude Include="source\include\wrapper\input_manager.h" />
     <ClInclude Include="source\include\wrapper\service_type.h" />
@@ -289,6 +296,7 @@
     <ClInclude Include="source\include\wrapper\time.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
+    <ClInclude Include="source\include\reflection\runtime_classes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />

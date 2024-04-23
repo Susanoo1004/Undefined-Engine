@@ -1,6 +1,7 @@
 #pragma once
 
-#include "world/components/component.h"
+#include "world/component.h"
+#include <refl.hpp>
 
 class Model;
 
@@ -20,3 +21,5 @@ public:
 	/// </summary>
 	std::shared_ptr<Model> ModelObject;
 };
+
+REFL_AUTO(type(ModelRenderer, bases<Component>))

@@ -11,11 +11,11 @@
 Camera::Camera(const float width, const float height)
     : Width(width), Height(height)
 {
-    Eye = Vector3(0, 0, -1);
+    Eye = Vector3(0, 0.5f, -1);
     LookAt = Vector3(0, 0, 1);
     Up = Vector3(0, 1, 0);
 
-    mPerspective = Matrix4x4::ProjectionMatrix(calc::PI / 2, Width / Height, 0.1f, 20.0f);
+    mPerspective = Matrix4x4::ProjectionMatrix(calc::PI / 2, Width / Height, 0.1f, 100.0f);
 
     CurrentCamera = this;
 }
@@ -47,6 +47,11 @@ const Matrix4x4& Camera::GetVP() const
 void Camera::SetCurrentCamera()
 {
     CurrentCamera = this;
+}
+
+void Camera::SetView(const Matrix4x4& viewMatrix)
+{
+    mView = viewMatrix;
 }
 
 void Camera::Update()

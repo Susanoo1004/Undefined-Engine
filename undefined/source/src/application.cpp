@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <stb_image/stb_image.h>
+#include <stdlib.h>
 #include <toolbox/calc.h>
 
 #include "service_locator.h"
@@ -15,18 +16,19 @@
 #include "resources/model_renderer.h"
 #include "resources/resource_manager.h"
 
-#include "world/components/dir_light.h"
-#include "world/components/skybox.h"
+#include "world/dir_light.h"
+#include "world/skybox.h"
 
 #include "memory_leak.h"
 
-#include "world/scene_manager/scene_manager.h"
+#include "world/scene_manager.h"
 
 #include "interface/interface.h"
 #include "interface/inspector.h"
 
-// to del
-#include "world/components/player_test.h"
+#include <toolbox/calc.h>
+
+#include "reflection/runtime_classes.h"
 
 Application::Application()
 {
@@ -40,6 +42,11 @@ void Application::Init()
 {
     mWindowManager->Init();
     mRenderer->Init();
+
+    RuntimeClasses::AddType<Component>();
+    RuntimeClasses::AddType<Light>();
+    RuntimeClasses::AddType<DirLight>();
+    RuntimeClasses::AddType<ModelRenderer>();
 
     ResourceManager::Load("../Undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
@@ -59,7 +66,6 @@ void Application::Init()
     SceneManager::ActualScene->AddObject("DirLight")->AddComponent<DirLight>();
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-    object->AddComponent<Player>();
     
     SceneManager::ActualScene->AddObject(object, "Test Child");
 
@@ -73,10 +79,8 @@ void Application::Update()
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
-    Interface::Update(SceneManager::ActualScene);
-
     SceneManager::GlobalUpdate();
-
+    Interface::Update();
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
@@ -95,18 +99,26 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-        mRenderer->SetUniform(BaseShader->ID, "EntityID", SceneManager::ActualScene->Objects[i]);
-        
+
+        for (int j = 0; j < SceneManager::ActualScene->Objects.size(); j++)
+        {
+            mRenderer->SetUniform(BaseShader->ID, "EntityID", SceneManager::ActualScene->Objects[j]);
+        }
+
         SceneManager::Draw();
 
         mRenderer->UnUseShader();
 
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+
+    EditorViewport::SetIsGizmoUpdated(false);
+
     Interface::Render();
 
     mWindowManager->SwapBuffers();
     mRenderer->ClearBuffer();
+    Logger::CheckForExit();
 }
 
 void Application::Clear()
