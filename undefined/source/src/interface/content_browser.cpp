@@ -1,113 +1,7 @@
-#include <Resources/texture.h>
-#include <imgui/imgui.h>
-#include <imgui/imgui_stdlib.h>
-
 #include "interface/content_browser.h"
-#include "Resources/resource_manager.h"
-#include "utils/utils.h"
 
-void ContentBrowser::DisplayDirectories(const std::filesystem::path& path)
-{
-    std::string name = path.filename().string();
-    mIsDirectory = std::filesystem::is_directory(path);
-
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding;
-
-    SetupTreeNodeFlags(flags, path);
-
-    if (mRenamingPath == path)
-    {
-        name = "##";
-    }
-
-    ImGui::Image(Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID()), ImVec2(15, 15));
-    ImGui::SameLine();
-
-    if (ImGui::TreeNodeEx(name.c_str(), flags))
-    {
-        RightClickInteractions(path);
-        if (ImGui::IsItemHovered() && !ImGui::IsItemToggledOpen() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-        {
-            std::string file = "start explorer ";
-            file += '"' + absolute(path).string() + '"';
-            system(file.c_str());
-        }
-
-        if (mIsDirectory)
-        {
-            if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
-            {
-                mCurrentPath = path;
-            }
-
-            //For every folder we call the function to display what's inside
-            for (const auto& entry : std::filesystem::directory_iterator(path))
-            {
-                if (entry.is_directory())
-                {
-                    DisplayDirectories(entry);
-                }
-            }
-        }
-        ImGui::TreePop();
-    }
-
-    else
-    {
-        if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
-        {
-            mCurrentPath = path;
-        }
-        RightClickInteractions(path);
-    }
-}
-
-void ContentBrowser::RightClickInteractions(const std::filesystem::path& path)
-{
-    RightClickWindow(path);
-    if (mRenamingPath == path)
-    {
-        ImGui::SameLine();
-        RenameItem();
-    }
-}
-
-void ContentBrowser::SetupTreeNodeFlags(ImGuiTreeNodeFlags& flags, const std::filesystem::path& path)
-{
-    if (mIsDirectory)
-    {
-        bool isAnyFolder = false;
-        for (const auto& entry : std::filesystem::directory_iterator(path))
-        {
-            if (entry.is_directory())
-            {
-                isAnyFolder = true;
-                flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-                break;
-            }
-
-            else
-            {
-                continue;
-            }
-        }
-
-        if (!isAnyFolder)
-        {
-            flags |= ImGuiTreeNodeFlags_Leaf;
-        }
-
-        if (mCurrentPath == path)
-        {
-            flags |= ImGuiTreeNodeFlags_Selected;
-        }
-
-        if (path == mPath)
-        {
-            flags |= ImGuiTreeNodeFlags_DefaultOpen;
-        }
-    }
-}
+#include "interface/content_browser_folders.h"
+#include "interface/content_browser_hierarchy.h"
 
 void ContentBrowser::TextCentered(const std::string& text)
 {
@@ -250,68 +144,6 @@ void ContentBrowser::InteractionWithItems(const std::filesystem::path& path, boo
     }
 }
 
-void ContentBrowser::GoBackFolder(const std::filesystem::path& path)
-{
-    mIsAnythingHovered = false;
-    mIsDirectory = true;
-    ImGui::SameLine();
-
-    if (path != mPath)
-    {
-        ImTextureID imageID;
-
-        if (mSelectedPath == mBackFolder)
-        {
-            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
-            mCanPop = true;
-        }
-        else if (mHoveredPath == mBackFolder)
-        {
-            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-            mCanPop = true;
-        }
-
-        ImGui::BeginChild("BackFolder", ImVec2(100, 120), ImGuiChildFlags_AlwaysUseWindowPadding);
-        imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID());
-        ImGui::Image(imageID, ImVec2(80, 80));
-
-        InteractionWithItems(mBackFolder, true);
-
-        TextCentered("../");
-
-        ImGui::EndChild();
-
-        if (mCanPop)
-        {
-            ImGui::PopStyleColor();
-            mCanPop = false;
-        }
-    }
-}
-
-void ContentBrowser::LoadFolders(const std::filesystem::path& path)
-{
-    // For loop that goes through every file/folder in a path and displays them
-    for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(path))
-    {
-        if (entry.is_directory())
-        {
-            mCurrPathArray.push_back(entry);
-        }
-    }
-}
-
-void ContentBrowser::LoadFiles(const std::filesystem::path& path)
-{
-    for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(path))
-    {
-        if (!entry.is_directory())
-        {
-            mCurrPathArray.push_back(entry);
-        }
-    }
-}
-
 void ContentBrowser::RenameItem()
 {
     ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | 
@@ -323,7 +155,7 @@ void ContentBrowser::RenameItem()
 
     ImGui::SetKeyboardFocusHere();
     ImGui::PushItemWidth(ImGui::CalcTextSize(mRenamingName.c_str()).x + 5);
-    if (ImGui::InputText(oldName.c_str(), &mRenamingName))
+    if (ImGui::InputText(oldName.c_str(), &mRenamingName, flags))
     {
         if (std::filesystem::is_directory(mRenamingPath))
         {
@@ -407,98 +239,12 @@ void ContentBrowser::RightClickWindow(const std::filesystem::path& path)
     }
 }
 
-void ContentBrowser::DisplayActualDirectory(const std::filesystem::path& currentPath)
-{
-    mIsAnythingHovered = false;
-
-    GoBackFolder(currentPath);
-    ImGui::SameLine();
-
-    LoadFolders(currentPath);
-    LoadFiles(currentPath);
-
-    // For loop that goes through every file/folder in a path and displays them
-    for (int i = 0; i < mCurrPathArray.size(); i++)
-    {
-        mIsDirectory = mCurrPathArray[i].is_directory();
-
-        std::string filename = mCurrPathArray[i].path().filename().string();
-        std::filesystem::path filepath = mCurrPathArray[i].path();
-
-        ImVec2 imageSize;
-        ImTextureID imageID;
-
-        //Set imageID and imageSize
-        SetImageValues(filepath, imageID, imageSize);
-
-        ImVec2 childSize = ImVec2(imageSize.x + ImGui::GetStyle().FramePadding.x * 2.f, imageSize.y + ImGui::CalcTextSize(filename.c_str()).y + ImGui::GetStyle().FramePadding.y * 15.f);
-
-        if (mSelectedPath == mCurrPathArray[i].path())
-        {
-            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
-            mCanPop = true;
-        }
-
-        //If the mHoveredPath is the same as the path we're in we change it's style color
-        else if (mHoveredPath == mCurrPathArray[i].path())
-        {
-            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-            mCanPop = true;
-        }
-
-        ImGui::BeginChild(filename.c_str(), childSize, ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding);
-        ImGui::Image(imageID, imageSize);
-
-        InteractionWithItems(mCurrPathArray[i]);
-
-        DisplayText(mCurrPathArray[i], filename, imageSize);
-
-        ImGui::EndChild();
-     
-        RightClickWindow(mCurrPathArray[i]);
-        
-        if (mCanPop)
-        {
-            ImGui::PopStyleColor();
-            mCanPop = false;
-        }
-
-        ImGui::SameLine();
-
-        if(ImGui::GetCursorPosX() > ImGui::GetContentRegionAvail().x * 2)
-        {
-            //Create a dummy if we can't create another child for a file/folder so it creates an empty space and go to a new line
-            ImGui::Dummy(ImVec2(0, 0));
-        }
-    }
-    
-    if (!mSelectedPath.empty() && ImGui::IsKeyPressed(ImGuiKey_F2))
-    {
-        mRenamingPath = mSelectedPath;
-    }
-
-    if (!mIsAnythingHovered)
-    {
-        mHoveredPath = "";
-    }
-
-
-    mCurrPathArray.resize(0);
-    mCurrPathArray.shrink_to_fit();
-}
-
 void ContentBrowser::DisplayWindow()
 {
     ImGui::Begin("Content Browser");
 
-    ImGui::BeginChild("Hierarchy", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 0), ImGuiChildFlags_Border | ImGuiChildFlags_ResizeX);
-    DisplayDirectories(mPath);
-    ImGui::EndChild();
-
-    ImGui::SameLine();
-    ImGui::BeginChild("Repertory", ImVec2(0, 0), ImGuiChildFlags_Border);
-    DisplayActualDirectory(mCurrentPath);
-    ImGui::EndChild();
+    ContentBrowserHierarchy::Update();
+    ContentBrowserFolders::Update();
 
     ImGui::End();
 }

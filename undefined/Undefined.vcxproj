@@ -172,6 +172,8 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\interface\content_browser_folders.cpp" />
+    <ClCompile Include="source\src\interface\content_browser_hierarchy.cpp" />
     <ClCompile Include="source\src\reflection\utils_reflection.cpp" />
     <ClCompile Include="source\src\reflection\runtime_classes.cpp" />
     <ClCompile Include="source\src\resources\model_renderer.cpp" />
@@ -241,6 +243,8 @@
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
     <ClInclude Include="source\include\framebuffer.h" />
+    <ClInclude Include="source\include\interface\content_browser_folders.h" />
+    <ClInclude Include="source\include\interface\content_browser_hierarchy.h" />
     <ClInclude Include="source\include\reflection\attributes.h" />
     <ClInclude Include="source\include\interface\editor_viewport.h" />
     <ClInclude Include="source\include\reflection\utils_reflection.h" />

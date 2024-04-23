@@ -2,8 +2,13 @@
 
 #include <filesystem>
 #include <imgui/imgui.h>
+#include <imgui/imgui_stdlib.h>
+
+#include "resources/resource_manager.h"
+#include "resources/texture.h"
 
 #include "utils/flag.h"
+#include "utils/utils.h"
 
 /// <summary>
 /// ContentBrowser Class 
@@ -16,25 +21,9 @@ public:
 	/// <summary>
 	/// Update
 	/// </summary>
-	UNDEFINED_ENGINE static void DisplayWindow();
+	static void DisplayWindow();
 	
-private:
-	/// <summary>
-	/// Recursive function that displays the left side of the content browser who shows us every directory and file in a specific path
-	/// </summary>
-	/// <param name="path">: Path of the directory</param>
-	static void DisplayDirectories(const std::filesystem::path& path);
-
-	static void RightClickInteractions(const std::filesystem::path& path);
-
-	static void SetupTreeNodeFlags(ImGuiTreeNodeFlags& flags, const std::filesystem::path& path);
-
-	/// <summary>
-	/// Display the right side of the content browser who shows an image for a file/folder in a directory
-	/// </summary>
-	/// <param name="currentPath">: Path of the current directory</param>
-	static void DisplayActualDirectory(const std::filesystem::path& currentPath);
-
+protected:
 	/// <summary>
 	/// Center text for ImGui texts
 	/// </summary>
@@ -65,26 +54,6 @@ private:
 	static void InteractionWithItems(const std::filesystem::path& path, bool isBackFolder = false);
 
 	/// <summary>
-	/// Folder that put us to the parent path of the actual path
-	/// </summary>
-	/// <param name="path">: Path the backFolder will be displayed in</param>
-	static void GoBackFolder(const std::filesystem::path& path);
-
-	/// <summary>
-	/// Load all the folders in a path and adds them to an array
-	/// </summary>
-	/// <param name="path">: The path you want to load</param>
-	static void LoadFolders(const std::filesystem::path& path);
-
-	/// <summary>
-	/// Load all the files in a path and adds them to an array
-	/// </summary>
-	/// <param name="path">: The path you want to load</param>
-	static void LoadFiles(const std::filesystem::path& path);
-
-	//Rename an item in the content browser
-
-	/// <summary>
 	/// Rename an item with a simple text
 	/// </summary>
 	static void RenameItem();
@@ -94,8 +63,6 @@ private:
 	/// </summary>
 	static void RenameItemMultiline();
 
-	//Window that pop when we right click
-	
 	/// <summary>
 	/// Window that is displayed when we right click on something
 	/// </summary>
@@ -150,7 +117,7 @@ private:
 	/// Back folder name
 	/// </summary>
 	static inline std::string mBackFolder = "BackFolder";
-	
+
 	/// <summary>
 	/// Array of the current element in a path
 	/// </summary>
