@@ -15,13 +15,11 @@ void Inspector::ShowWindow()
 {
 	ImGui::Begin("Inspector");
 	
-	if (mRenderer->PixelData >= 0)
+	if (mRenderer->ObjectIndex >= 0)
 	{
-		Object* obj = SceneManager::ActualScene->Objects[mRenderer->PixelData];
+		Object* obj = SceneManager::ActualScene->Objects[mRenderer->ObjectIndex];
 		Reflection::ReflectionObj<Object>(obj);
 	}
-
-	ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "Not over");
 
 	ImGui::End();
 }
