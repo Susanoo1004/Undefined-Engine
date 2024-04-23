@@ -7,6 +7,9 @@ class ContentBrowserFolders : public ContentBrowser
 	STATIC_CLASS(ContentBrowserFolders)
 
 public:
+	/// <summary>
+	/// Update for the content browser folder
+	/// </summary>
 	static void Update();
 
 private:
@@ -34,24 +37,47 @@ private:
 	/// <param name="path">: The path you want to load</param>
 	static void LoadFiles(const std::filesystem::path& path);
 
+	/// <summary>
+	/// Check if we can Push Style
+	/// </summary>
+	/// <param name="i">index of the element we want to check</param>
 	static void CheckForPushStyle(int i);
 
+	/// <summary>
+	/// Check if we can Pop Style
+	/// </summary>
+	/// <param name="i">index of the element we want to check</param>
 	static void CheckForPopStyle(int i);
 
+	/// <summary>
+	/// Set all the variables we want to set
+	/// </summary>
+	/// <param name="i">index of the element we want to check</param>
 	static void SetAll(int i);
 	
+	/// <summary>
+	/// Load the go back folder and the array 
+	/// </summary>
+	/// <param name="currentPath">path of what we want to load</param>
 	static void LoadAll(const std::filesystem::path& currentPath);
 	
+	/// <summary>
+	/// Clear the elements 
+	/// </summary>
 	static void Clear();
 
+	/// <summary>
+	/// Draw every folders
+	/// </summary>
+	/// <param name="i">index of the folder we want to draw</param>
 	static void DrawFolders(int i);
 
-	static inline std::string filename;
+	static inline std::string mFilename;
 
-	static inline std::filesystem::path filepath;
+	static inline std::filesystem::path mFilepath;
 
-	static inline ImVec2 imageSize;
-	static inline ImVec2 childSize;
+	static inline ImVec2 mImageSize;
+	static inline ImVec2 mChildSize;
 
-	static inline ImTextureID imageID;
+	static inline ImTextureID mImageID;
 };

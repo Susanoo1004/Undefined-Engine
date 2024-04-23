@@ -52,7 +52,7 @@ void ContentBrowserFolders::GoBackFolder(const std::filesystem::path& path)
 
     if (path != mPath)
     {
-        ImTextureID imageID;
+        ImTextureID mImageID;
 
         if (mSelectedPath == mBackFolder)
         {
@@ -66,8 +66,8 @@ void ContentBrowserFolders::GoBackFolder(const std::filesystem::path& path)
         }
 
         ImGui::BeginChild("BackFolder", ImVec2(100, 120), ImGuiChildFlags_AlwaysUseWindowPadding);
-        imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID());
-        ImGui::Image(imageID, ImVec2(80, 80));
+        mImageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID());
+        ImGui::Image(mImageID, ImVec2(80, 80));
 
         InteractionWithItems(mBackFolder, true);
 
@@ -136,14 +136,14 @@ void ContentBrowserFolders::SetAll(int i)
 {
     mIsDirectory = mCurrPathArray[i].is_directory();
 
-    filename = mCurrPathArray[i].path().filename().string();
-    filepath = mCurrPathArray[i].path();
+    mFilename = mCurrPathArray[i].path().filename().string();
+    mFilepath = mCurrPathArray[i].path();
 
     //Set imageID and imageSize
-    SetImageValues(filepath, imageID, imageSize);
+    SetImageValues(mFilepath, mImageID, mImageSize);
 
-    childSize = ImVec2(imageSize.x + ImGui::GetStyle().FramePadding.x * 2.f,
-        imageSize.y + ImGui::CalcTextSize(filename.c_str()).y + ImGui::GetStyle().FramePadding.y * 15.f);
+    mChildSize = ImVec2(mImageSize.x + ImGui::GetStyle().FramePadding.x * 2.f,
+        mImageSize.y + ImGui::CalcTextSize(mFilename.c_str()).y + ImGui::GetStyle().FramePadding.y * 15.f);
 
 }
 
@@ -171,14 +171,14 @@ void ContentBrowserFolders::Clear()
 
 void ContentBrowserFolders::DrawFolders(int i)
 {
-    ImGui::BeginChild(filename.c_str(), childSize, ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar |
+    ImGui::BeginChild(mFilename.c_str(), mChildSize, ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar |
         ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding);
 
-    ImGui::Image(imageID, imageSize);
+    ImGui::Image(mImageID, mImageSize);
 
     InteractionWithItems(mCurrPathArray[i]);
 
-    DisplayText(mCurrPathArray[i], filename, imageSize);
+    DisplayText(mCurrPathArray[i], mFilename, mImageSize);
 
     ImGui::EndChild();
 }

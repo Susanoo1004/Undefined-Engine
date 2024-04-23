@@ -26,7 +26,7 @@ public:
 	/// </summary>
 	/// <param name="filepath">: Path of the image you want to create a texture</param>
 	/// <param name="isFlipped">: Do we need to flip the texture (by default : false)</param>
-	Texture(const char* filepath, bool isFlipped = false);
+	Texture(const char* mFilepath, bool isFlipped = false);
 	/// <summary>
 	/// Destructor of Texture
 	/// </summary>

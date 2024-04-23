@@ -36,7 +36,7 @@ protected:
 	/// <param name="path">: Path of the image you want to set</param>
 	/// <param name="imageID">: Set the ID of the image on the one in parameter</param>
 	/// <param name="imageSize">: Set the size of the image on the one in parameter</param>
-	static void SetImageValues(const std::filesystem::path& path, ImTextureID& imageID, ImVec2& imageSize);
+	static void SetImageValues(const std::filesystem::path& path, ImTextureID& mImageID, ImVec2& mImageSize);
 
 	/// <summary>
 	/// Display text on the screen depending of it's length
@@ -44,7 +44,7 @@ protected:
 	/// <param name="filepath">: Filepath of the text displayed to center it in case we are renaming a file </param>
 	/// <param name="filename">: Get the string of the filename to get the size </param>
 	/// <param name="imageSize">: Size of the image</param>
-	static void DisplayText(const std::filesystem::path& filepath, const std::string& filename, ImVec2& imageSize);
+	static void DisplayText(const std::filesystem::path& mFilepath, const std::string& mFilename, ImVec2& mImageSize);
 
 	/// <summary>
 	/// Handle every interaction a folder/file can have
@@ -68,6 +68,12 @@ protected:
 	/// </summary>
 	/// <param name="path">: Path of the current item on which we right clicked </param>
 	static void RightClickWindow(const std::filesystem::path& path);
+
+	/// <summary>
+	/// Return true if we double click
+	/// </summary>
+	/// <returns></returns>
+	static bool DoubleClick();
 
 	/// <summary>
 	/// Is folder open bool
@@ -122,4 +128,6 @@ protected:
 	/// Array of the current element in a path
 	/// </summary>
 	static inline std::vector<std::filesystem::directory_entry> mCurrPathArray;
+
+	static inline int clickCount = ImGui::GetMouseClickedCount(ImGuiMouseButton_Left);
 };

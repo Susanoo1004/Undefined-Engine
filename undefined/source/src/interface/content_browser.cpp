@@ -12,14 +12,14 @@ void ContentBrowser::TextCentered(const std::string& text)
     ImGui::TextWrapped(text.c_str());
 }
 
-void ContentBrowser::SetImageValues(const std::filesystem::path& path, ImTextureID& imageID, ImVec2& imageSize)
+void ContentBrowser::SetImageValues(const std::filesystem::path& path, ImTextureID& mImageID, ImVec2& mImageSize)
 {
     if (mIsDirectory)
     {
         std::shared_ptr<Texture> folder = ResourceManager::Get<Texture>("imgui/folder.png");
 
-        imageSize = ImVec2((float)folder->GetWidth(), (float)folder->GetHeight());
-        imageID = Utils::IntToPointer<ImTextureID>(folder->GetID());
+        mImageSize = ImVec2((float)folder->GetWidth(), (float)folder->GetHeight());
+        mImageID = Utils::IntToPointer<ImTextureID>(folder->GetID());
     }
     else
     {
@@ -31,11 +31,11 @@ void ContentBrowser::SetImageValues(const std::filesystem::path& path, ImTexture
         //If it's a texture we put the image of the texture instead of a basic file image
         if (path.string().ends_with(".jpg") || path.string().ends_with(".png"))
         {
-            imageSize = ImVec2(80.f, 80.f);
+            mImageSize = ImVec2(80.f, 80.f);
             if (ResourceManager::Contains(newName))
             {
 
-                imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>(newName)->GetID());
+                mImageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>(newName)->GetID());
             }
             else
             {
@@ -45,33 +45,33 @@ void ContentBrowser::SetImageValues(const std::filesystem::path& path, ImTexture
 
         else if (path.string().ends_with(".obj"))
         {
-            imageSize = ImVec2(80.f, 80.f);
-            imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/obj_file.png")->GetID());
+            mImageSize = ImVec2(80.f, 80.f);
+            mImageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/obj_file.png")->GetID());
         }
 
         else if (path.string().ends_with(".cpp") || path.string().ends_with(".h") || path.string().ends_with(".hpp"))
         {
-            imageSize = ImVec2(80.f, 80.f);
-            imageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/visual_studio.png")->GetID());
+            mImageSize = ImVec2(80.f, 80.f);
+            mImageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/visual_studio.png")->GetID());
         }
 
         else
         {
             std::shared_ptr<Texture> file = ResourceManager::Get<Texture>("imgui/file.png");
-            imageSize = ImVec2((float)file->GetWidth(), (float)file->GetHeight());
-            imageID = Utils::IntToPointer<ImTextureID>(file->GetID());
+            mImageSize = ImVec2((float)file->GetWidth(), (float)file->GetHeight());
+            mImageID = Utils::IntToPointer<ImTextureID>(file->GetID());
         }
     }
 }
 
-void ContentBrowser::DisplayText(const std::filesystem::path& filepath, const std::string& filename, ImVec2& imageSize)
+void ContentBrowser::DisplayText(const std::filesystem::path& mFilepath, const std::string& mFilename, ImVec2& mImageSize)
 {
     //If the text is larger than the image size it wrap on multiple lines else it's centered
-    if (ImGui::CalcTextSize(filename.c_str()).x > imageSize.x)
+    if (ImGui::CalcTextSize(mFilename.c_str()).x > mImageSize.x)
     {
-        if (mRenamingPath != filepath)
+        if (mRenamingPath != mFilepath)
         {
-            ImGui::TextWrapped(filename.c_str());
+            ImGui::TextWrapped(mFilename.c_str());
         }
         else
         {
@@ -81,9 +81,9 @@ void ContentBrowser::DisplayText(const std::filesystem::path& filepath, const st
 
     else
     {
-        if (mRenamingPath != filepath)
+        if (mRenamingPath != mFilepath)
         {
-            TextCentered(filename);
+            TextCentered(mFilename);
         }
         else
         {
@@ -99,8 +99,6 @@ void ContentBrowser::InteractionWithItems(const std::filesystem::path& path, boo
     //If we hover on a window we add a background color 
     if (ImGui::IsWindowHovered())
     {
-        int clickCount = ImGui::GetMouseClickedCount(ImGuiMouseButton_Left);
-
         mHoveredPath = path;
         mIsAnythingHovered = true;
 
@@ -112,7 +110,7 @@ void ContentBrowser::InteractionWithItems(const std::filesystem::path& path, boo
         }
 
         //If a window is selected and we click somewhere else it deselect it
-        if (clickCount && (clickCount % 2 == 0))
+        if (DoubleClick())
         {
             if (mIsDirectory)
             {
@@ -247,4 +245,16 @@ void ContentBrowser::DisplayWindow()
     ContentBrowserFolders::Update();
 
     ImGui::End();
+}
+
+bool ContentBrowser::DoubleClick()
+{
+    if (clickCount && (clickCount % 2 == 0))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

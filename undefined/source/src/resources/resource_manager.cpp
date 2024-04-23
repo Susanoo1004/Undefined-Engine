@@ -20,7 +20,7 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 		}
 
 		std::string name = entry.path().string();
-		std::string filename = entry.path().filename().generic_string();
+		std::string mFilename = entry.path().filename().generic_string();
 		std::string parentName = entry.path().parent_path().filename().string();
 		size_t pos = name.find(parentName);
 		std::string newName = name.substr(pos);
@@ -49,8 +49,8 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 				fragShaderName += "fs";
 				if (std::find(mShader.begin(), mShader.end(), fragShaderName) != mShader.end())
 				{
-					filename.resize(filename.size() - 3);
-					Create<Shader>(filename, name.c_str(), fragShaderName.c_str());
+					mFilename.resize(mFilename.size() - 3);
+					Create<Shader>(mFilename, name.c_str(), fragShaderName.c_str());
 					mShader.erase(std::find(mShader.begin(), mShader.end(), fragShaderName));
 				}
 			}
@@ -64,7 +64,7 @@ std::vector<std::string> ResourceManager::LoadFolder(const std::filesystem::path
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
 		std::string name = entry.path().string();
-		std::string filename = entry.path().filename().generic_string();
+		std::string mFilename = entry.path().filename().generic_string();
 		std::string parentName = entry.path().parent_path().filename().string();
 		size_t pos = name.find(parentName);
 		std::string newName = name.substr(pos);

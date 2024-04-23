@@ -131,7 +131,7 @@
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName).dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\$(TargetName).dll" /Y </Command>
+      <Command> </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

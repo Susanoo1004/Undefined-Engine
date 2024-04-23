@@ -17,7 +17,7 @@ Texture::Texture(const unsigned int width, const unsigned int height, const int 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, NULL);
 }
 
-Texture::Texture(const char* filepath, bool isFlipped)
+Texture::Texture(const char* mFilepath, bool isFlipped)
 {
 	mRenderer = ServiceLocator::Get<Renderer>();
 
@@ -27,7 +27,7 @@ Texture::Texture(const char* filepath, bool isFlipped)
 	stbi_set_flip_vertically_on_load(isFlipped);
 
 	int channelCount;
-	Data = stbi_load(filepath, &mWidth, &mHeight, &channelCount, 0);
+	Data = stbi_load(mFilepath, &mWidth, &mHeight, &channelCount, 0);
 
 	if (Data)
 	{
@@ -57,7 +57,7 @@ Texture::Texture(const char* filepath, bool isFlipped)
 	}
 	else
 	{
-		Logger::Warning("Failed to load {} texture", filepath);
+		Logger::Warning("Failed to load {} texture", mFilepath);
 	}
 
 	stbi_image_free((void*)Data);
