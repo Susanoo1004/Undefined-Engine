@@ -9,6 +9,15 @@
 #include "engine_debug/logger.h"
 #include "service_locator.h"
 
+bool fullscreen;
+
+#ifdef DEBUG
+fullscreen = true;
+#endif // DEBUG
+#ifdef RELEASE
+fullscreen = false;
+#endif // RELEASE
+
 Window::Window()
 {
     mWindow = NULL;
@@ -27,7 +36,8 @@ void Window::Init()
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-    CreateWindow(mode->width, mode->height, monitor);
+    // if we are in debug create a widow of size 1200*800 but in release create a window if the screen size wich is in fullscreen
+    CreateWindow(fullscreen == true ? mode->width : 1200, fullscreen == true ? mode->height : 800, fullscreen == true ? monitor : nullptr);
 
     SetupWindow();
 }
