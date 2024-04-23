@@ -22,7 +22,7 @@ Window::~Window()
 
 void Window::Init()
 {
-    SetupGlfw();
+    SetupWindowAPI();
 
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -32,7 +32,7 @@ void Window::Init()
     SetupWindow();
 }
 
-void Window::SetupGlfw()
+void Window::SetupWindowAPI()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -84,7 +84,7 @@ void Window::GetFramebufferSize(int& display_width, int& display_height)
     glfwGetFramebufferSize(mWindow, &display_width, &display_height);
 }
 
-GLFWwindow* Window::GetWindowVar()
+GLFWwindow* Window::GetWindowPointer()
 {
     return mWindow;
 }
@@ -129,6 +129,6 @@ void Window::Callbacks()
 {
     Window* w = ServiceLocator::Get<Window>();
 
-    Window::SetWindowSizeCallback(w->GetWindowVar(), Window::WindowSizeCallback);
-    Window::ScrollWheelCallback(w->GetWindowVar(), Camera::ChangeSpeedCam);
+    Window::SetWindowSizeCallback(w->GetWindowPointer(), Window::WindowSizeCallback);
+    Window::ScrollWheelCallback(w->GetWindowPointer(), Camera::ChangeSpeedCam);
 }

@@ -1,6 +1,7 @@
 #include "interface/scene_graph.h"
 
 #include <imgui/imgui.h>
+#include <toolbox/calc.h>
 
 #include "world/scene_manager.h"
 #include "service_locator.h"
@@ -71,8 +72,13 @@ void SceneGraph::ClickSelectObject(Object* object)
         {
             if (object == SceneManager::ActualScene->Objects[i]) // temp TODO: change Objects to vector
             {
-                ServiceLocator::Get<Renderer>()->PixelData = (int)i;
+                ServiceLocator::Get<Renderer>()->ObjectIndex = (int)i;
             }
         }
+    }
+    if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+    {
+        float t = 1;
+        Camera::CurrentCamera->Eye = calc::Lerp(Camera::CurrentCamera->Eye, object->GameTransform->Position - Camera::CurrentCamera->LookAt, t);
     }
 }

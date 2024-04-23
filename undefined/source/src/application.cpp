@@ -1,10 +1,11 @@
 #include "application.h"
 
-#include <glad/glad.h>
 #include <iostream>
 #include <filesystem>
-#include <stb_image/stb_image.h>
 #include <stdlib.h>
+#include <glad/glad.h>
+#include <stb_image/stb_image.h>
+#include <toolbox/calc.h>
 
 #include "service_locator.h"
 
@@ -22,8 +23,6 @@
 
 #include "interface/interface.h"
 #include "interface/inspector.h"
-
-#include <toolbox/calc.h>
 
 #include "reflection/runtime_classes.h"
 
