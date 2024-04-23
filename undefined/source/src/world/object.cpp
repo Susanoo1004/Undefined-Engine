@@ -1,12 +1,18 @@
 #include "world/object.h"
 
+#include <random>
+
+static std::random_device RANDOM_DEVICE;
+static std::mt19937_64 ENGINE(RANDOM_DEVICE());
+static std::uniform_int_distribution<uint64_t> UNIFORM_DISTRIBUTION;
+
 Object::Object()
-	: Name("Default")
+	: Name("Default"), mUUID(UNIFORM_DISTRIBUTION(ENGINE))
 {
 }
 
 Object::Object(const std::string& name)
-	: Name(name)
+	: Name(name), mUUID(UNIFORM_DISTRIBUTION(ENGINE))
 {
 }
 
