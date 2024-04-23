@@ -24,12 +24,12 @@ void SceneGraph::DisplayWindow()
 
 void SceneGraph::DisplayActualScene()
 {
+    RightClickObject(Object::mRoot);
 
     for (Object* object : Object::mRoot->GetChildren())
     {
         DisplayObject(object);
     }
-    RightClickObject(Object::mRoot);
 }
 
 void SceneGraph::DisplayObject(Object* object)
@@ -46,9 +46,6 @@ void SceneGraph::DisplayObject(Object* object)
         flags |= ImGuiTreeNodeFlags_Selected;
     }
     
-
-    //ImGui::Checkbox("##UUID???", &object->mIsEnable); // TODO: add refl
-    //ImGui::SameLine();
     if (ImGui::TreeNodeEx(object->Name.c_str(), flags))
     {
 
@@ -76,7 +73,7 @@ void SceneGraph::ClickSelectObject(Object* object)
         mSelectedObject = object;
         for (size_t i = 0; i < SceneManager::ActualScene->Objects.size(); i++) // temp TODO: find
         {
-            if (object == SceneManager::ActualScene->Objects[i]) // temp TODO: change Objects to vector
+            if (object == SceneManager::ActualScene->Objects[i])
             {
                 ServiceLocator::Get<Renderer>()->pixelData = i;
             }
@@ -87,15 +84,10 @@ void SceneGraph::ClickSelectObject(Object* object)
 
 void SceneGraph::RightClickObject(Object* object)
 {
-    if (ImGui::BeginPopupContextItem(std::to_string(object->mUUID).c_str()))
+
+    if (ImGui::BeginPopupContextWindow(std::to_string(object->mUUID).c_str(), ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_NoOpenOverExistingPopup) ||
+        ImGui::BeginPopupContextItem(std::to_string(object->mUUID).c_str(), ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverExistingPopup))
     {
-        Logger::Debug("");
-        Logger::Debug("{}", object->Name);
-        Logger::Debug("{}", object->mUUID);
-
-        Logger::Debug("{}", Object::mRoot->Name);
-        Logger::Debug("{}", Object::mRoot->mUUID);
-
         if (ImGui::BeginMenu(object->mUUID == Object::mRoot->mUUID ? "Add Object" : "Add Child"))
         {
             if (ImGui::MenuItem("Empty"))
@@ -145,7 +137,7 @@ void SceneGraph::RightClickObject(Object* object)
                     SceneManager::ActualScene->AddObject(object, "Sphere");
                     //Add Model and Collider
                     ImGui::CloseCurrentPopup();
-                }
+               }
                 ImGui::EndMenu();
             }
             
