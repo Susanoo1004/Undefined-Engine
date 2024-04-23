@@ -104,6 +104,8 @@ void Application::Update()
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
+    EditorViewport::SetIsGizmoUpdated(false);
+
     Interface::Render();
 
     mWindowManager->SwapBuffers();

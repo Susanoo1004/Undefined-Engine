@@ -43,7 +43,6 @@ void EditorViewport::ShowWindow()
 
 	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.gizmoWindowFlags);
 
-	SceneGizmo.ChangeGizmoOperation();
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
@@ -70,6 +69,8 @@ void EditorViewport::ShowWindow()
 		}
 		ImGui::EndPopup();
 	}
+
+	SceneGizmo.ChangeGizmoOperation();
 
 	mWidth = ImGui::GetContentRegionAvail().x;
 	mHeight = ImGui::GetContentRegionAvail().y;
@@ -103,9 +104,10 @@ void EditorViewport::ShowWindow()
 
 	int objectIndex = ServiceLocator::Get<Renderer>()->PixelData;
 
-	if (objectIndex >= 0)
+	if (objectIndex >= 0 && !mIsGizmoUpdated && Camera::CurrentCamera == ViewportCamera)
 	{
 		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->PixelData]->GameTransform);
+		mIsGizmoUpdated = true;
 	}
 
 	ImGui::End();
@@ -169,4 +171,9 @@ void EditorViewport::SetMouseMinMaxBounds(int& mouseX, int& mouseY, Vector2& vie
 
 	mouseX = (int)mx;
 	mouseY = (int)my;
+}
+
+void EditorViewport::SetIsGizmoUpdated(bool value)
+{
+	mIsGizmoUpdated = value;
 }

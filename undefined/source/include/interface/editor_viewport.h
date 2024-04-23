@@ -102,9 +102,21 @@ private:
 	/// </summary>
 	float mHeight = 0.f;
 
+public:
+	/// <summary>
+	/// Set mIsGizmoUpdated value
+	/// </summary>
+	/// <param name="value">: New value of mIsGizmoUpdated</param>
+	static void SetIsGizmoUpdated(bool value);
+
 private:
 	/// <summary>
 	/// Number of editor viewport from the beginning
 	/// </summary>
 	static inline int mEditorNumber = 0;
+	
+	/// <summary>
+	/// Boolean vlaue to know if the gizmos has been drawn and updated
+	/// </summary>
+	static inline bool mIsGizmoUpdated = false;
 };
