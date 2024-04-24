@@ -129,5 +129,5 @@ protected:
 	/// </summary>
 	static inline std::vector<std::filesystem::directory_entry> mCurrPathArray;
 
-	static inline int clickCount = ImGui::GetMouseClickedCount(ImGuiMouseButton_Left);
+	static inline int clickCount;
 };

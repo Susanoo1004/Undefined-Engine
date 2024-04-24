@@ -249,6 +249,8 @@ void ContentBrowser::DisplayWindow()
 
 bool ContentBrowser::DoubleClick()
 {
+    clickCount = ImGui::GetMouseClickedCount(ImGuiMouseButton_Left);
+
     if (clickCount && (clickCount % 2 == 0))
     {
         return true;
