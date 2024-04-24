@@ -1,4 +1,5 @@
 #pragma once
+
 #include "utils/flag.h"
 
 class Object;
@@ -17,10 +18,13 @@ private:
 	static void NodeInteraction(Object* object);
 
 	static void ClickSelectObject(Object* object);
-	static void RightClickObject(Object* object);
+	static bool RightClickObject(Object* object);
 
 	static void BeginDragObject(Object* object);
-	static void BeginDropOnObject(Object* object, bool setBefore = false);
+	static bool BeginDropOnObject(Object* object, bool setBefore = false);
+
+	static void RenameObject(Object* object);
+	static inline Object* mRenamingObject;
 
 	static inline Object* mSelectedObject;
 	

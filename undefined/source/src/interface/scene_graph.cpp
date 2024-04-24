@@ -2,10 +2,13 @@
 
 #include <imgui/imgui.h>
 #include <toolbox/calc.h>
+#include <set>
 #include <algorithm>
 
 #include "world/scene_manager.h"
 #include "service_locator.h"
+
+static inline std::set<ImGuiID> openNextFrame;
 
 void SceneGraph::DisplayWindow()
 {
@@ -17,7 +20,10 @@ void SceneGraph::DisplayWindow()
     }
 
     ImGui::Begin("Hierarchy");
-        //SceneManager::ActualScene->Name.c_str()
+    if (ImGui::CollapsingHeader(SceneManager::ActualScene->Name.c_str(),
+        ImGuiTreeNodeFlags_SpanAvailWidth |
+        ImGuiTreeNodeFlags_FramePadding |
+        ImGuiTreeNodeFlags_Leaf))
 
     DisplayActualScene();
 
@@ -55,10 +61,26 @@ void SceneGraph::DisplayObject(Object* object)
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
     ImGui::Dummy(ImVec2(ImGui::GetItemRectMax().x, 6.f));
     ImGui::PopStyleVar();
+
     BeginDropOnObject(object, true);
+    if (openNextFrame.contains(ImGui::GetID(object->Name.c_str())))
+    {
+        openNextFrame.erase(ImGui::GetID(object->Name.c_str()));
+        ImGui::SetNextItemOpen(true);
+    }
+
+    std::string displayName = object->Name.c_str();
+    if (object == mRenamingObject)
+    {
+        displayName = "##Renaming";
+    }
+    else if (object->Name == "")
+    {
+        displayName = "##Empty";
+    }
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-    if (ImGui::TreeNodeEx(object->Name.c_str(), flags))
+    if (ImGui::TreeNodeEx(displayName.c_str(), flags))
     {
         ImGui::PopStyleVar();
         NodeInteraction(object);
@@ -81,9 +103,16 @@ void SceneGraph::DisplayObject(Object* object)
 void SceneGraph::NodeInteraction(Object* object)
 {
     ClickSelectObject(object);
-    RightClickObject(object);
+    if (RightClickObject(object))
+    {
+        openNextFrame.insert(ImGui::GetItemID());
+    }
     BeginDragObject(object);
-    BeginDropOnObject(object);
+    if (BeginDropOnObject(object))
+    {
+        openNextFrame.insert(ImGui::GetItemID());
+    }
+    RenameObject(object);
 }
 
 void SceneGraph::ClickSelectObject(Object* object)
@@ -107,37 +136,47 @@ void SceneGraph::ClickSelectObject(Object* object)
 }
 
 
-void SceneGraph::RightClickObject(Object* object)
+bool SceneGraph::RightClickObject(Object* object)
 {
     if (ImGui::BeginPopupContextWindow(std::to_string(object->mUUID).c_str(), ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_NoOpenOverExistingPopup) ||
         ImGui::BeginPopupContextItem(std::to_string(object->mUUID).c_str(), ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverExistingPopup))
     {
+        mSelectedObject = object;
+        bool success = false;
         if (ImGui::BeginMenu(object->mUUID == Object::mRoot->mUUID ? "Add Object" : "Add Child"))
         {
             if (ImGui::MenuItem("Empty"))
             {
-                SceneManager::ActualScene->AddObject(object, "Empty");
+                Object* newObject = SceneManager::ActualScene->AddObject(object, "Empty");
+                ClickSelectObject(newObject);
                 ImGui::CloseCurrentPopup();
+                success = true;
             }
             if (ImGui::BeginMenu("Basic Shape"))
             {
                 if (ImGui::MenuItem("Cube"))
                 {
-                    SceneManager::ActualScene->AddObject(object, "Cube");
+                    Object* newObject = SceneManager::ActualScene->AddObject(object, "Cube");
                     //Add Model and Collider
+                    ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
+                    success = true;
                 }
                 if (ImGui::MenuItem("Capsule"))
                 {
-                    SceneManager::ActualScene->AddObject(object, "Capsule");
+                    Object* newObject = SceneManager::ActualScene->AddObject(object, "Capsule");
                     //Add Model and Collider
+                    ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
+                    success = true;
                 }
                 if (ImGui::MenuItem("Sphere"))
                 {
-                    SceneManager::ActualScene->AddObject(object, "Sphere");
+                    Object* newObject = SceneManager::ActualScene->AddObject(object, "Sphere");
                     //Add Model and Collider
+                    ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
+                    success = true;
                 }
                 ImGui::EndMenu();
             }
@@ -146,28 +185,41 @@ void SceneGraph::RightClickObject(Object* object)
             {
                 if (ImGui::MenuItem("Cube"))
                 {
-                    SceneManager::ActualScene->AddObject(object, "Cube");
+                    Object* newObject = SceneManager::ActualScene->AddObject(object, "Cube");
                     //Add Model and Collider
+                    ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
+                    success = true;
                 }
                 if (ImGui::MenuItem("Capsule"))
                 {
-                    SceneManager::ActualScene->AddObject(object, "Capsule");
+                    Object* newObject = SceneManager::ActualScene->AddObject(object, "Capsule");
                     //Add Model and Collider
+                    ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
+                    success = true;
                 }
                 if (ImGui::MenuItem("Sphere"))
                 {
-                    SceneManager::ActualScene->AddObject(object, "Sphere");
+                    Object* newObject = SceneManager::ActualScene->AddObject(object, "Sphere");
                     //Add Model and Collider
+                    ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
+                    success = true;
                 }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
         }
+        if (object->mUUID != Object::mRoot->mUUID && ImGui::Button("Rename"))
+        {
+            mRenamingObject = object;
+            ImGui::CloseCurrentPopup();
+        }
         ImGui::EndPopup();
+        return success;
     }
+    return false;
 }
 
 void SceneGraph::BeginDragObject(Object* object)
@@ -185,8 +237,9 @@ void SceneGraph::BeginDragObject(Object* object)
     }
 }
 
-void SceneGraph::BeginDropOnObject(Object* object, bool setBefore)
+bool SceneGraph::BeginDropOnObject(Object* object, bool setBefore)
 {
+    bool success = false;
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DragObject"))
@@ -211,8 +264,29 @@ void SceneGraph::BeginDropOnObject(Object* object, bool setBefore)
             {
                 payloadObject->SetParent(object);
             }
+            success = true;
         }
         ImGui::EndDragDropTarget();
+    }
+    return success;
+}
+
+void SceneGraph::RenameObject(Object* object)
+{
+    if (mRenamingObject == object)
+    {
+        ImGui::SameLine();
+        ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
+
+        char* newName = (char*)object->Name.c_str();
+
+        ImGui::SetKeyboardFocusHere();
+        ImGui::PushItemWidth(ImGui::CalcTextSize(newName).x + 5);
+        if (ImGui::InputText("##label", (char*)newName, 256, flags))
+        {
+            object->Name = newName;
+            mRenamingObject = nullptr;
+        }
     }
 }
 
