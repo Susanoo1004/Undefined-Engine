@@ -13,7 +13,7 @@ public:
 
 private:
 	static void DisplayActualScene();
-	static void DisplayObject(Object* object);
+	static void DisplayObject(Object* object, unsigned int labelID);
 
 	static void NodeInteraction(Object* object);
 

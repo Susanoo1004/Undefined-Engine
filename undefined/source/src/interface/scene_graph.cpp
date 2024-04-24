@@ -33,9 +33,11 @@ void SceneGraph::DisplayWindow()
 void SceneGraph::DisplayActualScene()
 {
     RightClickObject(Object::mRoot);
+    unsigned int labelID = 0;
     for (Object* object : Object::mRoot->GetChildren())
     {
-        DisplayObject(object);
+        DisplayObject(object, labelID);
+        labelID++;
     }
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
@@ -44,7 +46,7 @@ void SceneGraph::DisplayActualScene()
     BeginDropOnObject(Object::mRoot);
 }
 
-void SceneGraph::DisplayObject(Object* object)
+void SceneGraph::DisplayObject(Object* object, unsigned int labelID)
 {
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow;
 
@@ -78,6 +80,8 @@ void SceneGraph::DisplayObject(Object* object)
     {
         displayName = "##Empty";
     }
+    displayName += "##" + std::to_string(labelID);
+    Logger::Debug("{}", displayName);
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
     if (ImGui::TreeNodeEx(displayName.c_str(), flags))
@@ -88,7 +92,8 @@ void SceneGraph::DisplayObject(Object* object)
         //For every child we call the function to display their children
         for (Object* child : object->GetChildren())
         {
-            DisplayObject(child);
+            labelID++;
+            DisplayObject(child, labelID);
         }
         ImGui::TreePop();
     }
@@ -149,6 +154,8 @@ bool SceneGraph::RightClickObject(Object* object)
             {
                 Object* newObject = SceneManager::ActualScene->AddObject(object, "Empty");
                 ClickSelectObject(newObject);
+                Logger::Debug("");
+                Print(Object::mRoot, "");
                 ImGui::CloseCurrentPopup();
                 success = true;
             }
