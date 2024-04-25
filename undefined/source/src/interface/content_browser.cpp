@@ -34,7 +34,7 @@ void ContentBrowser::SetImageValues(const std::filesystem::path& path, ImTexture
             mImageSize = ImVec2(80.f, 80.f);
             if (ResourceManager::Contains(newName))
             {
-
+                //Disable warning C4312 type cast conversion
                 mImageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>(newName)->GetID());
             }
             else
@@ -251,12 +251,5 @@ bool ContentBrowser::DoubleClick()
 {
     clickCount = ImGui::GetMouseClickedCount(ImGuiMouseButton_Left);
 
-    if (clickCount && (clickCount % 2 == 0))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return clickCount && (clickCount % 2 == 0);
 }

@@ -28,5 +28,4 @@ private:
 	static void RightClickInteractions(const std::filesystem::path& path);
 
 	static inline std::string name;
-
 };

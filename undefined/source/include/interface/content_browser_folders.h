@@ -41,13 +41,13 @@ private:
 	/// Check if we can Push Style
 	/// </summary>
 	/// <param name="i">index of the element we want to check</param>
-	static void CheckForPushStyle(int i);
+	static void CheckForPushStyle(int i = 0);
 
 	/// <summary>
 	/// Check if we can Pop Style
 	/// </summary>
 	/// <param name="i">index of the element we want to check</param>
-	static void CheckForPopStyle(int i);
+	static void CheckForPopStyle();
 
 	/// <summary>
 	/// Set all the variables we want to set
@@ -71,6 +71,8 @@ private:
 	/// </summary>
 	/// <param name="i">index of the folder we want to draw</param>
 	static void DrawFolders(int i);
+
+	static inline bool isBackFolder;
 
 	static inline std::string mFilename;
 

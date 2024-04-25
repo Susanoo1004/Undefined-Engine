@@ -31,7 +31,7 @@ protected:
 	static void TextCentered(const std::string& text);
 
 	/// <summary>
-	/// Set the image for the file we want to load
+	/// Set the imageID and imageSize depending of the type of file we are displaying
 	/// </summary>
 	/// <param name="path">: Path of the image you want to set</param>
 	/// <param name="imageID">: Set the ID of the image on the one in parameter</param>

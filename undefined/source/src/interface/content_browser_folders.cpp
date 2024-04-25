@@ -27,7 +27,7 @@ void ContentBrowserFolders::DisplayActualDirectory(const std::filesystem::path& 
 
         ImGui::SameLine();
 
-        CheckForPopStyle(i);
+        CheckForPopStyle();
 
         if (ImGui::GetCursorPosX() >= ImGui::GetContentRegionAvail().x * 2)
         {
@@ -46,26 +46,16 @@ void ContentBrowserFolders::DisplayActualDirectory(const std::filesystem::path& 
 
 void ContentBrowserFolders::GoBackFolder(const std::filesystem::path& path)
 {
+    isBackFolder = true;
     mIsAnythingHovered = false;
     mIsDirectory = true;
+
+    CheckForPushStyle();
+
     ImGui::SameLine();
 
     if (path != mPath)
     {
-        ImTextureID mImageID;
-
-        if (mSelectedPath == mBackFolder)
-        {
-            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
-            mCanPop = true;
-        }
-        else if (mHoveredPath == mBackFolder)
-        {
-            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-            mCanPop = true;
-        }
-
-        ImGui::BeginChild("BackFolder", ImVec2(100, 120), ImGuiChildFlags_AlwaysUseWindowPadding);
         mImageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID());
         ImGui::Image(mImageID, ImVec2(80, 80));
 
@@ -75,13 +65,11 @@ void ContentBrowserFolders::GoBackFolder(const std::filesystem::path& path)
 
         ImGui::EndChild();
 
-        if (mCanPop)
-        {
-            ImGui::PopStyleColor();
-            mCanPop = false;
-        }
+        CheckForPopStyle();
     }
     ImGui::SameLine();
+
+    isBackFolder = false;
 }
 
 void ContentBrowserFolders::LoadFolders(const std::filesystem::path& path)
@@ -109,21 +97,42 @@ void ContentBrowserFolders::LoadFiles(const std::filesystem::path& path)
 
 void ContentBrowserFolders::CheckForPushStyle(int i)
 {
-    if (mSelectedPath == mCurrPathArray[i].path())
+    if (isBackFolder)
     {
-        ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
-        mCanPop = true;
+        if (mSelectedPath == mBackFolder)
+        {
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
+            mCanPop = true;
+        }
+        else if (mHoveredPath == mBackFolder)
+        {
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
+            mCanPop = true;
+        }
+
+        return;
     }
 
-    //If the mHoveredPath is the same as the path we're in we change it's style color
-    else if (mHoveredPath == mCurrPathArray[i].path())
+    else
     {
-        ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-        mCanPop = true;
+        if (mSelectedPath == mCurrPathArray[i].path())
+        {
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
+            mCanPop = true;
+        }
+
+        //If the mHoveredPath is the same as the path we're in we change it's style color
+        else if (mHoveredPath == mCurrPathArray[i].path())
+        {
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
+            mCanPop = true;
+        }
+
+        return;
     }
 }
 
-void ContentBrowserFolders::CheckForPopStyle(int i)
+void ContentBrowserFolders::CheckForPopStyle()
 {
     if (mCanPop)
     {
