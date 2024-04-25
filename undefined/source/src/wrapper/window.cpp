@@ -9,6 +9,15 @@
 #include "engine_debug/logger.h"
 #include "service_locator.h"
 
+bool fullscreen;
+
+#ifdef DEBUG
+fullscreen = true;
+#endif // DEBUG
+#ifdef RELEASE
+fullscreen = false;
+#endif // RELEASE
+
 Window::Window()
 {
     mWindow = NULL;
@@ -22,14 +31,18 @@ Window::~Window()
 
 void Window::Init()
 {
-    SetupGlfw();
+    SetupWindowAPI();
 
-    CreateWindow(1200, 800);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+    // if we are in debug create a widow of size 1200*800 but in release create a window if the screen size wich is in fullscreen
+    CreateWindow(fullscreen == true ? mode->width : 1200, fullscreen == true ? mode->height : 800, fullscreen == true ? monitor : nullptr);
 
     SetupWindow();
 }
 
-void Window::SetupGlfw()
+void Window::SetupWindowAPI()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -48,9 +61,9 @@ void Window::SetupGlfw()
     }
 }
 
-void Window::CreateWindow(int width, int height)
+void Window::CreateWindow(int width, int height, GLFWmonitor* monitor)
 {
-    mWindow = glfwCreateWindow(width, height, "Undefined Engine", nullptr, nullptr);
+    mWindow = glfwCreateWindow(width, height, "Undefined Engine", monitor, nullptr);
 
     if (!mWindow)
     {
@@ -81,7 +94,7 @@ void Window::GetFramebufferSize(int& display_width, int& display_height)
     glfwGetFramebufferSize(mWindow, &display_width, &display_height);
 }
 
-GLFWwindow* Window::GetWindowVar()
+GLFWwindow* Window::GetWindowPointer()
 {
     return mWindow;
 }
@@ -126,6 +139,6 @@ void Window::Callbacks()
 {
     Window* w = ServiceLocator::Get<Window>();
 
-    Window::SetWindowSizeCallback(w->GetWindowVar(), Window::WindowSizeCallback);
-    Window::ScrollWheelCallback(w->GetWindowVar(), Camera::ChangeSpeedCam);
+    Window::SetWindowSizeCallback(w->GetWindowPointer(), Window::WindowSizeCallback);
+    Window::ScrollWheelCallback(w->GetWindowPointer(), Camera::ChangeSpeedCam);
 }

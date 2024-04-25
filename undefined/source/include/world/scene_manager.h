@@ -16,6 +16,10 @@ public:
 	static void Delete();
 	
 	static Scene* CreateScene(const std::string& name = "New Scene");
+
+	static void Start();
+	static void GlobalUpdate();
+	static void Draw();
 	
 	static inline Scene* ActualScene;
 	static inline std::vector<Scene*> Scenes;

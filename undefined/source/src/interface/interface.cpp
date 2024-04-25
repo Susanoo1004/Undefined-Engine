@@ -25,7 +25,7 @@ void Interface::Init()
 
     constexpr const char* glslVersion = "#version 450";
 
-    ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<Window>()->GetWindowVar(), true);
+    ImGui_ImplGlfw_InitForOpenGL(ServiceLocator::Get<Window>()->GetWindowPointer(), true);
     ImGui_ImplOpenGL3_Init(glslVersion);
 
     ImGuizmo::SetOrthographic(false);

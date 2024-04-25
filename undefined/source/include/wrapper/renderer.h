@@ -261,7 +261,10 @@ public:
 	template<class... Args>
 	void EnableTest(Args... rendererTest);
 
-	int PixelData = -1;
+	/// <summary>
+	/// Index of the obejct selected
+	/// </summary>
+	int ObjectIndex = -1;
 
 	RendererDebug Debug;
 };

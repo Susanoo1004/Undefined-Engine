@@ -66,9 +66,9 @@ int Renderer::ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, i
 {
     glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
     glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
-    glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &PixelData);
+    glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &ObjectIndex);
 
-    return PixelData;
+    return ObjectIndex;
 }
 
 void Renderer::BindFramebuffer(unsigned int target, unsigned int framebufferID)

@@ -214,6 +214,7 @@
     <ClCompile Include="source\src\wrapper\input_manager.cpp" />
     <ClCompile Include="source\src\wrapper\window.cpp" />
     <ClCompile Include="source\src\wrapper\renderer.cpp" />
+    <ClCompile Include="source\src\wrapper\time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\assimp-vc142-mtd.lib" />
@@ -296,6 +297,7 @@
     <ClInclude Include="source\include\utils\flag.h" />
     <ClInclude Include="source\include\wrapper\window.h" />
     <ClInclude Include="source\include\wrapper\renderer.h" />
+    <ClInclude Include="source\include\wrapper\time.h" />
     <ClInclude Include="source\include\wrapper_glfw.h" />
     <ClInclude Include="source\include\wrapper_RHI.h" />
     <ClInclude Include="source\include\reflection\runtime_classes.h" />

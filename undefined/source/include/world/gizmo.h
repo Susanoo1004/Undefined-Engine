@@ -22,5 +22,4 @@ public:
 
 public:
 	static void DrawGrid(Camera* camera);
-	static void InitGizmo();
 };

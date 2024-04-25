@@ -1,12 +1,15 @@
 #include "application.h"
 
-#include <glad/glad.h>
 #include <iostream>
 #include <filesystem>
-#include <stb_image/stb_image.h>
 #include <stdlib.h>
+#include <glad/glad.h>
+#include <stb_image/stb_image.h>
+#include <toolbox/calc.h>
 
 #include "service_locator.h"
+
+#include "wrapper/time.h"
 
 #include "resources/texture.h"
 #include "resources/model.h"
@@ -22,8 +25,6 @@
 
 #include "interface/interface.h"
 #include "interface/inspector.h"
-
-#include <toolbox/calc.h>
 
 #include "reflection/runtime_classes.h"
 
@@ -65,13 +66,18 @@ void Application::Init()
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
     
     SceneManager::ActualScene->AddObject(object, "Test Child");
+
+    SceneManager::Start();
 }
 
 void Application::Update()
 {
+    Time::SetTimeVariables();
+
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
+    SceneManager::GlobalUpdate();
     Interface::Update();
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
@@ -97,12 +103,14 @@ void Application::Update()
             mRenderer->SetUniform(BaseShader->ID, "EntityID", SceneManager::ActualScene->Objects[j]);
         }
 
-        SceneManager::ActualScene->Draw();
+        SceneManager::Draw();
 
         mRenderer->UnUseShader();
 
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+
+    EditorViewport::SetIsGizmoUpdated(false);
 
     Interface::Render();
 

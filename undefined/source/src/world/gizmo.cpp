@@ -38,8 +38,6 @@ void Gizmo::DrawGizmos(Camera* camera, Transform* transform)
     {
         transform->SetLocalMatrix(matrix.Transpose());
     }
-
-    camera->SetView(view.Transpose());
 }
 
 void Gizmo::ChangeGizmoOperation()
@@ -52,6 +50,11 @@ void Gizmo::ChangeGizmoOperation()
     ImGui::SameLine();
     if (ImGui::RadioButton("Scale", CurrentGizmoOperation == ImGuizmo::SCALE))
         CurrentGizmoOperation = ImGuizmo::SCALE;
+    if (ImGui::RadioButton("Local", CurrentGizmoMode == ImGuizmo::LOCAL))
+        CurrentGizmoMode = ImGuizmo::LOCAL;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("World", CurrentGizmoMode == ImGuizmo::WORLD))
+        CurrentGizmoMode = ImGuizmo::WORLD;
 }
 
 void Gizmo::DrawGrid(Camera* camera)

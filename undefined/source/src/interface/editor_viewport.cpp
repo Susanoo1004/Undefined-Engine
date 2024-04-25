@@ -43,7 +43,6 @@ void EditorViewport::ShowWindow()
 
 	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.gizmoWindowFlags);
 
-	SceneGizmo.ChangeGizmoOperation();
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
@@ -71,6 +70,8 @@ void EditorViewport::ShowWindow()
 		ImGui::EndPopup();
 	}
 
+	SceneGizmo.ChangeGizmoOperation();
+
 	mWidth = ImGui::GetContentRegionAvail().x;
 	mHeight = ImGui::GetContentRegionAvail().y;
 	ViewportCamera->Width = mWidth;
@@ -86,8 +87,8 @@ void EditorViewport::ShowWindow()
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && 
 		mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
-		int PixelData = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
-		Logger::Info("Pixel data = {}", PixelData);
+		int ObjectIndex = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
+		Logger::Info("Pixel data = {}", ObjectIndex);
 	}
 
 	// we get the screen position of the window
@@ -101,11 +102,12 @@ void EditorViewport::ShowWindow()
 		ImVec2(1, 0)
 	);
 
-	int objectIndex = ServiceLocator::Get<Renderer>()->PixelData;
+	int objectIndex = ServiceLocator::Get<Renderer>()->ObjectIndex;
 
-	if (objectIndex >= 0)
+	if (objectIndex >= 0 && !mIsGizmoUpdated && Camera::CurrentCamera == ViewportCamera)
 	{
-		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->PixelData]->GameTransform);
+		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->ObjectIndex]->GameTransform);
+		mIsGizmoUpdated = true;
 	}
 
 	ImGui::End();
@@ -169,4 +171,9 @@ void EditorViewport::SetMouseMinMaxBounds(int& mouseX, int& mouseY, Vector2& vie
 
 	mouseX = (int)mx;
 	mouseY = (int)my;
+}
+
+void EditorViewport::SetIsGizmoUpdated(bool value)
+{
+	mIsGizmoUpdated = value;
 }

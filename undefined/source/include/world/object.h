@@ -173,6 +173,11 @@ private:
 	std::list<Object*> mChildren;
 
 	/// <summary>
+	/// Universally Unique Identifier for the Object
+	/// </summary>
+	uint64_t mUUID;
+
+	/// <summary>
 	/// Boolean to know if the Object is enable
 	/// </summary>
 	bool mIsEnable = true;
