@@ -246,12 +246,25 @@ public:
 	void DeleteTextures(int number, unsigned int* ID);
 
 	/// <summary>
+	/// Set the depth 
+	/// </summary>
+	/// <param name="depth">Depth you want to set(e.g : GL_LEQUAL or GL_LESS)</param>
+	void SetDepth(unsigned int depth);
+
+	/// <summary>
 	/// Set a Quad data in the VBO, EBO, VAO
 	/// </summary>
 	/// <param name="VBO">: VBO</param>
 	/// <param name="EBO">: EBO</param>
 	/// <param name="VAO">: VAO</param>
 	void SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO);
+
+	/// <summary>
+	/// Set a Cube data in the VBO and VAO
+	/// </summary>
+	/// <param name="VBO">: VBO</param>
+	/// <param name="VAO">: VAO</param>
+	void SetCube(unsigned int& VBO, unsigned int& VAO);
 
 	/// <summary>
 	/// Enable the OpenGL Test

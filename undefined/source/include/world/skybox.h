@@ -33,54 +33,6 @@ public:
 	UNDEFINED_ENGINE static void Draw();
 
 	/// <summary>
-	/// Vertices of a cube
-	/// </summary>
-	static inline float CubeVertices[] = {
-		// positions          // texture Coords
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-
-	/// <summary>
 	/// Path to the right texture for each face
 	/// </summary>
 	static inline std::vector<std::string> Faces
@@ -92,7 +44,13 @@ public:
 		"../undefined/resource_manager/skybox/front.jpg",
 		"../undefined/resource_manager/skybox/back.jpg"
 	};
-	
+
+	/// <summary>
+	/// Camera View without the translation
+	/// </summary>
+	static inline Matrix4x4 View;
+
+private:
 	/// <summary>
 	/// VAO
 	/// </summary>
@@ -101,15 +59,11 @@ public:
 	/// VBO
 	/// </summary>
 	static inline unsigned int CubeVBO = 0;
-
+	/// <summary>
+	/// Cubemap Texture
+	/// </summary>
 	static inline unsigned int CubemapTexture = 0;
 
-	/// <summary>
-	/// Camera View without the translation
-	/// </summary>
-	static inline Matrix4x4 View;
-
-private:
 	/// <summary>
 	/// Shader of the skybox
 	/// </summary>
