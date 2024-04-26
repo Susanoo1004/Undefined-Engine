@@ -7,9 +7,6 @@
 
 #include "service_locator.h"
 
-#include "resources/texture.h"
-#include "resources/resource_manager.h"
-
 #include "interface/interface.h"
 
 void Skybox::Setup()
@@ -18,7 +15,6 @@ void Skybox::Setup()
 
 	mRenderer = ServiceLocator::Get<Renderer>();
 
-	//faces = ResourceManager::LoadFolder("../undefined/resource_manager/skybox");
 	CubemapTexture = Texture::LoadCubeMap(Faces);
 	
 	mRenderer->SetCube(CubeVBO, CubeVAO);
@@ -56,4 +52,9 @@ void Skybox::Draw()
 	mRenderer->SetDepth(GL_LESS); // set depth function back to default
 
 	mRenderer->UnUseShader();
+}
+
+void Skybox::ChangeFaces()
+{
+
 }

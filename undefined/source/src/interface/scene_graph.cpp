@@ -8,8 +8,6 @@
 
 void SceneGraph::DisplayWindow()
 {
-    ImGui::ShowDemoWindow();
-
     if (!SceneManager::ActualScene)
     {
         return;

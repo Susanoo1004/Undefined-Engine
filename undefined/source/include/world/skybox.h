@@ -5,6 +5,9 @@
 #include <toolbox/Matrix4x4.h>
 #include <array>
 
+#include "resources/texture.h"
+#include "resources/resource_manager.h"
+
 #include "utils/flag.h"
 #include "world/component.h"
 #include "camera/camera.h"
@@ -32,25 +35,14 @@ public:
 	/// </summary>
 	UNDEFINED_ENGINE static void Draw();
 
-	/// <summary>
-	/// Path to the right texture for each face
-	/// </summary>
-	static inline std::vector<std::string> Faces
-	{
-		"../undefined/resource_manager/skybox/right.jpg",
-		"../undefined/resource_manager/skybox/left.jpg",
-		"../undefined/resource_manager/skybox/top.jpg",
-		"../undefined/resource_manager/skybox/bottom.jpg",
-		"../undefined/resource_manager/skybox/front.jpg",
-		"../undefined/resource_manager/skybox/back.jpg"
-	};
+	UNDEFINED_ENGINE static void ChangeFaces();
 
+private:
 	/// <summary>
 	/// Camera View without the translation
 	/// </summary>
 	static inline Matrix4x4 View;
 
-private:
 	/// <summary>
 	/// VAO
 	/// </summary>
@@ -72,6 +64,19 @@ private:
 	/// Pointer to our Renderer to simplify the calls from the ServiceLocator
 	/// </summary>
 	static inline Renderer* mRenderer;
+	
+	/// <summary>
+	/// Path to the right texture for each face
+	/// </summary>
+	static inline std::vector<std::string> Faces
+	{
+		"../undefined/resource_manager/skybox/right.jpg",
+		"../undefined/resource_manager/skybox/left.jpg",
+		"../undefined/resource_manager/skybox/top.jpg",
+		"../undefined/resource_manager/skybox/bottom.jpg",
+		"../undefined/resource_manager/skybox/front.jpg",
+		"../undefined/resource_manager/skybox/back.jpg"
+	};
 };
 
 REFL_AUTO(type(Skybox, bases<Component>)

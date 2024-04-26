@@ -19,7 +19,6 @@ class ResourceManager
 
 public:
 	UNDEFINED_ENGINE static void Load(const std::filesystem::path& path, bool recursivity = false);
-	UNDEFINED_ENGINE static std::vector<std::string> LoadFolder(const std::filesystem::path& path);
 	UNDEFINED_ENGINE static bool Contains(const std::string& name);
 
 	template<ResourceType Resource, typename... Args>
@@ -53,6 +52,31 @@ public:
 		return std::dynamic_pointer_cast<Resource>(p->second);
 	}
 
+	template<ResourceType Resource>
+	static std::shared_ptr<Resource> Find(const std::string& name)
+	{
+		if (Contains(name))
+		{
+			return mResources.find(name);
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+
+	static std::string FindName(const std::string& name)
+	{
+		if (Contains(name))
+		{
+			return name;
+		}
+		else
+		{
+			return "";
+		}
+	}
+
 	/// <summary>
 	/// Rename a Resource
 	/// </summary>
@@ -77,9 +101,13 @@ public:
 	UNDEFINED_ENGINE static void UnloadAll();
 
 private:
-	UNDEFINED_ENGINE static inline std::vector<std::string> mShader;
 	/// <summary>
 	/// std::unordered_map to store the Resource from the Resource Manager
 	/// </summary>
 	UNDEFINED_ENGINE static inline std::unordered_map<std::string, std::shared_ptr<Resource>> mResources;
+
+	static inline std::vector<std::string> mPathToIgnore
+	{
+		"../undefined/resource_manager/skybox"
+	};
 };

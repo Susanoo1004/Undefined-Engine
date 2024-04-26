@@ -46,7 +46,7 @@ void Application::Init()
     RuntimeClasses::AddType<DirLight>();
     RuntimeClasses::AddType<ModelRenderer>();
 
-    ResourceManager::Load("../Undefined/resource_manager/", true);
+    ResourceManager::Load("../undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
 
     // Callback
