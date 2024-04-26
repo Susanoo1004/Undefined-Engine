@@ -7,6 +7,8 @@
 #include <stb_image/stb_image.h>
 #include <toolbox/calc.h>
 
+#include <Jolt/Jolt.h>
+
 #include "service_locator.h"
 
 #include "wrapper/time.h"
@@ -30,6 +32,7 @@
 
 Application::Application()
 {
+    std::cout << JPH::abs(1) << "\n";
     ServiceLocator::Setup();
 
     mWindowManager = ServiceLocator::Get<Window>();
