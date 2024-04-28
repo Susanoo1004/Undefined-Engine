@@ -30,6 +30,10 @@
 
 #include "reflection/runtime_classes.h"
 
+#include "audio/audio.h"
+#include "audio/sound_buffer.h"
+#include "audio/sound_context.h"
+
 Application::Application()
 {
     std::cout << JPH::abs(1) << "\n";
@@ -37,6 +41,7 @@ Application::Application()
 
     mWindowManager = ServiceLocator::Get<Window>();
     mRenderer = ServiceLocator::Get<Renderer>();
+    mSoundDevice = SoundDevice::Get();
 }
 
 void Application::Init()

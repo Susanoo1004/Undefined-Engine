@@ -125,7 +125,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteurd.lib;Joltd.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteurd.lib;Joltd.lib;glfw3.lib;OpenAL32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -173,6 +173,11 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\audio\sound_source.cpp" />
+    <ClCompile Include="source\src\audio\audio.cpp" />
+    <ClCompile Include="source\src\audio\sound_buffer.cpp" />
+    <ClCompile Include="source\src\audio\sound_context.cpp" />
+    <ClCompile Include="source\src\audio\sound_device.cpp" />
     <ClCompile Include="source\src\interface\content_browser_folders.cpp" />
     <ClCompile Include="source\src\interface\content_browser_hierarchy.cpp" />
     <ClCompile Include="source\src\reflection\utils_reflection.cpp" />
@@ -244,6 +249,11 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\audio\audio.h" />
+    <ClInclude Include="source\include\audio\sound_buffer.h" />
+    <ClInclude Include="source\include\audio\sound_context.h" />
+    <ClInclude Include="source\include\audio\sound_device.h" />
+    <ClInclude Include="source\include\audio\sound_source.h" />
     <ClInclude Include="source\include\framebuffer.h" />
     <ClInclude Include="source\include\interface\content_browser_folders.h" />
     <ClInclude Include="source\include\interface\content_browser_hierarchy.h" />

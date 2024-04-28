@@ -5,6 +5,8 @@
 
 #include "engine_debug/logger.h"
 
+#include "audio/sound_device.h"
+
 #include "utils/flag.h"
 
 class Window;
@@ -31,6 +33,7 @@ private:
 
 	Window* mWindowManager = nullptr;
 	Renderer* mRenderer = nullptr;
+	SoundDevice* mSoundDevice = nullptr;
 
 public:
 	UNDEFINED_ENGINE static inline bool IsInGame = false;
