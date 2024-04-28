@@ -8,11 +8,11 @@
 
 #include "resources/shader.h"
 
-
-
 #include "world/gizmo.h"
 
-
+/// <summary>
+/// A Class for the Viewport in the Editor
+/// </summary>
 class EditorViewport
 {
 public:

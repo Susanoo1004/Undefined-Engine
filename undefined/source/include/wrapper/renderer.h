@@ -54,6 +54,19 @@ public:
 	/// </summary>
 	/// <param name="target">: MipMap target</param>
 	void GenerateMipMap(unsigned int target);
+	/// <summary>
+	/// Generate a framebuffer
+	/// </summary>
+	/// <param name="framebufferNumber">: Number of framebuffer</param>
+	/// <param name="ID">: New ID of the framebuffer</param>
+	void GenerateFramebuffer(int framebufferNumber, unsigned int* ID);
+
+	/// <summary>
+	/// Generate a renderbuffer
+	/// </summary>
+	/// <param name="renderbufferNumber">: Number of renderbuffer</param>
+	/// <param name="ID">: New ID of the renderbuffer</param>
+	void GenerateRenderbuffer(int renderbufferNumber, unsigned int* ID);
 
 	/// <summary>
 	/// Active the texture given
@@ -158,6 +171,12 @@ public:
 	/// <param name="start">: Start index in the actual array</param>
 	/// <param name="count">: Number of indices</param>
 	void Draw(unsigned int mode, int start, int count);
+	/// <summary>
+	/// Draw the buffers according to the attachements
+	/// </summary>
+	/// <param name="numberOfAttachement">: Number of attachements used</param>
+	/// <param name="attachements">: Array of the attachements</param>
+	void DrawBuffers(int numberOfAttachement, unsigned int* attachements);
 
 	/// <summary>
 	/// Set a shader

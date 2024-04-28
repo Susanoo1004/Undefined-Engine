@@ -47,6 +47,16 @@ void Renderer::GenerateMipMap(unsigned int target)
     glGenerateMipmap(target);
 }
 
+void Renderer::GenerateFramebuffer(int framebufferNumber, unsigned int* ID)
+{
+    glGenFramebuffers(framebufferNumber, ID);
+}
+
+void Renderer::GenerateRenderbuffer(int renderbufferNumber, unsigned int* ID)
+{
+    glGenRenderbuffers(renderbufferNumber, ID);
+}
+
 void Renderer::ActiveTexture(unsigned int ID)
 {
     glActiveTexture(ID);
@@ -122,6 +132,11 @@ void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* 
 void Renderer::Draw(unsigned int mode, int start, int count)
 {
     glDrawArrays(mode, start, count);
+}
+
+void Renderer::DrawBuffers(int numberOfAttachement, unsigned int* attachements)
+{
+    glDrawBuffers(numberOfAttachement, attachements);
 }
 
 unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
