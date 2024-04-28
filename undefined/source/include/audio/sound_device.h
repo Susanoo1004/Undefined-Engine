@@ -1,8 +1,6 @@
 #pragma once
 #include "audio/sound_context.h"
-
-struct ALCdevice;
-struct ALCcontext;
+#include <AL/alc.h>
 
 class SoundDevice
 {

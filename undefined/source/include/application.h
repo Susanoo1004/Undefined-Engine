@@ -34,6 +34,7 @@ private:
 	Window* mWindowManager = nullptr;
 	Renderer* mRenderer = nullptr;
 	SoundDevice* mSoundDevice = nullptr;
+	std::shared_ptr<KeyInput> mKeyInput = nullptr;
 
 public:
 	UNDEFINED_ENGINE static inline bool IsInGame = false;

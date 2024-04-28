@@ -33,6 +33,7 @@
 #include "audio/audio.h"
 #include "audio/sound_buffer.h"
 #include "audio/sound_context.h"
+#include "audio/sound_source.h"
 
 Application::Application()
 {
@@ -41,7 +42,6 @@ Application::Application()
 
     mWindowManager = ServiceLocator::Get<Window>();
     mRenderer = ServiceLocator::Get<Renderer>();
-    mSoundDevice = SoundDevice::Get();
 }
 
 void Application::Init()
@@ -62,6 +62,7 @@ void Application::Init()
 
     Interface::Init();
     Inspector::Init();
+    mKeyInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
@@ -76,6 +77,13 @@ void Application::Init()
     SceneManager::ActualScene->AddObject(object, "Test Child");
 
     SceneManager::Start();
+
+    //SOUND
+    mSoundDevice = SoundDevice::Get();
+    uint32_t sound1 = SoundBuffer::Get()->AddSoundEffect("fazbear.wav");
+    
+    SoundSource soundSource;
+    soundSource.Play(sound1);
 }
 
 void Application::Update()

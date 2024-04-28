@@ -1,4 +1,4 @@
-#include <AL/alc.h>
+#include <AL/al.h>
 
 #include "audio/sound_device.h"
 #include "engine_debug/logger.h"
@@ -11,7 +11,18 @@ SoundDevice* SoundDevice::Get()
 
 SoundDevice::SoundDevice()
 {
-	mALCDevice = alcOpenDevice(nullptr); //Get default device (nullptr = default)
+	const ALCchar* name = nullptr;
+	if (alcIsExtensionPresent(nullptr, "ALC_ENUMERATE_ALL_EXT"))
+	{
+		name = alcGetString(mALCDevice, ALC_DEFAULT_ALL_DEVICES_SPECIFIER); //Get device name
+	}
+
+	if (!name && alcGetError(nullptr) != ALC_DEVICE_SPECIFIER)
+	{
+		name = alcGetString(mALCDevice, ALC_DEVICE_SPECIFIER);
+	}
+
+	mALCDevice = alcOpenDevice(name); //Get default device (nullptr = default)
 	if (!mALCDevice)
 	{
 		Logger::Warning("Failed to get sound device");
@@ -23,21 +34,11 @@ SoundDevice::SoundDevice()
 		Logger::Warning("Failed to set sound context");
 	}
 
-	if (alcMakeContextCurrent(mALCContext)) //Make context current
+	if (!alcMakeContextCurrent(mALCContext)) //Make context current
 	{
 		Logger::Warning("Failed to make context current");
 	}
 
-	const ALCchar* name = nullptr;
-	if (alcIsExtensionPresent(mALCDevice, "ALC_ENUMERATE_ALL_EXT"))
-	{
-		name = alcGetString(mALCDevice, ALC_ALL_DEVICES_SPECIFIER);
-	}
-
-	if (!name || alcGetError(mALCDevice) != ALC_DEVICE_SPECIFIER)
-	{
-		name = alcGetString(mALCDevice, ALC_DEVICE_SPECIFIER);
-	}
 	Logger::Info("Opened {}", name);
 }
 
