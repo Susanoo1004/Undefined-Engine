@@ -6,6 +6,7 @@
 #include "engine_debug/logger.h"
 
 #include "audio/sound_device.h"
+#include "audio/sound_source.h"
 
 #include "utils/flag.h"
 
@@ -35,6 +36,7 @@ private:
 	Renderer* mRenderer = nullptr;
 	SoundDevice* mSoundDevice = nullptr;
 	std::shared_ptr<KeyInput> mKeyInput = nullptr;
+	SoundSource* tamerelaputemaxime;
 
 public:
 	UNDEFINED_ENGINE static inline bool IsInGame = false;

@@ -32,8 +32,6 @@
 
 #include "audio/audio.h"
 #include "audio/sound_buffer.h"
-#include "audio/sound_context.h"
-#include "audio/sound_source.h"
 
 Application::Application()
 {
@@ -82,8 +80,8 @@ void Application::Init()
     mSoundDevice = SoundDevice::Get();
     uint32_t sound1 = SoundBuffer::Get()->AddSoundEffect("fazbear.wav");
     
-    SoundSource soundSource;
-    soundSource.Play(sound1);
+    tamerelaputemaxime = new SoundSource;
+    tamerelaputemaxime->Play(sound1);
 }
 
 void Application::Update()

@@ -4,13 +4,15 @@
 
 #include <toolbox/Vector3.h>
 
+#include "utils/utils.h"
+
 class SoundSource
 {
 public:
 	SoundSource();
-	~SoundSource();
+	UNDEFINED_ENGINE ~SoundSource();
 
-	void Play(const ALuint buffer);
+	void Play(ALuint buffer);
 	
 private:
 	ALuint mBuffer = 0;

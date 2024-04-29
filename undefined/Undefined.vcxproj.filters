@@ -57,7 +57,6 @@
     <ClCompile Include="source\src\wrapper\time.cpp" />
     <ClCompile Include="source\src\audio\audio.cpp" />
     <ClCompile Include="source\src\audio\sound_device.cpp" />
-    <ClCompile Include="source\src\audio\sound_context.cpp" />
     <ClCompile Include="source\src\audio\sound_buffer.cpp" />
     <ClCompile Include="source\src\audio\sound_source.cpp" />
   </ItemGroup>
@@ -142,7 +141,6 @@
     <ClInclude Include="source\include\wrapper\time.h" />
     <ClInclude Include="source\include\audio\audio.h" />
     <ClInclude Include="source\include\audio\sound_device.h" />
-    <ClInclude Include="source\include\audio\sound_context.h" />
     <ClInclude Include="source\include\audio\sound_buffer.h" />
     <ClInclude Include="source\include\audio\sound_source.h" />
   </ItemGroup>
