@@ -67,9 +67,13 @@ public:
 	Quaternion Inverse() const;
 
 	/// <summary>
-	/// @brief Returns the rotation quaternion corresponding to the axis giveb
+	/// @brief Returns the rotation quaternion corresponding to the axis given
 	/// </summary>
-	static Quaternion GetRQ(const Vector3& axis, float angle);
+	static Quaternion GetRotationQuaternion(const Vector3& axis, float angle, bool degrees = false);
+	/// <summary>
+	/// @brief Returns the rotation quaternion corresponding to the euler angle given
+	/// </summary>
+	static Quaternion GetRotationQuaternion(const Vector3& euler, bool degrees = false);
 
 	/// <summary>
 	///  @brief Returns the quaternion rotate by the rotation given
@@ -91,6 +95,8 @@ public:
 
 	[[nodiscard]]
 	Matrix4x4 ToRotationMatrix() const;
+	[[nodiscard]]
+	Vector3 ToEuler(bool degrees = false) const;
 
 	explicit operator Vector3();
 
@@ -120,6 +126,9 @@ Quaternion& operator*=(Quaternion& a, const Quaternion& b);
 Quaternion& operator*=(Quaternion& q, const float value);
 Quaternion& operator/=(Quaternion& a, const Quaternion& b);
 Quaternion& operator/=(Quaternion& q, const float value);
+
+bool operator==(const Quaternion& q1, const Quaternion& q2);
+bool operator!=(const Quaternion& q1, const Quaternion& q2);
 
 bool operator==(const Quaternion& q, const float value);
 bool operator!=(const Quaternion& q, const float value);

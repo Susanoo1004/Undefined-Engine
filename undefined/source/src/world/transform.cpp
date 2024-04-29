@@ -30,7 +30,7 @@ void Transform::SetLocalMatrix(const Matrix4x4& matrix)
 	mLocalTRS = matrix;
 
 	mLocalPosition = mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3];
-	mLocalRotation = mLocalTRS.ToEuler();
+	mLocalRotation = mLocalTRS.ToQuaternion();
 	Matrix3x3 trans = Matrix4x4::Transpose(mLocalTRS);
 	mLocalScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
 
@@ -44,7 +44,7 @@ void Transform::SetLocalMatrix(const Matrix4x4& matrix)
 	}
 
 	mPosition = mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3];
-	mRotation = mWorldTRS.ToEuler();
+	mRotation = mWorldTRS.ToQuaternion();
 	trans = Matrix4x4::Transpose(mWorldTRS);
 	mScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
 }
@@ -73,7 +73,7 @@ void Transform::SetWorldMatrix(const Matrix4x4& matrix)
 	mWorldTRS = matrix;
 
 	mPosition = mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3];
-	mRotation = mWorldTRS.ToEuler();
+	mRotation = mWorldTRS.ToQuaternion();
 	Matrix3x3 trans = Matrix4x4::Transpose(mWorldTRS);
 	mScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
 
@@ -87,7 +87,7 @@ void Transform::SetWorldMatrix(const Matrix4x4& matrix)
 	}
 
 	mLocalPosition = mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3];
-	mLocalRotation = mLocalTRS.ToEuler();
+	mLocalRotation = mLocalTRS.ToQuaternion();
 	trans = Matrix4x4::Transpose(mLocalTRS);
 	mLocalScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
 }
@@ -116,7 +116,7 @@ void Transform::SetPosition(Vector3 newPosition)
 
 Vector3 Transform::GetRotation()
 {
-	return { calc::ToDeg(mRotation.x), calc::ToDeg(mRotation.y), calc::ToDeg(mRotation.z) };
+	return mRotation.ToRotationMatrix().ToEuler(true);
 }
 
 void Transform::SetRotation(Vector3 newRotation)
@@ -126,7 +126,7 @@ void Transform::SetRotation(Vector3 newRotation)
 
 Vector3 Transform::GetRotationRad()
 {
-	return mRotation;
+	return mRotation.ToRotationMatrix().ToEuler();
 }
 
 void Transform::SetRotationRad(Vector3 newRotationRad)
@@ -146,13 +146,32 @@ void Transform::SetRotationRad(Vector3 newRotationRad)
 		mLocalTRS = mWorldTRS;
 	}
 
-	Vector3 localRot = mLocalTRS.ToEuler();
+	mLocalRotation = mLocalTRS.ToQuaternion();
 
-	mLocalRotation = localRot;
+	mRotation = mWorldTRS.ToQuaternion();
+}
 
-	Vector3 worldRot = mWorldTRS.ToEuler();
+Quaternion Transform::GetRotationQuat()
+{
+	return mRotation;
+}
 
-	mRotation = worldRot;
+void Transform::SetRotationQuat(Quaternion newRotationQuat)
+{
+	 mWorldTRS = Matrix4x4::TRS(GetPosition(), newRotationQuat.ToRotationMatrix(), GetScale());
+
+	 if (mParentTransform)
+	 {
+		 mLocalTRS = mWorldTRS * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
+	 }
+	 else
+	 {
+		 mLocalTRS = mWorldTRS;
+	 }
+
+	 mLocalRotation = mLocalTRS.ToQuaternion();
+
+	 mRotation = mWorldTRS.ToQuaternion();
 }
 
 Vector3 Transform::GetScale()
@@ -205,7 +224,7 @@ void Transform::SetLocalPosition(Vector3 newLocalPosition)
 
 Vector3 Transform::GetLocalRotation()
 {
-	return { calc::ToDeg(mLocalRotation.x), calc::ToDeg(mLocalRotation.y), calc::ToDeg(mLocalRotation.z) };
+	return mLocalRotation.ToRotationMatrix().ToEuler(true);
 }
 
 void Transform::SetLocalRotation(Vector3 newLocalRotation)
@@ -218,7 +237,7 @@ void Transform::SetLocalRotation(Vector3 newLocalRotation)
 
 Vector3 Transform::GetLocalRotationRad()
 {
-	return mLocalRotation;
+	return mLocalRotation.ToRotationMatrix().ToEuler();
 }
 
 void Transform::SetLocalRotationRad(Vector3 newLocalRotationRad)
@@ -227,8 +246,9 @@ void Transform::SetLocalRotationRad(Vector3 newLocalRotationRad)
 	newLocalRotationRad.y = std::fmodf(newLocalRotationRad.y, 2.f * calc::PI);
 	newLocalRotationRad.z = std::fmodf(newLocalRotationRad.z, 2.f * calc::PI);
 
-	mLocalTRS = Matrix4x4::TRS(mLocalPosition, newLocalRotationRad, mLocalScale);
-	mLocalRotation = newLocalRotationRad;
+	Matrix4x4 matRot = Matrix4x4::RotationMatrix3D(newLocalRotationRad);
+	mLocalTRS = Matrix4x4::TRS(mLocalPosition, matRot, mLocalScale);
+	mLocalRotation = mLocalTRS.ToQuaternion();
 
 	if (mParentTransform)
 	{
@@ -239,7 +259,30 @@ void Transform::SetLocalRotationRad(Vector3 newLocalRotationRad)
 		mWorldTRS = mLocalTRS;
 	}
 	
-	mRotation = mWorldTRS.ToEuler();
+	mRotation = mWorldTRS.ToQuaternion();
+}
+
+Quaternion Transform::GetLocalRotationQuat()
+{
+	return mLocalRotation;
+}
+
+void Transform::SetLocalRotationQuat(Quaternion newLocalRotationQuat)
+{
+	mWorldTRS = Matrix4x4::TRS(GetLocalPosition(), newLocalRotationQuat.ToRotationMatrix(), GetLocalScale());
+
+	if (mParentTransform)
+	{
+		mLocalTRS = mWorldTRS * Matrix4x4::Inverse(mParentTransform->WorldMatrix());
+	}
+	else
+	{
+		mLocalTRS = mWorldTRS;
+	}
+
+	mLocalRotation = mLocalTRS.ToQuaternion();
+
+	mRotation = mWorldTRS.ToQuaternion();
 }
 
 Vector3 Transform::GetLocalScale()
