@@ -27,12 +27,17 @@ void SoundSource::Play(const ALuint buffer)
 
 	alSourcePlay(mSource);
 
+	Vector3 test(1.f);
 	ALint state = AL_PLAYING;
 	Logger::Info("Playing sound {}", mBuffer);
 	while (state == AL_PLAYING && alGetError() == AL_NO_ERROR)
 	{
-		Logger::Info("Currently playing sound");
+		//Logger::Info("Currently playing sound");
+		Logger::Debug(test, test);
 		alGetSourcei(mSource, AL_SOURCE_STATE, &state);
 	}
 	Logger::Info("Stopped playing sound");
+
+	alDeleteSources(1, &mSource);
+	alDeleteBuffers(1, &buffer);
 }

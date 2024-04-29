@@ -32,9 +32,9 @@ char* loadWAV(const char* fn, unsigned short& chan, int& samplerate, unsigned sh
 			if (strncmp(buffer, "fmt ", 4) == 0)
 			{
 				file.seekg(i + 8);
-				Logger::Debug("{}", i + 8);
 				file.read((char*)&chan, 2); //Number of channels
 				file.read((char*)&samplerate, 4); //Sample rate
+				Logger::Debug("{}", (int)file.cur);
 				file.seekg(i + 20);
 				file.read((char*)&bps, 2); //Bits per sample
 			}

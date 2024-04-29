@@ -82,6 +82,91 @@ public:
 		SetupLogEntry(LogLevel::FATALERROR, log);
 	}
 
+	template<class... Types>
+	static void Debug(Types... args)
+	{
+		constexpr std::size_t n = sizeof...(args);
+
+		std::string string;
+
+		for (int i = 0; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		std::string log = std::vformat(string, std::make_format_args(args...));
+
+		SetupLogEntry(LogLevel::DEBUG, log);
+	}
+
+	template<class... Types>
+	static void Info(Types... args)
+	{
+		constexpr std::size_t n = sizeof...(args);
+
+		std::string string;
+
+		for (int i = 0; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		std::string log = std::vformat(string, std::make_format_args(args...));
+
+		SetupLogEntry(LogLevel::INFO, log);
+	}
+
+	template<class... Types>
+	static void Warning(Types... args)
+	{
+		constexpr std::size_t n = sizeof...(args);
+
+		std::string string;
+
+		for (int i = 0; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		std::string log = std::vformat(string, std::make_format_args(args...));
+
+		SetupLogEntry(LogLevel::WARNING, log);
+	}
+
+	template<class... Types>
+	static void Error(Types... args)
+	{
+		constexpr std::size_t n = sizeof...(args);
+
+		std::string string;
+
+		for (int i = 0; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		std::string log = std::vformat(string, std::make_format_args(args...));
+
+		SetupLogEntry(LogLevel::ERROR, log);
+	}
+
+	template<class... Types>
+	static void FatalError(Types... args)
+	{
+		constexpr std::size_t n = sizeof...(args);
+
+		std::string string;
+
+		for (int i = 0; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		std::string log = std::vformat(string, std::make_format_args(args...));
+
+		SetupLogEntry(LogLevel::FATALERROR, log);
+	}
+
 private:
 	static std::string CurrentDateTime();
 	static void CreateDebugFile(const std::string& path, const std::string& name);
