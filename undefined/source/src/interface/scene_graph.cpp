@@ -81,6 +81,7 @@ void SceneGraph::DisplayObject(Object* object, unsigned int labelID)
         displayName = "##Empty";
     }
     displayName += "##" + std::to_string(labelID);
+    Logger::Debug("{}", displayName);
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
     if (ImGui::TreeNodeEx(displayName.c_str(), flags))
@@ -153,6 +154,8 @@ bool SceneGraph::RightClickObject(Object* object)
             {
                 Object* newObject = SceneManager::ActualScene->AddObject(object, "Empty");
                 ClickSelectObject(newObject);
+                Logger::Debug("");
+                Print(Object::mRoot, "");
                 ImGui::CloseCurrentPopup();
                 success = true;
             }
