@@ -41,145 +41,170 @@ public:
 	/// </summary>
 	UNDEFINED_ENGINE static void Stop();
 	UNDEFINED_ENGINE static void CheckForExit();
+	UNDEFINED_ENGINE static void Sync();
+	UNDEFINED_ENGINE static void Desync();
 
 	template<class... Types>
 	static void Debug(std::string string, Types... args)
-	{	
-		std::string log = std::vformat(string, std::make_format_args(args...));
+	{
+		constexpr std::size_t n = sizeof...(args);
+		size_t nFormat = 0;
+		std::string log;
 
-		SetupLogEntry(LogLevel::DEBUG, log);
+		for (size_t i = 0; (i = string.find("{}", i)) != std::string::npos; i += 2)
+		{
+			nFormat++;
+		}
+
+		for (size_t i = nFormat; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		if (nFormat <= n)
+		{
+			log = std::vformat(string, std::make_format_args(args...));
+			SetupLogEntry(LogLevel::DEBUG, log);
+		}
+
+		else
+		{
+			Logger::Error("Logger::Debug Attempt too many arguments, not enough {}", "{}");
+
+		}
 	}
 
 	template<class... Types>
-	static void Info(std::string entryString, Types... args)
+	static void Info(std::string string, Types... args)
 	{
-		std::string log = std::vformat(entryString, std::make_format_args(args...));
+		constexpr std::size_t n = sizeof...(args);
+		size_t nFormat = 0;
+		std::string log;
 
-		SetupLogEntry(LogLevel::INFO, log);
+		for (size_t i = 0; (i = string.find("{}", i)) != std::string::npos; i += 2)
+		{
+			nFormat++;
+		}
+
+		for (size_t i = nFormat; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		if (nFormat <= n)
+		{
+			log = std::vformat(string, std::make_format_args(args...));
+			SetupLogEntry(LogLevel::INFO, log);
+		}
+
+		else
+		{
+			Logger::Error("Logger::Info Attempt too many arguments, not enough {}", "{}");
+		}
 	}
 
 	template<class... Types>
 	static void Warning(std::string string, Types... args)
 	{
-		std::string log = std::vformat(string, std::make_format_args(args...));
+		constexpr std::size_t n = sizeof...(args);
+		size_t nFormat = 0;
+		std::string log;
 
-		SetupLogEntry(LogLevel::WARNING, log);
+		for (size_t i = 0; (i = string.find("{}", i)) != std::string::npos; i += 2)
+		{
+			nFormat++;
+		}
+
+		for (size_t i = nFormat; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		if (nFormat <= n)
+		{
+			log = std::vformat(string, std::make_format_args(args...));
+			SetupLogEntry(LogLevel::WARNING, log);
+		}
+
+		else
+		{
+			Logger::Error("Too many arguments, not enough {}", "{}");
+		}
 	}
 
 	template<class... Types>
 	static void Error(std::string string, Types... args)
 	{
-		std::string log = std::vformat(string, std::make_format_args(args...));
+		constexpr std::size_t n = sizeof...(args);
+		size_t nFormat = 0;
+		std::string log;
 
-		SetupLogEntry(LogLevel::ERROR, log);
+		for (size_t i = 0; (i = string.find("{}", i)) != std::string::npos; i += 2)
+		{
+			nFormat++;
+		}
+
+		for (size_t i = nFormat; i < n; i++)
+		{
+			string += "{} ";
+		}
+
+		if (nFormat <= n)
+		{
+			log = std::vformat(string, std::make_format_args(args...));
+			SetupLogEntry(LogLevel::ERROR, log);
+		}
+
+		else
+		{
+			Logger::Error("Too many arguments, not enough {}", "{}");
+		}
 	}
 
 	template<class... Types>
 	static void FatalError(std::string string, Types... args)
 	{
-		std::string log = std::vformat(string, std::make_format_args(args...));
-
-		SetupLogEntry(LogLevel::FATALERROR, log);
-	}
-
-	template<class... Types>
-	static void Debug(Types... args)
-	{
 		constexpr std::size_t n = sizeof...(args);
+		size_t nFormat = 0;
+		std::string log;
 
-		std::string string;
+		for (size_t i = 0; (i = string.find("{}", i)) != std::string::npos; i += 2)
+		{
+			nFormat++;
+		}
 
-		for (int i = 0; i < n; i++)
+		for (size_t i = nFormat; i < n; i++)
 		{
 			string += "{} ";
 		}
 
-		std::string log = std::vformat(string, std::make_format_args(args...));
-
-		SetupLogEntry(LogLevel::DEBUG, log);
-	}
-
-	template<class... Types>
-	static void Info(Types... args)
-	{
-		constexpr std::size_t n = sizeof...(args);
-
-		std::string string;
-
-		for (int i = 0; i < n; i++)
+		if (nFormat <= n)
 		{
-			string += "{} ";
+			log = std::vformat(string, std::make_format_args(args...));
+			SetupLogEntry(LogLevel::FATALERROR, log);
 		}
 
-		std::string log = std::vformat(string, std::make_format_args(args...));
-
-		SetupLogEntry(LogLevel::INFO, log);
-	}
-
-	template<class... Types>
-	static void Warning(Types... args)
-	{
-		constexpr std::size_t n = sizeof...(args);
-
-		std::string string;
-
-		for (int i = 0; i < n; i++)
+		else
 		{
-			string += "{} ";
+			Logger::Error("Too many arguments, not enough {}", "{}");
 		}
-
-		std::string log = std::vformat(string, std::make_format_args(args...));
-
-		SetupLogEntry(LogLevel::WARNING, log);
-	}
-
-	template<class... Types>
-	static void Error(Types... args)
-	{
-		constexpr std::size_t n = sizeof...(args);
-
-		std::string string;
-
-		for (int i = 0; i < n; i++)
-		{
-			string += "{} ";
-		}
-
-		std::string log = std::vformat(string, std::make_format_args(args...));
-
-		SetupLogEntry(LogLevel::ERROR, log);
-	}
-
-	template<class... Types>
-	static void FatalError(Types... args)
-	{
-		constexpr std::size_t n = sizeof...(args);
-
-		std::string string;
-
-		for (int i = 0; i < n; i++)
-		{
-			string += "{} ";
-		}
-
-		std::string log = std::vformat(string, std::make_format_args(args...));
-
-		SetupLogEntry(LogLevel::FATALERROR, log);
 	}
 
 private:
 	static std::string CurrentDateTime();
+	
 	static void CreateDebugFile(const std::string& path, const std::string& name);
 	static void SetupLogEntry(LogLevel level, const std::string& log);
-
-	UNDEFINED_ENGINE static inline std::fstream mFile;
 
 	static void Start();
 	static void PrintEntry(LogEntry entry);
 
 	UNDEFINED_ENGINE static inline bool IsRunning = true;
-	UNDEFINED_ENGINE static inline std::condition_variable Sleep;
+	UNDEFINED_ENGINE static inline bool IsSync = true;
 
+	UNDEFINED_ENGINE static inline std::fstream mFile;
+
+	UNDEFINED_ENGINE static inline std::condition_variable Sleep;
 	UNDEFINED_ENGINE static inline std::thread Thread = std::thread(&Logger::Start);
 	UNDEFINED_ENGINE static inline TsQueue<LogEntry> EntryList;
 };

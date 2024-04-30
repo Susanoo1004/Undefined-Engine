@@ -36,7 +36,7 @@ private:
 	Renderer* mRenderer = nullptr;
 	SoundDevice* mSoundDevice = nullptr;
 	std::shared_ptr<KeyInput> mKeyInput = nullptr;
-	SoundSource* tamerelaputemaxime;
+	SoundSource* mSoundSource;
 
 public:
 	UNDEFINED_ENGINE static inline bool IsInGame = false;

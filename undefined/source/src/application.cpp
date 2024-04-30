@@ -54,7 +54,6 @@ void Application::Init()
 
     ResourceManager::Load("../undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
-
     // Callback
     ServiceLocator::SetupCallbacks();
 
@@ -80,8 +79,8 @@ void Application::Init()
     mSoundDevice = SoundDevice::Get();
     uint32_t sound1 = SoundBuffer::Get()->AddSoundEffect("fazbear.wav");
     
-    tamerelaputemaxime = new SoundSource;
-    tamerelaputemaxime->Play(sound1);
+    mSoundSource = new SoundSource;
+    mSoundSource->Play(sound1);
 }
 
 void Application::Update()
