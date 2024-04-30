@@ -2,17 +2,22 @@
 
 #include "engine_debug/logger.h"
 
-void RuntimeClasses::Display(void* obj, size_t hash)
+const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)
 {
-	auto flipping = mHashClasses.find(hash);
+	auto hashedClass = mHashClasses.find(hash);
 
-	if (flipping == mHashClasses.end())
+	if (hashedClass == mHashClasses.end())
 	{
 		Logger::Error("Could not find hashClass {}", hash);
+		return nullptr;
 	}
+	return &hashedClass->second;
+}
 
-	else
+void RuntimeClasses::Display(void* obj, size_t hash)
+{
+	if (auto hashedClass = GetHashedClass(hash))
 	{
-		flipping->second.display(obj);
+		hashedClass->display(obj);
 	}
 }

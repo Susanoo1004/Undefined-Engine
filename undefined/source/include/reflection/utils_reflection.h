@@ -24,6 +24,14 @@ namespace Reflection
 	void DisplayObj(MemberT* obj);
 
 	/// <summary>
+	/// Object we wish to write into YAML string
+	/// </summary>
+	/// <typeparam name="T"> type of the object we want to write </typeparam>
+	/// <param name="obj"> object we write </param>
+	template<typename T>
+	std::string WriteObj(T* obj);
+
+	/// <summary>
 	/// Object we wish to reflect
 	/// </summary>
 	/// <typeparam name="T"> type of the object we want to reflect </typeparam>
@@ -57,6 +65,20 @@ namespace Reflection
 
 	template<typename T, typename MemberT, typename DescriptorT>
 	void Attributes(std::string& name);
+}
+
+template<typename T>
+std::string Reflection::WriteObj(T* obj)
+{
+	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
+	{
+		//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
+		if constexpr (!Reflection::IsFunction<DescriptorT>())
+		{
+
+		}
+	}
+	return std::string;
 }
 
 template<typename T>

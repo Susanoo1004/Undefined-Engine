@@ -68,3 +68,13 @@ void SceneManager::Draw()
 
 	ActualScene->Draw();
 }
+
+void SceneManager::SaveCurrentScene()
+{
+	if (!ActualScene)
+	{
+		return;
+	}
+
+
+}

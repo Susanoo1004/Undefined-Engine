@@ -18,6 +18,8 @@ public:
 	template <typename T>
 	static void AddType();
 
+	static const RuntimeClass* GetHashedClass(size_t hash);
+
 	static void Display(void* obj, size_t hash);
 
 private:

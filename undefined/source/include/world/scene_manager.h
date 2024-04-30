@@ -20,6 +20,9 @@ public:
 	static void Start();
 	static void GlobalUpdate();
 	static void Draw();
+
+	static void SaveCurrentScene();
+	static void LoadScene(const std::string& path);
 	
 	static inline Scene* ActualScene;
 	static inline std::vector<Scene*> Scenes;
