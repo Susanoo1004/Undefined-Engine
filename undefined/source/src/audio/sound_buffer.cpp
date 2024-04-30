@@ -102,7 +102,7 @@ ALuint SoundBuffer::AddSoundEffect(const char* filename)
 	}
 
 	mSoundEffectBuffers.push_back(bufferid);  // add to the list of known buffers
-
+	audioFilesName.push_back(filename);
 	return bufferid;
 }
 

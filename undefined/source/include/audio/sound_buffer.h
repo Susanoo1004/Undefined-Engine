@@ -13,6 +13,8 @@ public:
 	ALuint AddSoundEffect(const char* filename);
 	bool RemoveSoundEffect(const ALuint& buffer);
 
+	static inline std::vector<const char*> audioFilesName;
+
 private:
 	SoundBuffer();
 	~SoundBuffer();

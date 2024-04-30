@@ -1,5 +1,6 @@
 #include "audio/sound_source.h"
 #include "engine_debug/logger.h"
+#include "audio/sound_buffer.h"
 
 SoundSource::SoundSource()
 {
@@ -29,15 +30,14 @@ void SoundSource::Play(const ALuint buffer)
 
 	Vector3 test(1.f);
 	ALint state = AL_PLAYING;
-	Logger::Info("Playing sound {}", mBuffer);
-	//while (state == AL_PLAYING && alGetError() == AL_NO_ERROR)
-	//{
-	//	//Logger::Info("Currently playing sound");
-	//	Logger::Debug(test, test);
-	//	alGetSourcei(mSource, AL_SOURCE_STATE, &state);
-	//}
-	//Logger::Info("Stopped playing sound");
+	Logger::Info("Playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
+	if (state == AL_PLAYING && alGetError() == AL_NO_ERROR)
+	{
+		Logger::Info("Currently playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
+		alGetSourcei(mSource, AL_SOURCE_STATE, &state);
+	}
+	Logger::Info("Stopped playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
 
-	//alDeleteSources(1, &mSource);
-	//alDeleteBuffers(1, &buffer);
+	alDeleteSources(1, &mSource);
+	alDeleteBuffers(1, &buffer);
 }
