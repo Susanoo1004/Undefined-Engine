@@ -116,7 +116,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;JPH_SHARED_LIBRARY;JPH_DEBUG_RENDERER;JPH_DISABLE_CUSTOM_ALLOCATOR;JPH_FLOATING_POINT_EXCEPTIONS_ENABLED;JPH_PROFILE_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>source/include;</AdditionalIncludeDirectories>
@@ -141,7 +141,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;JPH_SHARED_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>source/include;</AdditionalIncludeDirectories>
@@ -173,6 +173,7 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\wrapper\physics_system.cpp" />
     <ClCompile Include="source\src\interface\content_browser_folders.cpp" />
     <ClCompile Include="source\src\interface\content_browser_hierarchy.cpp" />
     <ClCompile Include="source\src\reflection\utils_reflection.cpp" />
@@ -220,6 +221,8 @@
   <ItemGroup>
     <Library Include="external\libs\assimp-vc142-mtd.lib" />
     <Library Include="external\libs\glfw3.lib" />
+    <Library Include="external\libs\Jolt.lib" />
+    <Library Include="external\libs\Joltd.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
@@ -244,6 +247,7 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\wrapper\physics_system.h" />
     <ClInclude Include="source\include\framebuffer.h" />
     <ClInclude Include="source\include\interface\content_browser_folders.h" />
     <ClInclude Include="source\include\interface\content_browser_hierarchy.h" />
@@ -308,6 +312,10 @@
     <Image Include="assets\undefined_logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="external\libs\Jolt.dll" />
+    <None Include="external\libs\Jolt.pdb" />
+    <None Include="external\libs\Joltd.dll" />
+    <None Include="external\libs\Joltd.pdb" />
     <None Include="external\libs\toolboxMoteur.pdb" />
     <None Include="external\libs\toolboxMoteurd.pdb" />
   </ItemGroup>

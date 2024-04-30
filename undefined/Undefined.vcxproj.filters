@@ -55,6 +55,7 @@
     <ClCompile Include="source\src\interface\content_browser_hierarchy.cpp" />
     <ClCompile Include="source\src\interface\content_browser_folders.cpp" />
     <ClCompile Include="source\src\wrapper\time.cpp" />
+    <ClCompile Include="source\src\wrapper\physics_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -135,16 +136,23 @@
     <ClInclude Include="source\include\interface\content_browser_hierarchy.h" />
     <ClInclude Include="source\include\interface\content_browser_folders.h" />
     <ClInclude Include="source\include\wrapper\time.h" />
+    <ClInclude Include="source\include\wrapper\physics_system.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
     <Library Include="external\libs\assimp-vc142-mtd.lib" />
+    <Library Include="external\libs\Jolt.lib" />
+    <Library Include="external\libs\Joltd.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />
     <Image Include="assets\undefined_logo.png" />
+    <None Include="external\libs\Jolt.dll" />
+    <None Include="external\libs\Jolt.pdb" />
+    <None Include="external\libs\Joltd.dll" />
+    <None Include="external\libs\Joltd.pdb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\libs\toolboxMoteur.pdb" />

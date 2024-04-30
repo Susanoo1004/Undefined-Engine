@@ -8,10 +8,13 @@
 #include <toolbox/calc.h>
 
 #include <Jolt/Jolt.h>
+#include <Jolt/RegisterTypes.h>
+#include <Jolt/Core/Factory.h>
 
 #include "service_locator.h"
 
 #include "wrapper/time.h"
+#include "wrapper/physics_system.h"
 
 #include "resources/texture.h"
 #include "resources/model.h"
@@ -32,7 +35,6 @@
 
 Application::Application()
 {
-    std::cout << JPH::abs(1) << "\n";
     ServiceLocator::Setup();
 
     mWindowManager = ServiceLocator::Get<Window>();
@@ -43,6 +45,9 @@ void Application::Init()
 {
     mWindowManager->Init();
     mRenderer->Init();
+
+    //Physics
+    PhysicsSystem::Init();
 
     RuntimeClasses::AddType<Component>();
     RuntimeClasses::AddType<Light>();
@@ -78,6 +83,8 @@ void Application::Update()
     Time::SetTimeVariables();
 
     mRenderer->SetClearColor(0,0,0);
+
+    PhysicsSystem::Update();
 
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
@@ -124,6 +131,7 @@ void Application::Update()
 
 void Application::Clear()
 {
+    PhysicsSystem::Terminate();
     SceneManager::Delete();
     delete Camera::CurrentCamera;
     mRenderer->UnUseShader();
