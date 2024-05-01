@@ -26,18 +26,76 @@ void SoundSource::Play(const ALuint buffer)
 		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
 	}
 
-	alSourcePlay(mSource);
-
-	Vector3 test(1.f);
-	ALint state = AL_PLAYING;
-	Logger::Info("Playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
-	if (state == AL_PLAYING && alGetError() == AL_NO_ERROR)
+	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
 	{
-		Logger::Info("Currently playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
-		alGetSourcei(mSource, AL_SOURCE_STATE, &state);
+		alSourcePlay(mSource);
+		Logger::Info("Playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
+		mOldState = mState;
 	}
-	Logger::Info("Stopped playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
+}
 
-	alDeleteSources(1, &mSource);
-	alDeleteBuffers(1, &buffer);
+void SoundSource::Pause(const ALuint buffer)
+{
+	if (buffer != mBuffer)
+	{
+		mBuffer = buffer;
+		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+	}
+
+	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	if (mState == AL_PLAYING && alGetError() == AL_NO_ERROR)
+	{
+		alSourcePause(mSource);
+		Logger::Info("Paused sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
+	}
+}
+
+void SoundSource::Resume(const ALuint buffer)
+{
+	if (buffer != mBuffer)
+	{
+		mBuffer = buffer;
+		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+	}
+
+	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	if (mState == AL_PAUSED && alGetError() == AL_NO_ERROR)
+	{
+		alSourcePlay(mSource);
+		Logger::Info("Resume sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
+	}
+}
+
+void SoundSource::Stop(const ALuint buffer)
+{
+	if (buffer != mBuffer)
+	{
+		mBuffer = buffer;
+		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+	}
+
+	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	if (mState != AL_STOPPED && alGetError() == AL_NO_ERROR)
+	{
+		Logger::Info("Stopped playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
+		alSourceStop(mSource);
+	}
+}
+
+void SoundSource::Restart(const ALuint buffer)
+{
+	if (buffer != mBuffer)
+	{
+		mBuffer = buffer;
+		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+	}
+
+	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
+	{
+		Logger::Info("Restarted sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
+		alSourceRewind(mSource);
+		alSourcePlay(mSource);
+	}
 }

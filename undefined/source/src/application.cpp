@@ -77,10 +77,9 @@ void Application::Init()
 
     //SOUND
     mSoundDevice = SoundDevice::Get();
-    uint32_t sound1 = SoundBuffer::Get()->AddSoundEffect("fazbear.wav");
+    sound1 = SoundBuffer::Get()->AddSoundEffect("fazbear.wav");
     
     mSoundSource = new SoundSource;
-    mSoundSource->Play(sound1);
 }
 
 void Application::Update()
@@ -92,6 +91,31 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
+    {
+        mSoundSource->Play(sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_C))
+    {
+        mSoundSource->Pause(sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_N))
+    {
+        mSoundSource->Resume(sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_V))
+    {
+        mSoundSource->Stop(sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_B))
+    {
+        mSoundSource->Restart(sound1);
+    }
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {

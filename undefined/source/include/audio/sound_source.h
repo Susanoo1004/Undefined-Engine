@@ -13,11 +13,17 @@ public:
 	UNDEFINED_ENGINE ~SoundSource();
 
 	void Play(ALuint buffer);
-	
+	void Pause(ALuint buffer);
+	void Resume(ALuint buffer);
+	void Stop(ALuint buffer);
+	void Restart(ALuint buffer);
+
 private:
 	ALuint mBuffer = 0;
-	ALuint mSource;
-	
+	ALuint mSource = 0;
+	ALint mState = 0;
+	ALint mOldState = 0;
+
 	Vector3 mPostition = Vector3(1.f, 1.f, 1.f);
 	Vector3 mVelocity = Vector3(1.f, 1.f, 1.f);
 
