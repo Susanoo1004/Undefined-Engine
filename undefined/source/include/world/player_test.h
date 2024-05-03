@@ -1,11 +1,17 @@
 #pragma once
-#include "world/mono_behaviour.h"
 
-class Player : public MonoBehaviour
+#include <vector>
+
+#include "world/script.h"
+
+class Player : public Script
 {
 public:
 	void Update() override;
+
+private:
+	
 };
 
-REFL_AUTO(type(Player, bases<MonoBehaviour>)
+REFL_AUTO(type(Player, bases<Script>)
 );

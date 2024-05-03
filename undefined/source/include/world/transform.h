@@ -1,10 +1,12 @@
 #pragma once
-#include "utils/flag.h"
 
 #include <toolbox/Vector3.h>
 #include <toolbox/Matrix4x4.h>
 #include <refl.hpp>
+
 #include "reflection/attributes.h"
+
+#include "utils/flag.h"
 
 class Transform
 {

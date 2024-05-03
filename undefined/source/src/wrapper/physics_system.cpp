@@ -8,7 +8,7 @@ void PhysicsSystem::Init()
 	JPH::RegisterDefaultAllocator();
 
 	JPH::Trace = TraceImplentation;
-	//JPH::JPH_IF_ENABLE_ASSERTS(AssertFailed = AssertFailedImpl;);
+	// JPH::JPH_IF_ENABLE_ASSERTS(AssertFailed = AssertFailedImpl;);
 
 	JPH::Factory::sInstance = new JPH::Factory();
 
@@ -43,7 +43,7 @@ void PhysicsSystem::Init()
 	body_interface->AddBody(floor->GetID(), JPH::EActivation::DontActivate);
 
 
-	// ADD dyanmic body
+	// ADD dynamic body
 	
 	// Now create a dynamic body to bounce on the floor
 	// Note that this uses the shorthand version of creating and adding a body to the world
