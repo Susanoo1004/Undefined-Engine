@@ -6,6 +6,7 @@
 #include"resources/texture.h"
 #include"resources/model.h"
 
+#include "engine_debug/renderer_debug.h"
 #include "engine_debug/logger.h"
 
 void Renderer::Init()
@@ -14,7 +15,7 @@ void Renderer::Init()
     SetClearColor(0, 0, 0);
     EnableTest(GL_DEPTH_TEST);
 
-    Debug.DebugInit();
+    RendererDebug::DebugInit();
 }
 
 void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blueBaseColor)

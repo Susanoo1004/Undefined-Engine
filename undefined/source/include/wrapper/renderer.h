@@ -4,7 +4,6 @@
 #include <toolbox/Matrix4x4.h>
 #include <toolbox/Vector3.h>
 
-#include "engine_debug/renderer_debug.h"
 #include "wrapper/service_type.h"
 #include "utils/flag.h"
 
@@ -297,8 +296,6 @@ public:
 	/// Index of the obejct selected
 	/// </summary>
 	int ObjectIndex = -1;
-
-	RendererDebug Debug;
 };
 
 template<class ...Args>
