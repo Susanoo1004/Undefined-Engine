@@ -6,6 +6,8 @@
 #include "world/scene_manager.h"
 #include "service_locator.h"
 
+#include "wrapper/time.h"
+
 void SceneGraph::DisplayWindow()
 {
     if (!SceneManager::ActualScene)
@@ -67,6 +69,7 @@ void SceneGraph::DisplayObject(Object* object)
 
 void SceneGraph::ClickSelectObject(Object* object)
 {
+
     if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
     {
         mSelectedObject = object;
@@ -80,8 +83,21 @@ void SceneGraph::ClickSelectObject(Object* object)
     }
     if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
     {
-        float t = 1;
-        Camera::CurrentCamera->Eye = calc::Lerp(Camera::CurrentCamera->Eye, object->GameTransform->Position - Camera::CurrentCamera->LookAt, t);
+        // Time for the travel time of the camera when double clicking to an object 
+        mCamTravelTime = 0.4f;
+        mLerpCam = true;
+        mBaseCamPos = Camera::CurrentCamera->Eye;
+    }
+    if (mLerpCam)
+    {
+        Camera::CurrentCamera->Eye = calc::Lerp(mBaseCamPos, object->GameTransform->Position - Camera::CurrentCamera->LookAt, 1 - mCamTravelTime);
+
+        mCamTravelTime -= Time::DeltaTime;
+
+        if (mCamTravelTime <= 0)
+        {
+            mLerpCam = false;
+        }
     }
 }
 
