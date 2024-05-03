@@ -51,32 +51,13 @@ public:
 	template <ComponentType Comp, typename... Args>
 	Comp* AddComponent(Args... args)
 	{
-		Comp* comp = nullptr;
-		for (Component* findComp : Components)
-		{
-			if (typeid(Comp*) == typeid(findComp))
-			{
-				comp = (Comp*)findComp;
-				break;
-			}
-		}
-
-		if (comp)
-		{
-			Logger::Error("Component {} already exist in object {}", typeid(Comp).name(), Name);
-			return nullptr;
-		}
-
-		else
-		{
-			Logger::Info("Component {} added in object {}", typeid(Comp).name(), Name);
-		}
-		comp = new Comp(args...);
+		Comp* comp = new Comp(args...);
 
 		comp->GameObject = this;
 		comp->GameTransform = GameTransform;
 
 		Components.push_back(comp);
+		Logger::Info("Component {} added in object {}", typeid(Comp).name(), Name);
 		
 		return comp;
 	}
