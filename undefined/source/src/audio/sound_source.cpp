@@ -99,3 +99,28 @@ void SoundSource::Restart(const ALuint buffer)
 		alSourcePlay(mSource);
 	}
 }
+
+void SoundSource::SetPosition(const Vector3& position)
+{
+	mPostition = position;
+}
+
+void SoundSource::SetVelocity(const Vector3& velocity)
+{
+	mVelocity = velocity;
+}
+
+void SoundSource::SetVolume(const float volume)
+{
+	mGain = volume;
+}
+
+void SoundSource::SetSpeed(const float pitch)
+{
+	mPitch = pitch;
+}
+
+void SoundSource::SetLoop(const bool shouldLoop)
+{
+	mLoop = shouldLoop;
+}

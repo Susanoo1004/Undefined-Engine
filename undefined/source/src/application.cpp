@@ -91,6 +91,8 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
+    
+    mSoundSource->SetPosition(Vector3());
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
     {
@@ -116,6 +118,9 @@ void Application::Update()
     {
         mSoundSource->Restart(sound1);
     }
+
+    mSoundDevice->SetPosition(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);
+    mSoundDevice->SetOrientation(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->LookAt);
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {

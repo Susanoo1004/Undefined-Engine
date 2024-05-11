@@ -18,6 +18,12 @@ public:
 	void Stop(ALuint buffer);
 	void Restart(ALuint buffer);
 
+	void SetPosition(const Vector3& position);
+	void SetVelocity(const Vector3& velocity);
+	void SetVolume(const float volume);
+	void SetSpeed(const float pitch);
+	void SetLoop(const bool shouldLoop);
+
 private:
 	ALuint mBuffer = 0;
 	ALuint mSource = 0;
@@ -27,8 +33,8 @@ private:
 	Vector3 mPostition = Vector3(1.f, 1.f, 1.f);
 	Vector3 mVelocity = Vector3(1.f, 1.f, 1.f);
 
-	float mPitch = 1.f;
 	float mGain = 1.f;
+	float mPitch = 1.f;
 	
 	bool mLoop = false;
 };
