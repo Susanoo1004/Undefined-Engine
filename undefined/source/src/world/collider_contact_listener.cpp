@@ -1,5 +1,7 @@
 #include "world/collider_contact_listener.h"
 
+#include "wrapper/physics_system.h"
+
 JPH::ValidateResult ColliderContactListener::OnContactValidate(const JPH::Body& inBody1, const JPH::Body& inBody2, JPH::RVec3Arg inBaseOffset, const JPH::CollideShapeResult& inCollisionResult)
 {
 	Logger::Info("Contact validate callback");
@@ -11,57 +13,73 @@ JPH::ValidateResult ColliderContactListener::OnContactValidate(const JPH::Body& 
 void ColliderContactListener::OnContactAdded(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings)
 {
 	Logger::Info("A contact was added");
-	Script* script = GameObject->GetComponent<Script>();
+
+	Script* script = PhysicsSystem::GetColliderFromID(inBody1.GetID().GetIndexAndSequenceNumber())->GameObject->GetComponent<Script>();
 
 	if (script)
 	{	
-		mOnCollisionEnterScripts.push_back(std::make_pair(script, inBody2));
+		mOnCollisionEnterScripts.push_back(std::make_pair(script, &inBody2));
 	}
+	
 }
 void ColliderContactListener::OnContactPersisted(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings)
 {
 	Logger::Info("A contact was persisted");
-	Script* script = GameObject->GetComponent<Script>();
+	Script* script = PhysicsSystem::GetColliderFromID(inBody1.GetID().GetIndexAndSequenceNumber())->GameObject->GetComponent<Script>();
 
 	if (script)
 	{
-		std::pair<Script*, const JPH::Body&> p = std::make_pair(script, inBody2);
-
-		mOnCollisionStayScripts.push_back(p);
+		mOnCollisionStayScripts.push_back(std::make_pair(script, &inBody2));
 	}
+	
 }
 
 void ColliderContactListener::OnContactRemoved(const JPH::SubShapeIDPair& inSubShapePair)
 {
-	Logger::Info("A contact was removed");
-	Script* script = GameObject->GetComponent<Script>();
+	Logger::Info("A contact was removed"); 
+	Script* script = PhysicsSystem::GetColliderFromID(inSubShapePair.GetBody1ID().GetIndexAndSequenceNumber())->GameObject->GetComponent<Script>();
 
 	if (script)
 	{
-		OnCollisionExitScripts.push_back(script);
+		mOnCollisionExitScripts.push_back(script);
 	}
+	
 }
 
 void ColliderContactListener::CallOnColliderEnter()
 {
-	for (std::pair<Script*, const JPH::Body&> p : mOnCollisionEnterScripts)
+	for (std::pair<Script*, const JPH::Body*> p : mOnCollisionEnterScripts)
 	{
 		p.first->OnCollisionEnter(p.second);
+		delete p.first;
+		delete p.second;
 	}
+
+	mOnCollisionEnterScripts.clear();
 }
 
 void ColliderContactListener::CallOnColliderStay()
 {
-	for (std::pair<Script*, const JPH::Body&> p : mOnCollisionStayScripts)
+	
+	for (std::pair<Script*, const JPH::Body*> p : mOnCollisionStayScripts)
 	{
 		p.first->OnCollisionStay(p.second);
+		delete p.first;
+		delete p.second;
 	}
+
+	mOnCollisionStayScripts.clear();
+	
 }
 
 void ColliderContactListener::CallOnColliderExit()
 {
-	for (Script* s : OnCollisionExitScripts)
+	for (Script* s : mOnCollisionExitScripts)
 	{
 		s->OnCollisionExit();
+		delete s;
 	}
+
+	mOnCollisionExitScripts.clear();
+
 }

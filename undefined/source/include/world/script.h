@@ -23,9 +23,9 @@ public:
 
 	virtual void OnDisable();
 
-	virtual void OnCollisionEnter(const JPH::Body& inBody2);
+	virtual void OnCollisionEnter(const JPH::Body* inBody2);
 
-	virtual void OnCollisionStay(const JPH::Body& inBody2);
+	virtual void OnCollisionStay(const JPH::Body* inBody2);
 
 	virtual void OnCollisionExit();
 

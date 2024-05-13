@@ -59,6 +59,8 @@
     <ClCompile Include="source\src\world\collider_contact_listener.cpp" />
     <ClCompile Include="source\src\world\rigidbody.cpp" />
     <ClCompile Include="source\include\world\rigidbody.h" />
+    <ClCompile Include="source\src\world\box_collider.cpp" />
+    <ClCompile Include="source\src\world\capsule_collider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -141,6 +143,9 @@
     <ClInclude Include="source\include\wrapper\time.h" />
     <ClInclude Include="source\include\wrapper\physics_system.h" />
     <ClInclude Include="source\include\world\collider_contact_listener.h" />
+    <ClInclude Include="source\include\world\collider.h" />
+    <ClInclude Include="source\include\world\box_collider.h" />
+    <ClInclude Include="source\include\world\capsule_collider.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

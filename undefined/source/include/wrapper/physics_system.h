@@ -1,6 +1,7 @@
 #pragma once
 
 #include <thread>
+#include <unordered_map>
 
 #include <Jolt/Jolt.h>
 
@@ -9,13 +10,15 @@
 #include <Jolt/Core/TempAllocator.h>
 #include <Jolt/Core/JobSystemThreadPool.h>
 #include <Jolt/Physics/PhysicsSettings.h>
-#include <Jolt/Physics/PhysicsSystem.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
+#include <Jolt/Physics/Collision/Shape/CapsuleShape.h>
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
 
 #include "engine_debug/logger.h"
+
+#include "world/collider_contact_listener.h"
 
 #include "utils/flag.h"
 
@@ -138,35 +141,6 @@ public:
 	}
 };
 
-// An example contact listener
-class MyContactListener : public JPH::ContactListener
-{
-public:
-	// See: ContactListener
-	virtual JPH::ValidateResult OnContactValidate(const JPH::Body& inBody1, const JPH::Body& inBody2, JPH::RVec3Arg inBaseOffset, const JPH::CollideShapeResult& inCollisionResult) override
-	{
-		Logger::Info("Contact validate callback");
-
-		// Allows you to ignore a contact before it is created (using layers to not make objects collide is cheaper!)
-		return JPH::ValidateResult::AcceptAllContactsForThisBodyPair;
-	}
-
-	virtual void OnContactAdded(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings) override
-	{
-		Logger::Info("A contact was added");
-	}
-
-	virtual void OnContactPersisted(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings) override
-	{
-		Logger::Info("A contact was persisted");
-	}
-
-	virtual void OnContactRemoved(const JPH::SubShapeIDPair& inSubShapePair) override
-	{
-		Logger::Info("A contact was removed");
-	}
-};
-
 // An example activation listener
 class MyBodyActivationListener : public JPH::BodyActivationListener
 {
@@ -196,18 +170,28 @@ public:
 
 	static void TraceImplentation(const char* inFMT, ...);
 
+	static JPH::Vec3Arg ToJPH(const Vector3& in);
+	static JPH::QuatArg ToJPH(const Quaternion& in);
+
+	static unsigned int CreateBox(Vector3 pos, Quaternion rot, Vector3 scale);
+	static unsigned int CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius);
+
+	static void DestroyBody(unsigned int body_ID);
+
+	static Collider* GetColliderFromID(unsigned int bodyId);
+
 	static inline JPH::TempAllocatorImpl* temp_allocator;
 
 	// We need a job system that will execute physics jobs on multiple threads.
 	static inline JPH::JobSystemThreadPool* job_system;
 
-	static inline const unsigned int cMaxBodies = 1024;
+	static inline constexpr unsigned int cMaxBodies = 1024;
 
-	static inline const unsigned int cNumBodyMutexes = 0;
+	static inline constexpr unsigned int cNumBodyMutexes = 0;
 
-	static inline const unsigned int cMaxBodyPairs = 1024;
+	static inline constexpr unsigned int cMaxBodyPairs = 1024;
 
-	static inline const unsigned int cMaxContactConstraints = 1024;
+	static inline constexpr unsigned int cMaxContactConstraints = 1024;
 
 	static inline BPLayerInterfaceImpl broad_phase_layer_interface;
 
@@ -218,12 +202,14 @@ public:
 	static inline JPH::PhysicsSystem* physics_system;
 
 	static inline MyBodyActivationListener body_activation_listener;
-	static inline MyContactListener contact_listener;
+	static inline ColliderContactListener contact_listener;
 
 	static inline JPH::BodyInterface* body_interface;
 
 	static inline JPH::Body* floor = nullptr;
 	static inline JPH::BodyID sphere_id;
+
+	static inline std::unordered_map<unsigned int, Collider*> ColliderMap;
 
 };
 

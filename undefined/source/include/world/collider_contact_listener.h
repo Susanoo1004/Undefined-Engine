@@ -5,12 +5,12 @@
 
 #include "world/rigidbody.h"
 #include "world/object.h"
-#include "world/component.h"
+#include "world/collider.h"
 #include "world/script.h"
 
 #include "engine_debug/logger.h"
 
-class ColliderContactListener : public JPH::ContactListener, public Component
+class ColliderContactListener : public JPH::ContactListener
 {
 public:
 	// See: ContactListener
@@ -28,7 +28,8 @@ public:
 	static void CallOnColliderExit();
 	
 private:
-	static inline std::vector<std::pair<Script*, const JPH::Body&>> mOnCollisionEnterScripts;
-	static inline std::vector<std::pair<Script*, const JPH::Body&>> mOnCollisionStayScripts;
-	static inline std::vector<Script*> OnCollisionExitScripts;
+	static inline std::vector<std::pair<Script*, const JPH::Body*>> mOnCollisionEnterScripts;
+	static inline std::vector<std::pair<Script*, const JPH::Body*>> mOnCollisionStayScripts;
+	static inline std::vector<Script*> mOnCollisionExitScripts;
+
 };

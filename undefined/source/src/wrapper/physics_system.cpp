@@ -2,6 +2,7 @@
 
 #include <cstdarg>
 #include <toolbox/Vector3.h>
+#include <toolbox/Quaternion.h>
 
 void PhysicsSystem::Init()
 {
@@ -90,4 +91,54 @@ void PhysicsSystem::TraceImplentation(const char* inFMT, ...)
 
 	// Print to the TTY
 	std::cout << buffer << std::endl;
+}
+
+JPH::Vec3Arg PhysicsSystem::ToJPH(const Vector3& in)
+{
+	return JPH::RVec3Arg(in.x, in.y, in.z);
+}
+
+JPH::QuatArg PhysicsSystem::ToJPH(const Quaternion& in)
+{
+	return JPH::QuatArg(in.x, in.y, in.z, in.w);
+}
+
+unsigned int PhysicsSystem::CreateBox(Vector3 pos, Quaternion rot, Vector3 scale)
+{
+	JPH::BodyCreationSettings settings(new JPH::BoxShape(ToJPH(scale)), ToJPH(pos), ToJPH(rot), JPH::EMotionType::Dynamic, Layers::MOVING);
+
+	return body_interface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
+}
+
+unsigned int PhysicsSystem::CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius)
+{
+	const JPH::CapsuleShapeSettings capsuleSettings(height, radius);
+	const JPH::ShapeSettings::ShapeResult result = capsuleSettings.Create();
+
+	if (!result.IsValid())
+	{
+		Logger::Error("[Physics] - Couldn't create the capsule shape");
+		return JPH::BodyID::cInvalidBodyID;
+	}
+
+	JPH::BodyCreationSettings settings(result.Get(), ToJPH(pos), ToJPH(rot), JPH::EMotionType::Dynamic, Layers::MOVING);
+
+	return body_interface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
+}
+
+void PhysicsSystem::DestroyBody(unsigned int body_ID)
+{
+	body_interface->RemoveBody(JPH::BodyID(body_ID));
+	body_interface->DestroyBody(JPH::BodyID(body_ID));
+	ColliderMap.erase(ColliderMap.find(body_ID));
+}
+
+Collider* PhysicsSystem::GetColliderFromID(unsigned int body_ID)
+{
+	const auto&& it = ColliderMap.find(body_ID);
+
+	if (it == ColliderMap.end())
+		return nullptr;
+
+	return it->second;
 }

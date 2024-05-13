@@ -24,12 +24,12 @@ void Script::OnDisable()
 {
 }
 
-void Script::OnCollisionEnter(const JPH::Body& inBody2)
+void Script::OnCollisionEnter(const JPH::Body* inBody2)
 {
 
 }
 
-void Script::OnCollisionStay(const JPH::Body& inBody2)
+void Script::OnCollisionStay(const JPH::Body* inBody2)
 {
 }
 
