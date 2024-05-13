@@ -12,10 +12,10 @@ class SoundBuffer
 public:
 	static SoundBuffer* Get();
 	
-	ALuint AddSoundEffect(std::shared_ptr<Audio> filename);
+	ALuint AddSoundEffect(std::shared_ptr<Audio> sound);
 	bool RemoveSoundEffect(const ALuint& buffer);
 
-	static inline std::vector<const char*> audioFilesName;
+	static inline std::vector<std::string> audioFilesName;
 
 private:
 	SoundBuffer();

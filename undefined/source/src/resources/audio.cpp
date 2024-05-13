@@ -4,19 +4,16 @@
 
 #include "engine_debug/logger.h"
 
-Audio::Audio()
-{
-}
-
 Audio::Audio(const char* filename)
 {
-	mData = LoadWAV(filename, mChannel, mSampleRate, mBps, mSize);
 	mName = filename;
+	mData = LoadWAV(filename, mChannel, mSampleRate, mBps, mSize);
 }
 
 Audio::~Audio()
 {
 	mData = nullptr;
+	mName = "";
 }
 
 char* Audio::GetData()
@@ -44,7 +41,7 @@ ALint Audio::GetSize()
 	return mSize;
 }
 
-const char* Audio::GetName()
+std::string Audio::GetName()
 {
 	return mName;
 }

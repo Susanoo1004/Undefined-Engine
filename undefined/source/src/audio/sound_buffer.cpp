@@ -13,14 +13,14 @@ SoundBuffer* SoundBuffer::Get()
 	return soundBuffer;
 }
 
-ALuint SoundBuffer::AddSoundEffect(std::shared_ptr<Audio> filename)
+ALuint SoundBuffer::AddSoundEffect(std::shared_ptr<Audio> sound)
 {
 	ALenum err = 0;
 	ALuint bufferid = 0, format = 0;
 
-	if (filename->GetChannel() == 1)
+	if (sound->GetChannel() == 1)
 	{
-		if (filename->GetBPS() == 8)
+		if (sound->GetBPS() == 8)
 		{
 			format = AL_FORMAT_MONO8;
 		}
@@ -31,7 +31,7 @@ ALuint SoundBuffer::AddSoundEffect(std::shared_ptr<Audio> filename)
 	}
 	else
 	{
-		if (filename->GetBPS() == 8)
+		if (sound->GetBPS() == 8)
 		{
 			format = AL_FORMAT_STEREO8;
 		}
@@ -43,7 +43,7 @@ ALuint SoundBuffer::AddSoundEffect(std::shared_ptr<Audio> filename)
 
 	bufferid = 0;
 	alGenBuffers(1, &bufferid);
-	alBufferData(bufferid, format, filename->GetData(), filename->GetSize(), filename->GetSampleRate());
+	alBufferData(bufferid, format, sound->GetData(), sound->GetSize(), sound->GetSampleRate());
 
 	err = alGetError();
 	if (err != AL_NO_ERROR)
@@ -58,7 +58,8 @@ ALuint SoundBuffer::AddSoundEffect(std::shared_ptr<Audio> filename)
 	}
 
 	mSoundEffectBuffers.push_back(bufferid);  // add to the list of known buffers
-	audioFilesName.push_back(filename->GetName());
+	Logger::Debug("TEST : {}", sound->GetName());
+	audioFilesName.push_back(sound->GetName());
 	return bufferid;
 }
 

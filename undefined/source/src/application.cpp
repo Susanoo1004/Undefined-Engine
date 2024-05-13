@@ -78,7 +78,8 @@ void Application::Init()
     //SOUND
     mSoundDevice = SoundDevice::Get();
     sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/fazbear.wav"));
-    
+    sound2 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/desert.wav"));
+
     mSoundSource = new SoundSource;
 }
 
@@ -101,7 +102,7 @@ void Application::Update()
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_C))
     {
-        mSoundSource->Pause(sound1);
+        mSoundSource->Play(sound2);
     }
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_N))

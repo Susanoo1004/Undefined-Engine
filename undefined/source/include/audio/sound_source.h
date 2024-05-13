@@ -2,6 +2,7 @@
 
 #include <AL/al.h>
 
+#include <unordered_map>
 #include <toolbox/Vector3.h>
 
 #include "utils/utils.h"
@@ -12,7 +13,7 @@ public:
 	SoundSource();
 	UNDEFINED_ENGINE ~SoundSource();
 
-	void Play(ALuint buffer);
+	void Play(const ALuint buffer);
 	void Pause(ALuint buffer);
 	void Resume(ALuint buffer);
 	void Stop(ALuint buffer);

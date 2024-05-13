@@ -1,11 +1,11 @@
 #pragma once
 #include "resources/resource.h"
 #include <AL/al.h>
+#include <string>
 
 class Audio : public Resource
 {
 public:
-	Audio();
 	Audio(const char* filename);
 	~Audio();
 	
@@ -14,7 +14,7 @@ public:
 	ALushort GetBPS();
 	ALint GetSampleRate();
 	ALint GetSize();
-	const char* GetName();
+	std::string GetName();
 
 private:
 	char* mData = nullptr;
@@ -22,5 +22,5 @@ private:
 	ALint mSampleRate = 0, mSize = 0;
 
 	char* LoadWAV(const char* fn, ALushort& chan, ALint& samplerate, ALushort& bps, ALint& size);
-	const char* mName;
+	std::string mName;
 };
