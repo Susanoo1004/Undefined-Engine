@@ -58,7 +58,6 @@ ALuint SoundBuffer::AddSoundEffect(std::shared_ptr<Audio> sound)
 	}
 
 	mSoundEffectBuffers.push_back(bufferid);  // add to the list of known buffers
-	Logger::Debug("TEST : {}", sound->GetName());
 	audioFilesName.push_back(sound->GetName());
 	return bufferid;
 }

@@ -33,7 +33,7 @@ void SoundSource::Play(const ALuint buffer)
 		
 		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
-		Logger::Debug("Playing sound {}", newName);
+		Logger::Info("Playing sound {}", newName);
 	}
 }
 
