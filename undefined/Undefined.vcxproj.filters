@@ -55,7 +55,7 @@
     <ClCompile Include="source\src\interface\content_browser_hierarchy.cpp" />
     <ClCompile Include="source\src\interface\content_browser_folders.cpp" />
     <ClCompile Include="source\src\wrapper\time.cpp" />
-    <ClCompile Include="source\src\audio\audio.cpp" />
+    <ClCompile Include="source\src\resources\audio.cpp" />
     <ClCompile Include="source\src\audio\sound_device.cpp" />
     <ClCompile Include="source\src\audio\sound_buffer.cpp" />
     <ClCompile Include="source\src\audio\sound_source.cpp" />
@@ -139,7 +139,7 @@
     <ClInclude Include="source\include\interface\content_browser_hierarchy.h" />
     <ClInclude Include="source\include\interface\content_browser_folders.h" />
     <ClInclude Include="source\include\wrapper\time.h" />
-    <ClInclude Include="source\include\audio\audio.h" />
+    <ClInclude Include="source\include\resources\audio.h" />
     <ClInclude Include="source\include\audio\sound_device.h" />
     <ClInclude Include="source\include\audio\sound_buffer.h" />
     <ClInclude Include="source\include\audio\sound_source.h" />

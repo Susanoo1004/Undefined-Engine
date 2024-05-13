@@ -2,8 +2,10 @@
 
 #include <AL/alext.h>
 #include <inttypes.h>
-#include "engine_debug/logger.h"
 #include <algorithm>
+
+#include "engine_debug/logger.h"
+#include "resources/audio.h"
 
 SoundBuffer* SoundBuffer::Get()
 {
@@ -11,60 +13,14 @@ SoundBuffer* SoundBuffer::Get()
 	return soundBuffer;
 }
 
-char* loadWAV(const char* fn, unsigned short& chan, int& samplerate, unsigned short& bps, int& size)
+ALuint SoundBuffer::AddSoundEffect(std::shared_ptr<Audio> filename)
 {
-	std::ifstream file(fn, std::ios::in | std::ios::binary | std::ios::ate);
-	int fileSize = file.tellg();
-	file.seekg(0);
+	ALenum err = 0;
+	ALuint bufferid = 0, format = 0;
 
-	if (!file.good())
+	if (filename->GetChannel() == 1)
 	{
-		Logger::Warning("File {} could not be open", fn);
-	}
-
-	char buffer[4];
-	file.read(buffer, 4);
-
-	if (strncmp(buffer, "RIFF", 4) == 0)
-	{
-		for (size_t i = 12; i < fileSize; i++)
-		{
-			if (strncmp(buffer, "fmt ", 4) == 0)
-			{
-				file.seekg(i + 8);
-				file.read((char*)&chan, 2); //Number of channels
-				file.read((char*)&samplerate, 4); //Sample rate
-				Logger::Debug("{}", (int)file.cur);
-				file.seekg(i + 20);
-				file.read((char*)&bps, 2); //Bits per sample
-			}
-			if (strncmp(buffer, "data", 4) == 0)
-			{
-				file.seekg(i + 2);
-				file.read((char*)&size, 4); //size
-				char* data = new char[size];
-				file.read(data, size);
-				return data;
-			}
-			file.read(buffer, 4);
-			file.seekg(i);
-		}
-	}
-	return NULL;
-}
-
-ALuint SoundBuffer::AddSoundEffect(const char* filename)
-{
-	ALenum err;
-	ALushort channel, bps;
-	ALint sampleRate, size;
-	ALuint bufferid, format;
-
-	char* data = loadWAV(filename, channel, sampleRate, bps, size);
-
-	if (channel == 1)
-	{
-		if (bps == 8)
+		if (filename->GetBPS() == 8)
 		{
 			format = AL_FORMAT_MONO8;
 		}
@@ -75,7 +31,7 @@ ALuint SoundBuffer::AddSoundEffect(const char* filename)
 	}
 	else
 	{
-		if (bps == 8)
+		if (filename->GetBPS() == 8)
 		{
 			format = AL_FORMAT_STEREO8;
 		}
@@ -87,7 +43,7 @@ ALuint SoundBuffer::AddSoundEffect(const char* filename)
 
 	bufferid = 0;
 	alGenBuffers(1, &bufferid);
-	alBufferData(bufferid, format, data, size, sampleRate);
+	alBufferData(bufferid, format, filename->GetData(), filename->GetSize(), filename->GetSampleRate());
 
 	err = alGetError();
 	if (err != AL_NO_ERROR)
@@ -102,7 +58,7 @@ ALuint SoundBuffer::AddSoundEffect(const char* filename)
 	}
 
 	mSoundEffectBuffers.push_back(bufferid);  // add to the list of known buffers
-	audioFilesName.push_back(filename);
+	audioFilesName.push_back(filename->GetName());
 	return bufferid;
 }
 

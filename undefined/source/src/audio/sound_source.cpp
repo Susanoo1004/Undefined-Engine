@@ -31,7 +31,6 @@ void SoundSource::Play(const ALuint buffer)
 	{
 		alSourcePlay(mSource);
 		Logger::Info("Playing sound {}", SoundBuffer::audioFilesName[mBuffer - 1]);
-		mOldState = mState;
 	}
 }
 

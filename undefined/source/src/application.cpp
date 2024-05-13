@@ -30,7 +30,7 @@
 
 #include "reflection/runtime_classes.h"
 
-#include "audio/audio.h"
+#include "resources/audio.h"
 #include "audio/sound_buffer.h"
 
 Application::Application()
@@ -77,7 +77,7 @@ void Application::Init()
 
     //SOUND
     mSoundDevice = SoundDevice::Get();
-    sound1 = SoundBuffer::Get()->AddSoundEffect("fazbear.wav");
+    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/fazbear.wav"));
     
     mSoundSource = new SoundSource;
 }
