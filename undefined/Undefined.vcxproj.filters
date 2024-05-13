@@ -61,6 +61,7 @@
     <ClCompile Include="source\include\world\rigidbody.h" />
     <ClCompile Include="source\src\world\box_collider.cpp" />
     <ClCompile Include="source\src\world\capsule_collider.cpp" />
+    <ClCompile Include="source\src\world\broad_phase_layer_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -146,6 +147,8 @@
     <ClInclude Include="source\include\world\collider.h" />
     <ClInclude Include="source\include\world\box_collider.h" />
     <ClInclude Include="source\include\world\capsule_collider.h" />
+    <ClInclude Include="source\include\world\broad_phase_layer_interface.h" />
+    <ClInclude Include="source\include\world\layers.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
