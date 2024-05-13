@@ -75,6 +75,7 @@ void Object::SetParent(Object* parent)
 		{
 			if (current->mParent == this)
 			{
+				SetParent(nullptr);
 				return;
 			}
 
@@ -93,7 +94,7 @@ void Object::SetParent(Object* parent)
 	}
 }
 
-const std::list<Object*> Object::GetChildren() const
+const std::vector<Object*> Object::GetChildren() const
 {
 	return mChildren;
 }
@@ -136,23 +137,23 @@ void Object::DetachChild(unsigned int index)
 	{
 		return;
 	}
-	auto it = mChildren.begin();
-	std::advance(it, index);
-	(*it)->mParent = mRoot;
-	(*it)->mTransform.mParentTransform = nullptr;
-	mChildren.remove(*it);
+	mChildren[index]->mParent = mRoot;
+	mChildren[index]->mTransform.mParentTransform = nullptr;
+	mChildren.erase(mChildren.begin() + index);
 }
 
 void Object::DetachChild(std::string name)
 {
+	unsigned int index = 0;
 	for (Object* child : mChildren)
 	{
 		if (child->Name == name)
 		{
 			child->mParent = mRoot;
 			child->mTransform.mParentTransform = nullptr;
-			mChildren.remove(child);
+			mChildren.erase(mChildren.begin() + index);
 		}
+		index++;
 	}
 }
 
@@ -163,10 +164,43 @@ void Object::DetachChild(Object* child)
 		Logger::Warning("DetachChild(Object* child) argument invalid, child does not exist");
 		return;
 	}
+	unsigned int index = 0;
+	for (Object* currChild : mChildren)
+	{
+		if (currChild->mUUID == child->mUUID)
+		{
+			currChild->mParent = mRoot;
+			currChild->mTransform.mParentTransform = nullptr;
+			mChildren.erase(mChildren.begin() + index);
+			break;
+		}
+		index++;
+	}
+}
 
-	child->mParent = mRoot;
-	child->mTransform.mParentTransform = nullptr;
-	mChildren.remove(child);
+void Object::AtachChild(Object* child, unsigned int index)
+{
+	if (!child)
+	{
+		Logger::Warning("AtachChild(Object* child, unsigned int index) argument invalid, child does not exist");
+		return;
+	}
+	child->SetParent(this);
+	unsigned int findIndex = 0; // find object findIndex
+	for (Object* find : child->mParent->mChildren)
+	{
+		if (find == child)
+		{
+			break;
+		}
+		findIndex++;
+	}
+	mChildren.erase(mChildren.begin() + findIndex, mChildren.begin() + findIndex + 1);
+	if (index > findIndex)
+	{
+		index--;
+	}
+	mChildren.insert(mChildren.begin() + index, child);
 }
 
 void Object::ChangeEnableStatus()
