@@ -8,12 +8,12 @@
 #include "world/scene_manager.h"
 #include "service_locator.h"
 
+#include "wrapper/time.h"
+
 static inline std::set<ImGuiID> openNextFrame;
 
 void SceneGraph::DisplayWindow()
 {
-    ImGui::ShowDemoWindow();
-
     if (!SceneManager::ActualScene)
     {
         return;
@@ -122,6 +122,7 @@ void SceneGraph::NodeInteraction(Object* object)
 
 void SceneGraph::ClickSelectObject(Object* object)
 {
+
     if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
     {
         mSelectedObject = object;
@@ -135,8 +136,21 @@ void SceneGraph::ClickSelectObject(Object* object)
     }
     if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
     {
-        float t = 1;
-        Camera::CurrentCamera->Eye = calc::Lerp(Camera::CurrentCamera->Eye, object->GameTransform->Position - Camera::CurrentCamera->LookAt, t);
+        // Time for the travel time of the camera when double clicking to an object 
+        mCamTravelTime = 0.4f;
+        mLerpCam = true;
+        mBaseCamPos = Camera::CurrentCamera->Eye;
+    }
+    if (mLerpCam)
+    {
+        Camera::CurrentCamera->Eye = calc::Lerp(mBaseCamPos, object->GameTransform->Position - Camera::CurrentCamera->LookAt, 1 - mCamTravelTime);
+
+        mCamTravelTime -= Time::DeltaTime;
+
+        if (mCamTravelTime <= 0)
+        {
+            mLerpCam = false;
+        }
     }
 }
 
@@ -154,8 +168,6 @@ bool SceneGraph::RightClickObject(Object* object)
             {
                 Object* newObject = SceneManager::ActualScene->AddObject(object, "Empty");
                 ClickSelectObject(newObject);
-                Logger::Debug("");
-                Print(Object::mRoot, "");
                 ImGui::CloseCurrentPopup();
                 success = true;
             }
@@ -256,7 +268,7 @@ bool SceneGraph::BeginDropOnObject(Object* object, bool setBefore)
 
             if (setBefore)
             {
-                unsigned int index = 0; // find object index
+                unsigned int index = 0; // find object index    
                 for (Object* find : object->mParent->mChildren)
                 {
                     if (find == object)
@@ -294,14 +306,5 @@ void SceneGraph::RenameObject(Object* object)
             object->Name = newName;
             mRenamingObject = nullptr;
         }
-    }
-}
-
-void SceneGraph::Print(Object* object, const char* plus)
-{
-    for (Object* test : object->mChildren)
-    {
-        Logger::Debug("{} {} : {}", plus, test->Name, test->mUUID);
-        Print(test, ((std::string)plus + "[ ]").c_str());
     }
 }

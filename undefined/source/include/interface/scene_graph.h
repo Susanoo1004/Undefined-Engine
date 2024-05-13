@@ -1,5 +1,7 @@
 #pragma once
 
+#include <toolbox/Vector3.h>
+
 #include "utils/flag.h"
 
 class Object;
@@ -27,7 +29,8 @@ private:
 	static inline Object* mRenamingObject;
 
 	static inline Object* mSelectedObject;
-	
-	// to del Debog
-	static void Print(Object* object, const char* plus);
+
+	static inline Vector3 mBaseCamPos = Vector3();
+	static inline bool mLerpCam = false;
+	static inline float mCamTravelTime = 0;
 };

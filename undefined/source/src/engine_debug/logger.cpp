@@ -32,7 +32,7 @@ std::string Logger::CurrentDateTime()
 
 void Logger::CreateDebugFile(const std::string& path, const std::string& name)
 {
-    std::filesystem::path const& filename = path + name + ".txt";
+    std::filesystem::path const& mFilename = path + name + ".txt";
     int fileCount = 0;
 
     if (!std::filesystem::exists(path))
@@ -54,14 +54,14 @@ void Logger::CreateDebugFile(const std::string& path, const std::string& name)
         }
     }
 
-    mFile.open(filename, std::fstream::out);
+    mFile.open(mFilename, std::fstream::out);
     if (mFile.is_open())
     {
-        Logger::Info("File {} created", filename.string());
+        Logger::Info("File {} created", mFilename.string());
     }
     else
     {
-        Logger::Warning("File {} could not be created", filename.string());
+        Logger::Warning("File {} could not be created", mFilename.string());
     }
 }
 

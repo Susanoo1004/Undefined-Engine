@@ -17,7 +17,7 @@ Texture::Texture(const unsigned int width, const unsigned int height, const int 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, NULL);
 }
 
-Texture::Texture(const char* filepath, bool isFlipped)
+Texture::Texture(const char* mFilepath, bool isFlipped)
 {
 	mRenderer = ServiceLocator::Get<Renderer>();
 
@@ -27,7 +27,7 @@ Texture::Texture(const char* filepath, bool isFlipped)
 	stbi_set_flip_vertically_on_load(isFlipped);
 
 	int channelCount;
-	Data = stbi_load(filepath, &mWidth, &mHeight, &channelCount, 0);
+	Data = stbi_load(mFilepath, &mWidth, &mHeight, &channelCount, 0);
 
 	if (Data)
 	{
@@ -57,7 +57,7 @@ Texture::Texture(const char* filepath, bool isFlipped)
 	}
 	else
 	{
-		Logger::Warning("Failed to load {} texture", filepath);
+		Logger::Warning("Failed to load {} texture", mFilepath);
 	}
 
 	stbi_image_free((void*)Data);
@@ -100,23 +100,16 @@ unsigned int Texture::LoadCubeMap(const std::vector<std::string>& faces)
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
-	int width, height, nrChannels;
-	for (unsigned int i = 0; i < faces.size(); i++)
+	for (int i = 0; i < faces.size(); i++)
 	{
+		int width, height, nrChannels;
 		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
 		if (data)
 		{
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-			stbi_image_free(data);
-			Logger::Info("Cubemap texture {} loaded", faces[i].c_str());
-		}
-		else
-		{
-			Logger::Info("Cubemap texture failed to load at path: {}", faces[i].c_str());
-			stbi_image_free(data);
+			Logger::Info("Texture {} loaded", faces[i]);
 		}
 	}
-
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

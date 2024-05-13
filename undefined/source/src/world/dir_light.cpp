@@ -43,5 +43,5 @@ void DirLight::Update()
 
 int DirLight::GetNbrOfDirLight() const
 {
-	return mDirLightsArray.size();
+	return (int)mDirLightsArray.size();
 }

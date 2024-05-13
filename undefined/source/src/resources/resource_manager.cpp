@@ -9,8 +9,18 @@
 
 void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 {
+	std::vector<std::string> mShader;
+
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
+		for (int i = 0; i < mPathToIgnore.size(); i++)
+		{
+			if (entry.path().generic_string() == mPathToIgnore[i])
+			{
+				return;
+			}
+		}
+
 		if (recursivity)
 		{
 			if (std::filesystem::is_directory(entry))
@@ -20,7 +30,7 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 		}
 
 		std::string name = entry.path().string();
-		std::string filename = entry.path().filename().generic_string();
+		std::string mFilename = entry.path().filename().generic_string();
 		std::string parentName = entry.path().parent_path().filename().string();
 		size_t pos = name.find(parentName);
 		std::string newName = name.substr(pos);
@@ -49,40 +59,13 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 				fragShaderName += "fs";
 				if (std::find(mShader.begin(), mShader.end(), fragShaderName) != mShader.end())
 				{
-					filename.resize(filename.size() - 3);
-					Create<Shader>(filename, name.c_str(), fragShaderName.c_str());
+					mFilename.resize(mFilename.size() - 3);
+					Create<Shader>(mFilename, name.c_str(), fragShaderName.c_str());
 					mShader.erase(std::find(mShader.begin(), mShader.end(), fragShaderName));
 				}
 			}
 		}
 	}
-}
-
-std::vector<std::string> ResourceManager::LoadFolder(const std::filesystem::path& path)
-{
-	std::vector<std::string> vectorArray;
-	for (const auto& entry : std::filesystem::directory_iterator(path))
-	{
-		std::string name = entry.path().string();
-		std::string filename = entry.path().filename().generic_string();
-		std::string parentName = entry.path().parent_path().filename().string();
-		size_t pos = name.find(parentName);
-		std::string newName = name.substr(pos);
-
-		if (name.ends_with(".obj"))
-		{
-			Create<Model>(newName, name.c_str());
-			vectorArray.push_back(name);
-		}
-
-		else if (name.ends_with(".png") || name.ends_with(".jpg"))
-		{
-			Create<Texture>(newName, name.c_str());
-			vectorArray.push_back(name);
-		}
-	}
-
-	return vectorArray;
 }
 
 bool ResourceManager::Contains(const std::string& name)
@@ -145,7 +128,6 @@ void ResourceManager::RenameFolder(const std::string& oldName, const std::string
 			test.push_back(it);
 		}
 	}
-
 
 	for (auto& it : test)
 	{

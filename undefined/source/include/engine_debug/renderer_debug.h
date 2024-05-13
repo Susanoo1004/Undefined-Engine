@@ -4,6 +4,7 @@
 
 class UNDEFINED_ENGINE RendererDebug
 {
+	STATIC_CLASS(RendererDebug)
 public:
-	void DebugInit();
+	static void DebugInit();
 };

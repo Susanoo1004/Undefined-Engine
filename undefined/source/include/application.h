@@ -20,15 +20,10 @@ public:
 	UNDEFINED_ENGINE void Clear();
 
 	std::shared_ptr<Shader> BaseShader;
-	std::shared_ptr<Shader> skyboxShader;
-	std::shared_ptr<Shader> pickingShader;
 
 	Logger Log;
 
 private:
-	unsigned int mVAO = 0, mVBO = 0, mEBO = 0;
-	unsigned int mVertexShader = 0, mFragmentShader = 0, mShaderProgram = 0;
-
 	Window* mWindowManager = nullptr;
 	Renderer* mRenderer = nullptr;
 
