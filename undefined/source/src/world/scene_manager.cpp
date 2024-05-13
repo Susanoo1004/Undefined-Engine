@@ -1,5 +1,7 @@
 #include "world/scene_manager.h"
 
+#include <json/json.h>
+
 #include "wrapper/time.h"
 
 void SceneManager::Init()
@@ -54,6 +56,8 @@ void SceneManager::GlobalUpdate()
 		ActualScene->FixedUpdate();
 		Time::FixedStep--;
 	}
+	Logger::Debug(Json::valueToString(false));
+
 	ActualScene->Update();
 	ActualScene->LateUpdate();
 }

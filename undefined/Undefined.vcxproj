@@ -125,7 +125,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteurd.lib;Joltd.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteurd.lib;Joltd.lib;glfw3.lib;jsoncppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -152,7 +152,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteur.lib;Jolt.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteur.lib;Jolt.lib;glfw3.lib;jsoncpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -306,8 +306,21 @@
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />
     <Image Include="assets\undefined_logo.png" />
+    <None Include="external\src\json\json_reader.cpp" />
+    <None Include="external\src\json\json_tool.h" />
+    <None Include="external\src\json\json_value.cpp" />
+    <None Include="external\src\json\json_valueiterator.inl" />
+    <None Include="external\src\json\json_writer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="external\libs\jsoncpp.dll" />
+    <None Include="external\libs\jsoncpp.lib" />
+    <None Include="external\libs\jsoncppd.dll" />
+    <None Include="external\libs\jsoncppd.lib" />
+    <None Include="external\libs\jsoncppd.pdb" />
+    <None Include="external\libs\jsoncpp_static.lib" />
+    <None Include="external\libs\jsoncpp_staticd.lib" />
+    <None Include="external\libs\jsoncpp_staticd.pdb" />
     <None Include="external\libs\toolboxMoteur.pdb" />
     <None Include="external\libs\toolboxMoteurd.pdb" />
   </ItemGroup>
