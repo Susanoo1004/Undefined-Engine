@@ -86,7 +86,6 @@ public:
 	/// <summary>
 	/// Load a Cubemap
 	/// </summary>
-	/// <param name="faces">: std::vector of the faces of the Cubemap</param>
 	/// <returns>Return the ID of the Cubemap</returns>
 	static unsigned int LoadCubeMap(const std::vector<std::string>& faces);
 };

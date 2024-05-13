@@ -5,6 +5,9 @@
 
 #include "utils/flag.h"
 
+/// <summary>
+/// A Class for a graph to moniotor the FPS
+/// </summary>
 class FPSGraph
 {
 	STATIC_CLASS(FPSGraph)

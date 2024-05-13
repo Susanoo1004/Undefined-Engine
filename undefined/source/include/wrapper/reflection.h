@@ -2,10 +2,6 @@
 
 #include <refl.hpp>
 
-enum
-{
-};
-
 namespace Reflection
 {
     template<typename T>

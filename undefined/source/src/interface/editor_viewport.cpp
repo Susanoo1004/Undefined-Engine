@@ -95,7 +95,7 @@ void EditorViewport::ShowWindow()
 	ImVec2 screenPos = ImGui::GetCursorScreenPos();
 	
 	ImGui::GetWindowDrawList()->AddImage(
-		Utils::IntToPointer<ImTextureID>(mFramebuffer->RenderedTextures[0]->GetID()),
+		Utils::IntToPointer<ImTextureID>(mFramebuffer->FramebufferTextures[0]->GetID()),
 		ImVec2(screenPos.x, screenPos.y),
 		ImVec2(screenPos.x + mWidth, screenPos.y + mHeight),
 		ImVec2(0, 1),

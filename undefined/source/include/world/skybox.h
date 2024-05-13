@@ -5,6 +5,9 @@
 #include <toolbox/Matrix4x4.h>
 #include <array>
 
+#include "resources/texture.h"
+#include "resources/resource_manager.h"
+
 #include "utils/flag.h"
 #include "world/component.h"
 #include "camera/camera.h"
@@ -32,54 +35,36 @@ public:
 	/// </summary>
 	UNDEFINED_ENGINE static void Draw();
 
+	UNDEFINED_ENGINE static void ChangeFaces();
+
+private:
 	/// <summary>
-	/// Vertices of a cube
+	/// Camera View without the translation
 	/// </summary>
-	static inline float CubeVertices[] = {
-		// positions          // texture Coords
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	static inline Matrix4x4 View;
 
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	/// <summary>
+	/// VAO
+	/// </summary>
+	static inline unsigned int CubeVAO = 0;
+	/// <summary>
+	/// VBO
+	/// </summary>
+	static inline unsigned int CubeVBO = 0;
+	/// <summary>
+	/// Cubemap Texture
+	/// </summary>
+	static inline unsigned int CubemapTexture = 0;
 
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-
+	/// <summary>
+	/// Shader of the skybox
+	/// </summary>
+	static inline std::shared_ptr<Shader> mSkyboxShader;
+	/// <summary>
+	/// Pointer to our Renderer to simplify the calls from the ServiceLocator
+	/// </summary>
+	static inline Renderer* mRenderer;
+	
 	/// <summary>
 	/// Path to the right texture for each face
 	/// </summary>
@@ -92,32 +77,6 @@ public:
 		"../undefined/resource_manager/skybox/front.jpg",
 		"../undefined/resource_manager/skybox/back.jpg"
 	};
-	
-	/// <summary>
-	/// VAO
-	/// </summary>
-	static inline unsigned int CubeVAO = 0;
-	/// <summary>
-	/// VBO
-	/// </summary>
-	static inline unsigned int CubeVBO = 0;
-
-	static inline unsigned int CubemapTexture = 0;
-
-	/// <summary>
-	/// Camera View without the translation
-	/// </summary>
-	static inline Matrix4x4 View;
-
-private:
-	/// <summary>
-	/// Shader of the skybox
-	/// </summary>
-	static inline std::shared_ptr<Shader> mSkyboxShader;
-	/// <summary>
-	/// Pointer to our Renderer to simplify the calls from the ServiceLocator
-	/// </summary>
-	static inline Renderer* mRenderer;
 };
 
 REFL_AUTO(type(Skybox, bases<Component>)

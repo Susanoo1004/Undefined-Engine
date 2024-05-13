@@ -54,7 +54,7 @@ void Application::Init()
     RuntimeClasses::AddType<DirLight>();
     RuntimeClasses::AddType<ModelRenderer>();
 
-    ResourceManager::Load("../Undefined/resource_manager/", true);
+    ResourceManager::Load("../undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
 
     // Callback
@@ -72,7 +72,7 @@ void Application::Init()
     SceneManager::ActualScene->AddObject("DirLight")->AddComponent<DirLight>();
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-    
+
     SceneManager::ActualScene->AddObject(object, "Test Child");
 
     SceneManager::Start();
@@ -89,7 +89,7 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
-
+    
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();

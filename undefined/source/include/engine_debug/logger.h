@@ -9,6 +9,9 @@
 
 #include "utils/flag.h"
 
+/// <summary>
+/// A Class for a Logger to debug
+/// </summary>
 class Logger
 {
 public:
@@ -16,6 +19,9 @@ public:
 	UNDEFINED_ENGINE ~Logger();
 
 private:
+	/// <summary>
+	/// Enum where we put different level of warning/error
+	/// </summary>
 	enum class LogLevel
 	{
 		DEBUG = 0,

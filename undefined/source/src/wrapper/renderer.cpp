@@ -6,6 +6,7 @@
 #include"resources/texture.h"
 #include"resources/model.h"
 
+#include "engine_debug/renderer_debug.h"
 #include "engine_debug/logger.h"
 
 void Renderer::Init()
@@ -14,7 +15,7 @@ void Renderer::Init()
     SetClearColor(0, 0, 0);
     EnableTest(GL_DEPTH_TEST);
 
-    Debug.DebugInit();
+    RendererDebug::DebugInit();
 }
 
 void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blueBaseColor)
@@ -45,6 +46,16 @@ void Renderer::GenTexture(unsigned int texNumber, unsigned int* ID)
 void Renderer::GenerateMipMap(unsigned int target)
 {
     glGenerateMipmap(target);
+}
+
+void Renderer::GenerateFramebuffer(int framebufferNumber, unsigned int* ID)
+{
+    glGenFramebuffers(framebufferNumber, ID);
+}
+
+void Renderer::GenerateRenderbuffer(int renderbufferNumber, unsigned int* ID)
+{
+    glGenRenderbuffers(renderbufferNumber, ID);
 }
 
 void Renderer::ActiveTexture(unsigned int ID)
@@ -122,6 +133,11 @@ void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* 
 void Renderer::Draw(unsigned int mode, int start, int count)
 {
     glDrawArrays(mode, start, count);
+}
+
+void Renderer::DrawBuffers(int numberOfAttachement, unsigned int* attachements)
+{
+    glDrawBuffers(numberOfAttachement, attachements);
 }
 
 unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
@@ -224,6 +240,11 @@ void Renderer::DeleteTextures(int number, unsigned int* ID)
     glDeleteTextures(number, ID);
 }
 
+void Renderer::SetDepth(unsigned int depth)
+{
+    glDepthFunc(depth);
+}
+
 void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
 {
     float Vertices[] = {
@@ -265,4 +286,59 @@ void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Renderer::SetCube(unsigned int& VBO, unsigned int& VAO)
+{
+    float CubeVertices[] = {
+        // positions          // texture Coords
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+
+    GenerateVertexArray(1, &VAO);
+    GenerateBuffer(1, &VBO);
+    BindBuffers(VAO, VBO, 0);
+    SetBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), &CubeVertices, GL_STATIC_DRAW);
+    AttributePointers(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+    AttributePointers(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 }

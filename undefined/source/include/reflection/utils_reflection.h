@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <refl.hpp>
 #include <toolbox/Vector3.h>
+#include <toolbox/Quaternion.h>
 #include <toolbox/calc.h>
 
 #include "engine_debug/logger.h"
@@ -198,6 +199,16 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 			ImGui::DragFloat2(name.c_str(), &obj->x, .1f);
 		}
 	}
+	else if constexpr (std::is_same_v<Quaternion, MemberT>)
+	{
+		Vector3 euler = obj->ToEuler();
+		ImGui::SliderAngle3(name.c_str(), &euler.x, .1f);
+		Quaternion quat = Quaternion::GetRotationQuaternion(euler);
+		obj->x = quat.x;
+		obj->y = quat.y;
+		obj->z = quat.z;
+		obj->w = quat.w;
+	}
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
@@ -240,7 +251,7 @@ void Reflection::DisplayObj(MemberT* obj)
 	{
 		DisplayStandardTypes<T, MemberT, DescriptorT>(obj, name);
 	}
-	else if constexpr (std::_Is_any_of_v<MemberT, Vector4, Vector3, Vector2>)
+	else if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3, Vector2>)
 	{
 		DisplayToolboxTypes<T, MemberT, DescriptorT>(obj, name);
 	}

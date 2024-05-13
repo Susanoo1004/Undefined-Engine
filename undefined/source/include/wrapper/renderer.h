@@ -4,7 +4,6 @@
 #include <toolbox/Matrix4x4.h>
 #include <toolbox/Vector3.h>
 
-#include "engine_debug/renderer_debug.h"
 #include "wrapper/service_type.h"
 #include "utils/flag.h"
 
@@ -54,6 +53,19 @@ public:
 	/// </summary>
 	/// <param name="target">: MipMap target</param>
 	void GenerateMipMap(unsigned int target);
+	/// <summary>
+	/// Generate a framebuffer
+	/// </summary>
+	/// <param name="framebufferNumber">: Number of framebuffer</param>
+	/// <param name="ID">: New ID of the framebuffer</param>
+	void GenerateFramebuffer(int framebufferNumber, unsigned int* ID);
+
+	/// <summary>
+	/// Generate a renderbuffer
+	/// </summary>
+	/// <param name="renderbufferNumber">: Number of renderbuffer</param>
+	/// <param name="ID">: New ID of the renderbuffer</param>
+	void GenerateRenderbuffer(int renderbufferNumber, unsigned int* ID);
 
 	/// <summary>
 	/// Active the texture given
@@ -158,6 +170,12 @@ public:
 	/// <param name="start">: Start index in the actual array</param>
 	/// <param name="count">: Number of indices</param>
 	void Draw(unsigned int mode, int start, int count);
+	/// <summary>
+	/// Draw the buffers according to the attachements
+	/// </summary>
+	/// <param name="numberOfAttachement">: Number of attachements used</param>
+	/// <param name="attachements">: Array of the attachements</param>
+	void DrawBuffers(int numberOfAttachement, unsigned int* attachements);
 
 	/// <summary>
 	/// Set a shader
@@ -246,12 +264,25 @@ public:
 	void DeleteTextures(int number, unsigned int* ID);
 
 	/// <summary>
+	/// Set the depth 
+	/// </summary>
+	/// <param name="depth">Depth you want to set(e.g : GL_LEQUAL or GL_LESS)</param>
+	void SetDepth(unsigned int depth);
+
+	/// <summary>
 	/// Set a Quad data in the VBO, EBO, VAO
 	/// </summary>
 	/// <param name="VBO">: VBO</param>
 	/// <param name="EBO">: EBO</param>
 	/// <param name="VAO">: VAO</param>
 	void SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO);
+
+	/// <summary>
+	/// Set a Cube data in the VBO and VAO
+	/// </summary>
+	/// <param name="VBO">: VBO</param>
+	/// <param name="VAO">: VAO</param>
+	void SetCube(unsigned int& VBO, unsigned int& VAO);
 
 	/// <summary>
 	/// Enable the OpenGL Test
@@ -265,8 +296,6 @@ public:
 	/// Index of the obejct selected
 	/// </summary>
 	int ObjectIndex = -1;
-
-	RendererDebug Debug;
 };
 
 template<class ...Args>
