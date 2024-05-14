@@ -7,7 +7,7 @@ class Scene
 {
 public:
 	UNDEFINED_ENGINE Scene();
-	UNDEFINED_ENGINE Scene(const std::string& name);
+	UNDEFINED_ENGINE Scene(const std::string& mName);
 	UNDEFINED_ENGINE ~Scene();
 
 	UNDEFINED_ENGINE void Start();
@@ -18,14 +18,14 @@ public:
 	UNDEFINED_ENGINE void LateUpdate();
 	UNDEFINED_ENGINE void Draw();
 
-	UNDEFINED_ENGINE Object* AddObject(const std::string& name = "Default");
-	UNDEFINED_ENGINE Object* AddObject(Object* parent, const std::string& name = "Default");
-	UNDEFINED_ENGINE Object* AddObject(Vector3 position, Vector3 rotation, const std::string& name = "Default");
-	UNDEFINED_ENGINE Object* AddObject(Vector3 position, Vector3 rotation, Object* parent, bool world = true , const std::string& name = "Default");
-	UNDEFINED_ENGINE Object* AddObject(const Object& original, const std::string& name = "Default");
-	UNDEFINED_ENGINE Object* AddObject(const Object& original, Object* parent, const std::string& name = "Default");
-	UNDEFINED_ENGINE Object* AddObject(const Object& original, Vector3 position, Vector3 rotation, const std::string& name = "Default");
-	UNDEFINED_ENGINE Object* AddObject(const Object& original, Vector3 position, Vector3 rotation, Object* parent, bool world = true, const std::string& name = "Default");
+	UNDEFINED_ENGINE Object* AddObject(const std::string& mName = "Default");
+	UNDEFINED_ENGINE Object* AddObject(Object* parent, const std::string& mName = "Default");
+	UNDEFINED_ENGINE Object* AddObject(Vector3 position, Vector3 rotation, const std::string& mName = "Default");
+	UNDEFINED_ENGINE Object* AddObject(Vector3 position, Vector3 rotation, Object* parent, bool world = true , const std::string& mName = "Default");
+	UNDEFINED_ENGINE Object* AddObject(const Object& original, const std::string& mName = "Default");
+	UNDEFINED_ENGINE Object* AddObject(const Object& original, Object* parent, const std::string& mName = "Default");
+	UNDEFINED_ENGINE Object* AddObject(const Object& original, Vector3 position, Vector3 rotation, const std::string& mName = "Default");
+	UNDEFINED_ENGINE Object* AddObject(const Object& original, Vector3 position, Vector3 rotation, Object* parent, bool world = true, const std::string& mName = "Default");
 
 	std::string Name = "Default";
 

@@ -4,15 +4,15 @@ void ContentBrowserHierarchy::Update()
 {
     ImGui::BeginChild("Hierarchy", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 0), ImGuiChildFlags_Border | ImGuiChildFlags_ResizeX);
 
-    DisplayDirectories(mPath);
+    DisplayDirectories(pPath);
 
     ImGui::EndChild();
 }
 
 void ContentBrowserHierarchy::DisplayDirectories(const std::filesystem::path& path)
 {
-    name = path.filename().string();
-    mIsDirectory = std::filesystem::is_directory(path);
+    mName = path.filename().string();
+    pIsDirectory = std::filesystem::is_directory(path);
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding;
 
@@ -21,7 +21,7 @@ void ContentBrowserHierarchy::DisplayDirectories(const std::filesystem::path& pa
     ImGui::Image(Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID()), ImVec2(15, 15));
     ImGui::SameLine();
 
-    if (ImGui::TreeNodeEx(name.c_str(), flags))
+    if (ImGui::TreeNodeEx(mName.c_str(), flags))
     {
         RightClickInteractions(path);
         if (ImGui::IsItemHovered() && !ImGui::IsItemToggledOpen() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
@@ -31,11 +31,11 @@ void ContentBrowserHierarchy::DisplayDirectories(const std::filesystem::path& pa
             system(file.c_str());
         }
 
-        if (mIsDirectory)
+        if (pIsDirectory)
         {
             if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
             {
-                mCurrentPath = path;
+                pCurrentPath = path;
             }
 
             //For every folder we call the function to display what's inside
@@ -54,7 +54,7 @@ void ContentBrowserHierarchy::DisplayDirectories(const std::filesystem::path& pa
     {
         if (!ImGui::IsItemToggledOpen() && ImGui::IsItemClicked(ImGuiMouseButton_Left))
         {
-            mCurrentPath = path;
+            pCurrentPath = path;
         }
         RightClickInteractions(path);
     }
@@ -62,7 +62,7 @@ void ContentBrowserHierarchy::DisplayDirectories(const std::filesystem::path& pa
 
 void ContentBrowserHierarchy::SetupTreeNodeFlags(ImGuiTreeNodeFlags& flags, const std::filesystem::path& path)
 {
-    if (mIsDirectory)
+    if (pIsDirectory)
     {
         bool isAnyFolder = false;
         for (const auto& entry : std::filesystem::directory_iterator(path))
@@ -85,12 +85,12 @@ void ContentBrowserHierarchy::SetupTreeNodeFlags(ImGuiTreeNodeFlags& flags, cons
             flags |= ImGuiTreeNodeFlags_Leaf;
         }
 
-        if (mCurrentPath == path)
+        if (pCurrentPath == path)
         {
             flags |= ImGuiTreeNodeFlags_Selected;
         }
 
-        if (path == mPath)
+        if (path == pPath)
         {
             flags |= ImGuiTreeNodeFlags_DefaultOpen;
         }
@@ -99,14 +99,14 @@ void ContentBrowserHierarchy::SetupTreeNodeFlags(ImGuiTreeNodeFlags& flags, cons
 
 void ContentBrowserHierarchy::RightClickInteractions(const std::filesystem::path& path)
 {
-    if (mRenamingPath == path)
+    if (pRenamingPath == path)
     {
-        name = "##";
+        mName = "##";
     }
 
     RightClickWindow(path);
     
-    if (mRenamingPath == path)
+    if (pRenamingPath == path)
     {
         ImGui::SameLine();
         RenameItem();

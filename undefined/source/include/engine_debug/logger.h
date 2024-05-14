@@ -90,7 +90,7 @@ public:
 
 private:
 	static std::string CurrentDateTime();
-	static void CreateDebugFile(const std::string& path, const std::string& name);
+	static void CreateDebugFile(const std::string& path, const std::string& mName);
 	static void SetupLogEntry(LogLevel level, const std::string& log);
 
 	UNDEFINED_ENGINE static inline std::fstream mFile;

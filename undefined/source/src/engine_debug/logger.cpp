@@ -30,9 +30,9 @@ std::string Logger::CurrentDateTime()
     return buffer;
 }
 
-void Logger::CreateDebugFile(const std::string& path, const std::string& name)
+void Logger::CreateDebugFile(const std::string& path, const std::string& mName)
 {
-    std::filesystem::path const& mFilename = path + name + ".txt";
+    std::filesystem::path const& mFilename = path + mName + ".txt";
     int fileCount = 0;
 
     if (!std::filesystem::exists(path))

@@ -11,8 +11,8 @@ Object::Object()
 {
 }
 
-Object::Object(const std::string& name)
-	: Name(name), mUUID(UNIFORM_DISTRIBUTION(ENGINE))
+Object::Object(const std::string& mName)
+	: Name(mName), mUUID(UNIFORM_DISTRIBUTION(ENGINE))
 {
 }
 
@@ -119,11 +119,11 @@ const Object* Object::GetChild(unsigned int index) const
 	return *(it);
 }
 
-const Object* Object::GetChild(std::string name) const
+const Object* Object::GetChild(std::string mName) const
 {
 	for (auto it = mChildren.begin(); it != mChildren.end(); ++it)
 	{
-		if ((*it)->Name == name)
+		if ((*it)->Name == mName)
 		{
 			return (*it);
 		}
@@ -142,12 +142,12 @@ void Object::DetachChild(unsigned int index)
 	mChildren.erase(mChildren.begin() + index);
 }
 
-void Object::DetachChild(std::string name)
+void Object::DetachChild(std::string mName)
 {
 	unsigned int index = 0;
 	for (Object* child : mChildren)
 	{
-		if (child->Name == name)
+		if (child->Name == mName)
 		{
 			child->mParent = mRoot;
 			child->mTransform.mParentTransform = nullptr;

@@ -27,5 +27,5 @@ private:
 	/// <param name="path">path of the element we right clicked on</param>
 	static void RightClickInteractions(const std::filesystem::path& path);
 
-	static inline std::string name;
+	static inline std::string mName;
 };

@@ -22,7 +22,7 @@ public:
 	/// Constructor of Object
 	/// </summary>
 	/// <param name="name">: Name of the Object</param>
-	Object(const std::string& name);
+	Object(const std::string& mName);
 	/// <summary>
 	/// Destructor of Object
 	/// </summary>
@@ -108,7 +108,7 @@ public:
 	/// </summary>
 	/// <param name="name">: Name of the child</param>
 	/// <returns>Return a pointer to the child</returns>
-	const Object* GetChild(std::string name) const;
+	const Object* GetChild(std::string mName) const;
 	/// <summary>
 	/// Detach a child by his index
 	/// </summary>
@@ -118,7 +118,7 @@ public:
 	/// Detach a child by his name
 	/// </summary>
 	/// <param name="name">: Name of the child</param>
-	void DetachChild(std::string name);
+	void DetachChild(std::string mName);
 	/// <summary>
 	/// Detach a child by a pointer to the child
 	/// </summary>
@@ -176,6 +176,7 @@ private:
 	friend class Application;
 	friend class SceneManager;
 	friend class SceneGraph;
+
 	static inline Object* mRoot;
 };
 

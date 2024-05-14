@@ -32,13 +32,13 @@ DirLight::~DirLight()
 
 void DirLight::Update()
 {
-	mShader->Use();
+	pShader->Use();
 	Direction = GameTransform->Position;
-	mShader->SetVec3("dirLights[0].direction", Direction);
-	mShader->SetVec3("dirLights[0].ambient", Ambient);
-	mShader->SetVec3("dirLights[0].diffuse", Diffuse);
-	mShader->SetVec3("dirLights[0].specular", Specular);
-	mShader->UnUse();
+	pShader->SetVec3("dirLights[0].direction", Direction);
+	pShader->SetVec3("dirLights[0].ambient", Ambient);
+	pShader->SetVec3("dirLights[0].diffuse", Diffuse);
+	pShader->SetVec3("dirLights[0].specular", Specular);
+	pShader->UnUse();
 }
 
 int DirLight::GetNbrOfDirLight() const

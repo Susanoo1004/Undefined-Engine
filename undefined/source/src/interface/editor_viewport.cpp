@@ -21,7 +21,7 @@
 
 
 EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
-	: mFramebuffer(framebuffer), ViewportCamera(camera), mShader(ResourceManager::Get<Shader>("viewport_shader"))
+	: mFramebuffer(framebuffer), ViewportCamera(camera), pShader(ResourceManager::Get<Shader>("viewport_shader"))
 {
 	mEditorNumber++;
 	mID = mEditorNumber;
@@ -41,7 +41,7 @@ void EditorViewport::Init()
 void EditorViewport::ShowWindow()
 {
 
-	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.gizmoWindowFlags);
+	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.GizmoWindowFlags);
 
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
