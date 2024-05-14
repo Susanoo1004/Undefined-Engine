@@ -78,7 +78,7 @@ SoundBuffer::SoundBuffer()
 
 SoundBuffer::~SoundBuffer()
 {
-	alDeleteBuffers(mSoundEffectBuffers.size(), mSoundEffectBuffers.data());
+	alDeleteBuffers((ALsizei)mSoundEffectBuffers.size(), mSoundEffectBuffers.data());
 
 	mSoundEffectBuffers.clear();
 }

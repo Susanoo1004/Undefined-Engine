@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "engine_debug/logger.h"
+#include "audio/sound_buffer.h"
 
 Audio::Audio(const char* filename)
 {
@@ -49,7 +50,7 @@ std::string Audio::GetName()
 char* Audio::LoadWAV(const char* fn, ALushort& chan, ALint& samplerate, ALushort& bps, ALint& size)
 {
 	std::ifstream file(fn, std::ios::in | std::ios::binary | std::ios::ate);
-	int fileSize = file.tellg();
+	size_t fileSize = file.tellg();
 	file.seekg(0);
 
 	if (!file.good())

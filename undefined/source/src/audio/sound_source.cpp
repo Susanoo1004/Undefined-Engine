@@ -33,16 +33,22 @@ void SoundSource::Play(const ALuint buffer)
 		
 		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
-		Logger::Info("Playing sound {}", newName);
+		Logger::Info("Playing {}", newName);
 	}
 }
 
 void SoundSource::Pause(const ALuint buffer)
 {
+	if (buffer != mBuffer)
+	{
+		mBuffer = buffer;
+		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+	}
+
 	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
 	if (mState == AL_PLAYING && alGetError() == AL_NO_ERROR)
 	{
-		alSourcePause(mSource);
+		alSourcePause(buffer);
 
 		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
@@ -52,30 +58,48 @@ void SoundSource::Pause(const ALuint buffer)
 
 void SoundSource::Resume(const ALuint buffer)
 {
+	if (buffer != mBuffer)
+	{
+		mBuffer = buffer;
+		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+	}
+
 	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
 	if (mState == AL_PAUSED && alGetError() == AL_NO_ERROR)
 	{
 		alSourcePlay(mSource);
 		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
-		Logger::Info("Resume sound {}", newName);
+		Logger::Info("Resumed {}", newName);
 	}
 }
 
 void SoundSource::Stop(const ALuint buffer)
 {
+	if (buffer != mBuffer)
+	{
+		mBuffer = buffer;
+		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+	}
+
 	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
 	if (mState != AL_STOPPED && alGetError() == AL_NO_ERROR)
 	{
 		alSourceStop(mSource);
 		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
-		Logger::Info("Stopped playing sound {}", newName);
+		Logger::Info("Stopped playing {}", newName);
 	}
 }
 
 void SoundSource::Restart(const ALuint buffer)
 {
+	if (buffer != mBuffer)
+	{
+		mBuffer = buffer;
+		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+	}
+
 	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
 	if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
 	{
@@ -83,7 +107,7 @@ void SoundSource::Restart(const ALuint buffer)
 		alSourcePlay(mSource);
 		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
-		Logger::Info("Restarted sound {}", newName);
+		Logger::Info("Restarted {}", newName);
 	}
 }
 
