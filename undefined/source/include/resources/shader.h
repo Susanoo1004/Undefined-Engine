@@ -57,11 +57,11 @@ public:
     void Link(unsigned int vertex, unsigned int fragment);
 
     // utility uniform functions
-    void SetBool(const std::string& name, bool value) const;
-    void SetInt(const std::string& name, int value) const;
-    void SetFloat(const std::string& name, float value) const;
-    void SetVec3(const std::string& name, const Vector3& v) const;
-    void SetMat4(const std::string& name, const Matrix4x4& m) const;
+    void SetBool(const std::string& mName, bool value) const;
+    void SetInt(const std::string& mName, int value) const;
+    void SetFloat(const std::string& mName, float value) const;
+    void SetVec3(const std::string& mName, const Vector3& v) const;
+    void SetMat4(const std::string& mName, const Matrix4x4& m) const;
 
     /// <summary>
     /// Load a shader by using a vertex and a fragment shader

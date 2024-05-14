@@ -48,16 +48,16 @@ namespace Reflection
 	/// <param name="obj"> object we want to display </param>
 	/// <param name="name"> name of the object we want to display </param>
 	template<typename T, typename MemberT, typename DescriptorT>
-	void DisplayBaseTypes(MemberT* obj, std::string name);
+	void DisplayBaseTypes(MemberT* obj, std::string mName);
 
 	template<typename T, typename MemberT, typename DescriptorT>
-	void DisplayStandardTypes(MemberT* obj, std::string name);
+	void DisplayStandardTypes(MemberT* obj, std::string mName);
 
 	template<typename T, typename MemberT, typename DescriptorT>
-	void DisplayToolboxTypes(MemberT* obj, std::string name);
+	void DisplayToolboxTypes(MemberT* obj, std::string mName);
 
 	template<typename T, typename MemberT, typename DescriptorT>
-	void Attributes(std::string& name);
+	void Attributes(std::string& mName);
 }
 
 template<typename T>
@@ -107,62 +107,62 @@ void Reflection::ReflectionObj(T* obj)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::DisplayBaseTypes(MemberT* obj, std::string name)
+void Reflection::DisplayBaseTypes(MemberT* obj, std::string mName)
 {
 	if constexpr (std::is_same_v<float, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_Float, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_Float, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<double, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_Double, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_Double, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<int8_t, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_S8, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_S8, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<int16_t, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_S16, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_S16, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<int, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_S32, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_S32, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<int64_t, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_S64, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_S64, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<uint8_t, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_U8, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_U8, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<uint16_t, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_U16, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_U16, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<unsigned int, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_U32, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_U32, obj, .1f);
 	}
 	else if constexpr (std::is_same_v<uint64_t, MemberT>)
 	{
-		ImGui::DragScalar(name.c_str(), ImGuiDataType_U64, obj, .1f);
+		ImGui::DragScalar(mName.c_str(), ImGuiDataType_U64, obj, .1f);
 	}
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::DisplayStandardTypes(MemberT* obj, std::string name)
+void Reflection::DisplayStandardTypes(MemberT* obj, std::string mName)
 {
 	//We check if MemberT (type of the variable we are reflecting) is the same as one of the standard lib
 	if constexpr (std::is_same_v<std::string, MemberT>)
 	{
-		ImGui::InputText(name.c_str(), obj);
+		ImGui::InputText(mName.c_str(), obj);
 	}
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
+void Reflection::DisplayToolboxTypes(MemberT* obj, std::string mName)
 {
 	//We check if MemberT (type of the variable we are reflecting) is the same as one of the math toolbox
 	if constexpr (std::is_same_v<Vector4, MemberT>)
@@ -170,39 +170,39 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 		//If the field has the attribute ToDeg we use a sliderAngle which convert radiants to degrees else we use DragFloat and send radiants directly
 		if constexpr (HasAttribute<DescriptorT, ToDeg>())
 		{
-			ImGui::SliderAngle4(name.c_str(), &obj->x);
+			ImGui::SliderAngle4(mName.c_str(), &obj->x);
 		}
 		else
 		{
-			ImGui::DragFloat4(name.c_str(), &obj->x, .1f);
+			ImGui::DragFloat4(mName.c_str(), &obj->x, .1f);
 		}
 	}
 	else if constexpr (std::is_same_v<Vector3, MemberT>)
 	{
 		if constexpr (HasAttribute<DescriptorT, ToDeg>())
 		{
-			ImGui::SliderAngle3(name.c_str(), &obj->x);
+			ImGui::SliderAngle3(mName.c_str(), &obj->x);
 		}
 		else
 		{
-			ImGui::DragFloat3(name.c_str(), &obj->x, .1f);
+			ImGui::DragFloat3(mName.c_str(), &obj->x, .1f);
 		}
 	}
 	else if constexpr (std::is_same_v<Vector2, MemberT>)
 	{
 		if constexpr (HasAttribute<DescriptorT, ToDeg>())
 		{
-			ImGui::SliderAngle2(name.c_str(), &obj->x);
+			ImGui::SliderAngle2(mName.c_str(), &obj->x);
 		}
 		else
 		{
-			ImGui::DragFloat2(name.c_str(), &obj->x, .1f);
+			ImGui::DragFloat2(mName.c_str(), &obj->x, .1f);
 		}
 	}
 	else if constexpr (std::is_same_v<Quaternion, MemberT>)
 	{
 		Vector3 euler = obj->ToEuler();
-		ImGui::SliderAngle3(name.c_str(), &euler.x, .1f);
+		ImGui::SliderAngle3(mName.c_str(), &euler.x, .1f);
 		Quaternion quat = Quaternion::GetRotationQuaternion(euler);
 		obj->x = quat.x;
 		obj->y = quat.y;
@@ -212,12 +212,12 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::Attributes(std::string& name)
+void Reflection::Attributes(std::string& mName)
 {
 	//If the Descriptor has a certain attribute
 	if constexpr (HasAttribute<DescriptorT, DontDisplayName>())
 	{
-		name = "##" + name;
+		mName = "##" + mName;
 	}
 
 	if constexpr (HasAttribute<DescriptorT, SameLine>())

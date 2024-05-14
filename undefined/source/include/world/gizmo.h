@@ -32,7 +32,7 @@ public:
 	/// <summary>
 	/// Flags for  the window
 	/// </summary>
-	static inline ImGuiWindowFlags gizmoWindowFlags;
+	static inline ImGuiWindowFlags GizmoWindowFlags;
 
 	/// <summary>
 	/// Gizmo operation (e.g : ImGuizmo::TRANSLATE, ImGuizmo::ROTATE, ImGuizmo::SCALE, ...)

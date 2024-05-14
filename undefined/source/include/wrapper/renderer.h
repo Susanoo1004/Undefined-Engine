@@ -209,35 +209,35 @@ public:
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="value">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, bool value) const;
+	void SetUniform(unsigned int ID, const std::string& mName, bool value) const;
 	/// <summary>
 	/// Set a Uniform in the shader
 	/// </summary>
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="value">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, int value) const;
+	void SetUniform(unsigned int ID, const std::string& mName, int value) const;
 	/// <summary>
 	/// Set a Uniform in the shader
 	/// </summary>
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="value">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, float value) const;
+	void SetUniform(unsigned int ID, const std::string& mName, float value) const;
 	/// <summary>
 	/// Set a Uniform in the shader
 	/// </summary>
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="v">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, const Vector3& v) const;
+	void SetUniform(unsigned int ID, const std::string& mName, const Vector3& v) const;
 	/// <summary>
 	/// Set a Uniform in the shader
 	/// </summary>
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="m">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, const Matrix4x4& m) const;
+	void SetUniform(unsigned int ID, const std::string& mName, const Matrix4x4& m) const;
 
 	/// <summary>
 	/// Delete a Shader

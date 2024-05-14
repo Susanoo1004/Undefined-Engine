@@ -41,20 +41,20 @@ private:
 	/// <summary>
 	/// Camera View without the translation
 	/// </summary>
-	static inline Matrix4x4 View;
+	static inline Matrix4x4 mView;
 
 	/// <summary>
 	/// VAO
 	/// </summary>
-	static inline unsigned int CubeVAO = 0;
+	static inline unsigned int mCubeVAO = 0;
 	/// <summary>
 	/// VBO
 	/// </summary>
-	static inline unsigned int CubeVBO = 0;
+	static inline unsigned int mCubeVBO = 0;
 	/// <summary>
 	/// Cubemap Texture
 	/// </summary>
-	static inline unsigned int CubemapTexture = 0;
+	static inline unsigned int mCubemapTexture = 0;
 
 	/// <summary>
 	/// Shader of the skybox
@@ -68,7 +68,7 @@ private:
 	/// <summary>
 	/// Path to the right texture for each face
 	/// </summary>
-	static inline std::vector<std::string> Faces
+	static inline std::vector<std::string> mFaces
 	{
 		"../undefined/resource_manager/skybox/right.jpg",
 		"../undefined/resource_manager/skybox/left.jpg",

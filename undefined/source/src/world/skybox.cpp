@@ -15,12 +15,12 @@ void Skybox::Setup()
 
 	mRenderer = ServiceLocator::Get<Renderer>();
 
-	CubemapTexture = Texture::LoadCubeMap(Faces);
+	mCubemapTexture = Texture::LoadCubeMap(mFaces);
 	
-	mRenderer->SetCube(CubeVBO, CubeVAO);
+	mRenderer->SetCube(mCubeVBO, mCubeVAO);
 
 	mRenderer->ActiveTexture(GL_TEXTURE0);
-	mRenderer->BindTexture(CubemapTexture, GL_TEXTURE_CUBE_MAP);
+	mRenderer->BindTexture(mCubemapTexture, GL_TEXTURE_CUBE_MAP);
 	mRenderer->BindBuffers(0, 0, 0);
 }
 
@@ -30,8 +30,8 @@ void Skybox::Update(Camera* cam)
 
 	for (int i = 0; i < Interface::EditorViewports.size(); i++)
 	{
-		View = Matrix4x4(Matrix3x3(cam->GetView())); // remove translation from the view matrix
-		mRenderer->SetUniform(mSkyboxShader->ID, "view", View);
+		mView = Matrix4x4(Matrix3x3(cam->GetView())); // remove translation from the view matrix
+		mRenderer->SetUniform(mSkyboxShader->ID, "view", mView);
 		mRenderer->SetUniform(mSkyboxShader->ID, "projection", cam->GetProjection());
 	}
 
@@ -44,7 +44,7 @@ void Skybox::Draw()
 
 	mRenderer->SetDepth(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 
-	mRenderer->BindBuffers(CubeVAO, 0, 0);
+	mRenderer->BindBuffers(mCubeVAO, 0, 0);
 	mRenderer->ActiveTexture(GL_TEXTURE0);
 	mRenderer->Draw(GL_TRIANGLES, 0, 36);
 	mRenderer->BindBuffers(0, 0, 0);

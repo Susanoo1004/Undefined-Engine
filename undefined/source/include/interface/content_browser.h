@@ -51,7 +51,7 @@ protected:
 	/// </summary>
 	/// <param name="path">: Path that the user intracts with </param> 
 	/// <param name="isBackFolder">: Boolean value to know if it is the backfolder (by default : false)</param>
-	static void InteractionWithItems(const std::filesystem::path& path, bool isBackFolder = false);
+	static void InteractionWithItems(const std::filesystem::path& path, bool mIsBackFolder = false);
 
 	/// <summary>
 	/// Rename an item with a simple text
@@ -78,56 +78,56 @@ protected:
 	/// <summary>
 	/// Is folder open bool
 	/// </summary>
-	static inline bool mIsFolderOpen = false;
+	static inline bool pIsFolderOpen = false;
 	/// <summary>
 	/// Is the path we are in a directory
 	/// </summary>
-	static inline bool mIsDirectory = false;
+	static inline bool pIsDirectory = false;
 	/// <summary>
 	/// Is anythingHovered
 	/// </summary>
-	static inline bool mIsAnythingHovered = false;
+	static inline bool pIsAnythingHovered = false;
 	/// <summary>
 	/// Is anything selected 
 	/// </summary>
-	static inline bool mIsAnythingSelected = false;
+	static inline bool pIsAnythingSelected = false;
 	/// <summary>
 	/// Can ImGui pop
 	/// </summary>
-	static inline bool mCanPop = false;
+	static inline bool pCanPop = false;
 
 	/// <summary>
 	/// Initial path
 	/// </summary>
-	static inline std::filesystem::path mPath = std::filesystem::current_path().append("assets");
+	static inline std::filesystem::path pPath = std::filesystem::current_path().append("assets");
 	/// <summary>
 	/// Current path we are in
 	/// </summary>
-	static inline std::filesystem::path mCurrentPath = mPath;
+	static inline std::filesystem::path pCurrentPath = pPath;
 	/// <summary>
 	/// Hovered path
 	/// </summary>
-	static inline std::filesystem::path mHoveredPath = "";
+	static inline std::filesystem::path pHoveredPath = "";
 	/// <summary>
 	/// Selected path
 	/// </summary>
-	static inline std::filesystem::path mSelectedPath = "";
+	static inline std::filesystem::path pSelectedPath = "";
 	/// <summary>
 	/// Renaming path
 	/// </summary>
-	static inline std::filesystem::path mRenamingPath = "";
+	static inline std::filesystem::path pRenamingPath = "";
 
-	static inline std::string mRenamingName = "";
+	static inline std::string pRenamingName = "";
 
 	/// <summary>
 	/// Back folder name
 	/// </summary>
-	static inline std::string mBackFolder = "BackFolder";
+	static inline std::string pBackFolder = "BackFolder";
 
 	/// <summary>
 	/// Array of the current element in a path
 	/// </summary>
-	static inline std::vector<std::filesystem::directory_entry> mCurrPathArray;
+	static inline std::vector<std::filesystem::directory_entry> pCurrPathArray;
 
-	static inline int clickCount;
+	static inline int pClickCount;
 };

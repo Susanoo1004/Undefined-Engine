@@ -15,7 +15,7 @@ public:
 	static void Init();
 	static void Delete();
 	
-	static Scene* CreateScene(const std::string& name = "New Scene");
+	static Scene* CreateScene(const std::string& mName = "New Scene");
 
 	static void Start();
 	static void GlobalUpdate();

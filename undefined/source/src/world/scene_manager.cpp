@@ -23,9 +23,9 @@ void SceneManager::Delete()
 	}
 }
 
-Scene* SceneManager::CreateScene(const std::string& name)
+Scene* SceneManager::CreateScene(const std::string& mName)
 {
-	Scene* newScene = new Scene(name);
+	Scene* newScene = new Scene(mName);
 	Scenes.push_back(newScene);
 	return newScene;
 }

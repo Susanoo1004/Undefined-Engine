@@ -6,7 +6,7 @@
 
 Gizmo::Gizmo()
 {
-	gizmoWindowFlags = 0;
+	GizmoWindowFlags = 0;
 
     CurrentGizmoMode = ImGuizmo::WORLD;
     CurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -60,7 +60,7 @@ void Gizmo::ChangeGizmoOperation()
 void Gizmo::DrawGrid(Camera* camera)
 {
     ImGuiWindow* window = ImGui::GetCurrentWindow();
-    gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
+    GizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
 
     Matrix4x4 view = camera->GetView();
     view = view.Transpose();

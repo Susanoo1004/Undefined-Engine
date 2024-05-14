@@ -72,7 +72,7 @@ private:
 	/// <param name="i">index of the folder we want to draw</param>
 	static void DrawFolders(int i);
 
-	static inline bool isBackFolder;
+	static inline bool mIsBackFolder;
 
 	static inline std::string mFilename;
 

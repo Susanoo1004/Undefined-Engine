@@ -46,25 +46,25 @@ void Shader::Link(unsigned int vertex, unsigned int fragment)
     ServiceLocator::Get<Renderer>()->LinkShader(ID, vertex, fragment);
 }
 
-void Shader::SetBool(const std::string& name, bool value) const
+void Shader::SetBool(const std::string& mName, bool value) const
 {
-    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, mName.c_str(), value);
 }
-void Shader::SetInt(const std::string& name, int value) const
+void Shader::SetInt(const std::string& mName, int value) const
 {
-    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, mName.c_str(), value);
 }
-void Shader::SetFloat(const std::string& name, float value) const
+void Shader::SetFloat(const std::string& mName, float value) const
 {
-    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), value);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, mName.c_str(), value);
 }
-void Shader::SetVec3(const std::string& name, const Vector3& v) const
+void Shader::SetVec3(const std::string& mName, const Vector3& v) const
 {
-    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), v);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, mName.c_str(), v);
 }
-void Shader::SetMat4(const std::string& name, const Matrix4x4& m) const
+void Shader::SetMat4(const std::string& mName, const Matrix4x4& m) const
 {
-    ServiceLocator::Get<Renderer>()->SetUniform(ID, name.c_str(), m);
+    ServiceLocator::Get<Renderer>()->SetUniform(ID, mName.c_str(), m);
 }
 
 void Shader::Load(const char* vertexPath, const char* fragmentPath)
