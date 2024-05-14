@@ -2,55 +2,65 @@
 #include "engine_debug/logger.h"
 #include "audio/sound_buffer.h"
 
+#define CHECK_AL_ERROR() Logger::Info("{}", alGetString(alGetError()));
+
 SoundSource::SoundSource()
 {
-	alGenSources(1, &mSource);
-	alSourcef(mSource, AL_PITCH, mPitch);
-	alSourcef(mSource, AL_GAIN, mGain);
-	alSource3f(mSource, AL_POSITION, mPostition.x, mPostition.y, mPostition.z);
-	alSource3f(mSource, AL_VELOCITY, mVelocity.x, mVelocity.y, mVelocity.z);
-	alSourcei(mSource, AL_LOOPING, mLoop);
-	alSourcei(mSource, AL_BUFFER, mBuffer);
 }
 
 SoundSource::~SoundSource()
 {
-	alDeleteSources(1, &mSource);
+	for (auto&& p : mSoundEffectSource)
+	{
+		alDeleteSources(1, &p.second);
+	}
+	mSoundEffectSource.clear();
 }
 
 void SoundSource::Play(const ALuint buffer)
 {
-	if (buffer != mBuffer)
+	if (mSoundEffectSource.size() == 0)
 	{
-		mBuffer = buffer;
-		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
+		ALuint source = CreateSource(buffer);
+		mSoundEffectSource.emplace(buffer, source);
+		alSourcei(source, AL_BUFFER, (ALint)buffer);
+		alGetSourcei(source, AL_SOURCE_STATE, &mState);
+		if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
+		{
+			alSourcePlay(source);
+		
+			std::string name = SoundBuffer::audioFilesName[buffer - 1];
+			std::string newName = name.substr(name.find_last_of("/") + 1);
+			Logger::Info("Playing {}", newName);
+		}
 	}
 
-	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
-	if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
+	else if (!ContainsBuffer(buffer))
 	{
-		alSourcePlay(mSource);
-		
-		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
-		std::string newName = name.substr(name.find_last_of("/") + 1);
-		Logger::Info("Playing {}", newName);
+		ALuint source = CreateSource(buffer);
+		mSoundEffectSource.emplace(buffer, source);
+		alSourcei(source, AL_BUFFER, (ALint)buffer);
+		alGetSourcei(source, AL_SOURCE_STATE, &mState);
+		if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
+		{
+			alSourcePlay(source);
+
+			std::string name = SoundBuffer::audioFilesName[buffer - 1];
+			std::string newName = name.substr(name.find_last_of("/") + 1);
+			Logger::Info("Playing {}", newName);
+		}
 	}
 }
 
 void SoundSource::Pause(const ALuint buffer)
 {
-	if (buffer != mBuffer)
-	{
-		mBuffer = buffer;
-		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
-	}
-
-	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	ALuint source = GetSource(buffer);
+	alGetSourcei(source, AL_SOURCE_STATE, &mState);
 	if (mState == AL_PLAYING && alGetError() == AL_NO_ERROR)
 	{
-		alSourcePause(buffer);
+		alSourcePause(source);
 
-		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
+		std::string name = SoundBuffer::audioFilesName[buffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
 		Logger::Info("Paused sound {}", newName);
 	}
@@ -58,17 +68,12 @@ void SoundSource::Pause(const ALuint buffer)
 
 void SoundSource::Resume(const ALuint buffer)
 {
-	if (buffer != mBuffer)
-	{
-		mBuffer = buffer;
-		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
-	}
-
-	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	ALuint source = GetSource(buffer);
+	alGetSourcei(source, AL_SOURCE_STATE, &mState);
 	if (mState == AL_PAUSED && alGetError() == AL_NO_ERROR)
 	{
-		alSourcePlay(mSource);
-		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
+		alSourcePlay(source);
+		std::string name = SoundBuffer::audioFilesName[buffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
 		Logger::Info("Resumed {}", newName);
 	}
@@ -76,17 +81,12 @@ void SoundSource::Resume(const ALuint buffer)
 
 void SoundSource::Stop(const ALuint buffer)
 {
-	if (buffer != mBuffer)
-	{
-		mBuffer = buffer;
-		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
-	}
-
-	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	ALuint source = GetSource(buffer);
+	alGetSourcei(source, AL_SOURCE_STATE, &mState);
 	if (mState != AL_STOPPED && alGetError() == AL_NO_ERROR)
 	{
-		alSourceStop(mSource);
-		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
+		alSourceStop(source);
+		std::string name = SoundBuffer::audioFilesName[buffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
 		Logger::Info("Stopped playing {}", newName);
 	}
@@ -94,44 +94,70 @@ void SoundSource::Stop(const ALuint buffer)
 
 void SoundSource::Restart(const ALuint buffer)
 {
-	if (buffer != mBuffer)
-	{
-		mBuffer = buffer;
-		alSourcei(mSource, AL_BUFFER, (ALint)mBuffer);
-	}
-
-	alGetSourcei(mSource, AL_SOURCE_STATE, &mState);
+	ALuint source = GetSource(buffer);
+	alGetSourcei(source, AL_SOURCE_STATE, &mState);
 	if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
 	{
-		alSourceRewind(mSource);
-		alSourcePlay(mSource);
-		std::string name = SoundBuffer::audioFilesName[mBuffer - 1];
+		alSourceRewind(source);
+		alSourcePlay(source);
+		std::string name = SoundBuffer::audioFilesName[buffer - 1];
 		std::string newName = name.substr(name.find_last_of("/") + 1);
 		Logger::Info("Restarted {}", newName);
 	}
 }
 
-void SoundSource::SetPosition(const Vector3& position)
+void SoundSource::SetPosition(ALuint buffer, const Vector3& position)
 {
-	mPostition = position;
+	alSource3f(GetSource(buffer), AL_POSITION, position.x, position.y, position.z);
 }
 
-void SoundSource::SetVelocity(const Vector3& velocity)
+void SoundSource::SetVelocity(ALuint buffer, const Vector3& velocity)
 {
-	mVelocity = velocity;
+	alSource3f(buffer, AL_VELOCITY, velocity.x, velocity.y, velocity.z);
 }
 
-void SoundSource::SetVolume(const float volume)
+void SoundSource::SetVolume(ALuint buffer, const float volume)
 {
-	mGain = volume;
+	alSourcef(GetSource(buffer), AL_GAIN, volume);
 }
 
-void SoundSource::SetSpeed(const float pitch)
+void SoundSource::SetSpeed(ALuint buffer, const float pitch)
 {
-	mPitch = pitch;
+	alSourcef(GetSource(buffer), AL_PITCH, pitch);
 }
 
-void SoundSource::SetLoop(const bool shouldLoop)
+void SoundSource::SetLoop(ALuint buffer, const bool shouldLoop)
 {
-	mLoop = shouldLoop;
+	alSourcei(GetSource(buffer), AL_LOOPING, shouldLoop);
+}
+
+ALuint SoundSource::CreateSource(ALuint buffer)
+{
+	ALuint source;
+	alGenSources(1, &source);
+	alSourcef(mSource, AL_PITCH, mPitch);
+	alSourcef(mSource, AL_GAIN, mGain);
+	alSource3f(mSource, AL_POSITION, mPostition.x, mPostition.y, mPostition.z);
+	alSource3f(mSource, AL_VELOCITY, mVelocity.x, mVelocity.y, mVelocity.z);
+	alSourcei(mSource, AL_LOOPING, mLoop);
+	alSourcei(mSource, AL_BUFFER, buffer);
+	
+	return source;
+}
+
+ALuint SoundSource::GetSource(ALuint buffer)
+{
+	auto&& p = mSoundEffectSource.find(buffer);
+
+	if (p == mSoundEffectSource.end())
+	{
+		return 0;
+	}
+
+	return p->second;
+}
+
+bool SoundSource::ContainsBuffer(ALuint buffer)
+{
+	return mSoundEffectSource.find(buffer) != mSoundEffectSource.end();
 }

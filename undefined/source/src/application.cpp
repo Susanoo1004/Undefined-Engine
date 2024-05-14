@@ -42,6 +42,7 @@ Application::Application()
     mRenderer = ServiceLocator::Get<Renderer>();
 }
 
+#define CHECK_AL_ERROR() Logger::Info("{}", alGetString(alGetError()));
 void Application::Init()
 {
     mWindowManager->Init();
@@ -92,9 +93,9 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
-    
-    mSoundSource->SetPosition(Vector3());
 
+    //mSoundSource->SetPosition(sound1, Vector3());
+    
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
     {
         mSoundSource->Play(sound1);
