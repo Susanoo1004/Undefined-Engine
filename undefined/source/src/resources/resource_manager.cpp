@@ -9,7 +9,7 @@
 
 void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 {
-	std::vector<std::string> pShader;
+	std::vector<std::string> mShader;
 
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
@@ -47,21 +47,21 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 
 		else if (mName.ends_with(".fs"))
 		{
-			pShader.push_back(entry.path().generic_string());
+			mShader.push_back(entry.path().generic_string());
 		}
 
 		else if (mName.ends_with(".vs"))
 		{
-			if (pShader.size() != 0)
+			if (mShader.size() != 0)
 			{
 				std::string fragShaderName = entry.path().generic_string();
 				fragShaderName.resize(fragShaderName.size() - 2);
 				fragShaderName += "fs";
-				if (std::find(pShader.begin(), pShader.end(), fragShaderName) != pShader.end())
+				if (std::find(mShader.begin(), mShader.end(), fragShaderName) != mShader.end())
 				{
 					mFilename.resize(mFilename.size() - 3);
 					Create<Shader>(mFilename, mName.c_str(), fragShaderName.c_str());
-					pShader.erase(std::find(pShader.begin(), pShader.end(), fragShaderName));
+					mShader.erase(std::find(mShader.begin(), mShader.end(), fragShaderName));
 				}
 			}
 		}

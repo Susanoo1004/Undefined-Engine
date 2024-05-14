@@ -21,7 +21,7 @@
 
 
 EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
-	: mFramebuffer(framebuffer), ViewportCamera(camera), pShader(ResourceManager::Get<Shader>("viewport_shader"))
+	: mFramebuffer(framebuffer), ViewportCamera(camera), mShader(ResourceManager::Get<Shader>("viewport_shader"))
 {
 	mEditorNumber++;
 	mID = mEditorNumber;

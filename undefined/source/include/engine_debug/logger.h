@@ -98,9 +98,9 @@ private:
 	static void Start();
 	static void PrintEntry(LogEntry entry);
 
-	UNDEFINED_ENGINE static inline bool IsRunning = true;
-	UNDEFINED_ENGINE static inline std::condition_variable Sleep;
+	UNDEFINED_ENGINE static inline bool mIsRunning = true;
+	UNDEFINED_ENGINE static inline std::condition_variable mSleep;
 
-	UNDEFINED_ENGINE static inline std::thread Thread = std::thread(&Logger::Start);
-	UNDEFINED_ENGINE static inline TsQueue<LogEntry> EntryList;
+	UNDEFINED_ENGINE static inline std::thread mThread = std::thread(&Logger::Start);
+	UNDEFINED_ENGINE static inline TsQueue<LogEntry> mEntryList;
 };

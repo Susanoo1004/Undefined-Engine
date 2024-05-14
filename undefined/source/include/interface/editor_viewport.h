@@ -73,7 +73,7 @@ private:
 	/// <summary>
 	/// Pointer to the shader use by the viewport
 	/// </summary>
-	std::shared_ptr<Shader> pShader;
+	std::shared_ptr<Shader> mShader;
 	Vector2 mViewportBounds[2];
 
 	/// <summary>
