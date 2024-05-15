@@ -44,10 +44,9 @@ void Application::Init()
     mWindowManager->Init();
     mRenderer->Init();
 
-    RuntimeClasses::AddType<Component>();
-    RuntimeClasses::AddType<Light>();
     RuntimeClasses::AddType<DirLight>();
     RuntimeClasses::AddType<ModelRenderer>();
+
 
     ResourceManager::Load("../undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
@@ -82,6 +81,8 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
+    SceneManager::SaveCurrentScene();
+    //SceneManager::LoadScene("assets/scenes/test.scene");
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
@@ -124,6 +125,7 @@ void Application::Update()
 
 void Application::Clear()
 {
+
     SceneManager::Delete();
     delete Camera::CurrentCamera;
     mRenderer->UnUseShader();

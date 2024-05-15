@@ -21,3 +21,11 @@ void RuntimeClasses::Display(void* obj, size_t hash)
 		hashedClass->display(obj);
 	}
 }
+
+Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
+{
+	if (auto hashedClass = GetHashedClass(hash))
+	{
+		return hashedClass->write(val);
+	}
+}

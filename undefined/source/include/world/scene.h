@@ -27,5 +27,7 @@ public:
 
 	std::string Name = "Default";
 
+	std::filesystem::path Path;
+
 	std::vector<Object*> Objects;
 };

@@ -22,8 +22,8 @@ public:
 	static void Draw();
 
 	static void SaveCurrentScene();
-	static void LoadScene(const std::string& path);
-	
+	static bool LoadScene(const std::filesystem::path& path);
+		
 	static inline Scene* ActualScene;
 	static inline std::vector<Scene*> Scenes;
 };

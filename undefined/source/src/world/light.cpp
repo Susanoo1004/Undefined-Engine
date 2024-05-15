@@ -24,3 +24,10 @@ Light::~Light()
 void Light::Update()
 {
 }
+
+void Light::ValueChanged()
+{
+	Ambient;
+	Diffuse;
+	Specular;
+}

@@ -131,8 +131,7 @@
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y "$(SolutionDir)bin\$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,7 +157,7 @@
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName).dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\$(TargetName).dll" /Y </Command>
+      <Command>copy /Y "$(SolutionDir)bin$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
