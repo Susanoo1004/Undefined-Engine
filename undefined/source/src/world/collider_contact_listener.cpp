@@ -22,6 +22,7 @@ void ColliderContactListener::OnContactAdded(const JPH::Body& inBody1, const JPH
 	}
 	
 }
+
 void ColliderContactListener::OnContactPersisted(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings)
 {
 	Logger::Info("A contact was persisted");
@@ -50,9 +51,10 @@ void ColliderContactListener::CallOnColliderEnter()
 {
 	for (std::pair<Script*, const JPH::Body*> p : mOnCollisionEnterScripts)
 	{
+		if (!p.first || p.second)
+			return;
+
 		p.first->OnCollisionEnter(p.second);
-		delete p.first;
-		delete p.second;
 	}
 
 	mOnCollisionEnterScripts.clear();
@@ -63,9 +65,10 @@ void ColliderContactListener::CallOnColliderStay()
 	
 	for (std::pair<Script*, const JPH::Body*> p : mOnCollisionStayScripts)
 	{
+		if (!p.first || p.second)
+			return;
+
 		p.first->OnCollisionStay(p.second);
-		delete p.first;
-		delete p.second;
 	}
 
 	mOnCollisionStayScripts.clear();
@@ -76,8 +79,10 @@ void ColliderContactListener::CallOnColliderExit()
 {
 	for (Script* s : mOnCollisionExitScripts)
 	{
+		if (!s)
+			return;
+
 		s->OnCollisionExit();
-		delete s;
 	}
 
 	mOnCollisionExitScripts.clear();

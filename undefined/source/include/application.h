@@ -9,6 +9,7 @@
 
 class Window;
 class Renderer;
+class Object;
 
 class Application
 {

@@ -116,7 +116,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;JPH_SHARED_LIBRARY;JPH_DEBUG_RENDERER;JPH_DISABLE_CUSTOM_ALLOCATOR;JPH_FLOATING_POINT_EXCEPTIONS_ENABLED;JPH_PROFILE_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;JPH_SHARED_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>source/include;</AdditionalIncludeDirectories>
@@ -125,14 +125,13 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteurd.lib;Joltd.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteurd.lib;Jolt.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y "$(SolutionDir)bin\$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -173,8 +172,9 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\world\collider.cpp" />
+    <ClCompile Include="source\src\world\body_activation_listener.cpp" />
     <ClCompile Include="source\src\world\box_collider.cpp" />
-    <ClCompile Include="source\include\world\rigidbody.h" />
     <ClCompile Include="source\src\world\broad_phase_layer_interface.cpp" />
     <ClCompile Include="source\src\world\capsule_collider.cpp" />
     <ClCompile Include="source\src\world\collider_contact_listener.cpp" />
@@ -253,6 +253,7 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\world\body_activation_listener.h" />
     <ClInclude Include="source\include\world\box_collider.h" />
     <ClInclude Include="source\include\world\broad_phase_layer_interface.h" />
     <ClInclude Include="source\include\world\capsule_collider.h" />

@@ -7,8 +7,15 @@ CapsuleCollider::CapsuleCollider()
 }
 
 CapsuleCollider::CapsuleCollider(const Vector3& pos, const Quaternion& rot, float height, float radius)
+	: mHeight(height), mRadius(radius)
 {
-	pBodyID = PhysicsSystem::CreateCapsule(pos, rot, height, radius);
+	BodyID = PhysicsSystem::CreateCapsule(pos, rot, height, radius);
 
-	PhysicsSystem::ColliderMap.emplace(pBodyID, this);
+	PhysicsSystem::ColliderMap.emplace(BodyID, this);
+}
+
+CapsuleCollider::~CapsuleCollider()
+{
+	if (!JPH::BodyID(BodyID).IsInvalid())
+		PhysicsSystem::DestroyBody(BodyID);
 }

@@ -3,7 +3,6 @@
 #include <Jolt/Jolt.h>
 #include <Jolt/Physics/PhysicsSystem.h>
 
-#include "world/rigidbody.h"
 #include "world/object.h"
 #include "world/collider.h"
 #include "world/script.h"

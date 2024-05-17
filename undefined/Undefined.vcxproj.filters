@@ -58,10 +58,11 @@
     <ClCompile Include="source\src\wrapper\physics_system.cpp" />
     <ClCompile Include="source\src\world\collider_contact_listener.cpp" />
     <ClCompile Include="source\src\world\rigidbody.cpp" />
-    <ClCompile Include="source\include\world\rigidbody.h" />
     <ClCompile Include="source\src\world\box_collider.cpp" />
     <ClCompile Include="source\src\world\capsule_collider.cpp" />
     <ClCompile Include="source\src\world\broad_phase_layer_interface.cpp" />
+    <ClCompile Include="source\src\world\body_activation_listener.cpp" />
+    <ClCompile Include="source\src\world\collider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="source\include\world\capsule_collider.h" />
     <ClInclude Include="source\include\world\broad_phase_layer_interface.h" />
     <ClInclude Include="source\include\world\layers.h" />
+    <ClInclude Include="source\include\world\body_activation_listener.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

@@ -21,11 +21,11 @@ public:
 	/// <summary>
 	/// Enable a component
 	/// </summary>
-	void Enable();
+	virtual void Enable();
 	/// <summary>
 	/// Disable a component
 	/// </summary>
-	void Disable();
+	virtual void Disable();
 
 	/// <summary>
 	/// Check if the component is enable
@@ -39,9 +39,19 @@ public:
 	virtual void Start();
 
 	/// <summary>
+	/// Update fix at 60 fps call after FixedUpdate
+	/// </summary>
+	virtual void PreFixedUpdate();
+
+	/// <summary>
 	/// Update fix at 60fps (mainly use for physics)
 	/// </summary>
 	virtual void FixedUpdate();
+
+	/// <summary>
+	/// Update fix at 60 fps call before FixedUpdate
+	/// </summary>
+	virtual void PostFixedUpdate();
 
 	/// <summary>
 	/// Update function 

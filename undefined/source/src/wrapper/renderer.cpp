@@ -9,6 +9,7 @@
 #include "engine_debug/renderer_debug.h"
 #include "engine_debug/logger.h"
 
+
 void Renderer::Init()
 {
     gladLoadGL();
@@ -16,6 +17,7 @@ void Renderer::Init()
     EnableTest(GL_DEPTH_TEST);
 
     RendererDebug::DebugInit();
+    
 }
 
 void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blueBaseColor)

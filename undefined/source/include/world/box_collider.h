@@ -12,7 +12,9 @@ class BoxCollider : public Collider
 {
 public:
 	BoxCollider();
-	BoxCollider(Vector3 pos, Quaternion rot, Vector3 scale);
+	BoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& scale, bool is_static = false);
+	virtual ~BoxCollider();
 
 private:
+	Vector3 mSize;
 };

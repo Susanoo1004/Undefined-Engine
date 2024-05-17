@@ -4,6 +4,17 @@
 
 class Collider : public Component
 {
-protected:
-	unsigned int pBodyID;
+public:
+	Collider();
+	Collider(const Vector3& pos, const Quaternion& rot);
+	virtual ~Collider();
+
+	void OnEnable() override;
+	void OnDisable() override;
+
+	void PreFixedUpdate() override;
+	void PostFixedUpdate() override;
+
+	unsigned int BodyID;
+	
 };

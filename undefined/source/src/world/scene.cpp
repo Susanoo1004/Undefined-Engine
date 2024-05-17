@@ -40,6 +40,27 @@ void Scene::Start()
 	}
 }
 
+UNDEFINED_ENGINE void Scene::PreFixedUpdate()
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		if (!Objects[i]->IsEnable())
+		{
+			continue;
+		}
+
+		for (Component* comp : Objects[i]->Components)
+		{
+			if (!comp->IsEnable())
+			{
+				continue;
+			}
+
+			comp->PreFixedUpdate();
+		}
+	}
+}
+
 void Scene::FixedUpdate()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
@@ -56,7 +77,29 @@ void Scene::FixedUpdate()
 				continue;
 			}
 
+			
 			comp->FixedUpdate();
+		}
+	}
+}
+
+UNDEFINED_ENGINE void Scene::PostFixedUpdate()
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		if (!Objects[i]->IsEnable())
+		{
+			continue;
+		}
+
+		for (Component* comp : Objects[i]->Components)
+		{
+			if (!comp->IsEnable())
+			{
+				continue;
+			}
+
+			comp->PostFixedUpdate();
 		}
 	}
 }

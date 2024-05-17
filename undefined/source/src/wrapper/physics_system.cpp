@@ -15,63 +15,32 @@ void PhysicsSystem::Init()
 
 	JPH::RegisterTypes();
 
-	temp_allocator = new JPH::TempAllocatorImpl(10 * 1024 * 1024);
-	job_system = new JPH::JobSystemThreadPool(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
+	TempAllocator = new JPH::TempAllocatorImpl(10 * 1024 * 1024);
+	JobSystem = new JPH::JobSystemThreadPool(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
 	JoltPhysicsSystem = new JPH::PhysicsSystem();
 
-	JoltPhysicsSystem->Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, broad_phase_layer_interface, object_vs_broadphase_layer_filter, object_vs_object_layer_filter);
+	JoltPhysicsSystem->Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints, BroadphaseLayerInterface, ObjectVsBroadphaseLayerFilter, ObjectLayerPairFilter);
 
-	JoltPhysicsSystem->SetBodyActivationListener(&body_activation_listener);
+	JoltPhysicsSystem->SetBodyActivationListener(&BodyListener);
 	JoltPhysicsSystem->SetContactListener(&ContactListener);
 
 	BodyInterface = &JoltPhysicsSystem->GetBodyInterface();
-
-	// ADD Floor
-
-	// Create the settings for the collision volume (the shape)
-	JPH::BoxShapeSettings floor_shape_settings(JPH::Vec3(100.0f, 1.0f, 100.0f));
-	floor_shape_settings.SetEmbedded();
-
-	// Create the shape
-	JPH::ShapeSettings::ShapeResult floor_shape_result = floor_shape_settings.Create();
-	JPH::ShapeRefC floor_shape = floor_shape_result.Get();
-
-	JPH::BodyCreationSettings floor_settings(floor_shape, JPH::RVec3(0.0, -1.0, 0.0), JPH::Quat::sIdentity(), JPH::EMotionType::Static, Layers::NON_MOVING);
-
-	floor = BodyInterface->CreateBody(floor_settings);
-
-	// Add it to the world
-	BodyInterface->AddBody(floor->GetID(), JPH::EActivation::DontActivate);
-
-
-	// ADD dynamic body
-	
-	// Now create a dynamic body to bounce on the floor
-	// Note that this uses the shorthand version of creating and adding a body to the world
-	JPH::BodyCreationSettings sphere_settings(new JPH::SphereShape(0.5f), JPH::RVec3(0.0, 2.0, 0.0), JPH::Quat::sIdentity(), JPH::EMotionType::Dynamic, Layers::MOVING);
-	sphere_id = BodyInterface->CreateAndAddBody(sphere_settings, JPH::EActivation::Activate);
-
-	// Now you can interact with the dynamic body, in this case we're going to give it a velocity.
-	// (note that if we had used CreateBody then we could have set the velocity straight on the body before adding it to the physics system)
-	BodyInterface->SetLinearVelocity(sphere_id, JPH::Vec3(0.0f, -5.0f, 0.0f));
 }
 
 void PhysicsSystem::Update()
 {
-	JoltPhysicsSystem->Update(1.f/60.f , 1, temp_allocator, job_system);
+	JoltPhysicsSystem->Update(1.f/60.f , 1, TempAllocator, JobSystem);
+	ContactListener.CallOnColliderEnter();
+	ContactListener.CallOnColliderStay();
+	ContactListener.CallOnColliderExit();
 }
 
 void PhysicsSystem::Terminate()
 {
-	// Remove the sphere from the physics system. Note that the sphere itself keeps all of its state and can be re-added at any time.
-	BodyInterface->RemoveBody(sphere_id);
 
-	// Destroy the sphere. After this the sphere ID is no longer valid.
-	BodyInterface->DestroyBody(sphere_id);
-
-	// Remove and destroy the floor
-	BodyInterface->RemoveBody(floor->GetID());
-	BodyInterface->DestroyBody(floor->GetID());
+	delete TempAllocator;
+	delete JobSystem;
+	delete JoltPhysicsSystem;
 
 	// Unregisters all types with the factory and cleans up the default material
 	JPH::UnregisterTypes();
@@ -93,20 +62,31 @@ void PhysicsSystem::TraceImplentation(const char* inFMT, ...)
 	std::cout << buffer << std::endl;
 }
 
-JPH::Vec3Arg PhysicsSystem::ToJPH(const Vector3& in)
+JPH::Vec3Arg PhysicsSystem::ToJPH(const Vector3& v)
 {
-	return JPH::RVec3Arg(in.x, in.y, in.z);
+	return JPH::RVec3Arg(v.x, v.y, v.z);
 }
 
-JPH::QuatArg PhysicsSystem::ToJPH(const Quaternion& in)
+JPH::QuatArg PhysicsSystem::ToJPH(const Quaternion& q)
 {
-	return JPH::QuatArg(in.x, in.y, in.z, in.w);
+	return JPH::QuatArg(q.x, q.y, q.z, q.w);
 }
 
-unsigned int PhysicsSystem::CreateBox(Vector3 pos, Quaternion rot, Vector3 scale)
+Vector3 PhysicsSystem::FromJPH(const JPH::Vec3& v)
 {
-	JPH::BodyCreationSettings settings(new JPH::BoxShape(ToJPH(scale)), ToJPH(pos), ToJPH(rot), JPH::EMotionType::Dynamic, Layers::MOVING);
+	return Vector3(v.GetX(), v.GetY(), v.GetZ());
+}
 
+Quaternion PhysicsSystem::FromJPH(const JPH::Quat& q)
+{
+	return Quaternion(q.GetX(), q.GetY(), q.GetZ(), q.GetW());
+}
+
+unsigned int PhysicsSystem::CreateBox(const Vector3& pos, const Quaternion& rot, const Vector3& scale, bool is_static)
+{
+	JPH::BodyCreationSettings settings(new JPH::BoxShape(ToJPH(scale)), ToJPH(pos), ToJPH(rot), is_static == true ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic, Layers::MOVING);
+
+	settings.mAllowSleeping = false;
 	return BodyInterface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
 }
 
@@ -117,7 +97,7 @@ unsigned int PhysicsSystem::CreateCapsule(const Vector3& pos, const Quaternion& 
 
 	if (!result.IsValid())
 	{
-		Logger::Error("[Physics] - Couldn't create the capsule shape");
+		Logger::Error("Couldn't create the capsule");
 		return JPH::BodyID::cInvalidBodyID;
 	}
 
@@ -126,8 +106,110 @@ unsigned int PhysicsSystem::CreateCapsule(const Vector3& pos, const Quaternion& 
 	return BodyInterface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
 }
 
+bool PhysicsSystem::IsBodyActive(unsigned int bodyId)
+{
+	return BodyInterface->IsActive(JPH::BodyID(bodyId));
+}
+
+Vector3 PhysicsSystem::GetBodyPosition(unsigned int bodyId)
+{
+	if (!IsBodyActive(bodyId))
+	{
+		// Logger::Warning("Trying to get the position of an inactive body : {}", bodyId);
+		return Vector3();
+	}
+
+	const JPH::RVec3 position = BodyInterface->GetCenterOfMassPosition((JPH::BodyID)bodyId);
+
+	return FromJPH(position);
+}
+
+Quaternion PhysicsSystem::GetBodyRotation(unsigned int bodyId)
+{
+	if (!IsBodyActive(bodyId))
+	{
+		// Logger::Warning("Trying to get the rotation of an inactive body : {}", bodyId);
+		return Quaternion();
+	}
+
+	const JPH::Quat rotation = BodyInterface->GetRotation((JPH::BodyID)bodyId);
+
+	return FromJPH(rotation);
+}
+
+void PhysicsSystem::SetPosition(unsigned int bodyId, const Vector3& position)
+{
+	BodyInterface->SetPosition((JPH::BodyID)bodyId, JPH::RVec3Arg(position.x, position.y, position.z), JPH::EActivation::DontActivate);
+}
+
+void PhysicsSystem::SetRotation(unsigned int bodyId, const Quaternion& rotation)
+{
+	BodyInterface->SetRotation((JPH::BodyID)bodyId, JPH::QuatArg(rotation.x, rotation.y, rotation.z, rotation.w), JPH::EActivation::DontActivate);
+}
+
+void PhysicsSystem::SetVelocity(unsigned int bodyId, const Vector3& velocity)
+{
+	BodyInterface->SetLinearVelocity((JPH::BodyID)bodyId, ToJPH(velocity));
+}
+
+void PhysicsSystem::AddForce(unsigned int bodyId, const Vector3& force)
+{
+	const JPH::BodyLockWrite lock(JoltPhysicsSystem->GetBodyLockInterface(), JPH::BodyID(bodyId));
+
+	if (!lock.Succeeded())
+		return;
+
+	JPH::Body& body = lock.GetBody();
+
+	body.AddForce(ToJPH(force) / body.GetMotionProperties()->GetInverseMass());
+}
+
+void PhysicsSystem::AddForce(unsigned int bodyId, const Vector3& force, const Vector3& point)
+{
+	const JPH::BodyLockWrite lock(JoltPhysicsSystem->GetBodyLockInterface(), JPH::BodyID(bodyId));
+
+	if (!lock.Succeeded())
+		return;
+
+	JPH::Body& body = lock.GetBody();
+
+	body.AddForce(ToJPH(force) / body.GetMotionProperties()->GetInverseMass(), ToJPH(point));
+}
+
+void PhysicsSystem::AddImpulse(uint32_t bodyId, const Vector3& impulse)
+{
+	const JPH::BodyLockWrite lock(JoltPhysicsSystem->GetBodyLockInterface(), JPH::BodyID(bodyId));
+
+	if (!lock.Succeeded())
+		return;
+
+	JPH::Body& body = lock.GetBody();
+
+	body.AddImpulse(ToJPH(impulse) / body.GetMotionProperties()->GetInverseMass());
+}
+
+void PhysicsSystem::AddImpulse(uint32_t bodyId, const Vector3& impulse, const Vector3& point)
+{
+	const JPH::BodyLockWrite lock(JoltPhysicsSystem->GetBodyLockInterface(), JPH::BodyID(bodyId));
+
+	if (!lock.Succeeded())
+		return;
+
+	JPH::Body& body = lock.GetBody();
+
+	body.AddImpulse(ToJPH(impulse) / body.GetMotionProperties()->GetInverseMass(), ToJPH(point));
+}
+
+void PhysicsSystem::AddTorque(uint32_t bodyId, const Vector3& torque)
+{
+	BodyInterface->AddTorque((JPH::BodyID)bodyId, ToJPH(torque));
+}
+
 void PhysicsSystem::DestroyBody(unsigned int body_ID)
 {
+	if (ColliderMap.find(body_ID) == ColliderMap.end())
+		return;
+
 	BodyInterface->RemoveBody(JPH::BodyID(body_ID));
 	BodyInterface->DestroyBody(JPH::BodyID(body_ID));
 	ColliderMap.erase(ColliderMap.find(body_ID));

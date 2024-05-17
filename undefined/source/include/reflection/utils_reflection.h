@@ -204,10 +204,10 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 		Vector3 euler = obj->ToEuler();
 		ImGui::SliderAngle3(name.c_str(), &euler.x, .1f);
 		Quaternion quat = Quaternion::GetRotationQuaternion(euler);
-		obj->x = quat.x;
-		obj->y = quat.y;
-		obj->z = quat.z;
-		obj->w = quat.w;
+		//obj->x = quat.x;
+		//obj->y = quat.y;
+		//obj->z = quat.z;
+		//obj->w = quat.w;
 	}
 }
 

@@ -27,6 +27,8 @@
 #include "memory_leak.h"
 
 #include "world/scene_manager.h"
+#include "world/box_collider.h"
+#include "world/capsule_collider.h"
 
 #include "interface/interface.h"
 #include "interface/inspector.h"
@@ -45,6 +47,10 @@ void Application::Init()
 {
     mWindowManager->Init();
     mRenderer->Init();
+
+    std::vector<int> a = { GLFW_KEY_SPACE };
+
+    ServiceLocator::Get<InputManager>()->CreateKeyInput("debug", a);
 
     //Physics
     PhysicsSystem::Init();
@@ -70,10 +76,20 @@ void Application::Init()
     SceneManager::Init();
 
     SceneManager::ActualScene->AddObject("DirLight")->AddComponent<DirLight>();
-    Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
-    object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
 
-    SceneManager::ActualScene->AddObject(object, "Test Child");
+    SceneManager::ActualScene->AddObject("Floor");
+    SceneManager::ActualScene->Objects[1]->GameTransform->Position = Vector3(0, -1, 0);
+    SceneManager::ActualScene->Objects[1]->AddComponent<BoxCollider>(SceneManager::ActualScene->Objects[1]->GameTransform->GetPosition(), SceneManager::ActualScene->Objects[1]->GameTransform->GetRotationQuat(), Vector3(100.0f, 1.0f, 100.0f), true);
+
+    Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
+    object->GameTransform->Position = Vector3(0, -0.5f, 0);
+    object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
+    
+
+    Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
+    sphere->GameTransform->Position = Vector3(1, 2, 0);
+    sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
+    CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
 
     SceneManager::Start();
 }
@@ -83,8 +99,6 @@ void Application::Update()
     Time::SetTimeVariables();
 
     mRenderer->SetClearColor(0,0,0);
-
-    PhysicsSystem::Update();
 
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
@@ -131,9 +145,9 @@ void Application::Update()
 
 void Application::Clear()
 {
-    PhysicsSystem::Terminate();
     SceneManager::Delete();
     delete Camera::CurrentCamera;
+    PhysicsSystem::Terminate();
     mRenderer->UnUseShader();
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();

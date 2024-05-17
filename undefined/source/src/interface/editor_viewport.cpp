@@ -87,8 +87,12 @@ void EditorViewport::ShowWindow()
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && 
 		mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
-		int ObjectIndex = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
-		Logger::Info("Pixel data = {}", ObjectIndex);
+		if (!ImGuizmo::IsOver())
+		{
+			int ObjectIndex = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
+			Logger::Info("Pixel data = {}", ObjectIndex);
+		}
+
 	}
 
 	// we get the screen position of the window

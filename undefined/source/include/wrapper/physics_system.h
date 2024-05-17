@@ -19,80 +19,10 @@
 #include "engine_debug/logger.h"
 
 #include "world/collider_contact_listener.h"
+#include "world/body_activation_listener.h"
 #include "world/broad_phase_layer_interface.h"
 
 #include "utils/flag.h"
-
-#pragma region TOMOVE
-
-#ifdef JPH_ENABLE_ASSERTS
-
-// Callback for asserts, connect this to your own assert handler if you have one
-static bool AssertFailedImpl(const char* inExpression, const char* inMessage, const char* inFile, unsigned int inLine)
-{	
-	// Print to the TTY
-	// Logger::FatalError("{} : {} : ( {} ) {}", inFile, inLine, inExpression, (inMessage != nullptr ? inMessage : ""));
-	std::cout << inFile << ":" << inLine << ": (" << inExpression << ") " << (inMessage != nullptr ? inMessage : "") << std::endl;
-	// Breakpoint
-	return true;
-};
-
-#endif // JPH_ENABLE_ASSERTSs
-
-/// Class that determines if two object layers can collide
-class ObjectLayerPairFilterImpl : public JPH::ObjectLayerPairFilter
-{
-public:
-	virtual bool ShouldCollide(JPH::ObjectLayer inObject1, JPH::ObjectLayer inObject2) const override
-	{
-		switch (inObject1)
-		{
-		case Layers::NON_MOVING:
-			return inObject2 == Layers::MOVING; // Non moving only collides with moving
-		case Layers::MOVING:
-			return true; // Moving collides with everything
-		default:
-			JPH_ASSERT(false);
-			return false;
-		}
-	}
-};
-
-/// Class that determines if an object layer can collide with a broadphase layer
-class ObjectVsBroadPhaseLayerFilterImpl : public JPH::ObjectVsBroadPhaseLayerFilter
-{
-public:
-	virtual bool ShouldCollide(JPH::ObjectLayer inLayer1, JPH::BroadPhaseLayer inLayer2) const override
-	{
-		switch (inLayer1)
-		{
-		case Layers::NON_MOVING:
-			return inLayer2 == BroadPhaseLayers::MOVING;
-		case Layers::MOVING:
-			return true;
-		default:
-			JPH_ASSERT(false);
-			return false;
-		}
-	}
-};
-
-// An example activation listener
-class MyBodyActivationListener : public JPH::BodyActivationListener
-{
-public:
-	virtual void OnBodyActivated(const JPH::BodyID& inBodyID, JPH::uint64 inBodyUserData) override
-	{
-		Logger::Info("A body got activated");
-	}
-
-	virtual void OnBodyDeactivated(const JPH::BodyID& inBodyID, JPH::uint64 inBodyUserData) override
-	{
-		Logger::Info("A body went to sleep");
-	}
-};
-
-#pragma endregion
 
 class PhysicsSystem
 {
@@ -106,20 +36,44 @@ public:
 
 	static void TraceImplentation(const char* inFMT, ...);
 
-	static JPH::Vec3Arg ToJPH(const Vector3& in);
-	static JPH::QuatArg ToJPH(const Quaternion& in);
+	static JPH::Vec3Arg ToJPH(const Vector3& v);
+	static JPH::QuatArg ToJPH(const Quaternion& q);
+	static Vector3 FromJPH(const JPH::Vec3& v);
+	static Quaternion FromJPH(const JPH::Quat& q);
 
-	static unsigned int CreateBox(Vector3 pos, Quaternion rot, Vector3 scale);
+	static unsigned int CreateBox(const Vector3& pos, const Quaternion& rot, const Vector3& scale, bool is_static);
 	static unsigned int CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius);
+
+	static bool IsBodyActive(unsigned int bodyId);
+
+	static Vector3 GetBodyPosition(unsigned int bodyId);
+
+	static Quaternion GetBodyRotation(unsigned int bodyId);
+	
+	static void SetPosition(unsigned int bodyId, const Vector3& position);
+	
+	static void SetRotation(unsigned int bodyId, const Quaternion& rotation);
+
+	static void SetVelocity(unsigned int bodyId, const Vector3& velocity);
+
+	static void AddForce(unsigned int bodyId, const Vector3& force);
+	
+	static void AddForce(unsigned int bodyId, const Vector3& force, const Vector3& point);
+
+	static void AddImpulse(uint32_t bodyId, const Vector3& impulse);
+
+	static void AddImpulse(uint32_t bodyId, const Vector3& impulse, const Vector3& point);
+
+	static void AddTorque(uint32_t bodyId, const Vector3& torque);
 
 	static void DestroyBody(unsigned int body_ID);
 
 	static Collider* GetColliderFromID(unsigned int bodyId);
 
-	static inline JPH::TempAllocatorImpl* temp_allocator;
+	static inline JPH::TempAllocatorImpl* TempAllocator;
 
 	// We need a job system that will execute physics jobs on multiple threads.
-	static inline JPH::JobSystemThreadPool* job_system;
+	static inline JPH::JobSystemThreadPool* JobSystem;
 
 	static inline constexpr unsigned int cMaxBodies = 1024;
 
@@ -129,21 +83,20 @@ public:
 
 	static inline constexpr unsigned int cMaxContactConstraints = 1024;
 
-	static inline BroadPhaseLayerInterface broad_phase_layer_interface;
+	static inline BroadPhaseLayerInterface BroadphaseLayerInterface;
 
-	static inline ObjectVsBroadPhaseLayerFilterImpl object_vs_broadphase_layer_filter;
+	static inline JPH::ObjectVsBroadPhaseLayerFilter ObjectVsBroadphaseLayerFilter;
 
-	static inline ObjectLayerPairFilterImpl object_vs_object_layer_filter;
+	static inline JPH::ObjectLayerPairFilter ObjectLayerPairFilter;
 
 	static inline JPH::PhysicsSystem* JoltPhysicsSystem;
 
-	static inline MyBodyActivationListener body_activation_listener;
+	static inline BodyActivationListener BodyListener;
 	static inline ColliderContactListener ContactListener;
 
 	static inline JPH::BodyInterface* BodyInterface;
 
 	static inline JPH::Body* floor = nullptr;
-	static inline JPH::BodyID sphere_id;
 
 	static inline std::unordered_map<unsigned int, Collider*> ColliderMap;
 

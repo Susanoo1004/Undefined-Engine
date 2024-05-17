@@ -2,13 +2,22 @@
 
 #include "wrapper/physics_system.h"
 
+#include "service_locator.h"
+
 BoxCollider::BoxCollider()
 {
 }
 
-BoxCollider::BoxCollider(Vector3 pos, Quaternion rot, Vector3 scale)
+BoxCollider::BoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& scale, bool is_static)
+	: mSize(scale)
 {
-	pBodyID = PhysicsSystem::CreateBox(pos, rot, scale);
+	BodyID = PhysicsSystem::CreateBox(pos, rot, scale, is_static);
 
-	PhysicsSystem::ColliderMap.emplace(pBodyID, this);
+	PhysicsSystem::ColliderMap.emplace(BodyID, this);
+}
+
+BoxCollider::~BoxCollider()
+{
+	if (!JPH::BodyID(BodyID).IsInvalid())
+		PhysicsSystem::DestroyBody(BodyID);
 }

@@ -13,6 +13,9 @@ class CapsuleCollider : public Collider
 public:
 	CapsuleCollider();
 	CapsuleCollider(const Vector3& pos, const Quaternion& rot, float height, float radius);
+	virtual ~CapsuleCollider();
 
 private:
+	float mHeight;
+	float mRadius;
 };

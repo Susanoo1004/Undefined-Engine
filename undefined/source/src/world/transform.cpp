@@ -119,7 +119,7 @@ Vector3 Transform::GetRotation()
 	return mRotation.ToRotationMatrix().ToEuler(true);
 }
 
-void Transform::SetRotation(Vector3 newRotation)
+void Transform::SetRotation(const Vector3& newRotation)
 {
 	SetRotationRad({ calc::ToRad(newRotation.x), calc::ToRad(newRotation.y), calc::ToRad(newRotation.z) });
 }
@@ -156,7 +156,7 @@ Quaternion Transform::GetRotationQuat()
 	return mRotation;
 }
 
-void Transform::SetRotationQuat(Quaternion newRotationQuat)
+void Transform::SetRotationQuat(const Quaternion& newRotationQuat)
 {
 	 mWorldTRS = Matrix4x4::TRS(GetPosition(), newRotationQuat.ToRotationMatrix(), GetScale());
 

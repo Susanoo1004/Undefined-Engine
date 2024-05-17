@@ -1,6 +1,7 @@
 #include "world/scene_manager.h"
 
 #include "wrapper/time.h"
+#include "wrapper/physics_system.h"
 
 void SceneManager::Init()
 {
@@ -55,6 +56,11 @@ void SceneManager::GlobalUpdate()
 		Time::FixedStep--;
 	}
 	ActualScene->Update();
+
+	ActualScene->PreFixedUpdate();
+	PhysicsSystem::Update();
+	ActualScene->PostFixedUpdate();
+
 	ActualScene->LateUpdate();
 }
 
