@@ -44,10 +44,7 @@ void Application::Init()
     mWindowManager->Init();
     mRenderer->Init();
 
-    RuntimeClasses::AddType<Component>();
-    RuntimeClasses::AddType<Light>();
-    RuntimeClasses::AddType<DirLight>();
-    RuntimeClasses::AddType<ModelRenderer>();
+    RuntimeClasses::AddAllClasses();
 
     ResourceManager::Load("../undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
@@ -82,7 +79,6 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
-    
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();

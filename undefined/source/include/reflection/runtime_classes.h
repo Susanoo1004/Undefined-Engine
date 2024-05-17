@@ -5,9 +5,12 @@
 #include <functional>
 #include "reflection/utils_reflection.h"
 
+
+
 struct RuntimeClass
 {
 	std::function<void(void*)> display;
+	std::function<Json::Value(void*)> write;
 };
 
 class RuntimeClasses
@@ -16,20 +19,30 @@ class RuntimeClasses
 
 public:
 	template <typename T>
-	static void AddType();
+	static void AddClass();
+
+	static void AddAllClasses();
+
+	static size_t TabSize();
+
+	static const RuntimeClass* GetHashedClass(size_t hash);
+
+	const RuntimeClass* GetClass(size_t hash);
 
 	static void Display(void* obj, size_t hash);
+	static Json::Value WriteValue(void* val, size_t hash);
 
 private:
 	static inline std::unordered_map<size_t, RuntimeClass> mHashClasses;
 };
 
 template <typename T>
-void RuntimeClasses::AddType()
+void RuntimeClasses::AddClass()
 {
 	RuntimeClass info = 
 	{
-		.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); }
+		.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); },
+		.write = [](void* obj) -> Json::Value { return Reflection::WriteValue<T>(static_cast<T*>(obj)); },
 	};
 
 	mHashClasses.emplace(typeid(T).hash_code(), info);

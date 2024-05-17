@@ -21,5 +21,5 @@ public:
 	/// </summary>
 	std::shared_ptr<Model> ModelObject;
 };
-
+ 
 REFL_AUTO(type(ModelRenderer, bases<Component>))

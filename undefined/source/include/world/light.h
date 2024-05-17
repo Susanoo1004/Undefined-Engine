@@ -35,7 +35,7 @@ public:
 	/// Destructor of Light
 	/// </summary>
 	/// <returns></returns>
-	UNDEFINED_ENGINE ~Light();
+	UNDEFINED_ENGINE ~Light() = 0;
 
 	/// <summary>
 	/// Update function from Component which is override
@@ -59,11 +59,14 @@ protected:
 	/// <summary>
 	/// Shader use for the lights
 	/// </summary>
-	std::shared_ptr<Shader> pShader;
+	std::shared_ptr<Shader> mShader;
+
+private:
+	void ValueChanged();
 };
 
 REFL_AUTO(type(Light, bases<Component>),
 	field(Ambient),
 	field(Diffuse),
 	field(Specular)
-	);
+);

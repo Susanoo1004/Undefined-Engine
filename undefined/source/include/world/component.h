@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// Virtual Destructor of Component which could be override by our components
 	/// </summary>
-	virtual ~Component();
+	virtual ~Component() = 0;
 
 	/// <summary>
 	/// Enable a component
