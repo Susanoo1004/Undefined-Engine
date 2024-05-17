@@ -42,7 +42,13 @@ namespace Reflection
 	template<typename T>
 	Json::Value WriteObj(T* obj);
 
-	//Json::Value WriteObjWithHash(void* val, size_t hash);
+	/// <summary>
+	/// Object we wish to read from Json string
+	/// </summary>
+	/// <typeparam name="T"> type of the object we want to write </typeparam>
+	/// <param name="obj"> object we write </param>
+	template<typename T>
+	T ReadValue(Json::Value jsonVal);
 
 	/// <summary>
 	/// Object we wish to reflect
@@ -114,7 +120,7 @@ Json::Value Reflection::WriteValue(MemberT* val)
 	}
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		Reflection::DisplayWithHash(*val, typeid(**val).hash_code());
+		root = Reflection::WriteValueWithHash(*val, typeid(**val).hash_code());
 	}
 	else if constexpr (Reflection::IsReflectable<MemberT>())
 	{
@@ -131,6 +137,8 @@ Json::Value Reflection::WriteObj(T* obj)
 
 	Json::Value root;
 
+	root["Type"] = typeid(T).name();
+
 	//Lamba that loops for each element we reflect from a class
 	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
 	{
@@ -143,11 +151,35 @@ Json::Value Reflection::WriteObj(T* obj)
 			const char* name = DescriptorT::name.c_str();
 			MemberT value = DescriptorT::get(obj);
 
-			root[name] = WriteValue<MemberT>(&value);
+			root["Values"][name] = WriteValue<MemberT>(&value);
 		}
 	});
 
 	return root;
+}
+
+template<typename T>
+T Reflection::ReadValue(Json::Value jsonVal)
+{
+	T obj;
+
+	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
+
+	//Lamba that loops for each element we reflect from a class
+	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
+	{
+		//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
+		if constexpr (!Reflection::IsFunction<DescriptorT>())
+		{
+			//MemberT is the type of the element we reflect
+			using MemberT = typename DescriptorT::value_type;
+
+			const char* name = DescriptorT::name.c_str();
+			//MemberT value = DescriptorT::get(obj);
+			MemberT value = jsonVal.get(name, MemberT()).as<MemberT>();
+
+		}
+	});
 }
 
 template<typename T>

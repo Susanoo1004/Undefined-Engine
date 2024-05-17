@@ -82,7 +82,7 @@ void Application::Update()
     SceneManager::GlobalUpdate();
     Interface::Update();
     SceneManager::SaveCurrentScene();
-    //SceneManager::LoadScene("assets/scenes/test.scene");
+    SceneManager::LoadScene("assets/scenes/test.scene");
 
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {

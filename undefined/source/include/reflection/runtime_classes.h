@@ -7,6 +7,7 @@
 
 struct RuntimeClass
 {
+	std::string type;
 	std::function<void(void*)> display;
 	std::function<Json::Value(void*)> write;
 };
@@ -20,6 +21,7 @@ public:
 	static void AddType();
 
 	static const RuntimeClass* GetHashedClass(size_t hash);
+	static const RuntimeClass* GetClassByType(std::string type);
 
 	static void Display(void* obj, size_t hash);
 	static Json::Value WriteValue(void* val, size_t hash);
@@ -31,8 +33,9 @@ private:
 template <typename T>
 void RuntimeClasses::AddType()
 {
-	RuntimeClass info = 
+	RuntimeClass info =
 	{
+		.type = typeid(T).name(),
 		.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); },
 		.write = [](void* obj) -> Json::Value { return Reflection::WriteValue<T>(static_cast<T*>(obj)); }
 	};

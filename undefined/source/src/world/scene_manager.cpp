@@ -86,14 +86,7 @@ void SceneManager::SaveCurrentScene()
 
 	for (Object* obj : ActualScene->Objects)
 	{
-		root["GameObjects"][std::to_string(obj->mUUID)] = Reflection::WriteObj(obj);
-
-		int i = 0;
-		for (Component* comp : obj->Components)
-		{	
-			root["Components"][std::to_string(obj->mUUID)][i] = Reflection::WriteValueWithHash(comp, typeid(*comp).hash_code());
-			i++;
-		}
+		root[std::to_string(obj->mUUID)] = Reflection::WriteObj(obj);
 	}
 
 	std::ofstream file("assets/scenes/test.scene");
@@ -117,6 +110,12 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 	Json::Value root;
 	std::ifstream file(path);
 	file >> root;
+
+	//std::string value = root.front().get("Values", Json::Value()).get("Name", std::string()).as<std::string>();
+
+	//Logger::Debug("{}", value);
+
+	Object obj = Reflection::ReadValue<Object>(root.front().get("Values", Json::Value()));
 
 	file.close();
 	return false;

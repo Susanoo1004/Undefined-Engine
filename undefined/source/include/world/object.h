@@ -174,8 +174,6 @@ private:
 	/// </summary>
 	std::list<Object*> mChildren;
 
-	DirLight test2;
-
 	/// <summary>
 	/// Universally Unique Identifier for the Object
 	/// </summary>

@@ -14,6 +14,21 @@ const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)
 	return &hashedClass->second;
 }
 
+const RuntimeClass* RuntimeClasses::GetClassByType(std::string type)
+{
+	for (size_t i = 0; i < mHashClasses.size(); i++)
+	{
+		auto typeClass = mHashClasses[i];
+		if (typeClass.type == type)
+		{
+			return &typeClass;
+		}
+	}
+
+	Logger::Error("Could not find typeClass {}", type);
+	return nullptr;
+}
+
 void RuntimeClasses::Display(void* obj, size_t hash)
 {
 	if (auto hashedClass = GetHashedClass(hash))
@@ -28,4 +43,5 @@ Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
 	{
 		return hashedClass->write(val);
 	}
+	return Json::Value();
 }
