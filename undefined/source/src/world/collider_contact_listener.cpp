@@ -20,7 +20,6 @@ void ColliderContactListener::OnContactAdded(const JPH::Body& inBody1, const JPH
 	{	
 		mOnCollisionEnterScripts.push_back(std::make_pair(script, &inBody2));
 	}
-	
 }
 
 void ColliderContactListener::OnContactPersisted(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings)
@@ -32,7 +31,6 @@ void ColliderContactListener::OnContactPersisted(const JPH::Body& inBody1, const
 	{
 		mOnCollisionStayScripts.push_back(std::make_pair(script, &inBody2));
 	}
-	
 }
 
 void ColliderContactListener::OnContactRemoved(const JPH::SubShapeIDPair& inSubShapePair)
@@ -44,7 +42,6 @@ void ColliderContactListener::OnContactRemoved(const JPH::SubShapeIDPair& inSubS
 	{
 		mOnCollisionExitScripts.push_back(script);
 	}
-	
 }
 
 void ColliderContactListener::CallOnColliderEnter()
