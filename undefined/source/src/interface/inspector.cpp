@@ -6,6 +6,7 @@
 #include "reflection/utils_reflection.h"
 #include "world/scene_manager.h"
 #include "reflection/runtime_classes.h"
+#include "world/component.h"
 
 void Inspector::Init()
 {
@@ -30,9 +31,8 @@ void Inspector::ShowWindow()
 			{
 				if (ImGui::Selectable(RuntimeClasses::names[i].c_str()))
 				{
-					RuntimeClasses::CreateClass(RuntimeClasses::names[i]);
+					obj->AddComponent(static_cast<Component*>(RuntimeClasses::CreateClass(RuntimeClasses::names[i])));
 				}
-
 			}
             ImGui::EndPopup();
         }
