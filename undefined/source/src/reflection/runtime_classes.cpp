@@ -3,6 +3,7 @@
 #include "engine_debug/logger.h"
 #include "world/dir_light.h"
 #include "resources/model_renderer.h"
+#include <ranges>
 
 const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)
 {
@@ -32,18 +33,21 @@ Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
 	}
 }
 
+void* RuntimeClasses::CreateClass(std::string name)
+{
+	for (RuntimeClass c : mHashClasses|std::views::values)
+	{
+		if (c.className == name)
+		{
+			return c.create();
+		}
+	}
+	
+	return nullptr;
+}
+
 void RuntimeClasses::AddAllClasses()
 {
 	AddClass<DirLight>();
 	AddClass<ModelRenderer>();
-}
-
-size_t RuntimeClasses::TabSize()
-{
-	return mHashClasses.size();
-}
-
-const RuntimeClass* RuntimeClasses::GetClass(size_t hash)
-{
-	return &mHashClasses[hash];
 }
