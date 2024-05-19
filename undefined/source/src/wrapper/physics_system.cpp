@@ -9,7 +9,6 @@ void PhysicsSystem::Init()
 	JPH::RegisterDefaultAllocator();
 
 	JPH::Trace = TraceImplentation;
-	// JPH::JPH_IF_ENABLE_ASSERTS(AssertFailed = AssertFailedImpl;);
 
 	JPH::Factory::sInstance = new JPH::Factory();
 
@@ -25,14 +24,17 @@ void PhysicsSystem::Init()
 	JoltPhysicsSystem->SetContactListener(&ContactListener);
 
 	BodyInterface = &JoltPhysicsSystem->GetBodyInterface();
+
+	JoltPhysicsSystem->SetGravity(ToJPH(Vector3(0, -9.81f, 0)));
 }
 
 void PhysicsSystem::Update()
 {
-	JoltPhysicsSystem->Update(1.f/60.f , 1, TempAllocator, JobSystem);
 	ContactListener.CallOnColliderEnter();
 	ContactListener.CallOnColliderStay();
 	ContactListener.CallOnColliderExit();
+
+	JoltPhysicsSystem->Update(1.f/60.f , 1, TempAllocator, JobSystem);
 }
 
 void PhysicsSystem::Terminate()

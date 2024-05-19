@@ -85,11 +85,12 @@ void Application::Init()
     object->GameTransform->Position = Vector3(0, -0.5f, 0);
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
     
-
     Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
-    sphere->GameTransform->Position = Vector3(1, 2, 0);
+    sphere->GameTransform->Position = Vector3(0, 4, 0);
     sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
     CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
+
+    PhysicsSystem::SetVelocity(c->BodyID ,Vector3(0, -1, 0));
 
     SceneManager::Start();
 }

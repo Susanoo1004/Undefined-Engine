@@ -42,12 +42,22 @@ void Collider::PostFixedUpdate()
 
 	Vector3 Bodypos = PhysicsSystem::GetBodyPosition(BodyID);
 	Quaternion Bodyrot = PhysicsSystem::GetBodyRotation(BodyID);
+	
+
+	Vector3 p = Bodyrot.ToEuler(true);
+
+	if (isnan<float>(Bodypos.x))
+		return;
+
+	if (isnan<float>(p.x))
+		return;
 
 	if (Bodypos == Vector3())
 		return;
 
 	if (Bodyrot == Quaternion())
 		return;
+
 
 	GameTransform->SetPosition(Bodypos);
 	GameTransform->SetRotationQuat(Bodyrot);
