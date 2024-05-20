@@ -28,7 +28,7 @@ void SoundSource::Play(const ALuint buffer)
 		if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
 		{
 			alSourcePlay(source);
-		
+
 			std::string name = SoundBuffer::audioFilesName[buffer - 1];
 			std::string newName = name.substr(name.find_last_of("/") + 1);
 			Logger::Info("Playing {}", newName);
@@ -135,13 +135,13 @@ ALuint SoundSource::CreateSource(ALuint buffer)
 {
 	ALuint source;
 	alGenSources(1, &source);
-	alSourcef(mSource, AL_PITCH, mPitch);
-	alSourcef(mSource, AL_GAIN, mGain);
-	alSource3f(mSource, AL_POSITION, mPostition.x, mPostition.y, mPostition.z);
-	alSource3f(mSource, AL_VELOCITY, mVelocity.x, mVelocity.y, mVelocity.z);
-	alSourcei(mSource, AL_LOOPING, mLoop);
-	alSourcei(mSource, AL_BUFFER, buffer);
-	
+	alSourcef(source, AL_PITCH, mPitch);
+	alSourcef(source, AL_GAIN, mGain);
+	alSource3f(source, AL_POSITION, mPostition.x, mPostition.y, mPostition.z);
+	alSource3f(source, AL_VELOCITY, mVelocity.x, mVelocity.y, mVelocity.z);
+	alSourcei(source, AL_LOOPING, mLoop);
+	alSourcei(source, AL_BUFFER, (ALint)buffer);
+
 	return source;
 }
 

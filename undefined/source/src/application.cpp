@@ -93,8 +93,8 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
-
-    //mSoundSource->SetPosition(sound1, Vector3());
+    Logger::Sync();
+    mSoundSource->SetPosition(sound1, Vector3());
     
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
     {
