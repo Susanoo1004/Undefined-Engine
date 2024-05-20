@@ -52,7 +52,7 @@ void RuntimeClasses::AddType()
 		.type = typeid(T).name(),
 		.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); },
 		.write = [](void* obj) -> Json::Value { return Reflection::WriteValue<T>(static_cast<T*>(obj)); }
-		.read = [](void* obj) -> void { Reflection::ReadValue<T>(static_cast<T*>(obj)); }
+		.read = [](Json::Value jsonVal) -> T { Reflection::ReadObj<T>(jsonVal); }
 	};
 
 	mHashClasses.emplace(typeid(T).hash_code(), info);

@@ -48,7 +48,7 @@ namespace Reflection
 	/// <typeparam name="T"> type of the object we want to write </typeparam>
 	/// <param name="obj"> object we write </param>
 	template<typename T>
-	T ReadValue(Json::Value jsonVal);
+	T ReadObj(Json::Value jsonObj);
 
 	/// <summary>
 	/// Object we wish to reflect
@@ -159,9 +159,9 @@ Json::Value Reflection::WriteObj(T* obj)
 }
 
 template<typename T>
-T Reflection::ReadValue(Json::Value jsonVal)
+T Reflection::ReadObj(Json::Value jsonObj)
 {
-	T obj;
+	//T obj;
 
 	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
 
@@ -176,7 +176,47 @@ T Reflection::ReadValue(Json::Value jsonVal)
 
 			const char* name = DescriptorT::name.c_str();
 			//MemberT value = DescriptorT::get(obj);
-			MemberT value = jsonVal.get(name, MemberT()).as<MemberT>();
+			//MemberT value = jsonVal.get(name, MemberT()).as<MemberT>();
+
+
+			if constexpr (std::_Is_any_of_v<MemberT, bool, std::string> || std::is_integral_v<MemberT> || std::is_floating_point_v<MemberT>)
+			{
+				MemberT value = jsonVal.get(name, MemberT()).as<MemberT>();
+			}
+			else if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3, Vector2>)
+			{
+				MemberT value.x = jsonVal.get(name, MemberT()).get("x", 0.0f).as<MemberT>();
+				MemberT value.y = jsonVal.get(name, MemberT()).get("y", 0.0f).as<MemberT>();
+
+				if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3>)
+				{
+					MemberT value.z = jsonVal.get(name, MemberT()).get("z", 0.0f).as<MemberT>();
+				}
+				if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4>)
+				{
+					MemberT value.w = jsonVal.get(name, MemberT()).get("w", 0.0f).as<MemberT>();
+				}
+			}
+			//else if constexpr (Reflection::is_vector_v<MemberT>)
+			//{
+			//	using ListT = typename MemberT::value_type;
+			//
+			//	//If it's a std::vector we reflect every element inside it
+			//	for (int i = 0; i < val->size(); i++)
+			//	{
+			//		root[i] = WriteValue<ListT>(&(*val)[i]);
+			//	}
+			//}
+			//else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
+			//{
+			//	root = Reflection::WriteValueWithHash(*val, typeid(**val).hash_code());
+			//}
+			//else if constexpr (Reflection::IsReflectable<MemberT>())
+			//{
+				//MemberT value =	Reflection::ReadObj<MemberT>(jsonObj[name]);
+			//}
+
+			//DescriptorT::get(obj) = value;
 
 		}
 	});

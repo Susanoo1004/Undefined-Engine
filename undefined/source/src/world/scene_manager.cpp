@@ -115,7 +115,7 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 
 	//Logger::Debug("{}", value);
 
-	Object obj = Reflection::ReadValue<Object>(root.front().get("Values", Json::Value()));
+	Object obj = Reflection::ReadObj<Object>(root.front().get("Values", Json::Value()));
 
 	file.close();
 	return false;
