@@ -32,7 +32,6 @@
 
 Application::Application()
 {
-    std::cout << JPH::abs(1) << "\n";
     ServiceLocator::Setup();
 
     mWindowManager = ServiceLocator::Get<Window>();
