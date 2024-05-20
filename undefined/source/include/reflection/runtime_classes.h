@@ -10,6 +10,7 @@ struct RuntimeClass
 	std::string type;
 	std::function<void(void*)> display;
 	std::function<Json::Value(void*)> write;
+	std::function<void(void*)> read;
 };
 
 class RuntimeClasses
@@ -23,8 +24,21 @@ public:
 	static const RuntimeClass* GetHashedClass(size_t hash);
 	static const RuntimeClass* GetClassByType(std::string type);
 
+	/*
+	template <typename T>
+	static T ReadValue(void* val, size_t hash)
+	{
+		if (auto hashedClass = GetHashedClass(hash))
+		{
+			return hashedClass->read(val);
+		}
+		return T();
+	}
+	*/
+
 	static void Display(void* obj, size_t hash);
 	static Json::Value WriteValue(void* val, size_t hash);
+	static void ReadValue(void* val, std::string type);
 
 private:
 	static inline std::unordered_map<size_t, RuntimeClass> mHashClasses;
@@ -38,6 +52,7 @@ void RuntimeClasses::AddType()
 		.type = typeid(T).name(),
 		.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); },
 		.write = [](void* obj) -> Json::Value { return Reflection::WriteValue<T>(static_cast<T*>(obj)); }
+		.read = [](void* obj) -> void { Reflection::ReadValue<T>(static_cast<T*>(obj)); }
 	};
 
 	mHashClasses.emplace(typeid(T).hash_code(), info);

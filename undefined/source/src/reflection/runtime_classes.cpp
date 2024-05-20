@@ -45,3 +45,11 @@ Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
 	}
 	return Json::Value();
 }
+
+void RuntimeClasses::ReadValue(void* obj, std::string type)
+{
+	if (auto hashedClass = GetClassByType(type))
+	{
+		hashedClass->read(obj);
+	}
+}
