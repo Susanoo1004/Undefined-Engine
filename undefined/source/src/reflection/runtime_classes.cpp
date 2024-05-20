@@ -48,6 +48,9 @@ void* RuntimeClasses::CreateClass(std::string name)
 
 void RuntimeClasses::AddAllClasses()
 {
+	//Lights
 	AddClass<DirLight>();
+
+	//Model
 	AddClass<ModelRenderer>();
 }

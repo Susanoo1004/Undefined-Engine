@@ -38,6 +38,5 @@ void Inspector::ShowWindow()
         }
 	}
 
-	ImGui::ShowDemoWindow();
 	ImGui::End();
 }
