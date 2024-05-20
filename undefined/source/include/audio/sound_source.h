@@ -13,23 +13,21 @@ public:
 	SoundSource();
 	UNDEFINED_ENGINE ~SoundSource();
 
-	void Play(const ALuint buffer);
-	void Pause(ALuint buffer);
-	void Resume(ALuint buffer);
-	void Stop(ALuint buffer);
-	void Restart(ALuint buffer);
+	ALuint CreateSource();
 
-	void SetPosition(ALuint buffer, const Vector3& position);
-	void SetVelocity(ALuint buffer, const Vector3& velocity);
-	void SetVolume(ALuint buffer, const float volume);
-	void SetSpeed(ALuint buffer, const float pitch);
-	void SetLoop(ALuint buffer, const bool shouldLoop);
+	void Play(ALuint source, const ALuint buffer);
+	void Pause(ALuint source, ALuint buffer);
+	void Resume(ALuint source, ALuint buffer);
+	void Stop(ALuint source, ALuint buffer);
+	void Restart(ALuint source, ALuint buffer);
+
+	void SetPosition(ALuint source, const Vector3& position);
+	void SetVelocity(ALuint source, const Vector3& velocity);
+	void SetVolume(ALuint source, const float volume);
+	void SetSpeed(ALuint source, const float pitch);
+	void SetLoop(ALuint source, const bool shouldLoop);
 
 private:
-	ALuint CreateSource(ALuint buffer);
-	ALuint GetSource(ALuint buffer);
-	bool ContainsBuffer(ALuint buffer);
-
 	ALuint mBuffer = 0;
 	ALuint mSource = 0;
 	ALint mState = 0;
@@ -42,7 +40,7 @@ private:
 	
 	bool mLoop = false;
 	/// <summary>
-	/// buffer, source
+	/// Sound source
 	/// </summary>
-	std::unordered_map<ALuint, ALuint> mSoundEffectSource;
+	std::vector<ALuint> mSoundEffectSource;
 };

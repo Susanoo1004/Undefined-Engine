@@ -78,10 +78,13 @@ void Application::Init()
 
     //SOUND
     mSoundDevice = SoundDevice::Get();
+
     sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/fazbear.wav"));
     sound2 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/desert.wav"));
 
     mSoundSource = new SoundSource;
+    source1 = mSoundSource->CreateSource();
+    source2 = mSoundSource->CreateSource();
 }
 
 void Application::Update()
@@ -94,31 +97,31 @@ void Application::Update()
     SceneManager::GlobalUpdate();
     Interface::Update();
     Logger::Sync();
-    mSoundSource->SetPosition(sound1, Vector3());
+    mSoundSource->SetPosition(source1, Vector3());
     
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
     {
-        mSoundSource->Play(sound1);
+        mSoundSource->Play(source1, sound1);
     }
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_C))
     {
-        mSoundSource->Play(sound2);
+        mSoundSource->Play(source2, sound2);
     }
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_N))
     {
-        mSoundSource->Resume(sound1);
+        mSoundSource->Resume(source1, sound1);
     }
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_V))
     {
-        mSoundSource->Stop(sound1);
+        mSoundSource->Stop(source1, sound1);
     }
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_B))
     {
-        mSoundSource->Restart(sound1);
+        mSoundSource->Restart(source1, sound1);
     }
 
     mSoundDevice->SetPosition(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);

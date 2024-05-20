@@ -37,6 +37,8 @@ private:
 	SoundDevice* mSoundDevice = nullptr;
 	std::shared_ptr<KeyInput> mKeyInput = nullptr;
 	SoundSource* mSoundSource = nullptr;
+	uint32_t source1 = 0;
+	uint32_t source2 = 0;
 	uint32_t sound1 = 0;
 	uint32_t sound2 = 0;
 

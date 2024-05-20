@@ -2,8 +2,6 @@
 #include "engine_debug/logger.h"
 #include "audio/sound_buffer.h"
 
-#define CHECK_AL_ERROR() Logger::Info("{}", alGetString(alGetError()));
-
 SoundSource::SoundSource()
 {
 }
@@ -12,49 +10,26 @@ SoundSource::~SoundSource()
 {
 	for (auto&& p : mSoundEffectSource)
 	{
-		alDeleteSources(1, &p.second);
-	}
-	mSoundEffectSource.clear();
-}
-
-void SoundSource::Play(const ALuint buffer)
-{
-	if (mSoundEffectSource.size() == 0)
-	{
-		ALuint source = CreateSource(buffer);
-		mSoundEffectSource.emplace(buffer, source);
-		alSourcei(source, AL_BUFFER, (ALint)buffer);
-		alGetSourcei(source, AL_SOURCE_STATE, &mState);
-		if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
-		{
-			alSourcePlay(source);
-
-			std::string name = SoundBuffer::audioFilesName[buffer - 1];
-			std::string newName = name.substr(name.find_last_of("/") + 1);
-			Logger::Info("Playing {}", newName);
-		}
-	}
-
-	else if (!ContainsBuffer(buffer))
-	{
-		ALuint source = CreateSource(buffer);
-		mSoundEffectSource.emplace(buffer, source);
-		alSourcei(source, AL_BUFFER, (ALint)buffer);
-		alGetSourcei(source, AL_SOURCE_STATE, &mState);
-		if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
-		{
-			alSourcePlay(source);
-
-			std::string name = SoundBuffer::audioFilesName[buffer - 1];
-			std::string newName = name.substr(name.find_last_of("/") + 1);
-			Logger::Info("Playing {}", newName);
-		}
+		alDeleteSources(1, &p);
 	}
 }
 
-void SoundSource::Pause(const ALuint buffer)
+void SoundSource::Play(ALuint source, const ALuint buffer)
 {
-	ALuint source = GetSource(buffer);
+	alSourcei(source, AL_BUFFER, (ALint)buffer);
+	alGetSourcei(source, AL_SOURCE_STATE, &mState);
+	if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
+	{
+		alSourcePlay(source);
+
+		std::string name = SoundBuffer::audioFilesName[buffer - 1];
+		std::string newName = name.substr(name.find_last_of("/") + 1);
+		Logger::Info("Playing {}", newName);
+	}
+}
+
+void SoundSource::Pause(ALuint source, const ALuint buffer)
+{
 	alGetSourcei(source, AL_SOURCE_STATE, &mState);
 	if (mState == AL_PLAYING && alGetError() == AL_NO_ERROR)
 	{
@@ -66,9 +41,8 @@ void SoundSource::Pause(const ALuint buffer)
 	}
 }
 
-void SoundSource::Resume(const ALuint buffer)
+void SoundSource::Resume(ALuint source, const ALuint buffer)
 {
-	ALuint source = GetSource(buffer);
 	alGetSourcei(source, AL_SOURCE_STATE, &mState);
 	if (mState == AL_PAUSED && alGetError() == AL_NO_ERROR)
 	{
@@ -79,9 +53,8 @@ void SoundSource::Resume(const ALuint buffer)
 	}
 }
 
-void SoundSource::Stop(const ALuint buffer)
+void SoundSource::Stop(ALuint source, const ALuint buffer)
 {
-	ALuint source = GetSource(buffer);
 	alGetSourcei(source, AL_SOURCE_STATE, &mState);
 	if (mState != AL_STOPPED && alGetError() == AL_NO_ERROR)
 	{
@@ -92,9 +65,8 @@ void SoundSource::Stop(const ALuint buffer)
 	}
 }
 
-void SoundSource::Restart(const ALuint buffer)
+void SoundSource::Restart(ALuint source, const ALuint buffer)
 {
-	ALuint source = GetSource(buffer);
 	alGetSourcei(source, AL_SOURCE_STATE, &mState);
 	if (mState != AL_PLAYING && alGetError() == AL_NO_ERROR)
 	{
@@ -106,32 +78,32 @@ void SoundSource::Restart(const ALuint buffer)
 	}
 }
 
-void SoundSource::SetPosition(ALuint buffer, const Vector3& position)
+void SoundSource::SetPosition(ALuint source, const Vector3& position)
 {
-	alSource3f(GetSource(buffer), AL_POSITION, position.x, position.y, position.z);
+	alSource3f(source, AL_POSITION, position.x, position.y, position.z);
 }
 
-void SoundSource::SetVelocity(ALuint buffer, const Vector3& velocity)
+void SoundSource::SetVelocity(ALuint source, const Vector3& velocity)
 {
-	alSource3f(buffer, AL_VELOCITY, velocity.x, velocity.y, velocity.z);
+	alSource3f(source, AL_VELOCITY, velocity.x, velocity.y, velocity.z);
 }
 
-void SoundSource::SetVolume(ALuint buffer, const float volume)
+void SoundSource::SetVolume(ALuint source, const float volume)
 {
-	alSourcef(GetSource(buffer), AL_GAIN, volume);
+	alSourcef(source, AL_GAIN, volume);
 }
 
-void SoundSource::SetSpeed(ALuint buffer, const float pitch)
+void SoundSource::SetSpeed(ALuint source, const float pitch)
 {
-	alSourcef(GetSource(buffer), AL_PITCH, pitch);
+	alSourcef(source, AL_PITCH, pitch);
 }
 
-void SoundSource::SetLoop(ALuint buffer, const bool shouldLoop)
+void SoundSource::SetLoop(ALuint source, const bool shouldLoop)
 {
-	alSourcei(GetSource(buffer), AL_LOOPING, shouldLoop);
+	alSourcei(source, AL_LOOPING, shouldLoop);
 }
 
-ALuint SoundSource::CreateSource(ALuint buffer)
+ALuint SoundSource::CreateSource()
 {
 	ALuint source;
 	alGenSources(1, &source);
@@ -140,24 +112,6 @@ ALuint SoundSource::CreateSource(ALuint buffer)
 	alSource3f(source, AL_POSITION, mPostition.x, mPostition.y, mPostition.z);
 	alSource3f(source, AL_VELOCITY, mVelocity.x, mVelocity.y, mVelocity.z);
 	alSourcei(source, AL_LOOPING, mLoop);
-	alSourcei(source, AL_BUFFER, (ALint)buffer);
-
+	mSoundEffectSource.emplace_back(source);
 	return source;
-}
-
-ALuint SoundSource::GetSource(ALuint buffer)
-{
-	auto&& p = mSoundEffectSource.find(buffer);
-
-	if (p == mSoundEffectSource.end())
-	{
-		return 0;
-	}
-
-	return p->second;
-}
-
-bool SoundSource::ContainsBuffer(ALuint buffer)
-{
-	return mSoundEffectSource.find(buffer) != mSoundEffectSource.end();
 }
