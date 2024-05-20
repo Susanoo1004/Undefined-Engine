@@ -63,6 +63,7 @@ public:
 		
 		return comp;
 	}
+	Component* AddComponent(Component* comp);
 
 	/// <summary>
 	/// Get a component
