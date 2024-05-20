@@ -61,7 +61,7 @@ public:
 	/// <summary>
 	/// Pointer for the Texture data
 	/// </summary>
-	const void* Data;
+	const void* Data = nullptr;
 
 private:
 	/// <summary>

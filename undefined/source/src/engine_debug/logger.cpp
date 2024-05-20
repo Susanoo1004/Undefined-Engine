@@ -71,8 +71,15 @@ void Logger::SetupLogEntry(LogLevel level, const std::string& log)
     entry.Level = level;
     entry.Log = log;
     entry.TimeOffset = std::chrono::system_clock::now();
-    mEntryList.Push(entry);
-    mSleep.notify_one();
+    if (mIsSync)
+    {
+        PrintEntry(entry);
+    }
+    else
+    {
+        mEntryList.Push(entry);
+        mSleep.notify_one();
+    }
 }
 
 void Logger::Start()
@@ -154,4 +161,14 @@ void Logger::CheckForExit()
 {
     std::atexit(Logger::Stop);
     std::at_quick_exit(Logger::Stop);
+}
+
+void Logger::Sync()
+{
+    mIsSync = true;
+}
+
+void Logger::Desync()
+{
+    mIsSync = false;
 }

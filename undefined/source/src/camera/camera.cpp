@@ -12,7 +12,7 @@ Camera::Camera(const float width, const float height)
     : Width(width), Height(height)
 {
     Eye = Vector3(0, 0.5f, -1);
-    LookAt = Vector3(0, 0, 1);
+    LookAt = Vector3(0, 0, -1);
     Up = Vector3(0, 1, 0);
 
     mPerspective = Matrix4x4::ProjectionMatrix(calc::PI / 2, Width / Height, 0.1f, 100.0f);

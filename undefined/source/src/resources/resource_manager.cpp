@@ -5,6 +5,7 @@
 #include "Resources/model.h"
 #include "Resources/texture.h"
 #include "Resources/shader.h"
+#include "resources/audio.h"
 
 
 void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
@@ -43,6 +44,11 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 		else if (mName.ends_with(".png") || mName.ends_with(".jpg"))
 		{
 			Create<Texture>(newName, mName.c_str());
+		}
+
+		else if (mName.ends_with(".wav"))
+		{
+			Create<Audio>(newName, mName.c_str());
 		}
 
 		else if (mName.ends_with(".fs"))
