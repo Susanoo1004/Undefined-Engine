@@ -243,7 +243,12 @@ void ContentBrowser::DisplayWindow()
 
     if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
     {
-        Camera::CurrentCamera = nullptr;
+        if (Camera::CurrentCamera != nullptr)
+        {
+            Camera::LastPos = Camera::CurrentCamera->Eye;
+            Camera::LastOrientation = Camera::CurrentCamera->LookAt;
+            Camera::CurrentCamera = nullptr;
+        }
     }
 
     ContentBrowserHierarchy::Update();

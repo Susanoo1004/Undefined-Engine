@@ -59,6 +59,8 @@
     <ClCompile Include="source\src\audio\sound_device.cpp" />
     <ClCompile Include="source\src\audio\sound_buffer.cpp" />
     <ClCompile Include="source\src\audio\sound_source.cpp" />
+    <ClCompile Include="..\..\source\src\world\point_light.cpp" />
+    <ClCompile Include="..\..\source\src\world\spot_light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />

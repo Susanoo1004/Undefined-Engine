@@ -161,6 +161,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\src\world\point_light.cpp" />
+    <ClCompile Include="..\..\source\src\world\spot_light.cpp" />
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="external\src\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="external\src\imgui\imgui.cpp" />

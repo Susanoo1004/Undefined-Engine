@@ -59,7 +59,7 @@ protected:
 	/// <summary>
 	/// Shader use for the lights
 	/// </summary>
-	std::shared_ptr<Shader> mShader;
+	std::shared_ptr<Shader> pShader;
 
 private:
 	void ValueChanged();

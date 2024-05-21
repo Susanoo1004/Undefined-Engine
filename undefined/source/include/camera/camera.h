@@ -159,4 +159,7 @@ public:
     /// Pointer to the current camera used
     /// </summary>
     static inline Camera* CurrentCamera;
+
+    static inline Vector3 LastPos;
+    static inline Vector3 LastOrientation;
 };

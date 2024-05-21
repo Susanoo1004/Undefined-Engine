@@ -25,6 +25,11 @@ EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
 {
 	mEditorNumber++;
 	mID = mEditorNumber;
+
+	if (mEditorNumber == 1)
+	{
+		Camera::CurrentCamera = ViewportCamera;
+	}
 }
 
 EditorViewport::~EditorViewport()

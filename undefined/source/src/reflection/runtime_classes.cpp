@@ -1,7 +1,11 @@
 #include "reflection/runtime_classes.h"
 
 #include "engine_debug/logger.h"
+
 #include "world/dir_light.h"
+#include "world/point_light.h"
+#include "world/spot_light.h"
+
 #include "resources/model_renderer.h"
 #include <ranges>
 
@@ -50,6 +54,8 @@ void RuntimeClasses::AddAllClasses()
 {
 	//Lights
 	AddClass<DirLight>();
+	AddClass<PointLight>();
+	AddClass<SpotLight>();
 
 	//Model
 	AddClass<ModelRenderer>();
