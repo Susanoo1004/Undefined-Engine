@@ -6,9 +6,17 @@
 
 #include "utils/utils.h"
 
+#include "camera/camera.h"
+
 void FPSGraph::ShowWindow()
 {
     ImGui::Begin("FPS Graph");
+
+    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
+    {
+        Camera::CurrentCamera = nullptr;
+    }
+
     ImGui::Text("Time since launch : %.2f", (float)glfwGetTime());
  
     //Every ImGUI slider 

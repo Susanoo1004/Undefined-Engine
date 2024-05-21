@@ -1,9 +1,10 @@
 #include "interface/inspector.h"
 
 #include <imgui/imgui.h>
-#include <ImGuizmo/ImGuizmo.h>
+
 #include "reflection/attributes.h"
 #include "reflection/utils_reflection.h"
+
 #include "world/scene_manager.h"
 
 void Inspector::Init()
@@ -15,6 +16,11 @@ void Inspector::ShowWindow()
 {
 	ImGui::Begin("Inspector");
 	
+	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
+	{
+		Camera::CurrentCamera = nullptr;
+	}
+
 	if (mRenderer->ObjectIndex >= 0)
 	{
 		Object* obj = SceneManager::ActualScene->Objects[mRenderer->ObjectIndex];

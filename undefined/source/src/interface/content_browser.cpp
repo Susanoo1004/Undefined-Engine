@@ -241,6 +241,11 @@ void ContentBrowser::DisplayWindow()
 {
     ImGui::Begin("Content Browser");
 
+    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
+    {
+        Camera::CurrentCamera = nullptr;
+    }
+
     ContentBrowserHierarchy::Update();
     ContentBrowserFolders::Update();
 

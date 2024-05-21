@@ -57,7 +57,6 @@ void main()
         result += CalcDirLight(dirLights[i], norm, viewDir);
     }
     
-    result = vec3(texture(texture0, TexCoord));
     FragColor = vec4(result, 1.0);
     PickingFragColor = EntityID;
 }
