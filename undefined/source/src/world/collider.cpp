@@ -42,14 +42,13 @@ void Collider::PostFixedUpdate()
 
 	Vector3 Bodypos = PhysicsSystem::GetBodyPosition(BodyID);
 	Quaternion Bodyrot = PhysicsSystem::GetBodyRotation(BodyID);
-	
 
-	Vector3 p = Bodyrot.ToEuler(true);
+	Vector3 eulerRot = Bodyrot.ToEuler(true);
 
-	if (isnan<float>(Bodypos.x))
+	if (isnan<float>(Bodypos.x) || isnan<float>(Bodypos.y) || isnan<float>(Bodypos.z))
 		return;
 
-	if (isnan<float>(p.x))
+	if (isnan<float>(eulerRot.x) || isnan<float>(eulerRot.y) || isnan<float>(eulerRot.z))
 		return;
 
 	if (Bodypos == Vector3())

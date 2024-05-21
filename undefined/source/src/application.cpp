@@ -79,6 +79,7 @@ void Application::Init()
 
     SceneManager::ActualScene->AddObject("Floor");
     SceneManager::ActualScene->Objects[1]->GameTransform->Position = Vector3(0, -1, 0);
+    SceneManager::ActualScene->Objects[1]->GameTransform->SetRotation(Vector3(0, 0.f, 10));
     SceneManager::ActualScene->Objects[1]->AddComponent<BoxCollider>(SceneManager::ActualScene->Objects[1]->GameTransform->GetPosition(), SceneManager::ActualScene->Objects[1]->GameTransform->GetRotationQuat(), Vector3(100.0f, 1.0f, 100.0f), true);
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
@@ -86,7 +87,7 @@ void Application::Init()
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
     
     Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
-    sphere->GameTransform->Position = Vector3(0, 4, 0);
+    sphere->GameTransform->Position = Vector3(0, 5, 0);
     sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
     CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
 
