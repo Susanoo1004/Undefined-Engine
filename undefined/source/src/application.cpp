@@ -28,6 +28,9 @@
 
 #include "reflection/runtime_classes.h"
 
+#include "resources/audio.h"
+#include "audio/sound_buffer.h"
+
 Application::Application()
 {
     ServiceLocator::Setup();
@@ -41,19 +44,16 @@ void Application::Init()
     mWindowManager->Init();
     mRenderer->Init();
 
-    RuntimeClasses::AddType<Component>();
-    RuntimeClasses::AddType<Light>();
-    RuntimeClasses::AddType<DirLight>();
-    RuntimeClasses::AddType<ModelRenderer>();
+    RuntimeClasses::AddAllClasses();
 
     ResourceManager::Load("../undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
-
     // Callback
     ServiceLocator::SetupCallbacks();
 
     Interface::Init();
     Inspector::Init();
+    mKeyInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
@@ -68,6 +68,16 @@ void Application::Init()
     SceneManager::ActualScene->AddObject(object, "Test Child");
 
     SceneManager::Start();
+
+    //SOUND
+    mSoundDevice = SoundDevice::Get();
+
+    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/fazbear.wav"));
+    sound2 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/desert.wav"));
+
+    mSoundSource = new SoundSource;
+    source1 = mSoundSource->CreateSource();
+    source2 = mSoundSource->CreateSource();
 }
 
 void Application::Update()
@@ -79,7 +89,37 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
+    Logger::Sync();
+    mSoundSource->SetPosition(source1, Vector3());
     
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
+    {
+        mSoundSource->Play(source1, sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_C))
+    {
+        mSoundSource->Play(source2, sound2);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_N))
+    {
+        mSoundSource->Resume(source1, sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_V))
+    {
+        mSoundSource->Stop(source1, sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_B))
+    {
+        mSoundSource->Restart(source1, sound1);
+    }
+
+    mSoundDevice->SetPosition(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);
+    mSoundDevice->SetOrientation(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->LookAt);
+
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();

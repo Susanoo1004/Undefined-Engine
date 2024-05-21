@@ -107,7 +107,7 @@ private:
     /// <summary>
     /// Eular angle yaw of the camera
     /// </summary>
-    float mYaw = 90.f;
+    float mYaw = -90.f;
     /// <summary>
     /// Eular angle pitch of the camera
     /// </summary>

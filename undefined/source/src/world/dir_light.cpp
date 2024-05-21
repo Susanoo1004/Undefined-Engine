@@ -5,6 +5,7 @@
 
 DirLight::DirLight()
 {
+
 }
 
 DirLight::DirLight(const Vector3& ambient, const Vector3& diffuse, const Vector3& specular)
@@ -32,13 +33,13 @@ DirLight::~DirLight()
 
 void DirLight::Update()
 {
-	pShader->Use();
+	mShader->Use();
 	Direction = GameTransform->Position;
-	pShader->SetVec3("dirLights[0].direction", Direction);
-	pShader->SetVec3("dirLights[0].ambient", Ambient);
-	pShader->SetVec3("dirLights[0].diffuse", Diffuse);
-	pShader->SetVec3("dirLights[0].specular", Specular);
-	pShader->UnUse();
+	mShader->SetVec3("dirLights[0].direction", Direction);
+	mShader->SetVec3("dirLights[0].ambient", Ambient);
+	mShader->SetVec3("dirLights[0].diffuse", Diffuse);
+	mShader->SetVec3("dirLights[0].specular", Specular);
+	mShader->UnUse();
 }
 
 int DirLight::GetNbrOfDirLight() const

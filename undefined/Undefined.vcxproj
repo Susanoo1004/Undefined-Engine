@@ -125,14 +125,13 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteurd.lib;Joltd.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteurd.lib;Joltd.lib;glfw3.lib;jsoncppd.lib;OpenAL32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y "$(SolutionDir)bin\$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,13 +151,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteur.lib;Jolt.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteur.lib;Jolt.lib;glfw3.lib;jsoncpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName).dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\$(TargetName).dll" /Y </Command>
+      <Command>copy /Y "$(SolutionDir)bin$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -173,6 +172,10 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\audio\sound_source.cpp" />
+    <ClCompile Include="source\src\resources\audio.cpp" />
+    <ClCompile Include="source\src\audio\sound_buffer.cpp" />
+    <ClCompile Include="source\src\audio\sound_device.cpp" />
     <ClCompile Include="source\src\interface\content_browser_folders.cpp" />
     <ClCompile Include="source\src\interface\content_browser_hierarchy.cpp" />
     <ClCompile Include="source\src\reflection\utils_reflection.cpp" />
@@ -244,6 +247,10 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\resources\audio.h" />
+    <ClInclude Include="source\include\audio\sound_buffer.h" />
+    <ClInclude Include="source\include\audio\sound_device.h" />
+    <ClInclude Include="source\include\audio\sound_source.h" />
     <ClInclude Include="source\include\framebuffer.h" />
     <ClInclude Include="source\include\interface\content_browser_folders.h" />
     <ClInclude Include="source\include\interface\content_browser_hierarchy.h" />
@@ -306,8 +313,21 @@
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />
     <Image Include="assets\undefined_logo.png" />
+    <None Include="external\src\json\json_reader.cpp" />
+    <None Include="external\src\json\json_tool.h" />
+    <None Include="external\src\json\json_value.cpp" />
+    <None Include="external\src\json\json_valueiterator.inl" />
+    <None Include="external\src\json\json_writer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="external\libs\jsoncpp.dll" />
+    <None Include="external\libs\jsoncpp.lib" />
+    <None Include="external\libs\jsoncppd.dll" />
+    <None Include="external\libs\jsoncppd.lib" />
+    <None Include="external\libs\jsoncppd.pdb" />
+    <None Include="external\libs\jsoncpp_static.lib" />
+    <None Include="external\libs\jsoncpp_staticd.lib" />
+    <None Include="external\libs\jsoncpp_staticd.pdb" />
     <None Include="external\libs\toolboxMoteur.pdb" />
     <None Include="external\libs\toolboxMoteurd.pdb" />
   </ItemGroup>

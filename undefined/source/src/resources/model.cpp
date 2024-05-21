@@ -10,6 +10,8 @@
 
 Model::Model()
 {
+    mRenderer = ServiceLocator::Get<Renderer>();
+    Init();
 
 }
 

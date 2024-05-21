@@ -6,6 +6,8 @@
 #include "reflection/utils_reflection.h"
 
 #include "world/scene_manager.h"
+#include "reflection/runtime_classes.h"
+#include "world/component.h"
 
 void Inspector::Init()
 {
@@ -25,6 +27,21 @@ void Inspector::ShowWindow()
 	{
 		Object* obj = SceneManager::ActualScene->Objects[mRenderer->ObjectIndex];
 		Reflection::ReflectionObj<Object>(obj);
+
+        if (ImGui::Button("Add Component"))
+            ImGui::OpenPopup("component_popup");
+        ImGui::SameLine();
+        if (ImGui::BeginPopup("component_popup"))
+        {
+			for (int i = 0; i < RuntimeClasses::names.size(); i++)
+			{
+				if (ImGui::Selectable(RuntimeClasses::names[i].c_str()))
+				{
+					obj->AddComponent(static_cast<Component*>(RuntimeClasses::CreateClass(RuntimeClasses::names[i])));
+				}
+			}
+            ImGui::EndPopup();
+        }
 	}
 
 	ImGui::End();

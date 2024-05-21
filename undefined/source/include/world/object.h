@@ -8,6 +8,8 @@
 #include "engine_debug/logger.h"
 #include "reflection/attributes.h"
 
+#include "world/dir_light.h"
+
 template<class Comp>
 concept ComponentType = std::is_base_of<Component, Comp>::value;
 
@@ -61,6 +63,7 @@ public:
 		
 		return comp;
 	}
+	Component* AddComponent(Component* comp);
 
 	/// <summary>
 	/// Get a component
@@ -158,6 +161,8 @@ private:
 	/// </summary>
 	std::vector<Object*> mChildren;
 
+	DirLight test2;
+
 	/// <summary>
 	/// Universally Unique Identifier for the Object
 	/// </summary>
@@ -181,8 +186,10 @@ private:
 };
 
 REFL_AUTO(type(Object),
+	field(mUUID, HideInInspector()),
 	field(mIsEnable, DontDisplayName(), Callback(&Object::ChangeEnableStatus)),
 	field(Name, SameLine()),
+	//field(mChildren, HideInInspector()),
 	field(mTransform),
 	field(Components, Spacing(ImVec2(0, 30)))
 )

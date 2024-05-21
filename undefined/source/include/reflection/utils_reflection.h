@@ -4,8 +4,9 @@
 #include <imgui/imgui_stdlib.h>
 #include <type_traits>
 #include <refl.hpp>
-#include <toolbox/Vector3.h>
+#include <json/json.h>
 #include <toolbox/Quaternion.h>
+#include <toolbox/Vector3.h>
 #include <toolbox/calc.h>
 
 #include "engine_debug/logger.h"
@@ -25,6 +26,26 @@ namespace Reflection
 	void DisplayObj(MemberT* obj);
 
 	/// <summary>
+	/// Value we wish to write into Json string
+	/// </summary>
+	/// <typeparam name="MemberT"> type of the value we want to write </typeparam>
+	/// <param name="val"> value we write </param>
+	template<typename MemberT>
+	Json::Value WriteValue(MemberT* val);
+
+	Json::Value WriteValueWithHash(void* val, size_t hash);
+
+	/// <summary>
+	/// Object we wish to write into Json string
+	/// </summary>
+	/// <typeparam name="T"> type of the object we want to write </typeparam>
+	/// <param name="obj"> object we write </param>
+	template<typename T>
+	Json::Value WriteObj(T* obj);
+
+	//Json::Value WriteObjWithHash(void* val, size_t hash);
+
+	/// <summary>
 	/// Object we wish to reflect
 	/// </summary>
 	/// <typeparam name="T"> type of the object we want to reflect </typeparam>
@@ -38,7 +59,7 @@ namespace Reflection
 	/// <param name="obj"> object we want to display </param>
 	/// <param name="hash"> hash code of the class </param>
 	void DisplayWithHash(void* obj, size_t hash);
-
+	
 	/// <summary>
 	/// Display bases types in inspector
 	/// </summary>
@@ -58,6 +79,76 @@ namespace Reflection
 
 	template<typename T, typename MemberT, typename DescriptorT>
 	void Attributes(std::string& mName);
+}
+
+template<typename MemberT>
+Json::Value Reflection::WriteValue(MemberT* val)
+{
+	Json::Value root;
+
+	if constexpr (std::_Is_any_of_v<MemberT, bool, std::string> || std::is_integral_v<MemberT> || std::is_floating_point_v<MemberT>)
+	{
+		root = *val;
+	}
+	else if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3, Vector2>)
+	{
+		root["x"] = val->x;
+		root["y"] = val->y;
+		if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3>)
+		{
+			root["z"] = val->z;
+		}
+		if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4>)
+		{
+			root["w"] = val->w;
+		}
+	}
+	else if constexpr (Reflection::is_vector_v<MemberT>)
+	{
+		using ListT = typename MemberT::value_type;
+
+		//If it's a std::vector we reflect every element inside it
+		for (int i = 0; i < val->size(); i++)
+		{
+			root[i] = WriteValue<ListT>(&(*val)[i]);
+		}
+	}
+	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
+	{
+		Reflection::DisplayWithHash(*val, typeid(**val).hash_code());
+	}
+	else if constexpr (Reflection::IsReflectable<MemberT>())
+	{
+		root = Reflection::WriteObj<MemberT>(val);
+	}
+
+	return root;
+}
+
+template<typename T>
+Json::Value Reflection::WriteObj(T* obj)
+{
+	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
+
+	Json::Value root;
+
+	//Lamba that loops for each element we reflect from a class
+	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
+	{
+		//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
+		if constexpr (!Reflection::IsFunction<DescriptorT>())
+		{
+			//MemberT is the type of the element we reflect
+			using MemberT = typename DescriptorT::value_type;
+
+			const char* name = DescriptorT::name.c_str();
+			MemberT value = DescriptorT::get(obj);
+
+			root[name] = WriteValue<MemberT>(&value);
+		}
+	});
+
+	return root;
 }
 
 template<typename T>
@@ -269,6 +360,7 @@ void Reflection::DisplayObj(MemberT* obj)
 	}
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
+		ImGui::Text("%s", typeid(**obj).name());
 		Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
 	}
 	//Recursivity if there's a reflectable type
