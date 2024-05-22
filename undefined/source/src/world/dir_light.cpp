@@ -31,7 +31,7 @@ DirLight::~DirLight()
 	}
 }
 
-void DirLight::Update()
+void DirLight::Draw()
 {
 	pShader->Use();
 	Direction = GameTransform->Position;

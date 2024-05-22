@@ -14,7 +14,7 @@ SpotLight::~SpotLight()
 {
 }
 
-void SpotLight::Update()
+void SpotLight::Draw()
 {
 	mID = mGlobalID;
 	pShader->Use();
@@ -33,11 +33,15 @@ void SpotLight::Update()
 	mGlobalID++;
 }
 
-void SpotLight::LateUpdate()
+void SpotLight::PostDraw()
 {
+	pShader->Use();
+	pShader->SetBool("spotLights[" + std::to_string(mID) + "].isUsed", false);
+	mGlobalID = 0;
+	pShader->UnUse();
 }
 
 int SpotLight::GetNbrOfSpotLight() const
 {
-	return 0;
+	return mSpotLightsArray.size();
 }

@@ -27,9 +27,9 @@ public:
 	~DirLight();
 
 	/// <summary>
-	/// Update function from Component which is override
+	/// Draw function from Component which is override
 	/// </summary>
-	void Update() override;
+	void Draw() override;
 	/// <summary>
 	/// Get the total number of DirLight
 	/// </summary>

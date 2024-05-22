@@ -26,6 +26,9 @@ public:
 	/// </summary>
 	void Draw() override;
 
+	/// <summary>
+	/// Post Draw function from Component which is override
+	/// </summary>
 	void PostDraw() override;
 
 	/// <summary>
