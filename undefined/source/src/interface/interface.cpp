@@ -73,7 +73,7 @@ void Interface::BeginDockSpace()
         ImGui::SetNextWindowViewport(viewport->ID);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
 
         windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
         windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
@@ -116,15 +116,15 @@ void Interface::Delete()
     ImGui::DestroyContext();
 }
 
-UNDEFINED_ENGINE void Interface::CreateEditorViewport()
+void Interface::CreateEditorViewport()
 {
-    Framebuffer* framebuffer = Framebuffer::Create<2>(200, 200);
-    Camera* camera = new Camera(200, 200);
+    Framebuffer* framebuffer = Framebuffer::Create<2>(200.0f, 200.0f);
+    Camera* camera = new Camera(200.0f, 200.0f);
 
     EditorViewports.push_back(new EditorViewport(framebuffer, camera));
 }
 
-UNDEFINED_ENGINE void Interface::DeleteEditorViewport(int ID)
+void Interface::DeleteEditorViewport(int ID)
 {
     std::vector<EditorViewport*>::iterator it = EditorViewports.begin();
 

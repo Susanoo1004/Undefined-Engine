@@ -1,3 +1,5 @@
+#pragma warning(disable : 26812)
+
 // https://github.com/CedricGuillemet/ImGuizmo
 // v 1.89 WIP
 //

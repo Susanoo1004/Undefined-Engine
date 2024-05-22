@@ -1,5 +1,5 @@
 template <size_t TextureNumber>
-Framebuffer* Framebuffer::Create(unsigned int width, unsigned int height)
+Framebuffer* Framebuffer::Create(float width, float height)
 {
     static_assert(TextureNumber < 32, "TextureNumber must be less than 32");
 

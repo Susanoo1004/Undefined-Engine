@@ -6,8 +6,8 @@
 
 #include "engine_debug/logger.h"
 
-Texture::Texture(const unsigned int width, const unsigned int height, const int internalFormat, const int format)
-	: mWidth(width), mHeight(height)
+Texture::Texture(const float width, const float height, const int internalFormat, const int format)
+	: mWidth((int)width), mHeight((int)height)
 {
 	mRenderer = ServiceLocator::Get<Renderer>();
 

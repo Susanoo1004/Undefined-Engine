@@ -11,23 +11,23 @@ SceneSerializer::~SceneSerializer()
 {
 }
 
-void SceneSerializer::Serialize(const std::filesystem::path& path)
+void SceneSerializer::Serialize()
 {
 
 
 	
 }
 
-void SceneSerializer::Deserialize(const std::filesystem::path& path)
+void SceneSerializer::Deserialize()
 {
 }
 
-bool SceneSerializer::SerializeRuntime(const std::filesystem::path& path)
+bool SceneSerializer::SerializeRuntime()
 {
 	return false;
 }
 
-bool SceneSerializer::DeserializeRuntime(const std::filesystem::path& path)
+bool SceneSerializer::DeserializeRuntime()
 {
 	return false;
 }

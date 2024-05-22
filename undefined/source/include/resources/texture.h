@@ -20,7 +20,7 @@ public:
 	/// </summary>
 	/// <param name="width">: Width of the texture created</param>
 	/// <param name="height">: Height of the texture created</param>
-	Texture(const unsigned int width, const unsigned int height, const int internalFormat = 0x1908, const int format = 0x1908);
+	Texture(const float width, const float height, const int internalFormat = 0x1908, const int format = 0x1908);
 	/// <summary>
 	/// A Constructor of Texture, creating a texture with an image (e.g : png or jpg)
 	/// </summary>
