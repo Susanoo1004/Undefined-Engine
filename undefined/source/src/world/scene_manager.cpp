@@ -35,11 +35,14 @@ Scene* SceneManager::CreateScene(const std::string& mName)
 	return newScene;
 }
 
-void SceneManager::Reload()
+void SceneManager::SetPlay(bool play)
 {
-	Logger::Debug("Reload scene");
-	//help
-	//load ActualScene
+	IsScenePlaying = play;
+}
+
+void SceneManager::SetPause(bool pause)
+{
+	IsScenePaused = pause;
 }
 
 void SceneManager::Start()
@@ -146,4 +149,11 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 
 	file.close();
 	return false;
+}
+
+void SceneManager::Reload()
+{
+	Logger::Debug("Reload scene");
+	//help
+	//load ActualScene
 }
