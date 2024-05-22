@@ -94,6 +94,10 @@ void Application::Update()
     SceneManager::GlobalUpdate();
     Interface::Update();
     Logger::Sync();
+
+    SceneManager::SaveCurrentScene();
+    SceneManager::LoadScene("assets/scenes/test.scene");
+
     mSoundSource->SetPosition(source1, Vector3());
     
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))

@@ -26,6 +26,7 @@ public:
 	static void AddAllClasses();
 
 	static const RuntimeClass* GetHashedClass(size_t hash);
+	static const RuntimeClass* GetHashedClass(std::string name);
 
 	static void Display(void* obj, size_t hash);
 	static Json::Value WriteValue(void* val, size_t hash);

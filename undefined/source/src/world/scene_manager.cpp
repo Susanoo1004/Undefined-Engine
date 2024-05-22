@@ -133,6 +133,7 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 {
 	if (!path.string().ends_with(".scene"))
 	{
+		//Logger::Error("Can't load scene : {}", path.c_str());
 		return false;
 	}
 
@@ -144,7 +145,12 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 
 	//Logger::Debug("{}", value);
 
-	Object obj = Reflection::ReadObj<Object>(root.front().get("Values", Json::Value()));
+	std::vector<std::string> names = root.getMemberNames();
+	for (size_t i = 0; i < root.size(); i++)
+	{
+		Reflection::ReadObj<Object>(root.get(names[i], Json::Value()));
+		Logger::Debug("");
+	}
 
 	file.close();
 	return false;

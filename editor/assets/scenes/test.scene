@@ -1,94 +1,13 @@
 {
-	"1005786994989697981" : 
+	"10189361782582768428" : 
 	{
-		"Type" : "class Object",
-		"Values" : 
-		{
-			"Components" : null,
-			"Name" : "Test Child",
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "class Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 1005786994989697981
-		}
-	},
-	"12150506501577229068" : 
-	{
-		"Type" : "class Object",
+		"Type" : "Object",
 		"Values" : 
 		{
 			"Components" : 
 			[
 				{
-					"Type" : "class ModelRenderer",
-					"Values" : 
-					{
-						"mIsEnable" : true
-					}
-				}
-			],
-			"Name" : "PikingRoom",
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "class Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 12150506501577229068
-		}
-	},
-	"1432032331362320344" : 
-	{
-		"Type" : "class Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "class DirLight",
+					"Type" : "PointLight",
 					"Values" : 
 					{
 						"Ambient" : 
@@ -97,12 +16,15 @@
 							"y" : 0.40000000596046448,
 							"z" : 0.40000000596046448
 						},
+						"ConstantAttenuation" : 1.0,
 						"Diffuse" : 
 						{
 							"x" : 0.80000001192092896,
 							"y" : 0.80000001192092896,
 							"z" : 0.80000001192092896
 						},
+						"LinearAttenuation" : 0.090000003576278687,
+						"QuadraticAttenuation" : 0.032000001519918442,
 						"Specular" : 
 						{
 							"x" : 0.5,
@@ -113,11 +35,11 @@
 					}
 				}
 			],
-			"Name" : "DirLight",
+			"Name" : "poin",
 			"mIsEnable" : true,
 			"mTransform" : 
 			{
-				"Type" : "class Transform",
+				"Type" : "Transform",
 				"Values" : 
 				{
 					"mPosition" : 
@@ -128,6 +50,7 @@
 					},
 					"mRotation" : 
 					{
+						"w" : 1.0,
 						"x" : 0.0,
 						"y" : 0.0,
 						"z" : 0.0
@@ -140,7 +63,90 @@
 					}
 				}
 			},
-			"mUUID" : 1432032331362320344
+			"mUUID" : 10189361782582768428
+		}
+	},
+	"2494684195761236614" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "PikingRoom",
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 2494684195761236614
+		}
+	},
+	"7154602094414553277" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : null,
+			"Name" : "Test Child",
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 7154602094414553277
 		}
 	}
 }

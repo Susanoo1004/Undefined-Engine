@@ -44,10 +44,16 @@ namespace Reflection
 	Json::Value WriteObj(T* obj);
 
 	/// <summary>
-	/// Object we wish to read from Json string
+	/// Value we wish to read from Json Value
 	/// </summary>
-	/// <typeparam name="T"> type of the object we want to write </typeparam>
-	/// <param name="obj"> object we write </param>
+	/// <param name="jsonValue"> object we write </param>
+	template<typename MemberT>
+	MemberT ReadValue(Json::Value jsonValue);
+
+	/// <summary>
+	/// Object we wish to read from Json Value
+	/// </summary>
+	/// <param name="jsonObj"> object we write </param>
 	template<typename T>
 	T ReadObj(Json::Value jsonObj);
 
@@ -138,7 +144,10 @@ Json::Value Reflection::WriteObj(T* obj)
 
 	Json::Value root;
 
-	root["Type"] = typeid(T).name();
+	std::string type = typeid(T).name();
+	type.erase(0, 6);
+
+	root["Type"] = type;
 
 	//Lamba that loops for each element we reflect from a class
 	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
@@ -159,12 +168,81 @@ Json::Value Reflection::WriteObj(T* obj)
 	return root;
 }
 
-template<typename T>
+template<typename MemberT>
+MemberT Reflection::ReadValue(Json::Value jsonValue)
+{
+	if constexpr (std::_Is_any_of_v<MemberT, bool, std::string> || std::is_integral_v<MemberT> || std::is_floating_point_v<MemberT>)
+	{
+		MemberT value = jsonValue.as<MemberT>();
+		Logger::Debug("{}", value);
+		return value;
+	}
+	else if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3, Vector2>)
+	{
+		MemberT value;
+		value.x = jsonValue.get("x", 0.0f).asFloat();
+		value.y = jsonValue.get("y", 0.0f).asFloat();
+		if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3>)
+		{
+			value.z = jsonValue.get("z", 0.0f).asFloat();
+		}
+		if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4>)
+		{
+			value.w = jsonValue.get("w", 0.0f).asFloat();
+		}
+		Logger::Debug("{}", value);
+		return value;
+	}
+	else if constexpr (Reflection::is_vector_v<MemberT>)
+	{
+		using ListT = typename MemberT::value_type;
+
+		MemberT valueList;
+		valueList.resize(jsonValue.size());
+
+		Logger::Debug("List :");
+		//If it's a std::vector we reflect every element inside it
+		for (int i = 0; i < jsonValue.size(); i++)
+		{
+			valueList[i] = ReadValue<ListT>(jsonValue[i]);
+		}
+		Logger::Debug("Fin list");
+		return valueList;
+	}
+	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
+	{
+		//root = Reflection::WriteValueWithHash(*val, typeid(**val).hash_code());
+		std::string subJsonType = jsonValue.get("Type", std::string()).asString();
+		Json::Value subJsonValue = jsonValue.get("Values", Json::Value());
+
+		//ReadWithTypeName()
+		Logger::Debug("pointer {}", typeid(MemberT).name());
+		MemberT value = ReadObj<MemberT>(subJsonValue);
+		return value;
+	}
+	else if constexpr (Reflection::IsReflectable<MemberT>())
+	{
+		Logger::Debug("{} :", typeid(MemberT).name());
+		MemberT value = ReadObj<MemberT>(jsonValue);
+		Logger::Debug("Fin de {}", typeid(MemberT).name());
+		return value;
+	}
+
+	Logger::Error("FUCK");
+	return MemberT();
+}
+
+template <typename T>
 T Reflection::ReadObj(Json::Value jsonObj)
 {
-	//T obj;
+	//void* obj = RuntimeClasses::CreateClass(jsonObj.get("Type", "null").asString());
 
+	//Logger::Debug("{}", typeid(obj).name());
+
+	T obj = T();
 	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
+
+	Json::Value jsonValues = jsonObj.get("Values", Json::Value());
 
 	//Lamba that loops for each element we reflect from a class
 	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
@@ -176,51 +254,12 @@ T Reflection::ReadObj(Json::Value jsonObj)
 			using MemberT = typename DescriptorT::value_type;
 
 			const char* name = DescriptorT::name.c_str();
-			//MemberT value = DescriptorT::get(obj);
-			//MemberT value = jsonVal.get(name, MemberT()).as<MemberT>();
 
-
-			if constexpr (std::_Is_any_of_v<MemberT, bool, std::string> || std::is_integral_v<MemberT> || std::is_floating_point_v<MemberT>)
-			{
-				MemberT value = jsonVal.get(name, MemberT()).as<MemberT>();
-			}
-			else if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3, Vector2>)
-			{
-				MemberT value.x = jsonVal.get(name, MemberT()).get("x", 0.0f).as<MemberT>();
-				MemberT value.y = jsonVal.get(name, MemberT()).get("y", 0.0f).as<MemberT>();
-
-				if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3>)
-				{
-					MemberT value.z = jsonVal.get(name, MemberT()).get("z", 0.0f).as<MemberT>();
-				}
-				if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4>)
-				{
-					MemberT value.w = jsonVal.get(name, MemberT()).get("w", 0.0f).as<MemberT>();
-				}
-			}
-			//else if constexpr (Reflection::is_vector_v<MemberT>)
-			//{
-			//	using ListT = typename MemberT::value_type;
-			//
-			//	//If it's a std::vector we reflect every element inside it
-			//	for (int i = 0; i < val->size(); i++)
-			//	{
-			//		root[i] = WriteValue<ListT>(&(*val)[i]);
-			//	}
-			//}
-			//else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
-			//{
-			//	root = Reflection::WriteValueWithHash(*val, typeid(**val).hash_code());
-			//}
-			//else if constexpr (Reflection::IsReflectable<MemberT>())
-			//{
-				//MemberT value =	Reflection::ReadObj<MemberT>(jsonObj[name]);
-			//}
-
-			//DescriptorT::get(obj) = value;
-
+			MemberT val = ReadValue<MemberT>(jsonValues.get(name, Json::Value()));
 		}
 	});
+
+	return obj;
 }
 
 template<typename T>

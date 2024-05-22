@@ -44,7 +44,6 @@
     <ClCompile Include="source\src\framebuffer.cpp" />
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
     <ClCompile Include="source\src\resources\material.cpp" />
-    <ClCompile Include="source\src\world\scene_serializer.cpp" />
     <ClCompile Include="source\src\world\transform.cpp" />
     <ClCompile Include="source\src\resources\model_renderer.cpp" />
     <ClCompile Include="source\src\reflection\runtime_classes.cpp" />
@@ -129,7 +128,6 @@
     <ClInclude Include="source\include\framebuffer.h" />
     <ClInclude Include="source\include\interface\editor_viewport.h" />
     <ClInclude Include="source\include\resources\material.h" />
-    <ClInclude Include="source\include\world\scene_serializer.h" />
     <ClInclude Include="source\include\resources\model_renderer.h" />
     <ClInclude Include="source\include\reflection\attributes.h" />
     <ClInclude Include="source\include\reflection\utils_reflection.h" />

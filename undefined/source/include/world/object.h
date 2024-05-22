@@ -8,8 +8,6 @@
 #include "engine_debug/logger.h"
 #include "reflection/attributes.h"
 
-#include "world/dir_light.h"
-
 template<class Comp>
 concept ComponentType = std::is_base_of<Component, Comp>::value;
 

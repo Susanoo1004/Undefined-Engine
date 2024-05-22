@@ -25,18 +25,15 @@ const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)
 	return &hashedClass->second;
 }
 
-const RuntimeClass* RuntimeClasses::GetClassByType(std::string type)
+const RuntimeClass* RuntimeClasses::GetHashedClass(std::string name)
 {
-	for (size_t i = 0; i < mHashClasses.size(); i++)
+	for (int i = 0; i < mHashClasses.size(); i++)
 	{
-		auto typeClass = mHashClasses[i];
-		if (typeClass.type == type)
+		if (mHashClasses[i].className == name)
 		{
-			return &typeClass;
+			return nullptr/*something, help*/;
 		}
 	}
-
-	Logger::Error("Could not find typeClass {}", type);
 	return nullptr;
 }
 
