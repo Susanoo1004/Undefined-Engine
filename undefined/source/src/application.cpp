@@ -79,7 +79,7 @@ void Application::Init()
 
     SceneManager::ActualScene->AddObject("Floor");
     SceneManager::ActualScene->Objects[1]->GameTransform->Position = Vector3(0, -1, 0);
-    SceneManager::ActualScene->Objects[1]->GameTransform->SetRotation(Vector3(0, 0.f, 10));
+    SceneManager::ActualScene->Objects[1]->GameTransform->SetRotation(Vector3(0, 0.f, 1));
     SceneManager::ActualScene->Objects[1]->AddComponent<BoxCollider>(SceneManager::ActualScene->Objects[1]->GameTransform->GetPosition(), SceneManager::ActualScene->Objects[1]->GameTransform->GetRotationQuat(), Vector3(100.0f, 1.0f, 100.0f), true);
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
@@ -91,7 +91,10 @@ void Application::Init()
     sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
     CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
 
-    PhysicsSystem::SetVelocity(c->BodyID ,Vector3(0, -1, 0));
+    Object* sphere2 = SceneManager::ActualScene->AddObject("Sphere2");
+    sphere2->GameTransform->Position = Vector3(0, 5, 3);
+    sphere2->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
+    BoxCollider* c2 = sphere2->AddComponent<BoxCollider>(sphere2->GameTransform->GetPosition(), sphere2->GameTransform->GetRotationQuat(), Vector3(1,1,1));
 
     SceneManager::Start();
 }

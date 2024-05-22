@@ -4,6 +4,8 @@
 #include <toolbox/Vector3.h>
 #include <toolbox/Quaternion.h>
 
+#include "wrapper/time.h"
+
 void PhysicsSystem::Init()
 {
 	JPH::RegisterDefaultAllocator();
@@ -26,20 +28,21 @@ void PhysicsSystem::Init()
 	BodyInterface = &JoltPhysicsSystem->GetBodyInterface();
 
 	JoltPhysicsSystem->SetGravity(ToJPH(Vector3(0, -9.81f, 0)));
+
+	JoltPhysicsSystem->OptimizeBroadPhase();
 }
 
 void PhysicsSystem::Update()
 {
+	JoltPhysicsSystem->Update(Time::FixedDeltaTime, 1, TempAllocator, JobSystem);
+
 	ContactListener.CallOnColliderEnter();
 	ContactListener.CallOnColliderStay();
 	ContactListener.CallOnColliderExit();
-
-	JoltPhysicsSystem->Update(1.f/60.f , 1, TempAllocator, JobSystem);
 }
 
 void PhysicsSystem::Terminate()
 {
-
 	delete TempAllocator;
 	delete JobSystem;
 	delete JoltPhysicsSystem;

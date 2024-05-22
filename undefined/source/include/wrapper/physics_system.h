@@ -75,13 +75,13 @@ public:
 	// We need a job system that will execute physics jobs on multiple threads.
 	static inline JPH::JobSystemThreadPool* JobSystem;
 
-	static inline constexpr unsigned int cMaxBodies = 1024;
+	static inline constexpr unsigned int cMaxBodies = 65536;
 
 	static inline constexpr unsigned int cNumBodyMutexes = 0;
 
-	static inline constexpr unsigned int cMaxBodyPairs = 1024;
+	static inline constexpr unsigned int cMaxBodyPairs = 65536;
 
-	static inline constexpr unsigned int cMaxContactConstraints = 1024;
+	static inline constexpr unsigned int cMaxContactConstraints = 10240;
 
 	static inline BroadPhaseLayerInterface BroadphaseLayerInterface;
 
