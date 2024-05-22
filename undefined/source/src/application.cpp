@@ -78,23 +78,18 @@ void Application::Init()
     SceneManager::ActualScene->AddObject("DirLight")->AddComponent<DirLight>();
 
     SceneManager::ActualScene->AddObject("Floor");
-    SceneManager::ActualScene->Objects[1]->GameTransform->Position = Vector3(0, -1, 0);
-    SceneManager::ActualScene->Objects[1]->GameTransform->SetRotation(Vector3(0, 0.f, 1));
-    SceneManager::ActualScene->Objects[1]->AddComponent<BoxCollider>(SceneManager::ActualScene->Objects[1]->GameTransform->GetPosition(), SceneManager::ActualScene->Objects[1]->GameTransform->GetRotationQuat(), Vector3(100.0f, 1.0f, 100.0f), true);
+    SceneManager::ActualScene->Objects[1]->GameTransform->Position = Vector3(0, -2, 0);
+    SceneManager::ActualScene->Objects[1]->GameTransform->SetRotation(Vector3(0, 0.f, 5));
+    SceneManager::ActualScene->Objects[1]->AddComponent<BoxCollider>(SceneManager::ActualScene->Objects[1]->GameTransform->GetPosition(), SceneManager::ActualScene->Objects[1]->GameTransform->GetRotationQuat(), Vector3(100.0f, 2.0f, 100.0f), true);
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->GameTransform->Position = Vector3(0, -0.5f, 0);
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
     
     Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
-    sphere->GameTransform->Position = Vector3(0, 5, 0);
+    sphere->GameTransform->Position = Vector3(0, 1.f, 0);
     sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
     CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
-
-    Object* sphere2 = SceneManager::ActualScene->AddObject("Sphere2");
-    sphere2->GameTransform->Position = Vector3(0, 5, 3);
-    sphere2->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
-    BoxCollider* c2 = sphere2->AddComponent<BoxCollider>(sphere2->GameTransform->GetPosition(), sphere2->GameTransform->GetRotationQuat(), Vector3(1,1,1));
 
     SceneManager::Start();
 }

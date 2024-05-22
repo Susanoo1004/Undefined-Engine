@@ -89,7 +89,7 @@ Quaternion PhysicsSystem::FromJPH(const JPH::Quat& q)
 
 unsigned int PhysicsSystem::CreateBox(const Vector3& pos, const Quaternion& rot, const Vector3& scale, bool is_static)
 {
-	JPH::BodyCreationSettings settings(new JPH::BoxShape(ToJPH(scale)), ToJPH(pos), ToJPH(rot), is_static == true ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic, Layers::MOVING);
+	JPH::BodyCreationSettings settings(new JPH::BoxShape(ToJPH(scale/2)), ToJPH(pos), ToJPH(rot), is_static == true ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic, Layers::MOVING);
 
 	settings.mAllowSleeping = false;
 	return BodyInterface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
