@@ -35,6 +35,7 @@ Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
 	{
 		return hashedClass->write(val);
 	}
+	return JSON_USE_NULLREF;
 }
 
 void* RuntimeClasses::CreateClass(std::string name)

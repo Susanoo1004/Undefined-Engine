@@ -48,5 +48,8 @@ private:
 
 };
 
-REFL_AUTO(type(PointLight, bases<Light>)
+REFL_AUTO(type(PointLight, bases<Light>),
+	field(ConstantAttenuation),
+	field(LinearAttenuation),
+	field(QuadraticAttenuation)
 );
