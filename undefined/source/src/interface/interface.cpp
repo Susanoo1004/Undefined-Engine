@@ -31,8 +31,10 @@ void Interface::Init()
     ImGuizmo::SetOrthographic(false);
     ImGuizmo::Enable(true);
 
-    std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
+    std::vector<int> keys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_X, GLFW_KEY_C, GLFW_KEY_V, GLFW_KEY_B, GLFW_KEY_N, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT, GLFW_MOUSE_BUTTON_RIGHT };
     ServiceLocator::Get<InputManager>()->CreateKeyInput("editorCameraInput", keys);
+
+    EditorViewport::InitButtonTextures();
 
     CreateEditorViewport();
 }

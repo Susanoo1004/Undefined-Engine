@@ -5,7 +5,7 @@ void ContentBrowserFolders::Update()
     ImGui::SameLine();
     ImGui::BeginChild("Repertory", ImVec2(0, 0), ImGuiChildFlags_Border);
 
-    DisplayActualDirectory(mCurrentPath);
+    DisplayActualDirectory(pCurrentPath);
 
     ImGui::EndChild();
 }
@@ -15,7 +15,7 @@ void ContentBrowserFolders::DisplayActualDirectory(const std::filesystem::path& 
     LoadAll(currentPath);
 
     // For loop that goes through every file/folder in a path and displays them
-    for (int i = 0; i < mCurrPathArray.size(); i++)
+    for (int i = 0; i < pCurrPathArray.size(); i++)
     {
         SetAll(i);
 
@@ -23,7 +23,7 @@ void ContentBrowserFolders::DisplayActualDirectory(const std::filesystem::path& 
 
         DrawFolders(i);
 
-        RightClickWindow(mCurrPathArray[i]);
+        RightClickWindow(pCurrPathArray[i]);
 
         ImGui::SameLine();
 
@@ -36,9 +36,9 @@ void ContentBrowserFolders::DisplayActualDirectory(const std::filesystem::path& 
         }
     }
 
-    if (!mSelectedPath.empty() && ImGui::IsKeyPressed(ImGuiKey_F2))
+    if (!pSelectedPath.empty() && ImGui::IsKeyPressed(ImGuiKey_F2))
     {
-        mRenamingPath = mSelectedPath;
+        pRenamingPath = pSelectedPath;
     }
 
     Clear();
@@ -46,20 +46,20 @@ void ContentBrowserFolders::DisplayActualDirectory(const std::filesystem::path& 
 
 void ContentBrowserFolders::GoBackFolder(const std::filesystem::path& path)
 {
-    isBackFolder = true;
-    mIsAnythingHovered = false;
-    mIsDirectory = true;
+    mIsBackFolder = true;
+    pIsAnythingHovered = false;
+    pIsDirectory = true;
 
     CheckForPushStyle();
 
     ImGui::SameLine();
 
-    if (path != mPath)
+    if (path != pPath)
     {
         mImageID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/folder.png")->GetID());
         ImGui::Image(mImageID, ImVec2(80, 80));
 
-        InteractionWithItems(mBackFolder, true);
+        InteractionWithItems(pBackFolder, true);
 
         TextCentered("../");
 
@@ -69,7 +69,7 @@ void ContentBrowserFolders::GoBackFolder(const std::filesystem::path& path)
     }
     ImGui::SameLine();
 
-    isBackFolder = false;
+    mIsBackFolder = false;
 }
 
 void ContentBrowserFolders::LoadFolders(const std::filesystem::path& path)
@@ -79,7 +79,7 @@ void ContentBrowserFolders::LoadFolders(const std::filesystem::path& path)
     {
         if (entry.is_directory())
         {
-            mCurrPathArray.push_back(entry);
+            pCurrPathArray.push_back(entry);
         }
     }
 }
@@ -90,24 +90,24 @@ void ContentBrowserFolders::LoadFiles(const std::filesystem::path& path)
     {
         if (!entry.is_directory())
         {
-            mCurrPathArray.push_back(entry);
+            pCurrPathArray.push_back(entry);
         }
     }
 }
 
 void ContentBrowserFolders::CheckForPushStyle(int i)
 {
-    if (isBackFolder)
+    if (mIsBackFolder)
     {
-        if (mSelectedPath == mBackFolder)
+        if (pSelectedPath == pBackFolder)
         {
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
-            mCanPop = true;
+            pCanPop = true;
         }
-        else if (mHoveredPath == mBackFolder)
+        else if (pHoveredPath == pBackFolder)
         {
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-            mCanPop = true;
+            pCanPop = true;
         }
 
         return;
@@ -115,17 +115,17 @@ void ContentBrowserFolders::CheckForPushStyle(int i)
 
     else
     {
-        if (mSelectedPath == mCurrPathArray[i].path())
+        if (pSelectedPath == pCurrPathArray[i].path())
         {
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.7f, 0.7f, 0.7f, 0.7f));
-            mCanPop = true;
+            pCanPop = true;
         }
 
         //If the mHoveredPath is the same as the path we're in we change it's style color
-        else if (mHoveredPath == mCurrPathArray[i].path())
+        else if (pHoveredPath == pCurrPathArray[i].path())
         {
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.5f, 0.5f, 0.5f, 0.5f));
-            mCanPop = true;
+            pCanPop = true;
         }
 
         return;
@@ -134,19 +134,19 @@ void ContentBrowserFolders::CheckForPushStyle(int i)
 
 void ContentBrowserFolders::CheckForPopStyle()
 {
-    if (mCanPop)
+    if (pCanPop)
     {
         ImGui::PopStyleColor();
-        mCanPop = false;
+        pCanPop = false;
     }
 }
 
 void ContentBrowserFolders::SetAll(int i)
 {
-    mIsDirectory = mCurrPathArray[i].is_directory();
+    pIsDirectory = pCurrPathArray[i].is_directory();
 
-    mFilename = mCurrPathArray[i].path().filename().string();
-    mFilepath = mCurrPathArray[i].path();
+    mFilename = pCurrPathArray[i].path().filename().string();
+    mFilepath = pCurrPathArray[i].path();
 
     //Set imageID and imageSize
     SetImageValues(mFilepath, mImageID, mImageSize);
@@ -165,17 +165,17 @@ void ContentBrowserFolders::LoadAll(const std::filesystem::path& currentPath)
 
 void ContentBrowserFolders::Clear()
 {
-    if (!mIsAnythingHovered)
+    if (!pIsAnythingHovered)
     {
-        mHoveredPath = "";
+        pHoveredPath = "";
     }
     else
     {
-        mIsAnythingHovered = false;
+        pIsAnythingHovered = false;
     }
 
-    mCurrPathArray.resize(0);
-    mCurrPathArray.shrink_to_fit();
+    pCurrPathArray.resize(0);
+    pCurrPathArray.shrink_to_fit();
 }
 
 void ContentBrowserFolders::DrawFolders(int i)
@@ -185,9 +185,9 @@ void ContentBrowserFolders::DrawFolders(int i)
 
     ImGui::Image(mImageID, mImageSize);
 
-    InteractionWithItems(mCurrPathArray[i]);
+    InteractionWithItems(pCurrPathArray[i]);
 
-    DisplayText(mCurrPathArray[i], mFilename, mImageSize);
+    DisplayText(pCurrPathArray[i], mFilename, mImageSize);
 
     ImGui::EndChild();
 }

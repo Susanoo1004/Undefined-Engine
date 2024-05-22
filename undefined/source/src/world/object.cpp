@@ -11,8 +11,8 @@ Object::Object()
 {
 }
 
-Object::Object(const std::string& name)
-	: Name(name), mUUID(UNIFORM_DISTRIBUTION(ENGINE))
+Object::Object(const std::string& mName)
+	: Name(mName), mUUID(UNIFORM_DISTRIBUTION(ENGINE))
 {
 }
 
@@ -47,6 +47,23 @@ const bool Object::IsEnable() const
 	return mIsEnable;
 }
 
+Component* Object::AddComponent(Component* comp)
+{
+	if (!comp)
+	{
+		Logger::Error("AddComponent(Component* comp) comp is nullptr");
+		return nullptr;
+	}
+
+	comp->GameObject = this;
+	comp->GameTransform = GameTransform;
+
+	Components.push_back(comp);
+	Logger::Info("Component {} added in object {}", typeid(comp).name(), Name);
+
+	return comp;
+}
+
 const Object* Object::GetParent() const
 {
 	if (mParent == mRoot)
@@ -75,6 +92,7 @@ void Object::SetParent(Object* parent)
 		{
 			if (current->mParent == this)
 			{
+				SetParent(nullptr);
 				return;
 			}
 
@@ -93,7 +111,7 @@ void Object::SetParent(Object* parent)
 	}
 }
 
-const std::list<Object*> Object::GetChildren() const
+const std::vector<Object*> Object::GetChildren() const
 {
 	return mChildren;
 }
@@ -118,11 +136,11 @@ const Object* Object::GetChild(unsigned int index) const
 	return *(it);
 }
 
-const Object* Object::GetChild(std::string name) const
+const Object* Object::GetChild(std::string mName) const
 {
 	for (auto it = mChildren.begin(); it != mChildren.end(); ++it)
 	{
-		if ((*it)->Name == name)
+		if ((*it)->Name == mName)
 		{
 			return (*it);
 		}
@@ -136,23 +154,23 @@ void Object::DetachChild(unsigned int index)
 	{
 		return;
 	}
-	auto it = mChildren.begin();
-	std::advance(it, index);
-	(*it)->mParent = mRoot;
-	(*it)->mTransform.mParentTransform = nullptr;
-	mChildren.remove(*it);
+	mChildren[index]->mParent = mRoot;
+	mChildren[index]->mTransform.mParentTransform = nullptr;
+	mChildren.erase(mChildren.begin() + index);
 }
 
-void Object::DetachChild(std::string name)
+void Object::DetachChild(std::string mName)
 {
+	unsigned int index = 0;
 	for (Object* child : mChildren)
 	{
-		if (child->Name == name)
+		if (child->Name == mName)
 		{
 			child->mParent = mRoot;
 			child->mTransform.mParentTransform = nullptr;
-			mChildren.remove(child);
+			mChildren.erase(mChildren.begin() + index);
 		}
+		index++;
 	}
 }
 
@@ -163,10 +181,43 @@ void Object::DetachChild(Object* child)
 		Logger::Warning("DetachChild(Object* child) argument invalid, child does not exist");
 		return;
 	}
+	unsigned int index = 0;
+	for (Object* currChild : mChildren)
+	{
+		if (currChild->mUUID == child->mUUID)
+		{
+			currChild->mParent = mRoot;
+			currChild->mTransform.mParentTransform = nullptr;
+			mChildren.erase(mChildren.begin() + index);
+			break;
+		}
+		index++;
+	}
+}
 
-	child->mParent = mRoot;
-	child->mTransform.mParentTransform = nullptr;
-	mChildren.remove(child);
+void Object::AtachChild(Object* child, unsigned int index)
+{
+	if (!child)
+	{
+		Logger::Warning("AtachChild(Object* child, unsigned int index) argument invalid, child does not exist");
+		return;
+	}
+	child->SetParent(this);
+	unsigned int findIndex = 0; // find object findIndex
+	for (Object* find : child->mParent->mChildren)
+	{
+		if (find == child)
+		{
+			break;
+		}
+		findIndex++;
+	}
+	mChildren.erase(mChildren.begin() + findIndex, mChildren.begin() + findIndex + 1);
+	if (index > findIndex)
+	{
+		index--;
+	}
+	mChildren.insert(mChildren.begin() + index, child);
 }
 
 void Object::ChangeEnableStatus()

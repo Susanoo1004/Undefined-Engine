@@ -30,9 +30,9 @@ std::string Logger::CurrentDateTime()
     return buffer;
 }
 
-void Logger::CreateDebugFile(const std::string& path, const std::string& name)
+void Logger::CreateDebugFile(const std::string& path, const std::string& mName)
 {
-    std::filesystem::path const& mFilename = path + name + ".txt";
+    std::filesystem::path const& mFilename = path + mName + ".txt";
     int fileCount = 0;
 
     if (!std::filesystem::exists(path))
@@ -71,8 +71,15 @@ void Logger::SetupLogEntry(LogLevel level, const std::string& log)
     entry.Level = level;
     entry.Log = log;
     entry.TimeOffset = std::chrono::system_clock::now();
-    EntryList.Push(entry);
-    Sleep.notify_one();
+    if (mIsSync)
+    {
+        PrintEntry(entry);
+    }
+    else
+    {
+        mEntryList.Push(entry);
+        mSleep.notify_one();
+    }
 }
 
 void Logger::Start()
@@ -80,16 +87,16 @@ void Logger::Start()
     MemoryLeak::CheckMemoryLeak(true);
 
     std::mutex mutex;
-    (void)SetThreadDescription(Thread.native_handle(), L"Logger Thread");
+    (void)SetThreadDescription(mThread.native_handle(), L"Logger Thread");
 
     std::unique_lock lock(mutex);
-    while (IsRunning)
+    while (mIsRunning)
     {
-        Sleep.wait(lock, [] {return (!EntryList.Empty() || !IsRunning); });
+        mSleep.wait(lock, [] {return (!mEntryList.Empty() || !mIsRunning); });
 
-        while (!EntryList.Empty())
+        while (!mEntryList.Empty())
         {
-            PrintEntry(EntryList.Pop());
+            PrintEntry(mEntryList.Pop());
         }
 
         std::cout.flush();
@@ -141,12 +148,12 @@ void Logger::PrintEntry(LogEntry entry)
 
 void Logger::Stop()
 {
-    IsRunning = false;
-    Sleep.notify_one();
+    mIsRunning = false;
+    mSleep.notify_one();
 
-    if (Thread.joinable())
+    if (mThread.joinable())
     {
-        Thread.join();
+        mThread.join();
     }
 }
 
@@ -154,4 +161,14 @@ void Logger::CheckForExit()
 {
     std::atexit(Logger::Stop);
     std::at_quick_exit(Logger::Stop);
+}
+
+void Logger::Sync()
+{
+    mIsSync = true;
+}
+
+void Logger::Desync()
+{
+    mIsSync = false;
 }

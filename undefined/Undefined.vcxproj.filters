@@ -55,6 +55,12 @@
     <ClCompile Include="source\src\interface\content_browser_hierarchy.cpp" />
     <ClCompile Include="source\src\interface\content_browser_folders.cpp" />
     <ClCompile Include="source\src\wrapper\time.cpp" />
+    <ClCompile Include="source\src\resources\audio.cpp" />
+    <ClCompile Include="source\src\audio\sound_device.cpp" />
+    <ClCompile Include="source\src\audio\sound_buffer.cpp" />
+    <ClCompile Include="source\src\audio\sound_source.cpp" />
+    <ClCompile Include="source\src\world\point_light.cpp" />
+    <ClCompile Include="source\src\world\spot_light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -135,6 +141,12 @@
     <ClInclude Include="source\include\interface\content_browser_hierarchy.h" />
     <ClInclude Include="source\include\interface\content_browser_folders.h" />
     <ClInclude Include="source\include\wrapper\time.h" />
+    <ClInclude Include="source\include\resources\audio.h" />
+    <ClInclude Include="source\include\audio\sound_device.h" />
+    <ClInclude Include="source\include\audio\sound_buffer.h" />
+    <ClInclude Include="source\include\audio\sound_source.h" />
+    <ClInclude Include="source\include\world\point_light.h" />
+    <ClInclude Include="source\include\world\spot_light.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

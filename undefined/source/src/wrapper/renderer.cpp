@@ -6,7 +6,10 @@
 #include"resources/texture.h"
 #include"resources/model.h"
 
+#include "engine_debug/renderer_debug.h"
 #include "engine_debug/logger.h"
+
+#include "world/gizmo.h"
 
 void Renderer::Init()
 {
@@ -14,7 +17,7 @@ void Renderer::Init()
     SetClearColor(0, 0, 0);
     EnableTest(GL_DEPTH_TEST);
 
-    Debug.DebugInit();
+    RendererDebug::DebugInit();
 }
 
 void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blueBaseColor)
@@ -74,6 +77,9 @@ void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int 
 
 int Renderer::ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y)
 {
+    if (ImGuizmo::IsOver())
+        return -1;
+
     glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
     glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
     glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &ObjectIndex);
@@ -194,29 +200,29 @@ void Renderer::LinkShader(unsigned int& ID, unsigned int vertex, unsigned int fr
     }
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, bool value) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, bool value) const
 {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    glUniform1i(glGetUniformLocation(ID, mName.c_str()), (int)value);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, int value) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, int value) const
 {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1i(glGetUniformLocation(ID, mName.c_str()), value);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, float value) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, float value) const
 {
-    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1f(glGetUniformLocation(ID, mName.c_str()), value);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, const Vector3& v) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, const Vector3& v) const
 {
-    glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &v.x);
+    glUniform3fv(glGetUniformLocation(ID, mName.c_str()), 1, &v.x);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, const Matrix4x4& m) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, const Matrix4x4& m) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, true, &m[0].x);
+    glUniformMatrix4fv(glGetUniformLocation(ID, mName.c_str()), 1, true, &m[0].x);
 }
 
 void Renderer::DeleteShader(unsigned int shader)

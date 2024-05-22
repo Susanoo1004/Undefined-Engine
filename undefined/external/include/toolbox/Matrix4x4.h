@@ -137,6 +137,9 @@ public:
     /// @brief Creates a Translation-Rotation-Scaling (TRS) matrix from the given translation, rotation and scaling.
     [[nodiscard]]
     static Matrix4x4 TRS(const Vector3& translation, const Matrix4x4& rotation, const Vector3& scale);
+    /// @brief Creates a Translation-Rotation-Scaling (TRS) matrix from the given translation, rotation and scaling.
+    [[nodiscard]]
+    static Matrix4x4 TRS(const Vector3& translation, const Quaternion& rotation, const Vector3& scale);
 
     [[nodiscard]]
     Quaternion ToQuaternion() const;

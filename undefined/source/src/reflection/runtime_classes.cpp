@@ -2,6 +2,17 @@
 
 #include "engine_debug/logger.h"
 
+#include "world/dir_light.h"
+#include "world/point_light.h"
+#include "world/spot_light.h"
+
+#include "resources/model_renderer.h"
+
+// TODO: Remove
+#include "world/player_test.h"
+
+#include <ranges>
+
 const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)
 {
 	auto hashedClass = mHashClasses.find(hash);
@@ -43,13 +54,32 @@ Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
 	{
 		return hashedClass->write(val);
 	}
-	return Json::Value();
+	return JSON_USE_NULLREF;
 }
 
-void RuntimeClasses::ReadValue(void* obj, std::string type)
+void* RuntimeClasses::CreateClass(std::string name)
 {
-	if (auto hashedClass = GetClassByType(type))
+	for (RuntimeClass c : mHashClasses|std::views::values)
 	{
-		hashedClass->read(obj);
+		if (c.className == name)
+		{
+			return c.create();
+		}
 	}
+	
+	return nullptr;
+}
+
+void RuntimeClasses::AddAllClasses()
+{
+	//Lights
+	AddClass<DirLight>();
+	AddClass<PointLight>();
+	AddClass<SpotLight>();
+
+	//Model
+	AddClass<ModelRenderer>();
+
+	// TODO: Remove
+	AddClass<Player>();
 }

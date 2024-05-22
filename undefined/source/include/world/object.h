@@ -24,7 +24,7 @@ public:
 	/// Constructor of Object
 	/// </summary>
 	/// <param name="name">: Name of the Object</param>
-	Object(const std::string& name);
+	Object(const std::string& mName);
 	/// <summary>
 	/// Destructor of Object
 	/// </summary>
@@ -53,35 +53,17 @@ public:
 	template <ComponentType Comp, typename... Args>
 	Comp* AddComponent(Args... args)
 	{
-		Comp* comp = nullptr;
-		for (Component* findComp : Components)
-		{
-			if (typeid(Comp*) == typeid(findComp))
-			{
-				comp = (Comp*)findComp;
-				break;
-			}
-		}
-
-		if (comp)
-		{
-			Logger::Error("Component {} already exist in object {}", typeid(Comp).name(), Name);
-			return nullptr;
-		}
-
-		else
-		{
-			Logger::Info("Component {} added in object {}", typeid(Comp).name(), Name);
-		}
-		comp = new Comp(args...);
+		Comp* comp = new Comp(args...);
 
 		comp->GameObject = this;
 		comp->GameTransform = GameTransform;
 
 		Components.push_back(comp);
+		Logger::Info("Component {} added in object {}", typeid(Comp).name(), Name);
 		
 		return comp;
 	}
+	Component* AddComponent(Component* comp);
 
 	/// <summary>
 	/// Get a component
@@ -113,7 +95,7 @@ public:
 	/// Get all the Children on this Object 
 	/// </summary>
 	/// <returns>Return a list of pointer to the objects</returns>
-	const std::list<Object*> GetChildren() const;
+	const std::vector<Object*> GetChildren() const;
 	/// <summary>
 	/// Detach this object to all of his children
 	/// </summary>
@@ -129,7 +111,7 @@ public:
 	/// </summary>
 	/// <param name="name">: Name of the child</param>
 	/// <returns>Return a pointer to the child</returns>
-	const Object* GetChild(std::string name) const;
+	const Object* GetChild(std::string mName) const;
 	/// <summary>
 	/// Detach a child by his index
 	/// </summary>
@@ -139,12 +121,17 @@ public:
 	/// Detach a child by his name
 	/// </summary>
 	/// <param name="name">: Name of the child</param>
-	void DetachChild(std::string name);
+	void DetachChild(std::string mName);
 	/// <summary>
 	/// Detach a child by a pointer to the child
 	/// </summary>
 	/// <param name="child">: Pointer to the child</param>
 	void DetachChild(Object* child);
+	/// <summary>
+	/// Atach a child Object at this index
+	/// </summary>
+	/// <param name="child">: Pointer to the child</param>
+	void AtachChild(Object* child, unsigned int index);
 
 
 	/// <summary>
@@ -172,7 +159,7 @@ private:
 	/// <summary>
 	/// List of the children of the Object
 	/// </summary>
-	std::list<Object*> mChildren;
+	std::vector<Object*> mChildren;
 
 	/// <summary>
 	/// Universally Unique Identifier for the Object
@@ -189,8 +176,10 @@ private:
 private:
 	void ChangeEnableStatus();
 
+	friend class Application;
 	friend class SceneManager;
 	friend class SceneGraph;
+
 	static inline Object* mRoot;
 };
 

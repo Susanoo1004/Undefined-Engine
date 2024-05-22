@@ -45,5 +45,6 @@ private:
 	static inline std::vector<DirLight*> mDirLightsArray;
 };
 
-REFL_AUTO(type(DirLight, bases<Light>)
+REFL_AUTO(type(DirLight, bases<Light>),
+	field(Direction)
 );

@@ -28,11 +28,21 @@ void SceneManager::Delete()
 	}
 }
 
-Scene* SceneManager::CreateScene(const std::string& name)
+Scene* SceneManager::CreateScene(const std::string& mName)
 {
-	Scene* newScene = new Scene(name);
+	Scene* newScene = new Scene(mName);
 	Scenes.push_back(newScene);
 	return newScene;
+}
+
+void SceneManager::SetPlay(bool play)
+{
+	IsScenePlaying = play;
+}
+
+void SceneManager::SetPause(bool pause)
+{
+	IsScenePaused = pause;
 }
 
 void SceneManager::Start()
@@ -42,7 +52,8 @@ void SceneManager::Start()
 		Logger::Error("No scene loaded");
 		return;
 	}
-
+	// save ActualScene
+	
 	ActualScene->Start();
 }
 
@@ -51,6 +62,24 @@ void SceneManager::GlobalUpdate()
 	if (!ActualScene)
 	{
 		Logger::Error("No scene loaded");
+		return;
+	}
+
+	if (!IsScenePlaying)
+	{
+		while (Time::FixedStep >= 1)
+		{
+			Time::FixedStep--;
+		}
+		return;
+	}
+
+	if (IsScenePaused /*&& !nextFrameButton*/)
+	{
+		while (Time::FixedStep >= 1)
+		{
+			Time::FixedStep--;
+		}
 		return;
 	}
 
@@ -119,4 +148,11 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 
 	file.close();
 	return false;
+}
+
+void SceneManager::Reload()
+{
+	Logger::Debug("Reload scene");
+	//help
+	//load ActualScene
 }

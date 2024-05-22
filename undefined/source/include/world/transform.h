@@ -3,7 +3,9 @@
 
 #include <toolbox/Vector3.h>
 #include <toolbox/Matrix4x4.h>
+#include <toolbox/Quaternion.h>
 #include <refl.hpp>
+
 #include "reflection/attributes.h"
 
 class Transform
@@ -25,6 +27,9 @@ public:
 	__declspec(property(get = GetRotationRad, put = SetRotationRad)) Vector3 RotationRad;
 	UNDEFINED_ENGINE Vector3 GetRotationRad();
 	UNDEFINED_ENGINE void SetRotationRad(Vector3 newRotationRad);
+	__declspec(property(get = GetRotationQuat, put = SetRotationQuat)) Quaternion RotationQuat;
+	UNDEFINED_ENGINE Quaternion GetRotationQuat();
+	UNDEFINED_ENGINE void SetRotationQuat(Quaternion newRotationQuat);
 
 	__declspec(property(get = GetScale, put = SetScale)) Vector3 Scale;
 	UNDEFINED_ENGINE Vector3 GetScale();
@@ -40,6 +45,9 @@ public:
 	__declspec(property(get = GetLocalRotationRad, put = SetLocalRotationRad)) Vector3 LocalRotationRad;
 	UNDEFINED_ENGINE Vector3 GetLocalRotationRad();
 	UNDEFINED_ENGINE void SetLocalRotationRad(Vector3 newLocalRotationRad);
+	__declspec(property(get = GetLocalRotationQuat, put = SetLocalRotationQuat)) Quaternion LocalRotationQuat;
+	UNDEFINED_ENGINE Quaternion GetLocalRotationQuat();
+	UNDEFINED_ENGINE void SetLocalRotationQuat(Quaternion newLocalRotationQuat);
 
 	__declspec(property(get = GetLocalScale, put = SetLocalScale)) Vector3 LocalScale;
 	UNDEFINED_ENGINE Vector3 GetLocalScale();
@@ -48,15 +56,15 @@ public:
 private:
 	bool mHasChanged;
 	Vector3 mPosition;
-	Vector3 mRotation;
+	Quaternion mRotation;
 	Vector3 mScale = { 1, 1, 1 };
 
 	Vector3 mLocalPosition;
-	Vector3 mLocalRotation;
+	Quaternion mLocalRotation;
 	Vector3 mLocalScale = { 1, 1, 1 };
 
-	Matrix4x4 mWorldTRS = Matrix4x4::TRS({ 0,0,0 }, { 0,0,0 }, { 1,1,1 });
-	Matrix4x4 mLocalTRS = Matrix4x4::TRS({ 0,0,0 }, { 0,0,0 }, { 1,1,1 });
+	Matrix4x4 mWorldTRS = Matrix4x4::TRS(Vector3(), Quaternion(), Vector3(1));
+	Matrix4x4 mLocalTRS = Matrix4x4::TRS(Vector3(), Quaternion(), Vector3(1));
 	friend class Object;
 	friend struct refl_impl::metadata::type_info__ <Transform>;
 	Transform* mParentTransform;
@@ -64,6 +72,6 @@ private:
 
 REFL_AUTO(type(Transform),
 	field(mPosition, NotifyChange(&Transform::mHasChanged), Spacing(ImVec2(0, 20))),
-	field(mRotation, NotifyChange(&Transform::mHasChanged), ToDeg()),
+	field(mRotation, NotifyChange(&Transform::mHasChanged)),
 	field(mScale, NotifyChange(&Transform::mHasChanged))
 )

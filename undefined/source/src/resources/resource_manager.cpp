@@ -5,6 +5,7 @@
 #include "Resources/model.h"
 #include "Resources/texture.h"
 #include "Resources/shader.h"
+#include "resources/audio.h"
 
 
 void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
@@ -29,28 +30,33 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 			}
 		}
 
-		std::string name = entry.path().string();
+		std::string mName = entry.path().string();
 		std::string mFilename = entry.path().filename().generic_string();
 		std::string parentName = entry.path().parent_path().filename().string();
-		size_t pos = name.find(parentName);
-		std::string newName = name.substr(pos);
+		size_t pos = mName.find(parentName);
+		std::string newName = mName.substr(pos);
 
-		if (name.ends_with(".obj"))
+		if (mName.ends_with(".obj"))
 		{
-			Create<Model>(newName, name.c_str());
+			Create<Model>(newName, mName.c_str());
 		}
 
-		else if (name.ends_with(".png") || name.ends_with(".jpg"))
+		else if (mName.ends_with(".png") || mName.ends_with(".jpg"))
 		{
-			Create<Texture>(newName, name.c_str());
+			Create<Texture>(newName, mName.c_str());
 		}
 
-		else if (name.ends_with(".fs"))
+		else if (mName.ends_with(".wav"))
+		{
+			Create<Audio>(newName, mName.c_str());
+		}
+
+		else if (mName.ends_with(".fs"))
 		{
 			mShader.push_back(entry.path().generic_string());
 		}
 
-		else if (name.ends_with(".vs"))
+		else if (mName.ends_with(".vs"))
 		{
 			if (mShader.size() != 0)
 			{
@@ -60,7 +66,7 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 				if (std::find(mShader.begin(), mShader.end(), fragShaderName) != mShader.end())
 				{
 					mFilename.resize(mFilename.size() - 3);
-					Create<Shader>(mFilename, name.c_str(), fragShaderName.c_str());
+					Create<Shader>(mFilename, mName.c_str(), fragShaderName.c_str());
 					mShader.erase(std::find(mShader.begin(), mShader.end(), fragShaderName));
 				}
 			}
@@ -68,23 +74,23 @@ void ResourceManager::Load(const std::filesystem::path& path, bool recursivity)
 	}
 }
 
-bool ResourceManager::Contains(const std::string& name)
+bool ResourceManager::Contains(const std::string& mName)
 {
-	if (mResources.find(name) != mResources.end())
+	if (mResources.find(mName) != mResources.end())
 	{
 		return true;
 	}
 		
-	Logger::Warning("The resource manager does not contain : {}", name);
+	Logger::Warning("The resource manager does not contain : {}", mName);
 	return false;
 }
 
-void ResourceManager::Unload(const std::string& name)
+void ResourceManager::Unload(const std::string& mName)
 {
-	mResources[name].reset();
-	mResources.erase(name);
+	mResources[mName].reset();
+	mResources.erase(mName);
 
-	Logger::Info("{} unloaded", name);
+	Logger::Info("{} unloaded", mName);
 }
 
 void ResourceManager::UnloadAll()

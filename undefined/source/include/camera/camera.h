@@ -107,7 +107,7 @@ private:
     /// <summary>
     /// Eular angle yaw of the camera
     /// </summary>
-    float mYaw = 90.f;
+    float mYaw = -90.f;
     /// <summary>
     /// Eular angle pitch of the camera
     /// </summary>
@@ -159,4 +159,7 @@ public:
     /// Pointer to the current camera used
     /// </summary>
     static inline Camera* CurrentCamera;
+
+    static inline Vector3 LastPos;
+    static inline Vector3 LastOrientation;
 };

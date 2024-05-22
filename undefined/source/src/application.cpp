@@ -7,8 +7,6 @@
 #include <stb_image/stb_image.h>
 #include <toolbox/calc.h>
 
-#include <Jolt/Jolt.h>
-
 #include "service_locator.h"
 
 #include "wrapper/time.h"
@@ -19,6 +17,8 @@
 #include "resources/resource_manager.h"
 
 #include "world/dir_light.h"
+#include "world/point_light.h"
+#include "world/spot_light.h"
 #include "world/skybox.h"
 
 #include "memory_leak.h"
@@ -30,9 +30,13 @@
 
 #include "reflection/runtime_classes.h"
 
+#include "resources/audio.h"
+#include "audio/sound_buffer.h"
+
+#include "world/player_test.h"
+
 Application::Application()
 {
-    std::cout << JPH::abs(1) << "\n";
     ServiceLocator::Setup();
 
     mWindowManager = ServiceLocator::Get<Window>();
@@ -44,18 +48,16 @@ void Application::Init()
     mWindowManager->Init();
     mRenderer->Init();
 
-    RuntimeClasses::AddType<DirLight>();
-    RuntimeClasses::AddType<ModelRenderer>();
-
+    RuntimeClasses::AddAllClasses();
 
     ResourceManager::Load("../undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
-
     // Callback
     ServiceLocator::SetupCallbacks();
 
     Interface::Init();
     Inspector::Init();
+    mKeyInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
@@ -63,13 +65,23 @@ void Application::Init()
 
     SceneManager::Init();
 
-    SceneManager::ActualScene->AddObject("DirLight")->AddComponent<DirLight>();
+    SceneManager::ActualScene->AddObject("poin")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }
+    ,1.0f, 0.09f, 0.032f);
+
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-    
+
     SceneManager::ActualScene->AddObject(object, "Test Child");
 
-    SceneManager::Start();
+    //SOUND
+    mSoundDevice = SoundDevice::Get();
+
+    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/fazbear.wav"));
+    sound2 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/desert.wav"));
+
+    mSoundSource = new SoundSource;
+    source1 = mSoundSource->CreateSource();
+    source2 = mSoundSource->CreateSource();
 }
 
 void Application::Update()
@@ -81,9 +93,36 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
-    SceneManager::SaveCurrentScene();
-    SceneManager::LoadScene("assets/scenes/test.scene");
+    Logger::Sync();
+    mSoundSource->SetPosition(source1, Vector3());
+    
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
+    {
+        mSoundSource->Play(source1, sound1);
+    }
 
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_C))
+    {
+        mSoundSource->Play(source2, sound2);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_N))
+    {
+        mSoundSource->Resume(source1, sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_V))
+    {
+        mSoundSource->Stop(source1, sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_B))
+    {
+        mSoundSource->Restart(source1, sound1);
+    }
+
+    mSoundDevice->SetPosition(Camera::CurrentCamera == nullptr ? Camera::LastPos : Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);
+    mSoundDevice->SetOrientation(Camera::CurrentCamera == nullptr ? Camera::LastOrientation : Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->LookAt);
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();
@@ -125,7 +164,6 @@ void Application::Update()
 
 void Application::Clear()
 {
-
     SceneManager::Delete();
     delete Camera::CurrentCamera;
     mRenderer->UnUseShader();

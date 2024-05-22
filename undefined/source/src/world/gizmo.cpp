@@ -6,7 +6,7 @@
 
 Gizmo::Gizmo()
 {
-	gizmoWindowFlags = 0;
+	GizmoWindowFlags = 0;
 
     CurrentGizmoMode = ImGuizmo::WORLD;
     CurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -43,24 +43,35 @@ void Gizmo::DrawGizmos(Camera* camera, Transform* transform)
 void Gizmo::ChangeGizmoOperation()
 {
     if (ImGui::RadioButton("Translate", CurrentGizmoOperation == ImGuizmo::TRANSLATE))
+    {
         CurrentGizmoOperation = ImGuizmo::TRANSLATE;
+    }
     ImGui::SameLine();
     if (ImGui::RadioButton("Rotate", CurrentGizmoOperation == ImGuizmo::ROTATE))
+    {
         CurrentGizmoOperation = ImGuizmo::ROTATE;
+    }
     ImGui::SameLine();
     if (ImGui::RadioButton("Scale", CurrentGizmoOperation == ImGuizmo::SCALE))
+    {
         CurrentGizmoOperation = ImGuizmo::SCALE;
+    }
+
     if (ImGui::RadioButton("Local", CurrentGizmoMode == ImGuizmo::LOCAL))
+    {
         CurrentGizmoMode = ImGuizmo::LOCAL;
+    }
     ImGui::SameLine();
     if (ImGui::RadioButton("World", CurrentGizmoMode == ImGuizmo::WORLD))
+    {
         CurrentGizmoMode = ImGuizmo::WORLD;
+    }
 }
 
 void Gizmo::DrawGrid(Camera* camera)
 {
     ImGuiWindow* window = ImGui::GetCurrentWindow();
-    gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
+    GizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
 
     Matrix4x4 view = camera->GetView();
     view = view.Transpose();

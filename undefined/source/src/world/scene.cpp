@@ -6,8 +6,8 @@ Scene::Scene()
 {
 }
 
-Scene::Scene(const std::string& name)
-	: Name(name)
+Scene::Scene(const std::string& mName)
+	: Name(mName)
 {
 }
 
@@ -126,27 +126,27 @@ void Scene::Draw()
 	Skybox::Draw();
 }
 
-Object* Scene::AddObject(const std::string& name)
+Object* Scene::AddObject(const std::string& mName)
 {
-	Object* obj = new Object(name);
+	Object* obj = new Object(mName);
 	Objects.push_back(obj);
 	obj->SetParent(nullptr);
 
 	return obj;
 }
 
-Object* Scene::AddObject(Object* parent, const std::string& name)
+Object* Scene::AddObject(Object* parent, const std::string& mName)
 {
-	Object* obj = new Object(name);
+	Object* obj = new Object(mName);
 	Objects.push_back(obj);
 	obj->SetParent(parent);
 
 	return obj;
 }
 
-Object* Scene::AddObject(Vector3 position, Vector3 rotation, const std::string& name)
+Object* Scene::AddObject(Vector3 position, Vector3 rotation, const std::string& mName)
 {
-	Object* obj = new Object(name);
+	Object* obj = new Object(mName);
 	Objects.push_back(obj);
 	obj->SetParent(nullptr);
 	obj->GameTransform->Position = position;
@@ -155,9 +155,9 @@ Object* Scene::AddObject(Vector3 position, Vector3 rotation, const std::string& 
 	return obj;
 }
 
-Object* Scene::AddObject(Vector3 position, Vector3 rotation, Object* parent, bool world, const std::string& name)
+Object* Scene::AddObject(Vector3 position, Vector3 rotation, Object* parent, bool world, const std::string& mName)
 {
-	Object* obj = new Object(name);
+	Object* obj = new Object(mName);
 	Objects.push_back(obj);
 	obj->SetParent(parent);
 	if (world)
