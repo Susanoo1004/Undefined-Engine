@@ -112,6 +112,8 @@ void Interface::Delete()
 {
     FPSGraph::Delete();
 
+    EditorViewports.clear();
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyPlatformWindows();

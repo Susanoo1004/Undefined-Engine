@@ -22,13 +22,12 @@ public:
 	~PointLight();
 
 	/// <summary>
-	/// Update function from Component which is override
+	/// Draw function from Component which is override
 	/// </summary>
-	void Update() override;
-	/// <summary>
-	/// LateUpdate function from Component which is override
-	/// </summary>
-	void LateUpdate() override;
+	void Draw() override;
+
+	void PostDraw() override;
+
 	/// <summary>
 	/// Get the total number of PointLight
 	/// </summary>

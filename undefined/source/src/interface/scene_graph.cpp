@@ -36,6 +36,12 @@ void SceneGraph::DisplayWindow()
     ImGui::End();
 }
 
+void SceneGraph::Delete()
+{
+    delete mRenamingObject;
+    delete mSelectedObject;
+}
+
 void SceneGraph::DisplayActualScene()
 {
     RightClickObject(Object::mRoot);
@@ -144,7 +150,7 @@ void SceneGraph::ClickSelectObject(Object* object)
         // Time for the travel time of the camera when double clicking to an object 
         mCamTravelTime = 0.4f;
         mLerpCam = true;
-        mBaseCamPos = Camera::CurrentCamera == nullptr ? Camera::LastPos : Camera::CurrentCamera->Eye;
+        mBaseCamPos = Camera::CurrentCamera->Eye;
     }
     if (mLerpCam)
     {

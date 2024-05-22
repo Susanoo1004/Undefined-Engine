@@ -74,4 +74,6 @@ SoundDevice::SoundDevice()
 
 SoundDevice::~SoundDevice()
 {
+	delete mALCDevice;
+	delete mALCContext;
 }

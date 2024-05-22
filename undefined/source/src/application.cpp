@@ -65,8 +65,7 @@ void Application::Init()
 
     SceneManager::Init();
 
-    SceneManager::ActualScene->AddObject("poin")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }
-    ,1.0f, 0.09f, 0.032f);
+    SceneManager::ActualScene->AddObject("point")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }, 1.0f, 0.09f, 0.032f);
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
@@ -165,9 +164,9 @@ void Application::Update()
 
 void Application::Clear()
 {
+    mRenderer->UnUseShader();
     SceneManager::Delete();
     delete Camera::CurrentCamera;
-    mRenderer->UnUseShader();
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
     Interface::Delete();

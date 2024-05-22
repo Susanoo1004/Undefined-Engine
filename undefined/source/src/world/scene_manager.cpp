@@ -102,6 +102,7 @@ void SceneManager::Draw()
 	}
 
 	ActualScene->Draw();
+	ActualScene->PostDraw();
 }
 
 void SceneManager::SaveCurrentScene()

@@ -126,6 +126,27 @@ void Scene::Draw()
 	Skybox::Draw();
 }
 
+UNDEFINED_ENGINE void Scene::PostDraw()
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		if (!Objects[i]->IsEnable())
+		{
+			continue;
+		}
+
+		for (Component* comp : Objects[i]->Components)
+		{
+			if (!comp->IsEnable())
+			{
+				continue;
+			}
+
+			comp->PostDraw();
+		}
+	}
+}
+
 Object* Scene::AddObject(const std::string& mName)
 {
 	Object* obj = new Object(mName);
