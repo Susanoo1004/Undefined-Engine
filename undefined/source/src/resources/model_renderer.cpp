@@ -4,7 +4,14 @@
 
 #include "imgui/imgui.h"
 
+ModelRenderer::ModelRenderer()
+{
+}
+
 void ModelRenderer::Draw()
 {
-	ModelObject->Draw(GameTransform->WorldMatrix());
+	if (ModelObject)
+	{
+		ModelObject->Draw(GameTransform->WorldMatrix());
+	}
 }

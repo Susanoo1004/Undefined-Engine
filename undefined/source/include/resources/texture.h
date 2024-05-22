@@ -3,6 +3,7 @@
 #include <string>
 #include <filesystem>
 #include <array>
+#include <refl.hpp>
 
 #include "resources/resource.h"
 #include "wrapper/renderer.h"
@@ -15,6 +16,7 @@
 class UNDEFINED_ENGINE Texture : public Resource
 {
 public:
+	Texture();
 	/// <summary>
 	/// A Constructor of Texture, creating a blank texture with a width and height given
 	/// </summary>
@@ -37,6 +39,7 @@ public:
 	/// </summary>
 	/// <returns>Return the Texture ID</returns>
 	unsigned int GetID() const;
+
 	/// <summary>
 	/// Set the Texture ID 
 	/// </summary>
@@ -89,3 +92,5 @@ public:
 	/// <returns>Return the ID of the Cubemap</returns>
 	static unsigned int LoadCubeMap(const std::vector<std::string>& faces);
 };
+
+REFL_AUTO(type(Texture, bases<Resource>))

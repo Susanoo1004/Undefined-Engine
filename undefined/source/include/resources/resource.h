@@ -3,6 +3,8 @@
 
 #include "utils/flag.h"
 
+#include <refl.hpp>
+
 /// <summary>
 /// Base Class for all our Resources
 /// </summary>
@@ -23,3 +25,6 @@ public:
 	/// <returns>Return either true if it is valid or false</returns>
 	virtual bool IsValid();
 };
+
+REFL_AUTO(type(Resource)
+);

@@ -6,6 +6,14 @@
 
 #include "engine_debug/logger.h"
 
+Texture::Texture()
+{
+	mRenderer = ServiceLocator::Get<Renderer>();
+
+	mRenderer->GenTexture(1, &mID);
+	mRenderer->BindTexture(mID);
+}
+
 Texture::Texture(const float width, const float height, const int internalFormat, const int format)
 	: mWidth((int)width), mHeight((int)height)
 {

@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <cassert>
+#include <ranges>
 
 #include "resources/resource.h"
 
@@ -21,31 +22,59 @@ public:
 	UNDEFINED_ENGINE static void Load(const std::filesystem::path& path, bool recursivity = false);
 	UNDEFINED_ENGINE static bool Contains(const std::string& mName);
 
+	template<ResourceType T>
+	static std::unordered_map<std::string, std::shared_ptr<T>> GetType()
+	{
+		std::unordered_map<std::string, std::shared_ptr<T>> resource;
+
+		for (std::shared_ptr<Resource>& r : mResources | std::views::values)
+		{
+			std::shared_ptr<T> res = std::dynamic_pointer_cast<T, Resource>(r);
+			if (res)
+			{
+				std::vector<std::string> keys;
+				keys.reserve(mResources.size());
+				std::vector<Resource> vals;
+				vals.reserve(mResources.size());
+
+				for (auto kv : mResources) 
+				{
+					if (kv.second == res)
+					{
+						resource.emplace(kv.first, res);
+					}
+				}
+			}
+		}
+
+		return resource;
+	}
+
 	template<ResourceType Resource, typename... Args>
-	static std::shared_ptr<Resource> Create(const std::string& mName, Args... args)
+	static std::shared_ptr<Resource> Create(const std::string& name, Args... args)
 	{
 		std::shared_ptr<Resource> resource = std::make_shared<Resource>(args...);
 		
-		auto&& p = mResources.try_emplace(mName, resource);
+		auto&& p = mResources.try_emplace(name, resource);
 		if (!p.second)
 		{
 			p.first->second.reset();
 		}
-		mResources.emplace(mName, resource);
+		mResources.emplace(name, resource);
 
-		Logger::Info("{} {} loaded", typeid(Resource).name(), mName);
+		Logger::Info("{} {} loaded", typeid(Resource).name(), name);
 
 		return resource;
 	}
 
 	template<ResourceType Resource>
-	static std::shared_ptr<Resource> Get(const std::string& mName)
+	static std::shared_ptr<Resource> Get(const std::string& name)
 	{
-		auto&& p = mResources.find(mName);
+		auto&& p = mResources.find(name);
 
 		if (p == mResources.end())
 		{
-			Logger::Warning("Invalid resource name : {}", mName);
+			Logger::Warning("Invalid resource name : {}", name);
 			return nullptr;
 		}
 
@@ -53,11 +82,11 @@ public:
 	}
 
 	template<ResourceType Resource>
-	static std::shared_ptr<Resource> Find(const std::string& mName)
+	static std::shared_ptr<Resource> Find(const std::string& name)
 	{
-		if (Contains(mName))
+		if (Contains(name))
 		{
-			return mResources.find(mName);
+			return mResources.find(name);
 		}
 		else
 		{
@@ -65,11 +94,11 @@ public:
 		}
 	}
 
-	static std::string FindName(const std::string& mName)
+	static std::string FindName(const std::string& name)
 	{
-		if (Contains(mName))
+		if (Contains(name))
 		{
-			return mName;
+			return name;
 		}
 		else
 		{
@@ -94,7 +123,7 @@ public:
 	/// Unload a Resource
 	/// </summary>
 	/// <param name="name">: Name of the Resource</param>
-	UNDEFINED_ENGINE static void Unload(const std::string& mName);
+	UNDEFINED_ENGINE static void Unload(const std::string& name);
 	/// <summary>
 	/// Unload all the Resource stored in the Resource Manager
 	/// </summary>

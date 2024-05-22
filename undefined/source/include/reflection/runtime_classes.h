@@ -40,24 +40,28 @@ private:
 template <typename T>
 void RuntimeClasses::AddClass()
 {
-	RuntimeClass info = 
+	if constexpr (Reflection::IsReflectable<T>())
 	{
-		.className = refl::reflect<T>().name.c_str(),
-		.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); },
-		.write = [](void* obj) -> Json::Value { return Reflection::WriteValue<T>(static_cast<T*>(obj)); },
-		.create = []() -> void* { return new T; }
-	};
+		const std::string className = refl::reflect<T>().name.c_str();
+		RuntimeClass info = 
+		{
+			.className = className,
+			.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); },
+			.write = [](void* obj) -> Json::Value { return Reflection::WriteValue<T>(static_cast<T*>(obj)); },
+			.create = []() -> void* { return new T; }
+		};
 
-	if constexpr (!std::is_default_constructible_v<T>)
-	{
-		info.create = []() -> void* { return nullptr; };
+		if constexpr (!std::is_default_constructible_v<T>)
+		{
+			info.create = []() -> void* { return nullptr; };
+		}
+
+		names.push_back(className);
+
+		mHashClasses.emplace(typeid(T).hash_code(), info);
 	}
-
-	std::string name = typeid(T).name();
-
-	name.erase(0, 6);
-
-	names.push_back(name);
-
-	mHashClasses.emplace(typeid(T).hash_code(), info);
+	else
+	{
+		Logger::Debug("{}", typeid(T).name());
+	}
 }
