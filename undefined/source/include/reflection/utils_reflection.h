@@ -80,7 +80,7 @@ namespace Reflection
 	void DisplayToolboxTypes(MemberT* obj, std::string mName);
 
 	template<typename T, typename MemberT, typename DescriptorT>
-	void DisplayOurTypes(MemberT* obj, std::string mName);
+	void DisplayOurTypes(std::shared_ptr<MemberT>* obj, std::string mName);
 
 	template<typename T, typename MemberT, typename DescriptorT>
 	void Attributes(std::string& mName);
@@ -315,13 +315,13 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::DisplayOurTypes(MemberT* obj, std::string name)
+void Reflection::DisplayOurTypes(std::shared_ptr<MemberT>* obj, std::string name)
 {
 	//We check if MemberT (type of the variable we are reflecting) is the same as one of the math toolbox
 	if constexpr (std::is_same_v<Texture, MemberT>)
 	{
 		std::unordered_map<std::string, std::shared_ptr<MemberT>> resource = ResourceManager::GetType<MemberT>();
-		if (ImGui::Button("Change texture"))
+		if (ImGui::Button(name.c_str()))
 		{
 			ImGui::OpenPopup("resource_popup");
 		}
@@ -332,9 +332,9 @@ void Reflection::DisplayOurTypes(MemberT* obj, std::string name)
 		{
 			for (auto kv : resource)
 			{
-				if (ImGui::Selectable(name.c_str()))
+				if (ImGui::Selectable(kv.first.c_str()))
 				{
-					kv.first;
+					*obj = kv.second;
 				}
 			}
 			ImGui::EndPopup();
@@ -387,10 +387,6 @@ void Reflection::DisplayObj(MemberT* obj)
 	{
 		DisplayToolboxTypes<T, MemberT, DescriptorT>(obj, name);
 	}
-	else if constexpr (std::_Is_any_of_v<MemberT, Texture>)
-	{
-		DisplayOurTypes<T, MemberT, DescriptorT>(obj, name);
-	}
 	else if constexpr (Reflection::is_vector_v<MemberT>)
 	{
 		using ListT = typename MemberT::value_type;
@@ -406,8 +402,16 @@ void Reflection::DisplayObj(MemberT* obj)
 	{
 		using TypeT = typename MemberT::element_type;
 
-		//If it's a shared_ptr we reflect every element inside it
-		DisplayObj<MemberT, TypeT, DescriptorT>(obj->get());
+		if constexpr (std::_Is_any_of_v <MemberT, std::shared_ptr<Texture>>)
+		{
+			DisplayOurTypes<T, TypeT, DescriptorT>(obj, name);
+		}
+
+		else
+		{
+			//If it's a shared_ptr we reflect every element inside it
+			DisplayObj<MemberT, TypeT, DescriptorT>(obj->get());
+		}
 	}
 
 	else if constexpr (Reflection::is_pair_v<MemberT>)

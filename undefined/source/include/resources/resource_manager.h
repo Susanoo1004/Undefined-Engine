@@ -34,12 +34,10 @@ public:
 			{
 				std::vector<std::string> keys;
 				keys.reserve(mResources.size());
-				std::vector<Resource> vals;
-				vals.reserve(mResources.size());
 
 				for (auto kv : mResources) 
 				{
-					if (kv.second == res)
+					if (kv.second == r)
 					{
 						resource.emplace(kv.first, res);
 					}
