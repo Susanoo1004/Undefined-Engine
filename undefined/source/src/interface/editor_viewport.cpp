@@ -43,6 +43,13 @@ void EditorViewport::Init()
 	ServiceLocator::Get<Renderer>()->SetQuad(mVBO, mEBO, mVAO);
 }
 
+void EditorViewport::InitButtonTextures()
+{
+	mPlayID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/play.png")->GetID());
+	mStopID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/stop.png")->GetID());
+	mPauseID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/pause.png")->GetID());
+}
+
 void EditorViewport::ShowWindow()
 {
 
@@ -76,7 +83,17 @@ void EditorViewport::ShowWindow()
 		ImGui::EndPopup();
 	}
 
-	SceneGizmo.ChangeGizmoOperation();
+	if (ImGui::BeginTable("TopBar", 2))
+	{
+		ImGui::TableNextColumn();
+		SceneGizmo.ChangeGizmoOperation();
+
+		ImGui::TableNextColumn();
+
+		DisplayPlayButtons();
+
+		ImGui::EndTable();
+	}
 
 	mWidth = ImGui::GetContentRegionAvail().x;
 	mHeight = ImGui::GetContentRegionAvail().y;
@@ -180,6 +197,29 @@ void EditorViewport::SetMouseMinMaxBounds(int& mouseX, int& mouseY, Vector2& vie
 
 	mouseX = (int)mx;
 	mouseY = (int)my;
+}
+
+void EditorViewport::DisplayPlayButtons()
+{
+	if (ImGui::ImageButton("##play", SceneManager::IsScenePlaying ? mStopID : mPlayID, mIconSize))
+	{
+		if (!SceneManager::IsScenePlaying)
+		{
+			SceneManager::Start();
+		}
+		else
+		{
+			SceneManager::Reload();
+		}
+		SceneManager::IsScenePlaying = !SceneManager::IsScenePlaying;
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::ImageButton("##pause", mPauseID, mIconSize, ImVec2(0, 0), ImVec2(1, 1), SceneManager::IsScenePaused ? ImVec4(0.5f, 0.5f, 0.5f, 1) : ImVec4()))
+	{
+		SceneManager::IsScenePaused = !SceneManager::IsScenePaused;
+	}
 }
 
 void EditorViewport::SetIsGizmoUpdated(bool value)

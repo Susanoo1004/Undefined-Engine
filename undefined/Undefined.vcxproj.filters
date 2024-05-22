@@ -145,6 +145,8 @@
     <ClInclude Include="source\include\audio\sound_device.h" />
     <ClInclude Include="source\include\audio\sound_buffer.h" />
     <ClInclude Include="source\include\audio\sound_source.h" />
+    <ClInclude Include="source\include\world\point_light.h" />
+    <ClInclude Include="source\include\world\spot_light.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

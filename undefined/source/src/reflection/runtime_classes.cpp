@@ -7,6 +7,10 @@
 #include "world/spot_light.h"
 
 #include "resources/model_renderer.h"
+
+// TODO: Remove
+#include "world/player_test.h"
+
 #include <ranges>
 
 const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)
@@ -35,6 +39,7 @@ Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
 	{
 		return hashedClass->write(val);
 	}
+	return JSON_USE_NULLREF;
 }
 
 void* RuntimeClasses::CreateClass(std::string name)
@@ -59,4 +64,7 @@ void RuntimeClasses::AddAllClasses()
 
 	//Model
 	AddClass<ModelRenderer>();
+
+	// TODO: Remove
+	AddClass<Player>();
 }

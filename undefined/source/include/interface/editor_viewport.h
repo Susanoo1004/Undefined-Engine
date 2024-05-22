@@ -31,6 +31,7 @@ public:
 	/// Init the editor viewport
 	/// </summary>
 	void Init();
+
 	/// <summary>
 	/// Display the window with the needed inside
 	/// </summary>
@@ -66,6 +67,11 @@ public:
 
 
 private:
+	/// <summary>
+	/// Display the buttons on the topbar (play/stop and pause)
+	/// </summary>
+	void DisplayPlayButtons();
+
 	/// <summary>
 	/// Pointer to the Framebuffer bind to the viewport
 	/// </summary>
@@ -109,6 +115,11 @@ public:
 	/// <param name="value">: New value of mIsGizmoUpdated</param>
 	static void SetIsGizmoUpdated(bool value);
 
+	/// <summary>
+	/// Init the button textures for all Viewport
+	/// </summary>
+	static void InitButtonTextures();
+
 private:
 	/// <summary>
 	/// Number of editor viewport from the beginning
@@ -119,4 +130,9 @@ private:
 	/// Boolean vlaue to know if the gizmos has been drawn and updated
 	/// </summary>
 	static inline bool mIsGizmoUpdated = false;
+
+	static inline ImTextureID mPlayID;
+	static inline ImTextureID mStopID;
+	static inline ImTextureID mPauseID;
+	static inline ImVec2 mIconSize = ImVec2(32.f, 32.f);
 };

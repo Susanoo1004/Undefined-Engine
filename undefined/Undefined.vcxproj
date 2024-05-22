@@ -259,6 +259,8 @@
     <ClInclude Include="source\include\reflection\attributes.h" />
     <ClInclude Include="source\include\interface\editor_viewport.h" />
     <ClInclude Include="source\include\reflection\utils_reflection.h" />
+    <ClInclude Include="source\include\world\point_light.h" />
+    <ClInclude Include="source\include\world\spot_light.h" />
     <ClInclude Include="source\include\wrapper\reflection.h" />
     <ClInclude Include="source\include\resources\material.h" />
     <ClInclude Include="source\include\resources\mesh.h" />

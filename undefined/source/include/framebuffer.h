@@ -24,11 +24,11 @@ public:
 	/// <summary>
 	/// Width of the window
 	/// </summary>
-	unsigned int Width;
+	float Width;
 	/// <summary>
 	/// Height of the window
 	/// </summary>
-	unsigned int Height;
+	float Height;
 
 	/// <summary>
 	/// Framebuffer ID

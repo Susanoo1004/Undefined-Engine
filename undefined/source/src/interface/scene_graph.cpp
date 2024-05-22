@@ -144,7 +144,7 @@ void SceneGraph::ClickSelectObject(Object* object)
         // Time for the travel time of the camera when double clicking to an object 
         mCamTravelTime = 0.4f;
         mLerpCam = true;
-        mBaseCamPos = Camera::CurrentCamera->Eye;
+        mBaseCamPos = Camera::CurrentCamera == nullptr ? Camera::LastPos : Camera::CurrentCamera->Eye;
     }
     if (mLerpCam)
     {

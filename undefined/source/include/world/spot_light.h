@@ -53,5 +53,11 @@ private:
 
 };
 
-REFL_AUTO(type(SpotLight, bases<Light>)
+REFL_AUTO(type(SpotLight, bases<Light>),
+	field(Direction),
+	field(ConstantAttenuation),
+	field(LinearAttenuation),
+	field(QuadraticAttenuation),
+	field(CutOff),
+	field(OuterCutOff)
 );

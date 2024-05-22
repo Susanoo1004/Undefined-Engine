@@ -33,6 +33,8 @@
 #include "resources/audio.h"
 #include "audio/sound_buffer.h"
 
+#include "world/player_test.h"
+
 Application::Application()
 {
     ServiceLocator::Setup();
@@ -70,8 +72,6 @@ void Application::Init()
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
 
     SceneManager::ActualScene->AddObject(object, "Test Child");
-
-    SceneManager::Start();
 
     //SOUND
     mSoundDevice = SoundDevice::Get();
