@@ -7,6 +7,10 @@
 #include "world/spot_light.h"
 
 #include "resources/model_renderer.h"
+
+// TODO: Remove
+#include "world/player_test.h"
+
 #include <ranges>
 
 const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)
@@ -60,4 +64,7 @@ void RuntimeClasses::AddAllClasses()
 
 	//Model
 	AddClass<ModelRenderer>();
+
+	// TODO: Remove
+	AddClass<Player>();
 }

@@ -35,6 +35,13 @@ Scene* SceneManager::CreateScene(const std::string& mName)
 	return newScene;
 }
 
+void SceneManager::Reload()
+{
+	Logger::Debug("Reload scene");
+	//help
+	//load ActualScene
+}
+
 void SceneManager::Start()
 {
 	if (!ActualScene)
@@ -42,7 +49,8 @@ void SceneManager::Start()
 		Logger::Error("No scene loaded");
 		return;
 	}
-
+	// save ActualScene
+	
 	ActualScene->Start();
 }
 
@@ -51,6 +59,24 @@ void SceneManager::GlobalUpdate()
 	if (!ActualScene)
 	{
 		Logger::Error("No scene loaded");
+		return;
+	}
+
+	if (!IsScenePlaying)
+	{
+		while (Time::FixedStep >= 1)
+		{
+			Time::FixedStep--;
+		}
+		return;
+	}
+
+	if (IsScenePaused /*&& !nextFrameButton*/)
+	{
+		while (Time::FixedStep >= 1)
+		{
+			Time::FixedStep--;
+		}
 		return;
 	}
 
