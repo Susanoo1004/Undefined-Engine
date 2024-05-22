@@ -51,6 +51,7 @@ void EditorViewport::ShowWindow()
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
+		ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(true);
 		Camera::CurrentCamera = ViewportCamera;
 	}
 

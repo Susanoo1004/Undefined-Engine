@@ -243,12 +243,7 @@ void ContentBrowser::DisplayWindow()
 
     if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
     {
-        if (Camera::CurrentCamera != nullptr)
-        {
-            Camera::LastPos = Camera::CurrentCamera->Eye;
-            Camera::LastOrientation = Camera::CurrentCamera->LookAt;
-            Camera::CurrentCamera = nullptr;
-        }
+        ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(false);
     }
 
     ContentBrowserHierarchy::Update();
