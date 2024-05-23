@@ -417,10 +417,10 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string mName)
 		Vector3 euler = obj->ToEuler();
 		ImGui::SliderAngle3(mName.c_str(), &euler.x, .1f);
 		Quaternion quat = Quaternion::GetRotationQuaternion(euler);
-		//obj->x = quat.x;
-		//obj->y = quat.y;
-		//obj->z = quat.z;
-		//obj->w = quat.w;
+		obj->x = quat.x;
+		obj->y = quat.y;
+		obj->z = quat.z;
+		obj->w = quat.w;
 	}
 }
 
@@ -611,7 +611,7 @@ void Reflection::DisplayObj(MemberT* obj)
 
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		if (ImGui::CollapsingHeader(typeid(**obj).name()))
+		if (ImGui::CollapsingHeader(typeid(**obj).name(), ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
 		}

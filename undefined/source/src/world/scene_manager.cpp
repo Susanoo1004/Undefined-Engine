@@ -33,9 +33,11 @@ void SceneManager::Delete()
 
 Scene* SceneManager::CreateScene(const std::string& mName)
 {
-	Scene* newScene = new Scene(mName);
-	Scenes.push_back(newScene);
-	return newScene;
+	Object::mRoot->DetachChildren();
+	delete ActualScene;
+
+	ActualScene = new Scene(mName);
+	return ActualScene;
 }
 
 void SceneManager::SetPlay(bool play)
@@ -56,7 +58,7 @@ void SceneManager::Start()
 		return;
 	}
 	// save ActualScene into temp scene (to restart)
-	SceneManager::SaveCurrentScene();
+	SceneManager::SaveTempScene();
 
 	ActualScene->Start();
 }
@@ -127,6 +129,26 @@ void SceneManager::Draw()
 	ActualScene->PostDraw();
 }
 
+void SceneManager::SaveTempScene()
+{
+	if (!ActualScene)
+	{
+		return;
+	}
+
+	Json::Value root;
+
+	for (Object* obj : ActualScene->Objects)
+	{
+		root[std::to_string(obj->mUUID)] = Reflection::WriteObj(obj);
+	}
+
+	std::ofstream file("temp.scene");
+	file << root.toStyledString();
+
+	file.close();
+}
+
 void SceneManager::SaveCurrentScene()
 {
 	if (!ActualScene)
@@ -141,12 +163,12 @@ void SceneManager::SaveCurrentScene()
 		root[std::to_string(obj->mUUID)] = Reflection::WriteObj(obj);
 	}
 
-	std::ofstream file("assets/scenes/test.scene");
-	//if (!ActualScene->Path.string().ends_with(".scene"))
-	//{
-		//ActualScene->Path = "assets/" + ActualScene->Name + ".scene";
-	//}
-	//std::ofstream file(ActualScene->Path);
+	//std::ofstream file("assets/scenes/test.scene");
+	if (!ActualScene->Path.string().ends_with(".scene"))
+	{
+		ActualScene->Path = "assets/" + ActualScene->Name + ".scene";
+	}
+	std::ofstream file(ActualScene->Path);
 	file << root.toStyledString();
 
 	file.close();
@@ -156,7 +178,16 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 {
 	if (!path.string().ends_with(".scene"))
 	{
-		Logger::Error("Can't load scene : {}", path.generic_string());
+		Logger::Error("Can't load scene : {}", path.filename().string());
+		return false;
+	}
+
+	Json::Value root;
+	std::ifstream file(path);
+
+	if (!file.is_open())
+	{
+		Logger::Error("Can't load scene : {}", path.filename().string());
 		return false;
 	}
 
@@ -164,9 +195,8 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 	delete ActualScene;
 
 	ActualScene = new Scene(path.filename().string().erase(path.filename().string().size() - 6));
+	ActualScene->Path = path;
 
-	Json::Value root;
-	std::ifstream file(path);
 	file >> root;
 
 	std::vector<std::string> names = root.getMemberNames();
@@ -191,13 +221,16 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 	}
 
 	file.close();
-	return false;
+	return true;
 }
 
 void SceneManager::Reload()
 {
-	//help
-	//load ActualScene
+	std::filesystem::path path = ActualScene->Path;
+	std::string name = ActualScene->Name;
 
-	SceneManager::LoadScene("assets/scenes/test.scene");
+	SceneManager::LoadScene("temp.scene");
+
+	ActualScene->Path = path;
+	ActualScene->Name = name;
 }

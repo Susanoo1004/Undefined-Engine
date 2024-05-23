@@ -42,7 +42,7 @@ public:
 	static Quaternion FromJPH(const JPH::Quat& q);
 
 	static unsigned int CreateBox(const Vector3& pos, const Quaternion& rot, const Vector3& scale, bool is_static);
-	static unsigned int CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius);
+	static unsigned int CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius, bool is_static);
 
 	static bool IsBodyActive(unsigned int bodyId);
 
@@ -69,6 +69,10 @@ public:
 	static void DestroyBody(unsigned int body_ID);
 
 	static Collider* GetColliderFromID(unsigned int bodyId);
+
+	static void SetBoxShape(uint32_t bodyId, const Vector3& size);
+
+	static void SetCapsuleShape(uint32_t bodyId, float halfSize, float radius);
 
 	static inline JPH::TempAllocatorImpl* TempAllocator;
 

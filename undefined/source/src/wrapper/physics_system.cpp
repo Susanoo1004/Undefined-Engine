@@ -1,4 +1,5 @@
 #include "wrapper/physics_system.h"
+#include "Jolt/Physics/Collision/Shape/BoxShape.h"
 
 #include <cstdarg>
 #include <toolbox/Vector3.h>
@@ -91,22 +92,25 @@ unsigned int PhysicsSystem::CreateBox(const Vector3& pos, const Quaternion& rot,
 {
 	JPH::BodyCreationSettings settings(new JPH::BoxShape(ToJPH(scale/2)), ToJPH(pos), ToJPH(rot), is_static == true ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic, Layers::MOVING);
 
-	settings.mAllowSleeping = false;
+	//settings.mAllowSleeping = false;
 	return BodyInterface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
 }
 
-unsigned int PhysicsSystem::CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius)
+unsigned int PhysicsSystem::CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius, bool is_static)
 {
-	const JPH::CapsuleShapeSettings capsuleSettings(height, radius);
-	const JPH::ShapeSettings::ShapeResult result = capsuleSettings.Create();
+	
+	JPH::BodyCreationSettings settings(new JPH::CapsuleShape(height / 2, radius), ToJPH(pos), ToJPH(rot), is_static == true ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic, Layers::MOVING);
 
-	if (!result.IsValid())
-	{
-		Logger::Error("Couldn't create the capsule");
-		return JPH::BodyID::cInvalidBodyID;
-	}
+	//const JPH::CapsuleShapeSettings capsuleSettings(height, radius);
+	//const JPH::ShapeSettings::ShapeResult result = capsuleSettings.Create();
 
-	JPH::BodyCreationSettings settings(result.Get(), ToJPH(pos), ToJPH(rot), JPH::EMotionType::Dynamic, Layers::MOVING);
+	//if (!result.IsValid())
+	//{
+		//Logger::Error("Couldn't create the capsule");
+		//return JPH::BodyID::cInvalidBodyID;
+	//}
+
+	//JPH::BodyCreationSettings settings(result.Get(), ToJPH(pos), ToJPH(rot), JPH::EMotionType::Dynamic, Layers::MOVING);
 
 	return BodyInterface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
 }
@@ -232,4 +236,14 @@ Collider* PhysicsSystem::GetColliderFromID(unsigned int body_ID)
 		return nullptr;
 
 	return it->second;
+}
+
+void PhysicsSystem::SetBoxShape(uint32_t bodyId, const Vector3& size)
+{
+	BodyInterface->SetShape(JPH::BodyID(bodyId), new JPH::BoxShape(ToJPH(size)), false, JPH::EActivation::Activate);
+}
+
+void PhysicsSystem::SetCapsuleShape(uint32_t bodyId, float halfSize, float radius)
+{
+	BodyInterface->SetShape(JPH::BodyID(bodyId), new JPH::CapsuleShape(halfSize, radius), false, JPH::EActivation::Activate);
 }

@@ -16,9 +16,15 @@ class CapsuleCollider : public Collider
 public:
 	CapsuleCollider();
 	CapsuleCollider(const Vector3& pos, const Quaternion& rot, float height, float radius);
+
+	void Update();
+
 	virtual ~CapsuleCollider();
 
 private:
+	Vector3 mPos;
+	Quaternion mRot;
+
 	float mHeight;
 	float mRadius;
 
@@ -26,6 +32,8 @@ private:
 };
 
 REFL_AUTO(type(CapsuleCollider, bases<Collider>),
+	field(mPos),
+	field(mRot),
 	field(mHeight),
 	field(mRadius)
 );

@@ -1,58 +1,5 @@
 {
-	"13424184237862025354" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "BoxCollider",
-					"Values" : 
-					{
-						"mIsEnable" : true,
-						"mSize" : 
-						{
-							"x" : 100.0,
-							"y" : 2.0,
-							"z" : 100.0
-						}
-					}
-				}
-			],
-			"Name" : "Floor",
-			"mChildrenUUIDs" : null,
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : -2.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"w" : 0.99904823303222656,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.043619383126497269
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 13424184237862025354
-		}
-	},
-	"13642411649515795747" : 
+	"12057601152568742679" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -63,12 +10,12 @@
 					"Type" : "ModelRenderer",
 					"Values" : 
 					{
-						"ModelObject" : "assets/viking_room.obj",
+						"ModelObject" : "assets/dog.obj",
 						"mIsEnable" : true
 					}
 				}
 			],
-			"Name" : "PikingRoom2",
+			"Name" : "Player",
 			"mChildrenUUIDs" : null,
 			"mIsEnable" : true,
 			"mTransform" : 
@@ -78,29 +25,29 @@
 				{
 					"mPosition" : 
 					{
-						"x" : 2.0,
-						"y" : -0.5,
+						"x" : 0.0,
+						"y" : 0.0,
 						"z" : 0.0
 					},
 					"mRotation" : 
 					{
-						"w" : 1.0,
+						"w" : 0.63245552778244019,
 						"x" : 0.0,
 						"y" : 0.0,
 						"z" : 0.0
 					},
 					"mScale" : 
 					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
+						"x" : 0.20000000298023224,
+						"y" : 0.20000000298023224,
+						"z" : 0.20000000298023224
 					}
 				}
 			},
-			"mUUID" : 13642411649515795747
+			"mUUID" : 12057601152568742679
 		}
 	},
-	"16485229276431660349" : 
+	"15609016127099620420" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -121,7 +68,20 @@
 					{
 						"mHeight" : 1.0,
 						"mIsEnable" : true,
-						"mRadius" : 1.0
+						"mPos" : 
+						{
+							"x" : 0.0,
+							"y" : 1.0,
+							"z" : 0.0
+						},
+						"mRadius" : 1.0,
+						"mRot" : 
+						{
+							"w" : 1.0,
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						}
 					}
 				}
 			],
@@ -154,10 +114,10 @@
 					}
 				}
 			},
-			"mUUID" : 16485229276431660349
+			"mUUID" : 15609016127099620420
 		}
 	},
-	"4184410129310034883" : 
+	"18061502265111477203" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -202,10 +162,91 @@
 					}
 				}
 			},
-			"mUUID" : 4184410129310034883
+			"mUUID" : 18061502265111477203
 		}
 	},
-	"9558210162052005123" : 
+	"5132208671986476456" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "BoxCollider",
+					"Values" : 
+					{
+						"mIsEnable" : true,
+						"mIsStatic" : true,
+						"mPos" : 
+						{
+							"x" : 0.0,
+							"y" : -2.0,
+							"z" : 0.0
+						},
+						"mRot" : 
+						{
+							"w" : 1.0,
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mScale" : 
+						{
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mSize" : 
+						{
+							"x" : 100.0,
+							"y" : 2.0,
+							"z" : 100.0
+						}
+					}
+				},
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/ground.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "Floor",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : -2.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 7.1063351631164551,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 100.0,
+						"y" : 1.0,
+						"z" : 100.0
+					}
+				}
+			},
+			"mUUID" : 5132208671986476456
+		}
+	},
+	"6827624297205519386" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -270,7 +311,7 @@
 					}
 				}
 			},
-			"mUUID" : 9558210162052005123
+			"mUUID" : 6827624297205519386
 		}
 	}
 }

@@ -26,6 +26,10 @@ void Collider::OnDisable()
 	PhysicsSystem::BodyInterface->DeactivateBody((JPH::BodyID)BodyID);
 }
 
+void Collider::Update()
+{
+}
+
 void Collider::PreFixedUpdate()
 {
 	if (IsEnable())
