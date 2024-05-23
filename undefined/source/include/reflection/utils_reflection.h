@@ -511,10 +511,10 @@ void Reflection::DisplayObj(MemberT* obj)
 
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		std::string className = typeid(**obj).name();
-		className.erase(0, 6);
-		ImGui::Text("%s", className.c_str());
-		Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
+		if (ImGui::CollapsingHeader(typeid(**obj).name()))
+		{
+			Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
+		}
 	}
 	//Recursivity if there's a reflectable type
 	if constexpr (Reflection::IsReflectable<MemberT>())
