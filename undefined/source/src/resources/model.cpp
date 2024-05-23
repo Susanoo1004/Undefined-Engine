@@ -10,13 +10,11 @@
 
 Model::Model()
 {
-
+    Init();
 }
 
 Model::Model(const char* path)
 {
-    mRenderer = ServiceLocator::Get<Renderer>();
-
 	LoadModel(path);
 
     Init();
@@ -24,6 +22,8 @@ Model::Model(const char* path)
 
 void Model::Init()
 {
+    mRenderer = ServiceLocator::Get<Renderer>();
+
     mRenderer->GenerateVertexArray(1, &mVAO);
     mRenderer->GenerateBuffer(1, &mVBO);
     mRenderer->GenerateBuffer(1, &mEBO);
@@ -44,7 +44,7 @@ void Model::Init()
 
 bool Model::IsValid()
 {
-    return false;
+    return (mVAO != 00 && mVBO != 0 && mEBO != 0);
 }
 
 void Model::Draw(const Matrix4x4& TRS)

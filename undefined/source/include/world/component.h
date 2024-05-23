@@ -16,7 +16,7 @@ public:
 	/// <summary>
 	/// Virtual Destructor of Component which could be override by our components
 	/// </summary>
-	virtual ~Component();
+	virtual ~Component() = 0;
 
 	/// <summary>
 	/// Enable a component
@@ -69,6 +69,11 @@ public:
 	virtual void Draw();
 
 	/// <summary>
+	/// Post Draw 
+	/// </summary>
+	virtual void PostDraw();
+
+	/// <summary>
 	/// Function triggered one time when the component is enabled
 	/// </summary>
 	virtual void OnEnable();
@@ -84,7 +89,6 @@ public:
 	__declspec(property(get = GetTransform, put = SetTransform)) Transform* GameTransform;
 	Transform* GetTransform() const { return mTransform; };
 
-
 private:
 	void SetObject(Object* newObject) { mObject = newObject; };
 	void SetTransform(Transform* newTransform) { mTransform = newTransform; };
@@ -99,8 +103,6 @@ private:
 	/// </summary>
 	Object* mObject;
 
-	friend struct refl_impl::metadata::type_info__ <Component>;
-
 	/// <summary>
 	/// Pointer to the transform of the object that contains the component
 	/// </summary>
@@ -111,6 +113,8 @@ private:
 	/// Object is a friend class from component
 	/// </summary>
 	friend class Object;
+
+	friend struct refl_impl::metadata::type_info__ <Component>;
 };
 
 REFL_AUTO(type(Component),

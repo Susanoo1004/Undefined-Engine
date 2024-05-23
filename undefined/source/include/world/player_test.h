@@ -7,10 +7,7 @@
 class Player : public Script
 {
 public:
-	void Update() override;
-
-private:
-	
+	void FixedUpdate() override;
 };
 
 REFL_AUTO(type(Player, bases<Script>)

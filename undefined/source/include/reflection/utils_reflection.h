@@ -4,13 +4,17 @@
 #include <imgui/imgui_stdlib.h>
 #include <type_traits>
 #include <refl.hpp>
-#include <toolbox/Vector3.h>
+#include <json/json.h>
 #include <toolbox/Quaternion.h>
+#include <toolbox/Vector3.h>
 #include <toolbox/calc.h>
 
 #include "engine_debug/logger.h"
 #include "reflection/attributes.h"
 #include "wrapper/reflection.h"
+#include "resources/resource_manager.h"
+#include "resources/texture.h"
+#include "audio/sound_source.h"
 
 namespace Reflection
 {
@@ -23,6 +27,26 @@ namespace Reflection
 	/// <param name="obj"> object we want to display </param>
 	template<typename T, typename MemberT, typename DescriptorT>
 	void DisplayObj(MemberT* obj);
+
+	/// <summary>
+	/// Value we wish to write into Json string
+	/// </summary>
+	/// <typeparam name="MemberT"> type of the value we want to write </typeparam>
+	/// <param name="val"> value we write </param>
+	template<typename MemberT>
+	Json::Value WriteValue(MemberT* val);
+
+	Json::Value WriteValueWithHash(void* val, size_t hash);
+
+	/// <summary>
+	/// Object we wish to write into Json string
+	/// </summary>
+	/// <typeparam name="T"> type of the object we want to write </typeparam>
+	/// <param name="obj"> object we write </param>
+	template<typename T>
+	Json::Value WriteObj(T* obj);
+
+	//Json::Value WriteObjWithHash(void* val, size_t hash);
 
 	/// <summary>
 	/// Object we wish to reflect
@@ -38,7 +62,7 @@ namespace Reflection
 	/// <param name="obj"> object we want to display </param>
 	/// <param name="hash"> hash code of the class </param>
 	void DisplayWithHash(void* obj, size_t hash);
-
+	
 	/// <summary>
 	/// Display bases types in inspector
 	/// </summary>
@@ -57,53 +81,136 @@ namespace Reflection
 	void DisplayToolboxTypes(MemberT* obj, std::string mName);
 
 	template<typename T, typename MemberT, typename DescriptorT>
+	void DisplayOurTypes(MemberT* obj, std::string name);
+
+	template<typename T, typename MemberT, typename DescriptorT>
+	void DisplayOurTypesSharedPtr(std::shared_ptr<MemberT>* obj, std::string mName);
+
+	template<typename T, typename MemberT, typename DescriptorT>
 	void Attributes(std::string& mName);
+}
+
+template<typename MemberT>
+Json::Value Reflection::WriteValue(MemberT* val)
+{
+	Json::Value root;
+
+	if constexpr (std::_Is_any_of_v<MemberT, bool, std::string> || std::is_integral_v<MemberT> || std::is_floating_point_v<MemberT>)
+	{
+		root = *val;
+	}
+	else if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3, Vector2>)
+	{
+		root["x"] = val->x;
+		root["y"] = val->y;
+		if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3>)
+		{
+			root["z"] = val->z;
+		}
+		if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4>)
+		{
+			root["w"] = val->w;
+		}
+	}
+	else if constexpr (Reflection::is_vector_v<MemberT>)
+	{
+		using ListT = typename MemberT::value_type;
+
+		//If it's a std::vector we reflect every element inside it
+		for (int i = 0; i < val->size(); i++)
+		{
+			root[i] = WriteValue<ListT>(&(*val)[i]);
+		}
+	}
+	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
+	{
+		Reflection::DisplayWithHash(*val, typeid(**val).hash_code());
+	}
+	else if constexpr (Reflection::IsReflectable<MemberT>())
+	{
+		root = Reflection::WriteObj<MemberT>(val);
+	}
+
+	return root;
+}
+
+template<typename T>
+Json::Value Reflection::WriteObj(T* obj)
+{
+	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
+
+	Json::Value root;
+
+	//Lamba that loops for each element we reflect from a class
+	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
+	{
+		//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
+		if constexpr (!Reflection::IsFunction<DescriptorT>())
+		{
+			//MemberT is the type of the element we reflect
+			using MemberT = typename DescriptorT::value_type;
+
+			const char* name = DescriptorT::name.c_str();
+			MemberT value = DescriptorT::get(obj);
+
+			root[name] = WriteValue<MemberT>(&value);
+		}
+	});
+
+	return root;
 }
 
 template<typename T>
 void Reflection::ReflectionObj(T* obj)
 {
-	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
-	//Lamba that loops for each element we reflect from a class
-	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
+	if constexpr (Reflection::IsReflectable<T>())
 	{
-		//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
-		if constexpr (!Reflection::IsFunction<DescriptorT>() &&
-			!HasAttribute<DescriptorT, HideInInspector>())
+		constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
+		//Lamba that loops for each element we reflect from a class
+		Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
 		{
-			//MemberT is the type of the element we reflect
-			using MemberT = typename DescriptorT::value_type;
-
-			//If there's a change we put notify to true
-			if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>() || HasAttribute<DescriptorT, Callback<T>>())
+			//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
+			if constexpr (!Reflection::IsFunction<DescriptorT>() &&
+				!HasAttribute<DescriptorT, HideInInspector>())
 			{
-				const MemberT oldValue = DescriptorT::get(obj);
-				DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
+				//MemberT is the type of the element we reflect
+				using MemberT = typename DescriptorT::value_type;
 
-				if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>())
+				//If there's a change we put notify to true
+				if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>() || HasAttribute<DescriptorT, Callback<T>>())
 				{
-					if (oldValue != DescriptorT::get(obj))
+					const MemberT oldValue = DescriptorT::get(obj);
+					DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
+
+					if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>())
 					{
-						constexpr NotifyChange<T> notify = GetAttribute<DescriptorT, NotifyChange<T>>();
-						obj->*notify.ptr = true;
+						if (oldValue != DescriptorT::get(obj))
+						{
+							constexpr NotifyChange<T> notify = GetAttribute<DescriptorT, NotifyChange<T>>();
+							obj->*notify.ptr = true;
+						}
+					}
+					else if constexpr (HasAttribute<DescriptorT, Callback<T>>())
+					{
+						if (oldValue != DescriptorT::get(obj))
+						{
+							constexpr Callback<T> notify = GetAttribute<DescriptorT, Callback<T>>();
+							(obj->*notify.func)();
+						}
 					}
 				}
-				else if constexpr (HasAttribute<DescriptorT, Callback<T>>())
+
+				else
 				{
-					if (oldValue != DescriptorT::get(obj))
-					{
-						constexpr Callback<T> notify = GetAttribute<DescriptorT, Callback<T>>();
-						(obj->*notify.func)();
-					}
+					DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
 				}
 			}
-
-			else
-			{
-				DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
-			}
-		}
-	});
+		});
+	}
+	else
+	{
+		Logger::Debug("{}", typeid(T).name());
+	}
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
@@ -212,6 +319,85 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string mName)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
+void Reflection::DisplayOurTypes(MemberT* obj, std::string name)
+{
+	if constexpr (std::is_same_v<SoundSource, MemberT>)
+	{
+		std::unordered_map<std::string, std::shared_ptr<MemberT>> resource = ResourceManager::GetType<MemberT>();
+
+		if (ImGui::Button(name.c_str()))
+		{
+			ImGui::OpenPopup("audio_popup");
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::BeginPopup("audio_popup"))
+		{
+			for (auto kv : resource)
+			{
+				if (ImGui::Selectable(kv.first.c_str()))
+				{
+					*obj = kv.second;
+				}
+			}
+		}
+	}
+}
+
+template<typename T, typename MemberT, typename DescriptorT>
+void Reflection::DisplayOurTypesSharedPtr(std::shared_ptr<MemberT>* obj, std::string name)
+{
+	//We check if MemberT (type of the variable we are reflecting) is the same as one of our ResourceTypes
+	if constexpr (std::is_same_v<Texture, MemberT>)
+	{
+		std::unordered_map<std::string, std::shared_ptr<MemberT>> resource = ResourceManager::GetType<MemberT>();
+		if (ImGui::Button(name.c_str()))
+		{
+			ImGui::OpenPopup("resource_popup");
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::BeginPopup("resource_popup"))
+		{
+			for (auto kv : resource)
+			{
+				if (ImGui::Selectable(kv.first.c_str()))
+				{
+					*obj = kv.second;
+				}
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+	if constexpr (std::is_same_v<Model, MemberT>)
+	{
+		std::unordered_map<std::string, std::shared_ptr<MemberT>> resource = ResourceManager::GetType<MemberT>();
+
+		if (ImGui::Button(name.c_str()))
+		{
+			ImGui::OpenPopup("model_popup");
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::BeginPopup("model_popup"))
+		{
+			for (auto kv : resource)
+			{
+				if (ImGui::Selectable(kv.first.c_str()))
+				{
+					*obj = kv.second;
+				}
+			}
+			ImGui::EndPopup();
+		}
+	}
+}
+
+template<typename T, typename MemberT, typename DescriptorT>
 void Reflection::Attributes(std::string& mName)
 {
 	//If the Descriptor has a certain attribute
@@ -234,6 +420,8 @@ void Reflection::Attributes(std::string& mName)
 template<typename T, typename MemberT, typename DescriptorT>
 void Reflection::DisplayObj(MemberT* obj)
 {
+	ImGui::PushID(obj);
+
 	std::string name = DescriptorT::name.c_str();
 
 	Attributes<T, MemberT, DescriptorT>(name);
@@ -255,10 +443,12 @@ void Reflection::DisplayObj(MemberT* obj)
 	{
 		DisplayToolboxTypes<T, MemberT, DescriptorT>(obj, name);
 	}
+	else if constexpr (std::_Is_any_of_v<MemberT, SoundSource>)
+	{
+		DisplayOurTypes<T, MemberT, DescriptorT>(obj, name);
+	}
 	else if constexpr (Reflection::is_vector_v<MemberT>)
 	{
-		ImGui::Text(name.c_str(), obj);
-
 		using ListT = typename MemberT::value_type;
 
 		//If it's a std::vector we reflect every element inside it
@@ -267,13 +457,70 @@ void Reflection::DisplayObj(MemberT* obj)
 			Reflection::DisplayObj<T, ListT, DescriptorT>(&(*obj)[i]);
 		}
 	}
+
+	else if constexpr (Reflection::is_shared_ptr_v<MemberT>)
+	{
+		using TypeT = typename MemberT::element_type;
+
+		if constexpr (std::_Is_any_of_v <MemberT, std::shared_ptr<Texture>>)
+		{
+			DisplayOurTypesSharedPtr<T, TypeT, DescriptorT>(obj, name);
+		}
+
+		else if constexpr (std::_Is_any_of_v <MemberT, std::shared_ptr<Model>>)
+		{
+			if (obj->get() != nullptr)
+			{
+				DisplayObj<MemberT, TypeT, DescriptorT>(obj->get());
+			}
+			DisplayOurTypesSharedPtr<T, TypeT, DescriptorT>(obj, name);
+		}
+
+		else
+		{
+			//If it's a shared_ptr we reflect every element inside it
+			DisplayObj<MemberT, TypeT, DescriptorT>(obj->get());
+		}
+	}
+
+	else if constexpr (Reflection::is_pair_v<MemberT>)
+	{
+		using FirstT = typename MemberT::first_type;
+		using SecondT = typename MemberT::second_type;
+
+		if constexpr (Reflection::is_shared_ptr_v<FirstT>)
+		{
+			using FirstTT = typename FirstT::element_type;
+			ReflectionObj<FirstTT>(obj->first.get());
+		}
+		else
+		{
+			ReflectionObj<FirstT>(obj->first);
+		}
+
+		if constexpr (Reflection::is_shared_ptr_v<SecondT>)
+		{
+			using SecondTT = typename SecondT::element_type;
+			ReflectionObj<SecondTT>(obj->second.get());
+		}
+		else
+		{
+			ReflectionObj<SecondT>(obj->second);
+		}
+	}
+
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
+		if (ImGui::CollapsingHeader(typeid(**obj).name()))
+		{
+			Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
+		}
 	}
 	//Recursivity if there's a reflectable type
 	if constexpr (Reflection::IsReflectable<MemberT>())
 	{
 		ReflectionObj<MemberT>(obj);
 	}
+
+	ImGui::PopID();
 }

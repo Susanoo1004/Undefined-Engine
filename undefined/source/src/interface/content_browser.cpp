@@ -241,6 +241,11 @@ void ContentBrowser::DisplayWindow()
 {
     ImGui::Begin("Content Browser");
 
+    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
+    {
+        ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(false);
+    }
+
     ContentBrowserHierarchy::Update();
     ContentBrowserFolders::Update();
 

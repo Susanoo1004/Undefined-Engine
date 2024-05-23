@@ -12,7 +12,7 @@ Camera::Camera(const float width, const float height)
     : Width(width), Height(height)
 {
     Eye = Vector3(0, 0.5f, -1);
-    LookAt = Vector3(0, 0, 1);
+    LookAt = Vector3(0, 0, -1);
     Up = Vector3(0, 1, 0);
 
     mPerspective = Matrix4x4::ProjectionMatrix(calc::PI / 2, Width / Height, 0.1f, 100.0f);
@@ -62,6 +62,9 @@ void Camera::Update()
 
 void Camera::ProcessInput()
 {
+    if (!CurrentCamera)
+        return;
+
     std::shared_ptr<KeyInput> editorCameraInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
 
     CurrentCamera->mIsMouseForCam = editorCameraInput->GetIsKeyDown(GLFW_MOUSE_BUTTON_RIGHT);
@@ -94,6 +97,9 @@ void Camera::ProcessInput()
 
 void Camera::MouseCallback(GLFWwindow* const window, const double xposIn, const double yposIn)
 {
+    if (!CurrentCamera)
+        return;
+
     InputManager* inputManager = ServiceLocator::Get<InputManager>();
 
     float xpos = static_cast<float>(xposIn);
@@ -143,10 +149,15 @@ void Camera::MouseCallback(GLFWwindow* const window, const double xposIn, const 
     direction.z = sinf((CurrentCamera->mYaw * (calc::PI / 180.f))) * cosf((CurrentCamera->mPitch * (calc::PI / 180.f)));
 
     CurrentCamera->LookAt = direction.Normalized();
+
+    
 }
 
 void Camera::ChangeSpeedCam(GLFWwindow* , double , double yposIn)
 {
+    if (!CurrentCamera)
+        return;
+
     CurrentCamera->mCameraSpeed += calc::Sign((float)yposIn) * 0.0025f;
 
     // verify if camera speed is not negative so that we don't go opposite of where we want

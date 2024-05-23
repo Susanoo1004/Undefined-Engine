@@ -17,6 +17,7 @@ public:
 	UNDEFINED_ENGINE void Update();
 	UNDEFINED_ENGINE void LateUpdate();
 	UNDEFINED_ENGINE void Draw();
+	UNDEFINED_ENGINE void PostDraw();
 
 	UNDEFINED_ENGINE Object* AddObject(const std::string& mName = "Default");
 	UNDEFINED_ENGINE Object* AddObject(Object* parent, const std::string& mName = "Default");
@@ -28,6 +29,8 @@ public:
 	UNDEFINED_ENGINE Object* AddObject(const Object& original, Vector3 position, Vector3 rotation, Object* parent, bool world = true, const std::string& mName = "Default");
 
 	std::string Name = "Default";
+
+	std::filesystem::path Path;
 
 	std::vector<Object*> Objects;
 };

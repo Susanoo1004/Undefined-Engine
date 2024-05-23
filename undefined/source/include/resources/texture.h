@@ -3,6 +3,7 @@
 #include <string>
 #include <filesystem>
 #include <array>
+#include <refl.hpp>
 
 #include "resources/resource.h"
 #include "wrapper/renderer.h"
@@ -15,12 +16,13 @@
 class UNDEFINED_ENGINE Texture : public Resource
 {
 public:
+	Texture();
 	/// <summary>
 	/// A Constructor of Texture, creating a blank texture with a width and height given
 	/// </summary>
 	/// <param name="width">: Width of the texture created</param>
 	/// <param name="height">: Height of the texture created</param>
-	Texture(const unsigned int width, const unsigned int height, const int internalFormat = 0x1908, const int format = 0x1908);
+	Texture(const float width, const float height, const int internalFormat = 0x1908, const int format = 0x1908);
 	/// <summary>
 	/// A Constructor of Texture, creating a texture with an image (e.g : png or jpg)
 	/// </summary>
@@ -37,6 +39,7 @@ public:
 	/// </summary>
 	/// <returns>Return the Texture ID</returns>
 	unsigned int GetID() const;
+
 	/// <summary>
 	/// Set the Texture ID 
 	/// </summary>
@@ -61,7 +64,7 @@ public:
 	/// <summary>
 	/// Pointer for the Texture data
 	/// </summary>
-	const void* Data;
+	const void* Data = nullptr;
 
 private:
 	/// <summary>
@@ -89,3 +92,5 @@ public:
 	/// <returns>Return the ID of the Cubemap</returns>
 	static unsigned int LoadCubeMap(const std::vector<std::string>& faces);
 };
+
+REFL_AUTO(type(Texture, bases<Resource>))

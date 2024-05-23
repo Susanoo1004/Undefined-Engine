@@ -2,6 +2,8 @@
 
 #include "engine_debug/logger.h"
 
-void Player::Update()
+void Player::FixedUpdate()
 {
+	GameTransform->Position += {0, -0.2f, 0};
+	Logger::Debug("{}", GameTransform->Position);
 }

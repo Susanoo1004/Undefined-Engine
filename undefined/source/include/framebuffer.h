@@ -19,16 +19,16 @@ public:
     /// </summary>
     /// <param name="width">: New width of the framebuffer</param>
     /// <param name="height">: New height of the framebuufer</param>
-    void RescaleFramebuffer(unsigned int width, unsigned int height);
+    void RescaleFramebuffer(float width, float height);
 
 	/// <summary>
 	/// Width of the window
 	/// </summary>
-	unsigned int Width;
+	float Width;
 	/// <summary>
 	/// Height of the window
 	/// </summary>
-	unsigned int Height;
+	float Height;
 
 	/// <summary>
 	/// Framebuffer ID
@@ -59,7 +59,7 @@ public:
     /// <param name="height">: Base height of the framebuffer</param>
     /// <returns></returns>
     template <size_t TextureNumber>
-    static Framebuffer* Create(unsigned int width, unsigned int height);
+    static Framebuffer* Create(float width, float height);
 };
 
 #include "framebuffer.inl"

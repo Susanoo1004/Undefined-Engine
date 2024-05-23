@@ -9,6 +9,8 @@
 
 #include "utils/flag.h"
 
+#include <refl.hpp>
+
 /// <summary>
 /// Struct to store the data we usually give to the shader
 /// </summary>
@@ -49,3 +51,5 @@ public:
 	std::vector<unsigned int> Indices;
 };
 
+REFL_AUTO(type(Mesh)
+	);

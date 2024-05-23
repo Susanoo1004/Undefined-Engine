@@ -27,9 +27,9 @@ public:
 	~DirLight();
 
 	/// <summary>
-	/// Update function from Component which is override
+	/// Draw function from Component which is override
 	/// </summary>
-	void Update() override;
+	void Draw() override;
 	/// <summary>
 	/// Get the total number of DirLight
 	/// </summary>
@@ -41,9 +41,8 @@ public:
 	/// </summary>
 	Vector3 Direction;
 
-private:
-	static inline std::vector<DirLight*> mDirLightsArray;
 };
 
-REFL_AUTO(type(DirLight, bases<Light>)
+REFL_AUTO(type(DirLight, bases<Light>),
+	field(Direction)
 );

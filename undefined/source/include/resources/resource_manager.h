@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <cassert>
+#include <ranges>
 
 #include "resources/resource.h"
 
@@ -20,6 +21,32 @@ class ResourceManager
 public:
 	UNDEFINED_ENGINE static void Load(const std::filesystem::path& path, bool recursivity = false);
 	UNDEFINED_ENGINE static bool Contains(const std::string& mName);
+
+	template<ResourceType T>
+	static std::unordered_map<std::string, std::shared_ptr<T>> GetType()
+	{
+		std::unordered_map<std::string, std::shared_ptr<T>> resource;
+
+		for (std::shared_ptr<Resource>& r : mResources | std::views::values)
+		{
+			std::shared_ptr<T> res = std::dynamic_pointer_cast<T, Resource>(r);
+			if (res)
+			{
+				std::vector<std::string> keys;
+				keys.reserve(mResources.size());
+
+				for (auto kv : mResources) 
+				{
+					if (kv.second == r)
+					{
+						resource.emplace(kv.first, res);
+					}
+				}
+			}
+		}
+
+		return resource;
+	}
 
 	template<ResourceType Resource, typename... Args>
 	static std::shared_ptr<Resource> Create(const std::string& mName, Args... args)

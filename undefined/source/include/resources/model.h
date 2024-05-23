@@ -5,6 +5,8 @@
 #include "resources/mesh.h"
 #include "resources/material.h"
 
+#include <refl.hpp>
+
 class Renderer;
 class ModelRenderer;
 
@@ -68,7 +70,7 @@ private:
     /// <summary>
     /// std::vector of a pair composes with a pointer to a Mesh and a pointer to a Material
     /// </summary>
-    std::vector <std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Material>>> mModel;
+    std::vector<std::pair<std::shared_ptr<Mesh>, std::shared_ptr<Material>>> mModel;
 
     /// <summary>
     /// EBO of the model
@@ -93,4 +95,10 @@ private:
     /// ModelRenderer is a friend class from Model
     /// </summary>
     friend class ModelRenderer;
+
+    friend struct refl_impl::metadata::type_info__ <Model>;
 };
+
+REFL_AUTO(type(Model, bases<Resource>),
+    field(mModel)
+);

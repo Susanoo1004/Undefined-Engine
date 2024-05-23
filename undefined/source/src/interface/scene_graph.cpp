@@ -20,6 +20,12 @@ void SceneGraph::DisplayWindow()
     }
 
     ImGui::Begin("Hierarchy");
+
+    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
+    {
+        ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(false);
+    }
+
     if (ImGui::CollapsingHeader(SceneManager::ActualScene->Name.c_str(),
         ImGuiTreeNodeFlags_SpanAvailWidth |
         ImGuiTreeNodeFlags_FramePadding |
@@ -28,6 +34,12 @@ void SceneGraph::DisplayWindow()
     DisplayActualScene();
 
     ImGui::End();
+}
+
+void SceneGraph::Delete()
+{
+    delete mRenamingObject;
+    delete mSelectedObject;
 }
 
 void SceneGraph::DisplayActualScene()

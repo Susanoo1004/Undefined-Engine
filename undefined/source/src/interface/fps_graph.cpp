@@ -6,9 +6,19 @@
 
 #include "utils/utils.h"
 
+#include "camera/camera.h"
+
+#include "service_locator.h"
+
 void FPSGraph::ShowWindow()
 {
     ImGui::Begin("FPS Graph");
+
+    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
+    {
+        ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(false);
+    }
+
     ImGui::Text("Time since launch : %.2f", (float)glfwGetTime());
  
     //Every ImGUI slider 

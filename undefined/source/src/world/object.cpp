@@ -47,6 +47,23 @@ const bool Object::IsEnable() const
 	return mIsEnable;
 }
 
+Component* Object::AddComponent(Component* comp)
+{
+	if (!comp)
+	{
+		Logger::Error("AddComponent(Component* comp) comp is nullptr");
+		return nullptr;
+	}
+
+	comp->GameObject = this;
+	comp->GameTransform = GameTransform;
+
+	Components.push_back(comp);
+	Logger::Info("Component {} added in object {}", typeid(comp).name(), Name);
+
+	return comp;
+}
+
 const Object* Object::GetParent() const
 {
 	if (mParent == mRoot)

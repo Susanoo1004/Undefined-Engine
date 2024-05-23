@@ -7,10 +7,6 @@
 #include <stb_image/stb_image.h>
 #include <toolbox/calc.h>
 
-#include <Jolt/Jolt.h>
-#include <Jolt/RegisterTypes.h>
-#include <Jolt/Core/Factory.h>
-
 #include "service_locator.h"
 
 #include "wrapper/time.h"
@@ -22,6 +18,8 @@
 #include "resources/resource_manager.h"
 
 #include "world/dir_light.h"
+#include "world/point_light.h"
+#include "world/spot_light.h"
 #include "world/skybox.h"
 
 #include "memory_leak.h"
@@ -34,6 +32,11 @@
 #include "interface/inspector.h"
 
 #include "reflection/runtime_classes.h"
+
+#include "resources/audio.h"
+#include "audio/sound_buffer.h"
+
+#include "world/player_test.h"
 
 Application::Application()
 {
@@ -48,26 +51,18 @@ void Application::Init()
     mWindowManager->Init();
     mRenderer->Init();
 
-    std::vector<int> a = { GLFW_KEY_SPACE };
-
-    ServiceLocator::Get<InputManager>()->CreateKeyInput("debug", a);
-
-    //Physics
-    PhysicsSystem::Init();
-
-    RuntimeClasses::AddType<Component>();
-    RuntimeClasses::AddType<Light>();
-    RuntimeClasses::AddType<DirLight>();
-    RuntimeClasses::AddType<ModelRenderer>();
+    RuntimeClasses::AddAllClasses();
 
     ResourceManager::Load("../undefined/resource_manager/", true);
     ResourceManager::Load("assets/", true);
-
     // Callback
     ServiceLocator::SetupCallbacks();
 
+    PhysicsSystem::Init();
+
     Interface::Init();
     Inspector::Init();
+    mKeyInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
 
     Skybox::Setup();
     BaseShader = ResourceManager::Get<Shader>("base_shader");
@@ -75,12 +70,14 @@ void Application::Init()
 
     SceneManager::Init();
 
-    SceneManager::ActualScene->AddObject("DirLight")->AddComponent<DirLight>();
-
-    SceneManager::ActualScene->AddObject("Floor");
-    SceneManager::ActualScene->Objects[1]->GameTransform->Position = Vector3(0, -2, 0);
-    SceneManager::ActualScene->Objects[1]->GameTransform->SetRotation(Vector3(0, 0.f, 5));
-    SceneManager::ActualScene->Objects[1]->AddComponent<BoxCollider>(SceneManager::ActualScene->Objects[1]->GameTransform->GetPosition(), SceneManager::ActualScene->Objects[1]->GameTransform->GetRotationQuat(), Vector3(100.0f, 2.0f, 100.0f), true);
+    SceneManager::ActualScene->AddObject("Point")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }, 1.0f, 0.09f, 0.032f);
+    //SceneManager::ActualScene->AddObject("Dir")->AddComponent<DirLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f });
+    
+    Object* floor = SceneManager::ActualScene->AddObject("Floor");
+    floor->GameTransform->Position = Vector3(0, -2, 0);
+    floor->GameTransform->SetRotation(Vector3(0, 0.f, 5));
+    floor->AddComponent<BoxCollider>(floor->GameTransform->GetPosition(), floor->GameTransform->GetRotationQuat(), Vector3(100.0f, 2.0f, 100.0f), true);
+    
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->GameTransform->Position = Vector3(0, -0.5f, 0);
@@ -91,7 +88,15 @@ void Application::Init()
     sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
     CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
 
-    SceneManager::Start();
+    //SOUND
+    mSoundDevice = SoundDevice::Get();
+
+    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/fazbear.wav"));
+    sound2 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/desert.wav"));
+
+    mSoundSource = new SoundSource;
+    source1 = mSoundSource->CreateSource();
+    source2 = mSoundSource->CreateSource();
 }
 
 void Application::Update()
@@ -103,7 +108,37 @@ void Application::Update()
     Camera::ProcessInput();
     SceneManager::GlobalUpdate();
     Interface::Update();
+    Logger::Sync();
+    mSoundSource->SetPosition(source1, Vector3());
     
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
+    {
+        mSoundSource->Play(source1, sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_C))
+    {
+        mSoundSource->Play(source2, sound2);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_N))
+    {
+        mSoundSource->Resume(source1, sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_V))
+    {
+        mSoundSource->Stop(source1, sound1);
+    }
+
+    if (mKeyInput->GetIsKeyDown(GLFW_KEY_B))
+    {
+        mSoundSource->Restart(source1, sound1);
+    }
+
+    mSoundDevice->SetPosition(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);
+    mSoundDevice->SetOrientation(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->LookAt);
+
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();
@@ -145,10 +180,10 @@ void Application::Update()
 
 void Application::Clear()
 {
+    mRenderer->UnUseShader();
     SceneManager::Delete();
     delete Camera::CurrentCamera;
     PhysicsSystem::Terminate();
-    mRenderer->UnUseShader();
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
     Interface::Delete();

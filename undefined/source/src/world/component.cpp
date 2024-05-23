@@ -49,6 +49,10 @@ void Component::Draw()
 {
 }
 
+void Component::PostDraw()
+{
+}
+
 void Component::OnEnable()
 {
 }

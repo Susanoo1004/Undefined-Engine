@@ -1,6 +1,7 @@
 #pragma once
 
 #include <refl.hpp>
+#include <memory>
 
 namespace Reflection
 {
@@ -37,6 +38,24 @@ namespace Reflection
 
     template <typename T>
     constexpr bool is_vector_v = is_vector<T>::value;
+
+    template <typename T>
+    struct is_pair : public std::false_type {};
+
+    template <typename T, typename A>
+    struct is_pair<std::pair<T, A>> : public std::true_type {};
+
+    template <typename T>
+    constexpr bool is_pair_v = is_pair<T>::value;
+
+    template <typename T>
+    struct is_shared_ptr : public std::false_type {};
+
+    template <typename T>
+    struct is_shared_ptr<std::shared_ptr<T>> : public std::true_type {};
+
+    template <typename T>
+    constexpr bool is_shared_ptr_v = is_shared_ptr<T>::value;
 }
 
 template<typename F, typename ...Ts>
