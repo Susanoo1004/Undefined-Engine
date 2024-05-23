@@ -18,3 +18,6 @@ public:
 	unsigned int BodyID;
 	
 };
+
+REFL_AUTO(type(Collider, bases<Component>)
+);

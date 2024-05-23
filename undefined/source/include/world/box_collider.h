@@ -4,6 +4,8 @@
 #include <Jolt/Physics/PhysicsSettings.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 
+#include <refl.hpp>
+
 #include <toolbox/Quaternion.h>
 
 #include "world/collider.h"
@@ -17,4 +19,11 @@ public:
 
 private:
 	Vector3 mSize;
+	
+	friend struct refl_impl::metadata::type_info__ <BoxCollider>;
 };
+
+
+REFL_AUTO(type(BoxCollider, bases<Collider>),
+	field(mSize)
+);

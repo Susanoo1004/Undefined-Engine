@@ -8,6 +8,9 @@
 
 #include "audio/sound_source.h"
 
+#include "world/capsule_collider.h"
+#include "world/box_collider.h"
+
 #include "resources/model_renderer.h"
 
 // TODO: Remove
@@ -69,4 +72,8 @@ void RuntimeClasses::AddAllClasses()
 	
 	//Audio
 	AddClass<SoundSource>();
+
+	//Physics
+	AddClass<CapsuleCollider>();
+	AddClass<BoxCollider>();
 }

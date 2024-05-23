@@ -49,7 +49,6 @@ void Game::Init()
 void Game::Update()
 {
     SceneManager::GlobalUpdate();
-    Logger::Sync();
     mSoundSource->SetPosition(source1, Vector3());
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))

@@ -330,8 +330,6 @@ void Reflection::DisplayOurTypes(MemberT* obj, std::string name)
 			ImGui::OpenPopup("audio_popup");
 		}
 
-		ImGui::SameLine();
-
 		if (ImGui::BeginPopup("audio_popup"))
 		{
 			for (auto kv : resource)
@@ -357,8 +355,6 @@ void Reflection::DisplayOurTypesSharedPtr(std::shared_ptr<MemberT>* obj, std::st
 			ImGui::OpenPopup("resource_popup");
 		}
 
-		ImGui::SameLine();
-
 		if (ImGui::BeginPopup("resource_popup"))
 		{
 			for (auto kv : resource)
@@ -380,8 +376,6 @@ void Reflection::DisplayOurTypesSharedPtr(std::shared_ptr<MemberT>* obj, std::st
 		{
 			ImGui::OpenPopup("model_popup");
 		}
-
-		ImGui::SameLine();
 
 		if (ImGui::BeginPopup("model_popup"))
 		{
