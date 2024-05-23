@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "wrapper/time.h"
+#include "wrapper/physics_system.h"
 #include "reflection/utils_reflection.h"
 
 void SceneManager::Init()
@@ -86,6 +87,9 @@ void SceneManager::GlobalUpdate()
 	while (Time::FixedStep >= 1)
 	{
 		ActualScene->FixedUpdate();
+		ActualScene->PreFixedUpdate();
+		PhysicsSystem::Update();
+		ActualScene->PostFixedUpdate();
 		Time::FixedStep--;
 	}
 

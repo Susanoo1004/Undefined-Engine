@@ -18,6 +18,7 @@ void Renderer::Init()
     EnableTest(GL_DEPTH_TEST);
 
     RendererDebug::DebugInit();
+    
 }
 
 void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blueBaseColor)

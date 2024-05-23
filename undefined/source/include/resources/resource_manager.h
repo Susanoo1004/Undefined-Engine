@@ -52,30 +52,30 @@ public:
 	}
 
 	template<ResourceType Resource, typename... Args>
-	static std::shared_ptr<Resource> Create(const std::string& name, Args... args)
+	static std::shared_ptr<Resource> Create(const std::string& mName, Args... args)
 	{
 		std::shared_ptr<Resource> resource = std::make_shared<Resource>(args...);
 		
-		auto&& p = mResources.try_emplace(name, resource);
+		auto&& p = mResources.try_emplace(mName, resource);
 		if (!p.second)
 		{
 			p.first->second.reset();
 		}
-		mResources.emplace(name, resource);
+		mResources.emplace(mName, resource);
 
-		Logger::Info("{} {} loaded", typeid(Resource).name(), name);
+		Logger::Info("{} {} loaded", typeid(Resource).name(), mName);
 
 		return resource;
 	}
 
 	template<ResourceType Resource>
-	static std::shared_ptr<Resource> Get(const std::string& name)
+	static std::shared_ptr<Resource> Get(const std::string& mName)
 	{
-		auto&& p = mResources.find(name);
+		auto&& p = mResources.find(mName);
 
 		if (p == mResources.end())
 		{
-			Logger::Warning("Invalid resource name : {}", name);
+			Logger::Warning("Invalid resource name : {}", mName);
 			return nullptr;
 		}
 
@@ -83,11 +83,11 @@ public:
 	}
 
 	template<ResourceType Resource>
-	static std::shared_ptr<Resource> Find(const std::string& name)
+	static std::shared_ptr<Resource> Find(const std::string& mName)
 	{
-		if (Contains(name))
+		if (Contains(mName))
 		{
-			return mResources.find(name);
+			return mResources.find(mName);
 		}
 		else
 		{
@@ -95,11 +95,11 @@ public:
 		}
 	}
 
-	static std::string FindName(const std::string& name)
+	static std::string FindName(const std::string& mName)
 	{
-		if (Contains(name))
+		if (Contains(mName))
 		{
-			return name;
+			return mName;
 		}
 		else
 		{
@@ -124,7 +124,7 @@ public:
 	/// Unload a Resource
 	/// </summary>
 	/// <param name="name">: Name of the Resource</param>
-	UNDEFINED_ENGINE static void Unload(const std::string& name);
+	UNDEFINED_ENGINE static void Unload(const std::string& mName);
 	/// <summary>
 	/// Unload all the Resource stored in the Resource Manager
 	/// </summary>

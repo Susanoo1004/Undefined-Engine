@@ -1,5 +1,4 @@
 #pragma once
-#include "utils/flag.h"
 
 #include <toolbox/Vector3.h>
 #include <toolbox/Matrix4x4.h>
@@ -7,6 +6,8 @@
 #include <refl.hpp>
 
 #include "reflection/attributes.h"
+
+#include "utils/flag.h"
 
 class Transform
 {
@@ -22,13 +23,13 @@ public:
 
 	__declspec(property(get = GetRotation, put = SetRotation)) Vector3 Rotation;
 	UNDEFINED_ENGINE Vector3 GetRotation();
-	UNDEFINED_ENGINE void SetRotation(Vector3 newRotation);
+	UNDEFINED_ENGINE void SetRotation(const Vector3& newRotation);
 	__declspec(property(get = GetRotationRad, put = SetRotationRad)) Vector3 RotationRad;
 	UNDEFINED_ENGINE Vector3 GetRotationRad();
 	UNDEFINED_ENGINE void SetRotationRad(Vector3 newRotationRad);
 	__declspec(property(get = GetRotationQuat, put = SetRotationQuat)) Quaternion RotationQuat;
 	UNDEFINED_ENGINE Quaternion GetRotationQuat();
-	UNDEFINED_ENGINE void SetRotationQuat(Quaternion newRotationQuat);
+	UNDEFINED_ENGINE void SetRotationQuat(const Quaternion& newRotationQuat);
 
 	__declspec(property(get = GetScale, put = SetScale)) Vector3 Scale;
 	UNDEFINED_ENGINE Vector3 GetScale();

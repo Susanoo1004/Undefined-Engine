@@ -10,6 +10,7 @@
 #include "service_locator.h"
 
 #include "wrapper/time.h"
+#include "wrapper/physics_system.h"
 
 #include "resources/texture.h"
 #include "resources/model.h"
@@ -24,6 +25,8 @@
 #include "memory_leak.h"
 
 #include "world/scene_manager.h"
+#include "world/box_collider.h"
+#include "world/capsule_collider.h"
 
 #include "interface/interface.h"
 #include "interface/inspector.h"
@@ -55,6 +58,8 @@ void Application::Init()
     // Callback
     ServiceLocator::SetupCallbacks();
 
+    PhysicsSystem::Init();
+
     Interface::Init();
     Inspector::Init();
     mKeyInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
@@ -65,17 +70,23 @@ void Application::Init()
 
     SceneManager::Init();
 
-    Object* Point = SceneManager::ActualScene->AddObject("Point");
-    Point->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }, 1.0f, 0.09f, 0.032f);
-    Point->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/cube.obj");
-    Point->GameTransform->SetPosition(Vector3(3,0,0));
-
-    //SceneManager::ActualScene->AddObject("Point")->AddComponent<DirLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f });
+    SceneManager::ActualScene->AddObject("Point")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }, 1.0f, 0.09f, 0.032f);
+    //SceneManager::ActualScene->AddObject("Dir")->AddComponent<DirLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f });
+    
+    Object* floor = SceneManager::ActualScene->AddObject("Floor");
+    floor->GameTransform->Position = Vector3(0, -2, 0);
+    floor->GameTransform->SetRotation(Vector3(0, 0.f, 5));
+    floor->AddComponent<BoxCollider>(floor->GameTransform->GetPosition(), floor->GameTransform->GetRotationQuat(), Vector3(100.0f, 2.0f, 100.0f), true);
+    
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
+    object->GameTransform->Position = Vector3(0, -0.5f, 0);
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-
-    SceneManager::ActualScene->AddObject(object, "Test Child");
+    
+    Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
+    sphere->GameTransform->Position = Vector3(0, 1.f, 0);
+    sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
+    CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
 
     //SOUND
     mSoundDevice = SoundDevice::Get();
@@ -167,6 +178,7 @@ void Application::Clear()
     mRenderer->UnUseShader();
     SceneManager::Delete();
     delete Camera::CurrentCamera;
+    PhysicsSystem::Terminate();
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
     Interface::Delete();

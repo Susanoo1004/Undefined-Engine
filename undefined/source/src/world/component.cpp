@@ -25,7 +25,15 @@ void Component::Start()
 {
 }
 
+void Component::PreFixedUpdate()
+{
+}
+
 void Component::FixedUpdate()
+{
+}
+
+void Component::PostFixedUpdate()
 {
 }
 

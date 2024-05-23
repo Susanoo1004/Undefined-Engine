@@ -269,7 +269,7 @@ void Reflection::DisplayStandardTypes(MemberT* obj, std::string mName)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
+void Reflection::DisplayToolboxTypes(MemberT* obj, std::string mName)
 {
 	//We check if MemberT (type of the variable we are reflecting) is the same as one of the math toolbox
 	if constexpr (std::is_same_v<Vector4, MemberT>)
@@ -277,44 +277,44 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 		//If the field has the attribute ToDeg we use a sliderAngle which convert radiants to degrees else we use DragFloat and send radiants directly
 		if constexpr (HasAttribute<DescriptorT, ToDeg>())
 		{
-			ImGui::SliderAngle4(name.c_str(), &obj->x);
+			ImGui::SliderAngle4(mName.c_str(), &obj->x);
 		}
 		else
 		{
-			ImGui::DragFloat4(name.c_str(), &obj->x, .1f);
+			ImGui::DragFloat4(mName.c_str(), &obj->x, .1f);
 		}
 	}
 	else if constexpr (std::is_same_v<Vector3, MemberT>)
 	{
 		if constexpr (HasAttribute<DescriptorT, ToDeg>())
 		{
-			ImGui::SliderAngle3(name.c_str(), &obj->x);
+			ImGui::SliderAngle3(mName.c_str(), &obj->x);
 		}
 		else
 		{
-			ImGui::DragFloat3(name.c_str(), &obj->x, .1f);
+			ImGui::DragFloat3(mName.c_str(), &obj->x, .1f);
 		}
 	}
 	else if constexpr (std::is_same_v<Vector2, MemberT>)
 	{
 		if constexpr (HasAttribute<DescriptorT, ToDeg>())
 		{
-			ImGui::SliderAngle2(name.c_str(), &obj->x);
+			ImGui::SliderAngle2(mName.c_str(), &obj->x);
 		}
 		else
 		{
-			ImGui::DragFloat2(name.c_str(), &obj->x, .1f);
+			ImGui::DragFloat2(mName.c_str(), &obj->x, .1f);
 		}
 	}
 	else if constexpr (std::is_same_v<Quaternion, MemberT>)
 	{
 		Vector3 euler = obj->ToEuler();
-		ImGui::SliderAngle3(name.c_str(), &euler.x, .1f);
+		ImGui::SliderAngle3(mName.c_str(), &euler.x, .1f);
 		Quaternion quat = Quaternion::GetRotationQuaternion(euler);
-		obj->x = quat.x;
-		obj->y = quat.y;
-		obj->z = quat.z;
-		obj->w = quat.w;
+		//obj->x = quat.x;
+		//obj->y = quat.y;
+		//obj->z = quat.z;
+		//obj->w = quat.w;
 	}
 }
 
