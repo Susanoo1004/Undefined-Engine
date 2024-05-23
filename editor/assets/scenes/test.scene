@@ -1,5 +1,88 @@
 {
-	"10189361782582768428" : 
+	"17583277564184805683" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : null,
+			"Name" : "Test Child",
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 17583277564184805683
+		}
+	},
+	"9831267654582162426" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "PikingRoom",
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 9831267654582162426
+		}
+	},
+	"9911249905058887448" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -63,90 +146,7 @@
 					}
 				}
 			},
-			"mUUID" : 10189361782582768428
-		}
-	},
-	"2494684195761236614" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "ModelRenderer",
-					"Values" : 
-					{
-						"mIsEnable" : true
-					}
-				}
-			],
-			"Name" : "PikingRoom",
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"w" : 1.0,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 2494684195761236614
-		}
-	},
-	"7154602094414553277" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : null,
-			"Name" : "Test Child",
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"w" : 1.0,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 7154602094414553277
+			"mUUID" : 9911249905058887448
 		}
 	}
 }

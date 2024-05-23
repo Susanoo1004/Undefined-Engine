@@ -12,6 +12,7 @@ struct RuntimeClass
 
 	std::function<void(void*)> display;
 	std::function<Json::Value(void*)> write;
+	std::function<void*(Json::Value)> read;
 	std::function<void*()> create;
 };
 
@@ -26,10 +27,10 @@ public:
 	static void AddAllClasses();
 
 	static const RuntimeClass* GetHashedClass(size_t hash);
-	static const RuntimeClass* GetHashedClass(std::string name);
 
 	static void Display(void* obj, size_t hash);
 	static Json::Value WriteValue(void* val, size_t hash);
+	static void* ReadObj(Json::Value jsonObj, std::string name);
 	static void* CreateClass(std::string name);
 
 	static inline std::vector<std::string> names;
@@ -46,6 +47,7 @@ void RuntimeClasses::AddClass()
 		.className = refl::reflect<T>().name.c_str(),
 		.display = [](void* obj) -> void { Reflection::ReflectionObj<T>(static_cast<T*>(obj)); },
 		.write = [](void* obj) -> Json::Value { return Reflection::WriteValue<T>(static_cast<T*>(obj)); },
+		.read = [](Json::Value jsonObj) -> void* { return Reflection::ReadObj<T>(jsonObj); },
 		.create = []() -> void* { return new T; }
 	};
 

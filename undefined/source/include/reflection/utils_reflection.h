@@ -50,12 +50,16 @@ namespace Reflection
 	template<typename MemberT>
 	MemberT ReadValue(Json::Value jsonValue);
 
-	/// <summary>
+	void* ReadValueWithName(Json::Value jsonObj, std::string name);
+
+		/// <summary>
 	/// Object we wish to read from Json Value
 	/// </summary>
 	/// <param name="jsonObj"> object we write </param>
 	template<typename T>
-	T ReadObj(Json::Value jsonObj);
+	T* ReadObj(Json::Value jsonObj);
+
+	void* CreateWithName(std::string name);
 
 	/// <summary>
 	/// Object we wish to reflect
@@ -211,19 +215,26 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 	}
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		//root = Reflection::WriteValueWithHash(*val, typeid(**val).hash_code());
 		std::string subJsonType = jsonValue.get("Type", std::string()).asString();
+		Logger::Debug("pointer {}", subJsonType);
 		Json::Value subJsonValue = jsonValue.get("Values", Json::Value());
+		MemberT value = static_cast<MemberT>(ReadValueWithName(subJsonValue, subJsonType));
+		Logger::Debug("fin de pointer {}", subJsonType);
 
-		//ReadWithTypeName()
-		Logger::Debug("pointer {}", typeid(MemberT).name());
-		MemberT value = ReadObj<MemberT>(subJsonValue);
 		return value;
 	}
 	else if constexpr (Reflection::IsReflectable<MemberT>())
 	{
+		std::string subJsonType = jsonValue.get("Type", std::string()).asString();
+		if (subJsonType != ((std::string)(typeid(MemberT).name())).erase(0,6))
+		{
+			return MemberT();
+		}
+
+		Json::Value subJsonValue = jsonValue.get("Values", Json::Value());
+
 		Logger::Debug("{} :", typeid(MemberT).name());
-		MemberT value = ReadObj<MemberT>(jsonValue);
+		MemberT value = *ReadObj<MemberT>(subJsonValue);
 		Logger::Debug("Fin de {}", typeid(MemberT).name());
 		return value;
 	}
@@ -233,13 +244,9 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 }
 
 template <typename T>
-T Reflection::ReadObj(Json::Value jsonObj)
+T* Reflection::ReadObj(Json::Value jsonObj)
 {
-	//void* obj = RuntimeClasses::CreateClass(jsonObj.get("Type", "null").asString());
-
-	//Logger::Debug("{}", typeid(obj).name());
-
-	T obj = T();
+	T* obj = new T();
 	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
 
 	Json::Value jsonValues = jsonObj.get("Values", Json::Value());
@@ -255,7 +262,7 @@ T Reflection::ReadObj(Json::Value jsonObj)
 
 			const char* name = DescriptorT::name.c_str();
 
-			MemberT val = ReadValue<MemberT>(jsonValues.get(name, Json::Value()));
+			DescriptorT::get(obj) = ReadValue<MemberT>(jsonValues.get(name, Json::Value()));
 		}
 	});
 

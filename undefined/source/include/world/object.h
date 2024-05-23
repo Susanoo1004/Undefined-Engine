@@ -73,9 +73,9 @@ public:
 	{
 		for (Component* findComp : Components)
 		{
-			if (Comp* castComp = (Comp*)findComp)
+			if (typeid(*findComp) == typeid(Comp))
 			{
-				return castComp;
+				return (Comp*)findComp;
 			}
 		}
 

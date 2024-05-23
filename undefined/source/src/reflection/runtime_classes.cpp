@@ -25,18 +25,6 @@ const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)
 	return &hashedClass->second;
 }
 
-const RuntimeClass* RuntimeClasses::GetHashedClass(std::string name)
-{
-	for (int i = 0; i < mHashClasses.size(); i++)
-	{
-		if (mHashClasses[i].className == name)
-		{
-			return nullptr/*something, help*/;
-		}
-	}
-	return nullptr;
-}
-
 void RuntimeClasses::Display(void* obj, size_t hash)
 {
 	if (auto hashedClass = GetHashedClass(hash))
@@ -52,6 +40,17 @@ Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
 		return hashedClass->write(val);
 	}
 	return JSON_USE_NULLREF;
+}
+
+void* RuntimeClasses::ReadObj(Json::Value jsonObj, std::string name)
+{
+	for (RuntimeClass c : mHashClasses | std::views::values)
+	{
+		if (c.className == name)
+		{
+			return c.read(jsonObj);
+		}
+	}
 }
 
 void* RuntimeClasses::CreateClass(std::string name)

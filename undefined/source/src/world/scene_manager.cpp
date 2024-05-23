@@ -7,6 +7,8 @@
 #include "wrapper/time.h"
 #include "reflection/utils_reflection.h"
 
+#include "world/point_light.h"
+
 void SceneManager::Init()
 {
 	if (!Object::mRoot)
@@ -148,7 +150,18 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 	std::vector<std::string> names = root.getMemberNames();
 	for (size_t i = 0; i < root.size(); i++)
 	{
-		Reflection::ReadObj<Object>(root.get(names[i], Json::Value()));
+		Object* test = Reflection::ReadObj<Object>(root.get(names[i], Json::Value()));
+		Logger::Debug("");
+
+		Logger::Debug("{}", test->Name);
+		PointLight* comp = test->GetComponent<PointLight>();
+		if (comp)
+		{
+			Logger::Debug("LIIIIIIIGHT");
+			Logger::Debug("{}", comp->Ambient);
+			
+		}
+
 		Logger::Debug("");
 	}
 
