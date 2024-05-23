@@ -4,14 +4,22 @@
 
 CapsuleCollider::CapsuleCollider()
 {
+	BodyID = PhysicsSystem::CreateCapsule(mPos, mRot, mHeight, mRadius);
+
+	PhysicsSystem::ColliderMap.emplace(BodyID, this);
 }
 
 CapsuleCollider::CapsuleCollider(const Vector3& pos, const Quaternion& rot, float height, float radius)
-	: mHeight(height), mRadius(radius)
+	:mPos(pos), mRot(rot), mHeight(height), mRadius(radius)
 {
 	BodyID = PhysicsSystem::CreateCapsule(pos, rot, height, radius);
 
 	PhysicsSystem::ColliderMap.emplace(BodyID, this);
+}
+
+void CapsuleCollider::Update()
+{
+	PhysicsSystem::SetCapsuleShape(BodyID, mHeight, mRadius);
 }
 
 CapsuleCollider::~CapsuleCollider()

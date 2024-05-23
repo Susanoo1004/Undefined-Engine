@@ -12,6 +12,8 @@ public:
 	void OnEnable() override;
 	void OnDisable() override;
 
+	void Update() override;
+
 	void PreFixedUpdate() override;
 	void PostFixedUpdate() override;
 

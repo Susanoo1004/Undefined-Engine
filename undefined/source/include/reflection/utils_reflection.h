@@ -505,7 +505,7 @@ void Reflection::DisplayObj(MemberT* obj)
 
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		if (ImGui::CollapsingHeader(typeid(**obj).name()))
+		if (ImGui::CollapsingHeader(typeid(**obj).name(), ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
 		}

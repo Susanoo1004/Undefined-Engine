@@ -14,18 +14,23 @@ void Game::Init()
 
     Object* floor = SceneManager::ActualScene->AddObject("Floor");
     floor->GameTransform->Position = Vector3(0, -2, 0);
-    floor->GameTransform->SetRotation(Vector3(0, 0.f, 5));
+    floor->GameTransform->Rotation = Vector3(0.0f, 0.0f, 0.0f);
+    floor->GameTransform->Scale = Vector3(100.0f, 1.0f, 100.0f);
     floor->AddComponent<BoxCollider>(floor->GameTransform->GetPosition(), floor->GameTransform->GetRotationQuat(), Vector3(100.0f, 2.0f, 100.0f), true);
+    std::shared_ptr<Model> floorModel = floor->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/ground.obj");
+    floorModel->SetTexture(0, ResourceManager::Get<Texture>("assets/ground.png"));
 
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->GameTransform->Position = Vector3(0, -0.5f, 0);
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
 
-    Object* object2 = SceneManager::ActualScene->AddObject("PikingRoom2");
-    object2->GameTransform->Position = Vector3(2, -0.5f, 0);
-    std::shared_ptr<Model> mode = object2->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-    mode->SetTexture(0, ResourceManager::Get<Texture>("assets/pacman.png"));
+    Object* player = SceneManager::ActualScene->AddObject("Player");
+    player->GameTransform->Position = Vector3(0.0f, 0.0f, 0.0f);
+    player->GameTransform->Rotation = Vector3(0.0f, 90.0f, 90.0f);
+    player->GameTransform->Scale = Vector3(0.2f, 0.2f, 0.2f);
+    std::shared_ptr<Model> mode = player->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/dog.obj");
+    mode->SetTexture(0, ResourceManager::Get<Texture>("assets/dog.jpg"));
 
 
     Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
@@ -36,7 +41,7 @@ void Game::Init()
     //SOUND
     mSoundDevice = SoundDevice::Get();
 
-    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/fazbear.wav"));
+    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/dog_barking.wav"));
     sound2 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/desert.wav"));
 
     mSoundSource = new SoundSource;
@@ -61,19 +66,14 @@ void Game::Update()
         mSoundSource->Play(source2, sound2);
     }
 
-    if (mKeyInput->GetIsKeyDown(GLFW_KEY_N))
-    {
-        mSoundSource->Resume(source1, sound1);
-    }
-
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_V))
     {
-        mSoundSource->Stop(source1, sound1);
+        mSoundSource->Pause(source2, sound2);
     }
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_B))
     {
-        mSoundSource->Restart(source1, sound1);
+        mSoundSource->Resume(source2, sound2);
     }
 
     mSoundDevice->SetPosition(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);

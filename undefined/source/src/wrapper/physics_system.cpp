@@ -1,4 +1,5 @@
 #include "wrapper/physics_system.h"
+#include "Jolt/Physics/Collision/Shape/BoxShape.h"
 
 #include <cstdarg>
 #include <toolbox/Vector3.h>
@@ -228,4 +229,14 @@ Collider* PhysicsSystem::GetColliderFromID(unsigned int body_ID)
 		return nullptr;
 
 	return it->second;
+}
+
+void PhysicsSystem::SetBoxShape(uint32_t bodyId, const Vector3& size)
+{
+	BodyInterface->SetShape(JPH::BodyID(bodyId), new JPH::BoxShape(ToJPH(size)), false, JPH::EActivation::Activate);
+}
+
+void PhysicsSystem::SetCapsuleShape(uint32_t bodyId, float halfSize, float radius)
+{
+	BodyInterface->SetShape(JPH::BodyID(bodyId), new JPH::CapsuleShape(halfSize, radius), false, JPH::EActivation::Activate);
 }

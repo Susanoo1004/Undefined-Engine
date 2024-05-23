@@ -70,6 +70,10 @@ public:
 
 	static Collider* GetColliderFromID(unsigned int bodyId);
 
+	static void SetBoxShape(uint32_t bodyId, const Vector3& size);
+
+	static void SetCapsuleShape(uint32_t bodyId, float halfSize, float radius);
+
 	static inline JPH::TempAllocatorImpl* TempAllocator;
 
 	// We need a job system that will execute physics jobs on multiple threads.
