@@ -4,7 +4,6 @@
 #include <toolbox/Matrix4x4.h>
 #include <toolbox/Vector3.h>
 
-#include "engine_debug/renderer_debug.h"
 #include "wrapper/service_type.h"
 #include "utils/flag.h"
 
@@ -57,6 +56,19 @@ public:
 	/// </summary>
 	/// <param name="target">: MipMap target</param>
 	void GenerateMipMap(unsigned int target);
+	/// <summary>
+	/// Generate a framebuffer
+	/// </summary>
+	/// <param name="framebufferNumber">: Number of framebuffer</param>
+	/// <param name="ID">: New ID of the framebuffer</param>
+	void GenerateFramebuffer(int framebufferNumber, unsigned int* ID);
+
+	/// <summary>
+	/// Generate a renderbuffer
+	/// </summary>
+	/// <param name="renderbufferNumber">: Number of renderbuffer</param>
+	/// <param name="ID">: New ID of the renderbuffer</param>
+	void GenerateRenderbuffer(int renderbufferNumber, unsigned int* ID);
 
 	/// <summary>
 	/// Active the texture given
@@ -70,6 +82,7 @@ public:
 	/// <param name="ID">: Texture ID</param>
 	/// <param name="type">: Texture type (by default : 0x0DE1 = 3553U = GL_TEXTURE_2D)</param>
 	void BindTexture(unsigned int ID, unsigned int type = 0x0DE1);
+
 	/// <summary>
 	/// Bind a Texture to a framebuffer
 	/// </summary>
@@ -111,7 +124,7 @@ public:
 	/// <param name="attachmentIndex">: Which attachment index to read pixels on</param>
 	/// <param name="x">: x pos to read on</param>
 	/// <param name="y">: y pos to read on</param>
-	int ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y);
+	void ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y);
 
 	/// <summary>
 	/// Attribute Pointers of data in the VAO
@@ -161,6 +174,12 @@ public:
 	/// <param name="start">: Start index in the actual array</param>
 	/// <param name="count">: Number of indices</param>
 	void Draw(unsigned int mode, int start, int count);
+	/// <summary>
+	/// Draw the buffers according to the attachements
+	/// </summary>
+	/// <param name="numberOfAttachement">: Number of attachements used</param>
+	/// <param name="attachements">: Array of the attachements</param>
+	void DrawBuffers(int numberOfAttachement, unsigned int* attachements);
 
 	/// <summary>
 	/// Set a shader
@@ -194,35 +213,35 @@ public:
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="value">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, bool value) const;
+	void SetUniform(unsigned int ID, const std::string& mName, bool value) const;
 	/// <summary>
 	/// Set a Uniform in the shader
 	/// </summary>
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="value">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, int value) const;
+	void SetUniform(unsigned int ID, const std::string& mName, int value) const;
 	/// <summary>
 	/// Set a Uniform in the shader
 	/// </summary>
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="value">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, float value) const;
+	void SetUniform(unsigned int ID, const std::string& mName, float value) const;
 	/// <summary>
 	/// Set a Uniform in the shader
 	/// </summary>
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="v">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, const Vector3& v) const;
+	void SetUniform(unsigned int ID, const std::string& mName, const Vector3& v) const;
 	/// <summary>
 	/// Set a Uniform in the shader
 	/// </summary>
 	/// <param name="ID">: Shader ID</param>
 	/// <param name="name">: Name of the Uniform</param>
 	/// <param name="m">: Value of the uniform</param>
-	void SetUniform(unsigned int ID, const std::string& name, const Matrix4x4& m) const;
+	void SetUniform(unsigned int ID, const std::string& mName, const Matrix4x4& m) const;
 
 	/// <summary>
 	/// Delete a Shader
@@ -249,12 +268,25 @@ public:
 	void DeleteTextures(int number, unsigned int* ID);
 
 	/// <summary>
+	/// Set the depth 
+	/// </summary>
+	/// <param name="depth">Depth you want to set(e.g : GL_LEQUAL or GL_LESS)</param>
+	void SetDepth(unsigned int depth);
+
+	/// <summary>
 	/// Set a Quad data in the VBO, EBO, VAO
 	/// </summary>
 	/// <param name="VBO">: VBO</param>
 	/// <param name="EBO">: EBO</param>
 	/// <param name="VAO">: VAO</param>
 	void SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO);
+
+	/// <summary>
+	/// Set a Cube data in the VBO and VAO
+	/// </summary>
+	/// <param name="VBO">: VBO</param>
+	/// <param name="VAO">: VAO</param>
+	void SetCube(unsigned int& VBO, unsigned int& VAO);
 
 	/// <summary>
 	/// Enable the OpenGL Test
@@ -265,9 +297,9 @@ public:
 	void EnableTest(Args... rendererTest);
 
 	/// <summary>
-	/// Instance of our debug Class for our Renderer
+	/// Index of the object selected
 	/// </summary>
-	RendererDebug Debug;
+	int ObjectIndex = -1;
 };
 
 template<class ...Args>

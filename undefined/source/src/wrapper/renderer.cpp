@@ -6,7 +6,10 @@
 #include"resources/texture.h"
 #include"resources/model.h"
 
+#include "engine_debug/renderer_debug.h"
 #include "engine_debug/logger.h"
+
+#include "world/gizmo.h"
 
 void Renderer::Init()
 {
@@ -14,7 +17,8 @@ void Renderer::Init()
     SetClearColor(0, 0, 0);
     EnableTest(GL_DEPTH_TEST);
 
-    Debug.DebugInit();
+    RendererDebug::DebugInit();
+    
 }
 
 void Renderer::SetClearColor(float redBaseColor, float greenBaseColor, float blueBaseColor)
@@ -47,6 +51,16 @@ void Renderer::GenerateMipMap(unsigned int target)
     glGenerateMipmap(target);
 }
 
+void Renderer::GenerateFramebuffer(int framebufferNumber, unsigned int* ID)
+{
+    glGenFramebuffers(framebufferNumber, ID);
+}
+
+void Renderer::GenerateRenderbuffer(int renderbufferNumber, unsigned int* ID)
+{
+    glGenRenderbuffers(renderbufferNumber, ID);
+}
+
 void Renderer::ActiveTexture(unsigned int ID)
 {
     glActiveTexture(ID);
@@ -62,14 +76,11 @@ void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int 
     glFramebufferTexture2D(framebufferTarget, attachement, type, ID, 0);
 }
 
-int Renderer::ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y)
+void Renderer::ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y)
 {
     glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
     glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
-    int pixelData;
-    glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
-
-    return pixelData;
+    glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &ObjectIndex);
 }
 
 void Renderer::BindFramebuffer(unsigned int target, unsigned int framebufferID)
@@ -123,6 +134,11 @@ void Renderer::Draw(unsigned int mode, int size, unsigned int type, const void* 
 void Renderer::Draw(unsigned int mode, int start, int count)
 {
     glDrawArrays(mode, start, count);
+}
+
+void Renderer::DrawBuffers(int numberOfAttachement, unsigned int* attachements)
+{
+    glDrawBuffers(numberOfAttachement, attachements);
 }
 
 unsigned int Renderer::SetShader(int shaderType, const char* vShaderCode)
@@ -180,29 +196,29 @@ void Renderer::LinkShader(unsigned int& ID, unsigned int vertex, unsigned int fr
     }
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, bool value) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, bool value) const
 {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    glUniform1i(glGetUniformLocation(ID, mName.c_str()), (int)value);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, int value) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, int value) const
 {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1i(glGetUniformLocation(ID, mName.c_str()), value);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, float value) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, float value) const
 {
-    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1f(glGetUniformLocation(ID, mName.c_str()), value);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, const Vector3& v) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, const Vector3& v) const
 {
-    glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &v.x);
+    glUniform3fv(glGetUniformLocation(ID, mName.c_str()), 1, &v.x);
 }
 
-void Renderer::SetUniform(unsigned int ID, const std::string& name, const Matrix4x4& m) const
+void Renderer::SetUniform(unsigned int ID, const std::string& mName, const Matrix4x4& m) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, true, &m[0].x);
+    glUniformMatrix4fv(glGetUniformLocation(ID, mName.c_str()), 1, true, &m[0].x);
 }
 
 void Renderer::DeleteShader(unsigned int shader)
@@ -223,6 +239,11 @@ void Renderer::DeleteRenderbuffers(int number, unsigned int* renderbuffersID)
 void Renderer::DeleteTextures(int number, unsigned int* ID)
 {
     glDeleteTextures(number, ID);
+}
+
+void Renderer::SetDepth(unsigned int depth)
+{
+    glDepthFunc(depth);
 }
 
 void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
@@ -266,4 +287,59 @@ void Renderer::SetQuad(unsigned int VBO, unsigned int EBO, unsigned int VAO)
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Renderer::SetCube(unsigned int& VBO, unsigned int& VAO)
+{
+    float CubeVertices[] = {
+        // positions          // texture Coords
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+
+    GenerateVertexArray(1, &VAO);
+    GenerateBuffer(1, &VBO);
+    BindBuffers(VAO, VBO, 0);
+    SetBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices), &CubeVertices, GL_STATIC_DRAW);
+    AttributePointers(0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+    AttributePointers(1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 }

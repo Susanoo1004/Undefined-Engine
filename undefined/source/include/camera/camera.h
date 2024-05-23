@@ -33,6 +33,10 @@ public:
     /// Set this camera as the pointer to the current camera
     /// </summary>
     void SetCurrentCamera();
+    /// <summary>
+    /// Set the View matrix
+    /// </summary>
+    void SetView(const Matrix4x4& viewMatrix);
 
     /// <summary>
     /// Update the camera
@@ -103,7 +107,7 @@ private:
     /// <summary>
     /// Eular angle yaw of the camera
     /// </summary>
-    float mYaw = 90.f;
+    float mYaw = -90.f;
     /// <summary>
     /// Eular angle pitch of the camera
     /// </summary>

@@ -56,7 +56,7 @@ std::shared_ptr<KeyInput> InputManager::GetKeyInput(const std::string& keyInputN
 
 void InputManager::Callbacks()
 {
-	GLFWwindow* mWindowManager = ServiceLocator::Get<Window>()->GetWindowVar();
+	GLFWwindow* mWindowManager = ServiceLocator::Get<Window>()->GetWindowPointer();
 
 	glfwSetKeyCallback(mWindowManager, InputManager::Callback);
 	glfwSetMouseButtonCallback(mWindowManager, InputManager::MouseButtonCallback);

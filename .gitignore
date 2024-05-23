@@ -18,7 +18,6 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod
@@ -446,3 +445,6 @@ editor/Undefined_Engine.lib
 editor/imgui.ini
 !editor/assimp-vc142-mtd.dll
 *.exp
+
+**/bin/**
+**/bin-int/**

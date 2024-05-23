@@ -9,7 +9,7 @@
 struct GLFWwindow;
 
 /// <summary>
-/// Class for our window
+/// Class for the Window
 /// </summary>
 class UNDEFINED_ENGINE Window : public ServiceType
 {
@@ -24,88 +24,89 @@ public:
     ~Window();
 
     /// <summary>
-    /// Initialize the window
+    /// Init the window
     /// </summary>
     void Init();
 
     /// <summary>
-    /// Setup the window library
+    /// setup the Window API
     /// </summary>
-    void SetupWindowLibrary();
+    void SetupWindowAPI();
 
     /// <summary>
-    /// Create a window
+    /// Create a new Window
     /// </summary>
     /// <param name="width">: Width of the window</param>
     /// <param name="height">: Height of the window</param>
-    void CreateWindow(int width, int height);
+    /// <param name="monitor">: monitor used by the Window where you want to fullscreen (by default : nullptr, so no fullscreen)</param>
+    void CreateWindow(int width, int height, GLFWmonitor* monitor = nullptr);
 
     /// <summary>
-    /// Setup the window
+    /// Setup the Window context qnd interval
     /// </summary>
     void SetupWindow();
 
     /// <summary>
-    /// Get the size of the window framebuffer
+    /// Get the Window framebuffer size
     /// </summary>
-    /// <param name="displayWidth">: Variable where the width will be written</param>
-    /// <param name="displayHeight">: Variable where the height will be written</param>
+    /// <param name="displayWidth">: Value where the width will be written</param>
+    /// <param name="displayHeight">: Value where the height will be written</param>
     void GetFramebufferSize(int &displayWidth, int &displayHeight);
 
     /// <summary>
-    /// Get the pointer to the window variable
+    /// Get the GLFWwindow pointer
     /// </summary>
-    /// <returns>Return the pointer to the window variable</returns>
-    GLFWwindow* GetWindowVar();
+    /// <returns>Return the GLFWwindow pointer</returns>
+    GLFWwindow* GetWindowPointer();
 
     /// <summary>
-    /// Check if the window is open
+    /// Checks if the Window is open
     /// </summary>
-    /// <returns>Return either true if it is opne or false</returns>
+    /// <returns>Return either true if it is open or false</returns>
     bool IsWindowOpen();
 
     /// <summary>
-    /// Swap the window buffers
+    /// Swap the buffers
     /// </summary>
     void SwapBuffers();
 
     /// <summary>
-    /// Width of the window
+    /// Width of the Window
     /// </summary>
     int Width = 0;
     /// <summary>
-    /// Height of the window
+    /// Height of the Window
     /// </summary>
     int Height = 0;
 
 private:
     /// <summary>
-    /// Pointer to the GLFW window
+    /// Pointer to the GLFWwindow
     /// </summary>
     GLFWwindow* mWindow;
 
 public:
     /// <summary>
-    /// Callback for the size of the window
+    /// Function for the Window size
     /// </summary>
     /// <param name="width">: New window width</param>
     /// <param name="height">: New window height</param>
     static void WindowSizeCallback(GLFWwindow* , int width, int height);
     /// <summary>
-    /// Window API function to execute the window size callback
+    /// Callback to set the Window size
     /// </summary>
-    /// <param name="window">: Pointer to the window API variable</param>
-    /// <param name="callback">: Callback function used</param>
+    /// <param name="window">: Pointer to the GLFWwindow</param>
+    /// <param name="callback">: Callback function</param>
     static void SetWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback);
     /// <summary>
-    /// Window API function to execute the scroll wheel callback
+    /// Callback to set the scroll wheel value
     /// </summary>
-    /// <param name="window">: Pointer to the window API variable</param>
-    /// <param name="callback">: Callback function used</param>
+    /// <param name="window">: Pointer to the GLFWwindow</param>
+    /// <param name="callback">: Callback function</param>
     static void ScrollWheelCallback(GLFWwindow* window, GLFWscrollfun callback);
 
     /// <summary>
-    /// Function that store all our callbacks
+    /// All our Window callabacks are here
     /// </summary>
     static void Callbacks();
 };

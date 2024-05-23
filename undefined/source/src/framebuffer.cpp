@@ -11,7 +11,7 @@ Framebuffer::~Framebuffer()
 	mRenderer->DeleteRenderbuffers(1, &FBO_ID);
 }
 
-void Framebuffer::RescaleFramebuffer(unsigned int width, unsigned int height)
+void Framebuffer::RescaleFramebuffer(float width, float height)
 {
 	Width = width;
 	Height = height;

@@ -4,6 +4,8 @@
 #include "resources/texture.h"
 #include "resources/shader.h"
 
+#include <refl.hpp>
+
 /// <summary>
 /// Material Class
 /// </summary>
@@ -30,3 +32,7 @@ public:
 	/// </summary>
 	std::shared_ptr<Shader> MatShader;
 };
+
+REFL_AUTO(type(Material, bases<Resource>),
+	field(MatTex)
+	);

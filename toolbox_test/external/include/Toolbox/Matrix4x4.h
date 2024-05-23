@@ -69,15 +69,19 @@ public:
     Matrix4x4& LoadIdentity();
     /// @brief Switches the matrix by its diagonal elements.
     Matrix4x4& Transpose();
+    /// @brief Computes the inverse of the given matrix using the Gauss-Jordan pivot.
     Matrix4x4& Inverse();
+    /// @brief Computes the ortho normal of the given matrix using Gram Schimdt method.
+    Matrix4x4& OrthoNormalise();
 
     /// @brief Switches the given matrix by its diagonal elements.
     [[nodiscard]]
     static Matrix4x4 Transpose(const Matrix4x4& matrix);
-    /// @brief Adds the 'm2' to the right of 'm1'.
     /// @brief Computes the inverse of the given matrix using the Gauss-Jordan pivot.
     [[nodiscard]]
     static Matrix4x4 Inverse(const Matrix4x4& matrix);
+    /// @brief Computes the ortho normal of the given matrix using Gram Schimdt method.
+    static Matrix4x4 OrthoNormalise(const Matrix4x4& matrix);
     /// @brief Creates a 3D translation matrix from the given angle for each of the x, y, and z axis.
     [[nodiscard]]
     static Matrix4x4 TranslationMatrix3D(const Vector3& translation);
@@ -133,11 +137,15 @@ public:
     /// @brief Creates a Translation-Rotation-Scaling (TRS) matrix from the given translation, rotation and scaling.
     [[nodiscard]]
     static Matrix4x4 TRS(const Vector3& translation, const Matrix4x4& rotation, const Vector3& scale);
+    /// @brief Creates a Translation-Rotation-Scaling (TRS) matrix from the given translation, rotation and scaling.
+    [[nodiscard]]
+    static Matrix4x4 TRS(const Vector3& translation, const Quaternion& rotation, const Vector3& scale);
 
     [[nodiscard]]
     Quaternion ToQuaternion() const;
+    Vector3 ToEuler(bool degrees = false) const;
 
-    static Matrix4x4 ViewMatrix(const Vector3& Eye, const Vector3& center, const Vector3& Up);
+    static Matrix4x4 ViewMatrix(const Vector3& eye, const Vector3& center, const Vector3& up);
     static Matrix4x4 ProjectionMatrix(const float fovY, const float aspectRatio, const float zNear, const float zFar);
 
     [[nodiscard]]

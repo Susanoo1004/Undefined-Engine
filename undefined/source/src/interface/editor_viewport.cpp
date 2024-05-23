@@ -6,6 +6,9 @@
 
 #include <vector>
 
+#include "world/scene_manager.h"
+#include "world/gizmo.h"
+
 #include "utils/utils.h"
 
 #include "engine_debug/logger.h"
@@ -16,11 +19,17 @@
 
 #include "interface/interface.h"
 
+
 EditorViewport::EditorViewport(Framebuffer* framebuffer, Camera* camera)
 	: mFramebuffer(framebuffer), ViewportCamera(camera), mShader(ResourceManager::Get<Shader>("viewport_shader"))
 {
 	mEditorNumber++;
 	mID = mEditorNumber;
+
+	if (mEditorNumber == 1)
+	{
+		Camera::CurrentCamera = ViewportCamera;
+	}
 }
 
 EditorViewport::~EditorViewport()
@@ -34,12 +43,21 @@ void EditorViewport::Init()
 	ServiceLocator::Get<Renderer>()->SetQuad(mVBO, mEBO, mVAO);
 }
 
+void EditorViewport::InitButtonTextures()
+{
+	mPlayID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/play.png")->GetID());
+	mStopID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/stop.png")->GetID());
+	mPauseID = Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/pause.png")->GetID());
+}
+
 void EditorViewport::ShowWindow()
 {
-	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str());
+	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.GizmoWindowFlags);
+
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
+		ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(true);
 		Camera::CurrentCamera = ViewportCamera;
 	}
 
@@ -64,6 +82,18 @@ void EditorViewport::ShowWindow()
 		ImGui::EndPopup();
 	}
 
+	if (ImGui::BeginTable("TopBar", 2))
+	{
+		ImGui::TableNextColumn();
+		SceneGizmo.ChangeGizmoOperation();
+
+		ImGui::TableNextColumn();
+
+		DisplayPlayButtons();
+
+		ImGui::EndTable();
+	}
+
 	mWidth = ImGui::GetContentRegionAvail().x;
 	mHeight = ImGui::GetContentRegionAvail().y;
 	ViewportCamera->Width = mWidth;
@@ -76,12 +106,14 @@ void EditorViewport::ShowWindow()
 
 	SetMouseMinMaxBounds(mouseX, mouseY, viewportOffset, viewportSize);
 
-
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && mouseX >= 0 && mouseY >= 0 && 
 		mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 	{
-		int pixelData = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
-		Logger::Debug("Pixel data = {}", pixelData);
+		if (!ImGuizmo::IsOver())
+		{
+			ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
+			Logger::Info("Pixel data = {}", ServiceLocator::Get<Renderer>()->ObjectIndex);
+		}
 	}
 
 	// we get the screen position of the window
@@ -94,7 +126,16 @@ void EditorViewport::ShowWindow()
 		ImVec2(0, 1),
 		ImVec2(1, 0)
 	);
+
+	int objectIndex = ServiceLocator::Get<Renderer>()->ObjectIndex;
 	
+	if (objectIndex >= 0 && !mIsGizmoUpdated && Camera::CurrentCamera == ViewportCamera)
+	{
+		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->ObjectIndex]->GameTransform);
+		mIsGizmoUpdated = true;
+	}
+	
+
 	ImGui::End();
 }
 
@@ -126,11 +167,11 @@ void EditorViewport::RescaleViewport()
 		if (aspect < 1.0f)
 			aspect = mHeight / mWidth;
 
-		result = Matrix4x4::ProjectionMatrix(calc::PI / 2.0f, aspect, 0.1f, 20.0f);
+		result = Matrix4x4::ProjectionMatrix(calc::PI / 2.0f, aspect, 0.1f, 100.0f);
 		ViewportCamera->SetPerspective(result);
 	}
 
-	mFramebuffer->RescaleFramebuffer((unsigned int)mWidth, (unsigned int)mHeight);
+	mFramebuffer->RescaleFramebuffer(mWidth, mHeight);
 
 	// TODO add to Renderer
 	glViewport(0, 0, (GLsizei)mWidth, (GLsizei)mHeight);
@@ -156,4 +197,32 @@ void EditorViewport::SetMouseMinMaxBounds(int& mouseX, int& mouseY, Vector2& vie
 
 	mouseX = (int)mx;
 	mouseY = (int)my;
+}
+
+void EditorViewport::DisplayPlayButtons()
+{
+	if (ImGui::ImageButton("##play", SceneManager::IsScenePlaying ? mStopID : mPlayID, mIconSize))
+	{
+		if (!SceneManager::IsScenePlaying)
+		{
+			SceneManager::Start();
+		}
+		else
+		{
+			SceneManager::Reload();
+		}
+		SceneManager::IsScenePlaying = !SceneManager::IsScenePlaying;
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::ImageButton("##pause", mPauseID, mIconSize, ImVec2(0, 0), ImVec2(1, 1), SceneManager::IsScenePaused ? ImVec4(0.5f, 0.5f, 0.5f, 1) : ImVec4()))
+	{
+		SceneManager::IsScenePaused = !SceneManager::IsScenePaused;
+	}
+}
+
+void EditorViewport::SetIsGizmoUpdated(bool value)
+{
+	mIsGizmoUpdated = value;
 }

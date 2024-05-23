@@ -8,9 +8,12 @@
 #include <vector>
 
 #include "utils/flag.h"
-
+#include "world/scene.h"
 #include "interface/editor_viewport.h"
 
+/// <summary>
+/// A static class to manage the Interface
+/// </summary>
 class Interface
 {
 	STATIC_CLASS(Interface)

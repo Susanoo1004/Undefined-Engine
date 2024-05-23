@@ -1,5 +1,8 @@
 #pragma once
 
+#include "editor.h"
+#include "game.h"
+
 #include "resources/texture.h"
 #include "resources/shader.h"
 
@@ -7,14 +10,9 @@
 
 #include "utils/flag.h"
 
-#include "world/components/dir_light.h"
-
-#include "resources/model.h"
-
-#include "world/scene_manager/scene.h"
-
 class Window;
 class Renderer;
+class Object;
 
 class Application
 {
@@ -26,18 +24,12 @@ public:
 	UNDEFINED_ENGINE void Clear();
 
 	std::shared_ptr<Shader> BaseShader;
-	std::shared_ptr<Shader> skyboxShader;
-	std::shared_ptr<Shader> pickingShader;
 
 	Logger Log;
 
-	// TODO: del
-	Scene ActualScene;
-
 private:
-	unsigned int mVAO = 0, mVBO = 0, mEBO = 0;
-	unsigned int mVertexShader = 0, mFragmentShader = 0, mShaderProgram = 0;
-
+	Editor mEditor;
+	Game mGame;
 	Window* mWindowManager = nullptr;
 	Renderer* mRenderer = nullptr;
 

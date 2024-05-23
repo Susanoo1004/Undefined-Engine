@@ -8,6 +8,11 @@
 
 #include "resources/shader.h"
 
+#include "world/gizmo.h"
+
+/// <summary>
+/// A Class for the Viewport in the Editor
+/// </summary>
 class EditorViewport
 {
 public:
@@ -26,6 +31,7 @@ public:
 	/// Init the editor viewport
 	/// </summary>
 	void Init();
+
 	/// <summary>
 	/// Display the window with the needed inside
 	/// </summary>
@@ -54,7 +60,18 @@ public:
 	/// </summary>
 	Camera* ViewportCamera;
 
+	/// <summary>
+	/// Gizmo for the current scene
+	/// </summary>
+	Gizmo SceneGizmo;
+
+
 private:
+	/// <summary>
+	/// Display the buttons on the topbar (play/stop and pause)
+	/// </summary>
+	void DisplayPlayButtons();
+
 	/// <summary>
 	/// Pointer to the Framebuffer bind to the viewport
 	/// </summary>
@@ -92,9 +109,31 @@ private:
 	/// </summary>
 	float mHeight = 0.f;
 
+public:
+	/// <summary>
+	/// Set mIsGizmoUpdated value
+	/// </summary>
+	/// <param name="value">: New value of mIsGizmoUpdated</param>
+	static void SetIsGizmoUpdated(bool value);
+
+	/// <summary>
+	/// Init the button textures for all Viewport
+	/// </summary>
+	static void InitButtonTextures();
+
 private:
 	/// <summary>
 	/// Number of editor viewport from the beginning
 	/// </summary>
 	static inline int mEditorNumber = 0;
+	
+	/// <summary>
+	/// Boolean vlaue to know if the gizmos has been drawn and updated
+	/// </summary>
+	static inline bool mIsGizmoUpdated = false;
+
+	static inline ImTextureID mPlayID;
+	static inline ImTextureID mStopID;
+	static inline ImTextureID mPauseID;
+	static inline ImVec2 mIconSize = ImVec2(32.f, 32.f);
 };

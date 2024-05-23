@@ -1,0 +1,317 @@
+{
+	"11040872884364677345" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/dog.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "Player",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 0.63245552778244019,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 0.20000000298023224,
+						"y" : 0.20000000298023224,
+						"z" : 0.20000000298023224
+					}
+				}
+			},
+			"mUUID" : 11040872884364677345
+		}
+	},
+	"11201159370938329867" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "PointLight",
+					"Values" : 
+					{
+						"Ambient" : 
+						{
+							"x" : 0.40000000596046448,
+							"y" : 0.40000000596046448,
+							"z" : 0.40000000596046448
+						},
+						"ConstantAttenuation" : 1.0,
+						"Diffuse" : 
+						{
+							"x" : 0.80000001192092896,
+							"y" : 0.80000001192092896,
+							"z" : 0.80000001192092896
+						},
+						"LinearAttenuation" : 0.090000003576278687,
+						"QuadraticAttenuation" : 0.032000001519918442,
+						"Specular" : 
+						{
+							"x" : 0.5,
+							"y" : 0.5,
+							"z" : 0.5
+						},
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "Point",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 11201159370938329867
+		}
+	},
+	"2027115876891179569" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/viking_room.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "PikingRoom",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : -0.5,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 2027115876891179569
+		}
+	},
+	"5111503503628597786" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/sphere.obj",
+						"mIsEnable" : true
+					}
+				},
+				{
+					"Type" : "CapsuleCollider",
+					"Values" : 
+					{
+						"mHeight" : 1.0,
+						"mIsEnable" : true,
+						"mPos" : 
+						{
+							"x" : 0.0,
+							"y" : 1.0,
+							"z" : 0.0
+						},
+						"mRadius" : 1.0,
+						"mRot" : 
+						{
+							"w" : 1.0,
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						}
+					}
+				}
+			],
+			"Name" : "Sphere",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : -2.361579418182373,
+						"y" : 2.4179902076721191,
+						"z" : -0.55718612670898438
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 0.99999809265136719,
+						"z" : 0.99999809265136719
+					}
+				}
+			},
+			"mUUID" : 5111503503628597786
+		}
+	},
+	"6183360229598348058" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "BoxCollider",
+					"Values" : 
+					{
+						"mIsEnable" : true,
+						"mIsStatic" : true,
+						"mPos" : 
+						{
+							"x" : 0.0,
+							"y" : -2.0,
+							"z" : 0.0
+						},
+						"mRot" : 
+						{
+							"w" : 1.0,
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mScale" : 
+						{
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mSize" : 
+						{
+							"x" : 100.0,
+							"y" : 2.0,
+							"z" : 100.0
+						}
+					}
+				},
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/ground.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "Floor",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : -2.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 7.1063351631164551,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 100.0,
+						"y" : 1.0,
+						"z" : 100.0
+					}
+				}
+			},
+			"mUUID" : 6183360229598348058
+		}
+	}
+}

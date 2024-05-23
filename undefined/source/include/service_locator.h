@@ -9,7 +9,7 @@
 #include "utils/flag.h"
 
 /// <summary>
-/// Class for the ServiceLocator to get our services
+/// Service Locator Class to get our Services (e.g : Renderer, InputManager, ...)
 /// </summary>
 class ServiceLocator
 {
@@ -17,21 +17,21 @@ class ServiceLocator
 
 public:
     /// <summary>
-    /// Setup the ServiceLocator
+    /// Setup the Service Locator
     /// </summary>
     UNDEFINED_ENGINE static void Setup();
 
     /// <summary>
-    /// Setup the callbacks of the services
+    /// Setup the Callbacks from the Services
     /// </summary>
     /// <returns></returns>
     UNDEFINED_ENGINE static void SetupCallbacks();
 
     /// <summary>
-    /// Provide to the ServiceLocator a ServiceType
+    /// Provide a Service to the ServiceLocator
     /// </summary>
-    /// <typeparam name="ServiceType">: Type of service you want to provide (e.g : Renderer, Window, ...)</typeparam>
-    /// <param name="p_service">: Pointer to the service you provide</param>
+    /// <typeparam name="ServiceType">: Type of the Service (e.g : Renderer, InputManager, ...)</typeparam>
+    /// <param name="p_service"></param>
     template<typename ServiceType>
     static void Provide(ServiceType* const p_service)
     {
@@ -39,10 +39,10 @@ public:
     }
 
     /// <summary>
-    /// Get a service type stored into the ServiceLocator
+    /// Get a Service
     /// </summary>
-    /// <typeparam name="ServiceType">: Type of service you want to get</typeparam>
-    /// <returns>Return a pointer to the first service off the good type</returns>
+    /// <typeparam name="ServiceType">: Type of the Service (e.g : Renderer, InputManager, ...)</typeparam>
+    /// <returns>Return a pointer to the Service</returns>
     template<typename ServiceType>
     static ServiceType* Get()
     {
@@ -50,13 +50,13 @@ public:
     }
 
     /// <summary>
-    /// Delete all the service from the ServiceLocator
+    /// Delete all the Services in the ServiceLocator
     /// </summary>
     UNDEFINED_ENGINE static void CleanServiceLocator();
 
 private:
     /// <summary>
-    /// std::unordered_map of our services
+    /// Map of the services with the hash_code as the key
     /// </summary>
     UNDEFINED_ENGINE static inline std::unordered_map<size_t, ServiceType*> mServices;
 };

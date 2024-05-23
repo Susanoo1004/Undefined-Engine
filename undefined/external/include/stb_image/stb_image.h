@@ -421,7 +421,7 @@ STBIDEF stbi_uc *stbi_load_from_memory   (stbi_uc           const *buffer, int l
 STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks const *clbk  , void *user, int *x, int *y, int *channels_in_file, int desired_channels);
 
 #ifndef STBI_NO_STDIO
-STBIDEF stbi_uc *stbi_load            (char const *filename, int *x, int *y, int *channels_in_file, int desired_channels);
+STBIDEF stbi_uc *stbi_load            (char const *mFilename, int *x, int *y, int *channels_in_file, int desired_channels);
 STBIDEF stbi_uc *stbi_load_from_file  (FILE *f, int *x, int *y, int *channels_in_file, int desired_channels);
 // for stbi_load_from_file, file pointer is left pointing immediately after image
 #endif
@@ -443,7 +443,7 @@ STBIDEF stbi_us *stbi_load_16_from_memory   (stbi_uc const *buffer, int len, int
 STBIDEF stbi_us *stbi_load_16_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *channels_in_file, int desired_channels);
 
 #ifndef STBI_NO_STDIO
-STBIDEF stbi_us *stbi_load_16          (char const *filename, int *x, int *y, int *channels_in_file, int desired_channels);
+STBIDEF stbi_us *stbi_load_16          (char const *mFilename, int *x, int *y, int *channels_in_file, int desired_channels);
 STBIDEF stbi_us *stbi_load_from_file_16(FILE *f, int *x, int *y, int *channels_in_file, int desired_channels);
 #endif
 
@@ -456,7 +456,7 @@ STBIDEF stbi_us *stbi_load_from_file_16(FILE *f, int *x, int *y, int *channels_i
    STBIDEF float *stbi_loadf_from_callbacks  (stbi_io_callbacks const *clbk, void *user, int *x, int *y,  int *channels_in_file, int desired_channels);
 
    #ifndef STBI_NO_STDIO
-   STBIDEF float *stbi_loadf            (char const *filename, int *x, int *y, int *channels_in_file, int desired_channels);
+   STBIDEF float *stbi_loadf            (char const *mFilename, int *x, int *y, int *channels_in_file, int desired_channels);
    STBIDEF float *stbi_loadf_from_file  (FILE *f, int *x, int *y, int *channels_in_file, int desired_channels);
    #endif
 #endif
@@ -475,7 +475,7 @@ STBIDEF stbi_us *stbi_load_from_file_16(FILE *f, int *x, int *y, int *channels_i
 STBIDEF int    stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *user);
 STBIDEF int    stbi_is_hdr_from_memory(stbi_uc const *buffer, int len);
 #ifndef STBI_NO_STDIO
-STBIDEF int      stbi_is_hdr          (char const *filename);
+STBIDEF int      stbi_is_hdr          (char const *mFilename);
 STBIDEF int      stbi_is_hdr_from_file(FILE *f);
 #endif // STBI_NO_STDIO
 
@@ -494,9 +494,9 @@ STBIDEF int      stbi_is_16_bit_from_memory(stbi_uc const *buffer, int len);
 STBIDEF int      stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *clbk, void *user);
 
 #ifndef STBI_NO_STDIO
-STBIDEF int      stbi_info               (char const *filename,     int *x, int *y, int *comp);
+STBIDEF int      stbi_info               (char const *mFilename,     int *x, int *y, int *comp);
 STBIDEF int      stbi_info_from_file     (FILE *f,                  int *x, int *y, int *comp);
-STBIDEF int      stbi_is_16_bit          (char const *filename);
+STBIDEF int      stbi_is_16_bit          (char const *mFilename);
 STBIDEF int      stbi_is_16_bit_from_file(FILE *f);
 #endif
 
@@ -745,7 +745,7 @@ static int stbi__cpuid3(void)
 }
 #endif
 
-#define STBI_SIMD_ALIGN(type, name) __declspec(align(16)) type name
+#define STBI_SIMD_ALIGN(type, mName) __declspec(align(16)) type mName
 
 #if !defined(STBI_NO_JPEG) && defined(STBI_SSE2)
 static int stbi__sse2_available(void)
@@ -756,7 +756,7 @@ static int stbi__sse2_available(void)
 #endif
 
 #else // assume GCC-style if not VC++
-#define STBI_SIMD_ALIGN(type, name) type name __attribute__((aligned(16)))
+#define STBI_SIMD_ALIGN(type, mName) type mName __attribute__((aligned(16)))
 
 #if !defined(STBI_NO_JPEG) && defined(STBI_SSE2)
 static int stbi__sse2_available(void)
@@ -1314,7 +1314,7 @@ STBIDEF int stbi_convert_wchar_to_utf8(char *buffer, size_t bufferlen, const wch
 }
 #endif
 
-static FILE *stbi__fopen(char const *filename, char const *mode)
+static FILE *stbi__fopen(char const *mFilename, char const *mode)
 {
    FILE *f;
 #if defined(_WIN32) && defined(STBI_WINDOWS_UTF8)
@@ -1334,7 +1334,7 @@ static FILE *stbi__fopen(char const *filename, char const *mode)
 #endif
 
 #elif defined(_MSC_VER) && _MSC_VER >= 1400
-   if (0 != fopen_s(&f, filename, mode))
+   if (0 != fopen_s(&f, mFilename, mode))
       f=0;
 #else
    f = fopen(filename, mode);
@@ -1343,9 +1343,9 @@ static FILE *stbi__fopen(char const *filename, char const *mode)
 }
 
 
-STBIDEF stbi_uc *stbi_load(char const *filename, int *x, int *y, int *comp, int req_comp)
+STBIDEF stbi_uc *stbi_load(char const *mFilename, int *x, int *y, int *comp, int req_comp)
 {
-   FILE *f = stbi__fopen(filename, "rb");
+   FILE *f = stbi__fopen(mFilename, "rb");
    unsigned char *result;
    if (!f) return stbi__errpuc("can't fopen", "Unable to open file");
    result = stbi_load_from_file(f,x,y,comp,req_comp);
@@ -1379,9 +1379,9 @@ STBIDEF stbi__uint16 *stbi_load_from_file_16(FILE *f, int *x, int *y, int *comp,
    return result;
 }
 
-STBIDEF stbi_us *stbi_load_16(char const *filename, int *x, int *y, int *comp, int req_comp)
+STBIDEF stbi_us *stbi_load_16(char const *mFilename, int *x, int *y, int *comp, int req_comp)
 {
-   FILE *f = stbi__fopen(filename, "rb");
+   FILE *f = stbi__fopen(mFilename, "rb");
    stbi__uint16 *result;
    if (!f) return (stbi_us *) stbi__errpuc("can't fopen", "Unable to open file");
    result = stbi_load_from_file_16(f,x,y,comp,req_comp);
@@ -1470,10 +1470,10 @@ STBIDEF float *stbi_loadf_from_callbacks(stbi_io_callbacks const *clbk, void *us
 }
 
 #ifndef STBI_NO_STDIO
-STBIDEF float *stbi_loadf(char const *filename, int *x, int *y, int *comp, int req_comp)
+STBIDEF float *stbi_loadf(char const *mFilename, int *x, int *y, int *comp, int req_comp)
 {
    float *result;
-   FILE *f = stbi__fopen(filename, "rb");
+   FILE *f = stbi__fopen(mFilename, "rb");
    if (!f) return stbi__errpf("can't fopen", "Unable to open file");
    result = stbi_loadf_from_file(f,x,y,comp,req_comp);
    fclose(f);
@@ -1508,9 +1508,9 @@ STBIDEF int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len)
 }
 
 #ifndef STBI_NO_STDIO
-STBIDEF int      stbi_is_hdr          (char const *filename)
+STBIDEF int      stbi_is_hdr          (char const *mFilename)
 {
-   FILE *f = stbi__fopen(filename, "rb");
+   FILE *f = stbi__fopen(mFilename, "rb");
    int result=0;
    if (f) {
       result = stbi_is_hdr_from_file(f);
@@ -7597,9 +7597,9 @@ static int stbi__is_16_main(stbi__context *s)
 }
 
 #ifndef STBI_NO_STDIO
-STBIDEF int stbi_info(char const *filename, int *x, int *y, int *comp)
+STBIDEF int stbi_info(char const *mFilename, int *x, int *y, int *comp)
 {
-    FILE *f = stbi__fopen(filename, "rb");
+    FILE *f = stbi__fopen(mFilename, "rb");
     int result;
     if (!f) return stbi__err("can't fopen", "Unable to open file");
     result = stbi_info_from_file(f, x, y, comp);
@@ -7618,9 +7618,9 @@ STBIDEF int stbi_info_from_file(FILE *f, int *x, int *y, int *comp)
    return r;
 }
 
-STBIDEF int stbi_is_16_bit(char const *filename)
+STBIDEF int stbi_is_16_bit(char const *mFilename)
 {
-    FILE *f = stbi__fopen(filename, "rb");
+    FILE *f = stbi__fopen(mFilename, "rb");
     int result;
     if (!f) return stbi__err("can't fopen", "Unable to open file");
     result = stbi_is_16_bit_from_file(f);

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "world/components/component.h"
+#include "world/component.h"
+#include "resources/model.h"
 
-class Model;
+#include <refl.hpp>
 
 /// <summary>
 /// Class for ModelRenderer that draw the model
@@ -10,6 +11,8 @@ class Model;
 class ModelRenderer : public Component
 {
 public:
+	ModelRenderer();
+
 	/// <summary>
 	/// Draw the model
 	/// </summary>
@@ -20,3 +23,7 @@ public:
 	/// </summary>
 	std::shared_ptr<Model> ModelObject;
 };
+ 
+REFL_AUTO(type(ModelRenderer, bases<Component>),
+	field(ModelObject)
+);
