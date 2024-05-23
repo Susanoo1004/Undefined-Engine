@@ -52,7 +52,6 @@ void EditorViewport::InitButtonTextures()
 
 void EditorViewport::ShowWindow()
 {
-
 	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.GizmoWindowFlags);
 
 
@@ -112,8 +111,8 @@ void EditorViewport::ShowWindow()
 	{
 		if (!ImGuizmo::IsOver())
 		{
-			int ObjectIndex = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
-			Logger::Info("Pixel data = {}", ObjectIndex);
+			ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
+			Logger::Info("Pixel data = {}", ServiceLocator::Get<Renderer>()->ObjectIndex);
 		}
 	}
 
@@ -129,12 +128,13 @@ void EditorViewport::ShowWindow()
 	);
 
 	int objectIndex = ServiceLocator::Get<Renderer>()->ObjectIndex;
-
+	
 	if (objectIndex >= 0 && !mIsGizmoUpdated && Camera::CurrentCamera == ViewportCamera)
 	{
 		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->ObjectIndex]->GameTransform);
 		mIsGizmoUpdated = true;
 	}
+	
 
 	ImGui::End();
 }

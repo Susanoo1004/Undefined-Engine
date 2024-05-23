@@ -116,7 +116,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;JPH_SHARED_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>source/include;</AdditionalIncludeDirectories>
@@ -140,7 +140,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;UNDEFINED_EXPORT;TOOLBOX_EXPORT;JPH_SHARED_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>source/include;</AdditionalIncludeDirectories>
@@ -161,6 +161,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\game.cpp" />
+    <ClCompile Include="source\src\editor.cpp" />
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="external\src\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="external\src\imgui\imgui.cpp" />
@@ -172,6 +174,14 @@
     <ClCompile Include="external\src\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="external\src\stb_image\stb_image.cpp" />
+    <ClCompile Include="source\src\world\collider.cpp" />
+    <ClCompile Include="source\src\world\body_activation_listener.cpp" />
+    <ClCompile Include="source\src\world\box_collider.cpp" />
+    <ClCompile Include="source\src\world\broad_phase_layer_interface.cpp" />
+    <ClCompile Include="source\src\world\capsule_collider.cpp" />
+    <ClCompile Include="source\src\world\collider_contact_listener.cpp" />
+    <ClCompile Include="source\src\world\rigidbody.cpp" />
+    <ClCompile Include="source\src\wrapper\physics_system.cpp" />
     <ClCompile Include="source\src\audio\sound_source.cpp" />
     <ClCompile Include="source\src\resources\audio.cpp" />
     <ClCompile Include="source\src\audio\sound_buffer.cpp" />
@@ -195,7 +205,7 @@
     <ClCompile Include="source\src\world\dir_light.cpp" />
     <ClCompile Include="source\src\world\gizmo.cpp" />
     <ClCompile Include="source\src\world\light.cpp" />
-    <ClCompile Include="source\src\world\mono_behaviour.cpp" />
+    <ClCompile Include="source\src\world\script.cpp" />
     <ClCompile Include="source\src\world\player_test.cpp" />
     <ClCompile Include="source\src\world\point_light.cpp" />
     <ClCompile Include="source\src\world\skybox.cpp" />
@@ -224,10 +234,14 @@
   <ItemGroup>
     <Library Include="external\libs\assimp-vc142-mtd.lib" />
     <Library Include="external\libs\glfw3.lib" />
+    <Library Include="external\libs\Jolt.lib" />
+    <Library Include="external\libs\Joltd.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\game.h" />
+    <ClInclude Include="source\include\editor.h" />
     <ClInclude Include="external\include\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="external\include\imgui\imconfig.h" />
     <ClInclude Include="external\include\imgui\imgui_impl_opengl3_loader.h" />
@@ -248,6 +262,14 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\world\body_activation_listener.h" />
+    <ClInclude Include="source\include\world\box_collider.h" />
+    <ClInclude Include="source\include\world\broad_phase_layer_interface.h" />
+    <ClInclude Include="source\include\world\capsule_collider.h" />
+    <ClInclude Include="source\include\world\collider.h" />
+    <ClInclude Include="source\include\world\collider_contact_listener.h" />
+    <ClInclude Include="source\include\world\layers.h" />
+    <ClInclude Include="source\include\wrapper\physics_system.h" />
     <ClInclude Include="source\include\resources\audio.h" />
     <ClInclude Include="source\include\audio\sound_buffer.h" />
     <ClInclude Include="source\include\audio\sound_device.h" />
@@ -275,7 +297,7 @@
     <ClInclude Include="source\include\world\dir_light.h" />
     <ClInclude Include="source\include\world\gizmo.h" />
     <ClInclude Include="source\include\world\light.h" />
-    <ClInclude Include="source\include\world\mono_behaviour.h" />
+    <ClInclude Include="source\include\world\script.h" />
     <ClInclude Include="source\include\world\player_test.h" />
     <ClInclude Include="source\include\world\skybox.h" />
     <ClInclude Include="source\include\world\transform.h" />
@@ -322,6 +344,10 @@
     <None Include="external\src\json\json_writer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="external\libs\Jolt.dll" />
+    <None Include="external\libs\Jolt.pdb" />
+    <None Include="external\libs\Joltd.dll" />
+    <None Include="external\libs\Joltd.pdb" />
     <None Include="external\libs\jsoncpp.dll" />
     <None Include="external\libs\jsoncpp.lib" />
     <None Include="external\libs\jsoncppd.dll" />

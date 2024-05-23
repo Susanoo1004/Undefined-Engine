@@ -86,7 +86,7 @@ public:
 	/// <param name="attachmentIndex">: Which attachment index to read pixels on</param>
 	/// <param name="x">: x pos to read on</param>
 	/// <param name="y">: y pos to read on</param>
-	int ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y);
+	void ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y);
 
 	/// <summary>
 	/// Bind a Texture to a framebuffer
@@ -293,7 +293,7 @@ public:
 	void EnableTest(Args... rendererTest);
 
 	/// <summary>
-	/// Index of the obejct selected
+	/// Index of the object selected
 	/// </summary>
 	int ObjectIndex = -1;
 };

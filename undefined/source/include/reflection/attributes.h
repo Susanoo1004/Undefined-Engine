@@ -52,10 +52,6 @@ struct Callback : FieldAttribute
 		: func(f) {}
 };
 
-struct Header : FieldAttribute
-{
-};
-
 template <typename DescriptorT, typename AttributeT>
 constexpr bool HasAttribute()
 {

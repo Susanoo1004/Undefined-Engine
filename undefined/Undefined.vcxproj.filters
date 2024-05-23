@@ -39,7 +39,7 @@
     <ClCompile Include="source\src\interface\inspector.cpp" />
     <ClCompile Include="source\src\world\dir_light.cpp" />
     <ClCompile Include="source\src\resources\mesh.cpp" />
-    <ClCompile Include="source\src\world\mono_behaviour.cpp" />
+    <ClCompile Include="source\src\world\script.cpp" />
     <ClCompile Include="source\src\world\player_test.cpp" />
     <ClCompile Include="source\src\framebuffer.cpp" />
     <ClCompile Include="source\src\interface\editor_viewport.cpp" />
@@ -54,12 +54,22 @@
     <ClCompile Include="source\src\interface\content_browser_hierarchy.cpp" />
     <ClCompile Include="source\src\interface\content_browser_folders.cpp" />
     <ClCompile Include="source\src\wrapper\time.cpp" />
+    <ClCompile Include="source\src\wrapper\physics_system.cpp" />
+    <ClCompile Include="source\src\world\collider_contact_listener.cpp" />
+    <ClCompile Include="source\src\world\rigidbody.cpp" />
+    <ClCompile Include="source\src\world\box_collider.cpp" />
+    <ClCompile Include="source\src\world\capsule_collider.cpp" />
+    <ClCompile Include="source\src\world\broad_phase_layer_interface.cpp" />
+    <ClCompile Include="source\src\world\body_activation_listener.cpp" />
+    <ClCompile Include="source\src\world\collider.cpp" />
     <ClCompile Include="source\src\resources\audio.cpp" />
     <ClCompile Include="source\src\audio\sound_device.cpp" />
     <ClCompile Include="source\src\audio\sound_buffer.cpp" />
     <ClCompile Include="source\src\audio\sound_source.cpp" />
     <ClCompile Include="source\src\world\point_light.cpp" />
     <ClCompile Include="source\src\world\spot_light.cpp" />
+    <ClCompile Include="source\src\editor.cpp" />
+    <ClCompile Include="source\src\game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -122,7 +132,7 @@
     <ClInclude Include="source\include\world\dir_light.h" />
     <ClInclude Include="source\include\resources\mesh.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="source\include\world\mono_behaviour.h" />
+    <ClInclude Include="source\include\world\script.h" />
     <ClInclude Include="source\include\world\player_test.h" />
     <ClInclude Include="source\include\world\transform.h" />
     <ClInclude Include="source\include\framebuffer.h" />
@@ -139,22 +149,38 @@
     <ClInclude Include="source\include\interface\content_browser_hierarchy.h" />
     <ClInclude Include="source\include\interface\content_browser_folders.h" />
     <ClInclude Include="source\include\wrapper\time.h" />
+    <ClInclude Include="source\include\wrapper\physics_system.h" />
+    <ClInclude Include="source\include\world\collider_contact_listener.h" />
+    <ClInclude Include="source\include\world\collider.h" />
+    <ClInclude Include="source\include\world\box_collider.h" />
+    <ClInclude Include="source\include\world\capsule_collider.h" />
+    <ClInclude Include="source\include\world\broad_phase_layer_interface.h" />
+    <ClInclude Include="source\include\world\layers.h" />
+    <ClInclude Include="source\include\world\body_activation_listener.h" />
     <ClInclude Include="source\include\resources\audio.h" />
     <ClInclude Include="source\include\audio\sound_device.h" />
     <ClInclude Include="source\include\audio\sound_buffer.h" />
     <ClInclude Include="source\include\audio\sound_source.h" />
     <ClInclude Include="source\include\world\point_light.h" />
     <ClInclude Include="source\include\world\spot_light.h" />
+    <ClInclude Include="source\include\editor.h" />
+    <ClInclude Include="source\include\game.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />
     <Library Include="external\libs\toolboxMoteur.lib" />
     <Library Include="external\libs\toolboxMoteurd.lib" />
     <Library Include="external\libs\assimp-vc142-mtd.lib" />
+    <Library Include="external\libs\Jolt.lib" />
+    <Library Include="external\libs\Joltd.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\libs\assimp-vc142-mtd.dll" />
     <Image Include="assets\undefined_logo.png" />
+    <None Include="external\libs\Jolt.dll" />
+    <None Include="external\libs\Jolt.pdb" />
+    <None Include="external\libs\Joltd.dll" />
+    <None Include="external\libs\Joltd.pdb" />
     <None Include="external\libs\jsoncpp.dll" />
     <None Include="external\libs\jsoncpp.lib" />
     <None Include="external\libs\jsoncpp_static.lib" />

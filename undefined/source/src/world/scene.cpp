@@ -40,6 +40,27 @@ void Scene::Start()
 	}
 }
 
+UNDEFINED_ENGINE void Scene::PreFixedUpdate()
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		if (!Objects[i]->IsEnable())
+		{
+			continue;
+		}
+
+		for (Component* comp : Objects[i]->Components)
+		{
+			if (!comp->IsEnable())
+			{
+				continue;
+			}
+
+			comp->PreFixedUpdate();
+		}
+	}
+}
+
 void Scene::FixedUpdate()
 {
 	for (size_t i = 0; i < Objects.size(); i++)
@@ -56,7 +77,29 @@ void Scene::FixedUpdate()
 				continue;
 			}
 
+			
 			comp->FixedUpdate();
+		}
+	}
+}
+
+UNDEFINED_ENGINE void Scene::PostFixedUpdate()
+{
+	for (size_t i = 0; i < Objects.size(); i++)
+	{
+		if (!Objects[i]->IsEnable())
+		{
+			continue;
+		}
+
+		for (Component* comp : Objects[i]->Components)
+		{
+			if (!comp->IsEnable())
+			{
+				continue;
+			}
+
+			comp->PostFixedUpdate();
 		}
 	}
 }
@@ -105,6 +148,9 @@ void Scene::LateUpdate()
 
 void Scene::Draw()
 {
+	Renderer* rend = ServiceLocator::Get<Renderer>();
+	std::shared_ptr<Shader> shader = ResourceManager::Get<Shader>("base_shader");
+
 	for (size_t i = 0; i < Objects.size(); i++)
 	{
 		if (!Objects[i]->IsEnable())
@@ -118,7 +164,9 @@ void Scene::Draw()
 			{
 				continue;
 			}
-
+			rend->UseShader(shader->ID);
+			rend->SetUniform(shader->ID, "EntityID", (int)i);
+			rend->UnUseShader();
 			comp->Draw();
 		}
 	}

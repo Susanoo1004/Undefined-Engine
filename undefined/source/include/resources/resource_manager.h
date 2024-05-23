@@ -20,7 +20,7 @@ class ResourceManager
 
 public:
 	UNDEFINED_ENGINE static void Load(const std::filesystem::path& path, bool recursivity = false);
-	UNDEFINED_ENGINE static bool Contains(const std::string& mName);
+	UNDEFINED_ENGINE static bool Contains(const std::string& name);
 
 	template<ResourceType T>
 	static std::unordered_map<std::string, std::shared_ptr<T>> GetType()
@@ -37,9 +37,12 @@ public:
 
 				for (auto kv : mResources) 
 				{
-					if (kv.second == r)
+					if (kv.first.find("assets") != kv.first.npos && kv.first.find("assets/missing_texture.jpg") == kv.first.npos)
 					{
-						resource.emplace(kv.first, res);
+						if (kv.second == r)
+						{
+							resource.emplace(kv.first, res);
+						}
 					}
 				}
 			}

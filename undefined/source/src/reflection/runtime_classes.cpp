@@ -8,10 +8,10 @@
 
 #include "audio/sound_source.h"
 
-#include "resources/model_renderer.h"
+#include "world/capsule_collider.h"
+#include "world/box_collider.h"
 
-// TODO: Remove
-#include "world/player_test.h"
+#include "resources/model_renderer.h"
 
 #include <ranges>
 
@@ -82,4 +82,8 @@ void RuntimeClasses::AddAllClasses()
 	
 	//Audio
 	AddClass<SoundSource>();
+
+	//Physics
+	AddClass<CapsuleCollider>();
+	AddClass<BoxCollider>();
 }

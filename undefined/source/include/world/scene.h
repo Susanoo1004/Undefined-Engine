@@ -11,7 +11,9 @@ public:
 	UNDEFINED_ENGINE ~Scene();
 
 	UNDEFINED_ENGINE void Start();
+	UNDEFINED_ENGINE void PreFixedUpdate();
 	UNDEFINED_ENGINE void FixedUpdate();
+	UNDEFINED_ENGINE void PostFixedUpdate();
 	UNDEFINED_ENGINE void Update();
 	UNDEFINED_ENGINE void LateUpdate();
 	UNDEFINED_ENGINE void Draw();

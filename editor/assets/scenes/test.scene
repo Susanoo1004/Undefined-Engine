@@ -1,11 +1,26 @@
 {
-	"11922704594827888402" : 
+	"13424184237862025354" : 
 	{
 		"Type" : "Object",
 		"Values" : 
 		{
-			"Components" : null,
-			"Name" : "Test Child",
+			"Components" : 
+			[
+				{
+					"Type" : "BoxCollider",
+					"Values" : 
+					{
+						"mIsEnable" : true,
+						"mSize" : 
+						{
+							"x" : 100.0,
+							"y" : 2.0,
+							"z" : 100.0
+						}
+					}
+				}
+			],
+			"Name" : "Floor",
 			"mChildrenUUIDs" : null,
 			"mIsEnable" : true,
 			"mTransform" : 
@@ -15,8 +30,56 @@
 				{
 					"mPosition" : 
 					{
-						"x" : 1.9668079614639282,
+						"x" : 0.0,
+						"y" : -2.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 0.99904823303222656,
+						"x" : 0.0,
 						"y" : 0.0,
+						"z" : 0.043619383126497269
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 13424184237862025354
+		}
+	},
+	"13642411649515795747" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/viking_room.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "PikingRoom2",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 2.0,
+						"y" : -0.5,
 						"z" : 0.0
 					},
 					"mRotation" : 
@@ -34,10 +97,115 @@
 					}
 				}
 			},
-			"mUUID" : 11922704594827888402
+			"mUUID" : 13642411649515795747
 		}
 	},
-	"14662173516088134887" : 
+	"16485229276431660349" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/sphere.obj",
+						"mIsEnable" : true
+					}
+				},
+				{
+					"Type" : "CapsuleCollider",
+					"Values" : 
+					{
+						"mHeight" : 1.0,
+						"mIsEnable" : true,
+						"mRadius" : 1.0
+					}
+				}
+			],
+			"Name" : "Sphere",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : 1.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 16485229276431660349
+		}
+	},
+	"4184410129310034883" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/viking_room.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "PikingRoom",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : -0.5,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 4184410129310034883
+		}
+	},
+	"9558210162052005123" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -102,108 +270,7 @@
 					}
 				}
 			},
-			"mUUID" : 14662173516088134887
-		}
-	},
-	"6960637432393765720" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "ModelRenderer",
-					"Values" : 
-					{
-						"ModelObject" : "assets/viking_room.obj",
-						"mIsEnable" : true
-					}
-				}
-			],
-			"Name" : "PikingRoom",
-			"mChildrenUUIDs" : 
-			[
-				11922704594827888402,
-				11922704594827888402,
-				11922704594827888402
-			],
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 1.9668079614639282,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"w" : 1.0,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 6960637432393765720
-		}
-	},
-	"7351854439810512682" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "ModelRenderer",
-					"Values" : 
-					{
-						"ModelObject" : "assets/cube.obj",
-						"mIsEnable" : true
-					}
-				}
-			],
-			"Name" : "Empty",
-			"mChildrenUUIDs" : null,
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"w" : 1.0,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 7351854439810512682
+			"mUUID" : 9558210162052005123
 		}
 	}
 }

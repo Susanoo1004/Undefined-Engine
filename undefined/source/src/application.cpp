@@ -24,9 +24,10 @@
 #include "memory_leak.h"
 
 #include "world/scene_manager.h"
+#include "world/box_collider.h"
+#include "world/capsule_collider.h"
 
 #include "interface/interface.h"
-#include "interface/inspector.h"
 
 #include "reflection/runtime_classes.h"
 
@@ -50,38 +51,15 @@ void Application::Init()
 
     RuntimeClasses::AddAllClasses();
 
-    ResourceManager::Load("../undefined/resource_manager/", true);
-    ResourceManager::Load("assets/", true);
     // Callback
     ServiceLocator::SetupCallbacks();
 
-    Interface::Init();
-    Inspector::Init();
-    mKeyInput = ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput");
+    mEditor.Init();
+    mGame.Init();
 
     Skybox::Setup();
+
     BaseShader = ResourceManager::Get<Shader>("base_shader");
-    ResourceManager::Get<Model>("assets/viking_room.obj")->SetTexture(0, ResourceManager::Get<Texture>("assets/viking_room.png"));
-
-    SceneManager::Init();
-
-    SceneManager::ActualScene->AddObject("Point")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }, 1.0f, 0.09f, 0.032f);
-    //SceneManager::ActualScene->AddObject("Point")->AddComponent<DirLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f });
-
-    Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
-    object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
-
-    SceneManager::ActualScene->AddObject(object, "Test Child");
-
-    //SOUND
-    mSoundDevice = SoundDevice::Get();
-
-    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/fazbear.wav"));
-    sound2 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/desert.wav"));
-
-    mSoundSource = new SoundSource;
-    source1 = mSoundSource->CreateSource();
-    source2 = mSoundSource->CreateSource();
 }
 
 void Application::Update()
@@ -91,40 +69,12 @@ void Application::Update()
     mRenderer->SetClearColor(0,0,0);
 
     Camera::ProcessInput();
-    SceneManager::GlobalUpdate();
-    Interface::Update();
-    Logger::Sync();
 
-    mSoundSource->SetPosition(source1, Vector3());
-    
-    if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
-    {
-        mSoundSource->Play(source1, sound1);
-    }
+    mGame.Update();
 
-    if (mKeyInput->GetIsKeyDown(GLFW_KEY_C))
-    {
-        mSoundSource->Play(source2, sound2);
-    }
+    mEditor.Update();
 
-    if (mKeyInput->GetIsKeyDown(GLFW_KEY_N))
-    {
-        mSoundSource->Resume(source1, sound1);
-    }
-
-    if (mKeyInput->GetIsKeyDown(GLFW_KEY_V))
-    {
-        mSoundSource->Stop(source1, sound1);
-    }
-
-    if (mKeyInput->GetIsKeyDown(GLFW_KEY_B))
-    {
-        mSoundSource->Restart(source1, sound1);
-    }
-
-    mSoundDevice->SetPosition(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);
-    mSoundDevice->SetOrientation(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->LookAt);
-
+    // Draw loop for all editors
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();
@@ -134,7 +84,7 @@ void Application::Update()
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
 
         mRenderer->EnableTest(GL_DEPTH_TEST);
-
+        
         mRenderer->SetClearColor(0,0,0);
         mRenderer->ClearBuffer();
         
@@ -142,11 +92,6 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-
-        for (int j = 0; j < SceneManager::ActualScene->Objects.size(); j++)
-        {
-            mRenderer->SetUniform(BaseShader->ID, "EntityID", SceneManager::ActualScene->Objects[j]);
-        }
 
         SceneManager::Draw();
 
@@ -167,10 +112,8 @@ void Application::Update()
 void Application::Clear()
 {
     mRenderer->UnUseShader();
-    SceneManager::Delete();
-    delete Camera::CurrentCamera;
+    mEditor.Terminate();
+    mGame.Terminate();
     ServiceLocator::CleanServiceLocator();
-    ResourceManager::UnloadAll();
-    Interface::Delete();
     Logger::Stop();
 }
