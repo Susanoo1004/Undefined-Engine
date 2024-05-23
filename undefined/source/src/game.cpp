@@ -31,6 +31,7 @@ void Game::Init()
     player->GameTransform->Scale = Vector3(0.2f, 0.2f, 0.2f);
     std::shared_ptr<Model> mode = player->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/dog.obj");
     mode->SetTexture(0, ResourceManager::Get<Texture>("assets/dog.jpg"));
+    player->AddComponent<BoxCollider>(player->GameTransform->Position, player->GameTransform->RotationQuat, player->GameTransform->Scale);
 
 
     Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
