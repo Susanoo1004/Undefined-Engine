@@ -135,34 +135,30 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 {
 	if (!path.string().ends_with(".scene"))
 	{
-		//Logger::Error("Can't load scene : {}", path.c_str());
+		Logger::Error("Can't load scene : {}", path.generic_string());
 		return false;
 	}
+
+	delete ActualScene;
+
+	ActualScene = new Scene(path.filename().generic_string());
 
 	Json::Value root;
 	std::ifstream file(path);
 	file >> root;
 
-	//std::string value = root.front().get("Values", Json::Value()).get("Name", std::string()).as<std::string>();
-
-	//Logger::Debug("{}", value);
-
 	std::vector<std::string> names = root.getMemberNames();
 	for (size_t i = 0; i < root.size(); i++)
 	{
 		Object* test = Reflection::ReadObj<Object>(root.get(names[i], Json::Value()));
-		Logger::Debug("");
+		ActualScene->Objects.push_back(test);
+		Logger::Debug("{}", test->GameTransform->Position);
+	}
 
-		Logger::Debug("{}", test->Name);
-		PointLight* comp = test->GetComponent<PointLight>();
-		if (comp)
-		{
-			Logger::Debug("LIIIIIIIGHT");
-			Logger::Debug("{}", comp->Ambient);
-			
-		}
-
-		Logger::Debug("");
+	for (size_t i = 0; i < ActualScene->Objects.size(); i++)
+	{
+		//set parents
+		ActualScene->Objects[i]->ResetPointerLink();
 	}
 
 	file.close();
@@ -174,4 +170,7 @@ void SceneManager::Reload()
 	Logger::Debug("Reload scene");
 	//help
 	//load ActualScene
+
+	//SceneManager::SaveCurrentScene();
+	SceneManager::LoadScene("assets/scenes/test.scene");
 }

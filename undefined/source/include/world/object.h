@@ -146,6 +146,8 @@ private:
 	void SetTransform(Transform newTransform) { mTransform = newTransform; };
 	void SetTransform(Transform* newTransform) { mTransform = *newTransform; };
 
+	void ResetPointerLink();
+
 	/// <summary>
 	/// Transform of the Object
 	/// </summary>

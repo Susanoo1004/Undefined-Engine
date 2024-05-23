@@ -220,6 +220,20 @@ void Object::AtachChild(Object* child, unsigned int index)
 	mChildren.insert(mChildren.begin() + index, child);
 }
 
+void Object::ResetPointerLink()
+{
+	if (mParent)
+	{
+		mTransform.mParentTransform = &mParent->mTransform;
+	}
+
+	for (size_t i = 0; i < Components.size(); i++)
+	{
+		Components[i]->mObject = this;
+		Components[i]->mTransform = &mTransform;
+	}
+}
+
 void Object::ChangeEnableStatus()
 {
 	if (mIsEnable)

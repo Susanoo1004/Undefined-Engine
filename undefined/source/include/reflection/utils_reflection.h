@@ -178,7 +178,7 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 	if constexpr (std::_Is_any_of_v<MemberT, bool, std::string> || std::is_integral_v<MemberT> || std::is_floating_point_v<MemberT>)
 	{
 		MemberT value = jsonValue.as<MemberT>();
-		Logger::Debug("{}", value);
+		//Logger::Debug("{}", value);
 		return value;
 	}
 	else if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3, Vector2>)
@@ -194,7 +194,7 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 		{
 			value.w = jsonValue.get("w", 0.0f).asFloat();
 		}
-		Logger::Debug("{}", value);
+		//Logger::Debug("{}", value);
 		return value;
 	}
 	else if constexpr (Reflection::is_vector_v<MemberT>)
@@ -204,22 +204,22 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 		MemberT valueList;
 		valueList.resize(jsonValue.size());
 
-		Logger::Debug("List :");
+		//Logger::Debug("List :");
 		//If it's a std::vector we reflect every element inside it
 		for (int i = 0; i < jsonValue.size(); i++)
 		{
 			valueList[i] = ReadValue<ListT>(jsonValue[i]);
 		}
-		Logger::Debug("Fin list");
+		//Logger::Debug("Fin list");
 		return valueList;
 	}
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
 		std::string subJsonType = jsonValue.get("Type", std::string()).asString();
-		Logger::Debug("pointer {}", subJsonType);
+		//Logger::Debug("pointer {}", subJsonType);
 		//Json::Value subJsonValue = jsonValue.get("Values", Json::Value());
 		MemberT value = static_cast<MemberT>(ReadValueWithName(jsonValue, subJsonType));
-		Logger::Debug("fin de pointer {}", subJsonType);
+		//Logger::Debug("fin de pointer {}", subJsonType);
 
 		return value;
 	}
@@ -231,13 +231,13 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 			return MemberT();
 		}
 
-		Logger::Debug("{} :", typeid(MemberT).name());
+		//Logger::Debug("{} :", typeid(MemberT).name());
 		MemberT value = *ReadObj<MemberT>(jsonValue);
-		Logger::Debug("Fin de {}", typeid(MemberT).name());
+		//Logger::Debug("Fin de {}", typeid(MemberT).name());
 		return value;
 	}
 
-	Logger::Error("FUCK");
+	Logger::Error("Couldn't read Object values");
 	return MemberT();
 }
 
