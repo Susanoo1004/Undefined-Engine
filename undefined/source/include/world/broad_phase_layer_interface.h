@@ -6,6 +6,8 @@
 
 #include "world/layers.h"
 
+#include "utils/flag.h"
+
 // Each broadphase layer results in a separate bounding volume tree in the broad phase. You at least want to have
 // a layer for non-moving and moving objects to avoid having to update a tree full of static objects every frame.
 // You can have a 1-on-1 mapping between object layers and broadphase layers (like in this case) but if you have
@@ -23,11 +25,11 @@ namespace BroadPhaseLayers
 class BroadPhaseLayerInterface final : public JPH::BroadPhaseLayerInterface
 {
 public:
-	BroadPhaseLayerInterface();
+	UNDEFINED_ENGINE BroadPhaseLayerInterface();
 
-	virtual unsigned int GetNumBroadPhaseLayers() const override;
+	UNDEFINED_ENGINE virtual unsigned int GetNumBroadPhaseLayers() const override;
 
-	virtual JPH::BroadPhaseLayer GetBroadPhaseLayer(JPH::ObjectLayer inLayer) const override;
+	UNDEFINED_ENGINE virtual JPH::BroadPhaseLayer GetBroadPhaseLayer(JPH::ObjectLayer inLayer) const override;
 
 #if defined(JPH_EXTERNAL_PROFILE) || defined(JPH_PROFILE_ENABLED)
 	virtual const char* GetBroadPhaseLayerName(JPH::BroadPhaseLayer inLayer) const override;

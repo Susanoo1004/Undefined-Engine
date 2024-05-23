@@ -69,6 +69,8 @@
     <ClCompile Include="source\src\audio\sound_source.cpp" />
     <ClCompile Include="source\src\world\point_light.cpp" />
     <ClCompile Include="source\src\world\spot_light.cpp" />
+    <ClCompile Include="source\src\editor.cpp" />
+    <ClCompile Include="source\src\game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -163,6 +165,8 @@
     <ClInclude Include="source\include\audio\sound_source.h" />
     <ClInclude Include="source\include\world\point_light.h" />
     <ClInclude Include="source\include\world\spot_light.h" />
+    <ClInclude Include="source\include\editor.h" />
+    <ClInclude Include="source\include\game.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

@@ -8,8 +8,8 @@
 class BodyActivationListener : public JPH::BodyActivationListener
 {
 public:
-	virtual void OnBodyActivated(const JPH::BodyID& inBodyID, JPH::uint64 inBodyUserData) override;
+	UNDEFINED_ENGINE virtual void OnBodyActivated(const JPH::BodyID& inBodyID, JPH::uint64 inBodyUserData) override;
 
-	virtual void OnBodyDeactivated(const JPH::BodyID& inBodyID, JPH::uint64 inBodyUserData) override;
+	UNDEFINED_ENGINE virtual void OnBodyDeactivated(const JPH::BodyID& inBodyID, JPH::uint64 inBodyUserData) override;
 
 };

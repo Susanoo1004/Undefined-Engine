@@ -161,6 +161,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\game.cpp" />
+    <ClCompile Include="source\src\editor.cpp" />
     <ClCompile Include="external\src\glad\glad.c" />
     <ClCompile Include="external\src\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="external\src\imgui\imgui.cpp" />
@@ -239,6 +241,8 @@
     <Library Include="external\libs\toolboxMoteurd.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\game.h" />
+    <ClInclude Include="source\include\editor.h" />
     <ClInclude Include="external\include\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="external\include\imgui\imconfig.h" />
     <ClInclude Include="external\include\imgui\imgui_impl_opengl3_loader.h" />
