@@ -52,7 +52,6 @@ void EditorViewport::InitButtonTextures()
 
 void EditorViewport::ShowWindow()
 {
-
 	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.GizmoWindowFlags);
 
 

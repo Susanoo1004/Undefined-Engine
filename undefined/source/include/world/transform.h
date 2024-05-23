@@ -11,7 +11,6 @@
 class Transform
 {
 public:
-
 	UNDEFINED_ENGINE const Matrix4x4& LocalMatrix();
 	UNDEFINED_ENGINE void SetLocalMatrix(const Matrix4x4& matrix);
 	UNDEFINED_ENGINE const Matrix4x4& WorldMatrix();

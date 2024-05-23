@@ -65,7 +65,11 @@ void Application::Init()
 
     SceneManager::Init();
 
-    SceneManager::ActualScene->AddObject("Point")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }, 1.0f, 0.09f, 0.032f);
+    Object* Point = SceneManager::ActualScene->AddObject("Point");
+    Point->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }, 1.0f, 0.09f, 0.032f);
+    Point->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/cube.obj");
+    Point->GameTransform->SetPosition(Vector3(3,0,0));
+
     //SceneManager::ActualScene->AddObject("Point")->AddComponent<DirLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f });
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
@@ -141,11 +145,6 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-
-        for (int j = 0; j < SceneManager::ActualScene->Objects.size(); j++)
-        {
-            mRenderer->SetUniform(BaseShader->ID, "EntityID", j);
-        }
 
         SceneManager::Draw();
 
