@@ -58,6 +58,11 @@ public:
 	virtual void Draw();
 
 	/// <summary>
+	/// Post Draw 
+	/// </summary>
+	virtual void PostDraw();
+
+	/// <summary>
 	/// Function triggered one time when the component is enabled
 	/// </summary>
 	virtual void OnEnable();

@@ -149,6 +149,8 @@ void Camera::MouseCallback(GLFWwindow* const window, const double xposIn, const 
     direction.z = sinf((CurrentCamera->mYaw * (calc::PI / 180.f))) * cosf((CurrentCamera->mPitch * (calc::PI / 180.f)));
 
     CurrentCamera->LookAt = direction.Normalized();
+
+    
 }
 
 void Camera::ChangeSpeedCam(GLFWwindow* , double , double yposIn)

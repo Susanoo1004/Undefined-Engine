@@ -1,8 +1,8 @@
 #include <AL/al.h>
+#include <array>
 
 #include "audio/sound_device.h"
 #include "engine_debug/logger.h"
-#include <array>
 
 SoundDevice* SoundDevice::Get()
 {
@@ -74,4 +74,6 @@ SoundDevice::SoundDevice()
 
 SoundDevice::~SoundDevice()
 {
+	alcDestroyContext(mALCContext);
+	alcCloseDevice(mALCDevice);
 }

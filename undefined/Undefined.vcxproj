@@ -151,13 +151,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>toolboxMoteur.lib;Jolt.lib;glfw3.lib;jsoncpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>toolboxMoteur.lib;Jolt.lib;glfw3.lib;jsoncpp.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)bin$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll"</Command>
+      <Command>copy /Y "$(SolutionDir)bin\$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

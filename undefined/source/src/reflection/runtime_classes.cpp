@@ -9,6 +9,10 @@
 #include "audio/sound_source.h"
 
 #include "resources/model_renderer.h"
+
+// TODO: Remove
+#include "world/player_test.h"
+
 #include <ranges>
 
 const RuntimeClass* RuntimeClasses::GetHashedClass(size_t hash)

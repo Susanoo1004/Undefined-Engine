@@ -43,18 +43,29 @@ void Gizmo::DrawGizmos(Camera* camera, Transform* transform)
 void Gizmo::ChangeGizmoOperation()
 {
     if (ImGui::RadioButton("Translate", CurrentGizmoOperation == ImGuizmo::TRANSLATE))
+    {
         CurrentGizmoOperation = ImGuizmo::TRANSLATE;
+    }
     ImGui::SameLine();
     if (ImGui::RadioButton("Rotate", CurrentGizmoOperation == ImGuizmo::ROTATE))
+    {
         CurrentGizmoOperation = ImGuizmo::ROTATE;
+    }
     ImGui::SameLine();
     if (ImGui::RadioButton("Scale", CurrentGizmoOperation == ImGuizmo::SCALE))
+    {
         CurrentGizmoOperation = ImGuizmo::SCALE;
+    }
+
     if (ImGui::RadioButton("Local", CurrentGizmoMode == ImGuizmo::LOCAL))
+    {
         CurrentGizmoMode = ImGuizmo::LOCAL;
+    }
     ImGui::SameLine();
     if (ImGui::RadioButton("World", CurrentGizmoMode == ImGuizmo::WORLD))
+    {
         CurrentGizmoMode = ImGuizmo::WORLD;
+    }
 }
 
 void Gizmo::DrawGrid(Camera* camera)

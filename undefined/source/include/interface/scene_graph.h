@@ -13,6 +13,8 @@ class SceneGraph
 public:
 	static void DisplayWindow();
 
+	static void Delete();
+
 private:
 	static void DisplayActualScene();
 	static void DisplayObject(Object* object, unsigned int labelID);

@@ -22,13 +22,15 @@ public:
 	~SpotLight();
 
 	/// <summary>
-	/// Update function from Component which is override
+	/// Draw function from Component which is override
 	/// </summary>
-	void Update() override;
+	void Draw() override;
+
 	/// <summary>
-	/// LateUpdate function from Component which is override
+	/// Post Draw function from Component which is override
 	/// </summary>
-	void LateUpdate() override;
+	void PostDraw() override;
+
 	/// <summary>
 	/// Get the total number of SpotLight
 	/// </summary>

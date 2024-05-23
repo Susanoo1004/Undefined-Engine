@@ -4,7 +4,7 @@
 class Player : public MonoBehaviour
 {
 public:
-	void Update() override;
+	void FixedUpdate() override;
 };
 
 REFL_AUTO(type(Player, bases<MonoBehaviour>)
