@@ -51,6 +51,8 @@ void* RuntimeClasses::ReadObj(Json::Value jsonObj, std::string name)
 			return c.read(jsonObj);
 		}
 	}
+	Logger::Error("Could not find className {}", name);
+	return nullptr;
 }
 
 void* RuntimeClasses::CreateClass(std::string name)

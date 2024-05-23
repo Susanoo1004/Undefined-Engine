@@ -217,8 +217,8 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 	{
 		std::string subJsonType = jsonValue.get("Type", std::string()).asString();
 		Logger::Debug("pointer {}", subJsonType);
-		Json::Value subJsonValue = jsonValue.get("Values", Json::Value());
-		MemberT value = static_cast<MemberT>(ReadValueWithName(subJsonValue, subJsonType));
+		//Json::Value subJsonValue = jsonValue.get("Values", Json::Value());
+		MemberT value = static_cast<MemberT>(ReadValueWithName(jsonValue, subJsonType));
 		Logger::Debug("fin de pointer {}", subJsonType);
 
 		return value;
@@ -231,10 +231,8 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 			return MemberT();
 		}
 
-		Json::Value subJsonValue = jsonValue.get("Values", Json::Value());
-
 		Logger::Debug("{} :", typeid(MemberT).name());
-		MemberT value = *ReadObj<MemberT>(subJsonValue);
+		MemberT value = *ReadObj<MemberT>(jsonValue);
 		Logger::Debug("Fin de {}", typeid(MemberT).name());
 		return value;
 	}
