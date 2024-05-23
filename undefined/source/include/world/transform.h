@@ -71,7 +71,7 @@ private:
 };
 
 REFL_AUTO(type(Transform),
-	field(mPosition, NotifyChange(&Transform::mHasChanged), Spacing(ImVec2(0, 10)), Header()),
+	field(mPosition, NotifyChange(&Transform::mHasChanged), Spacing(ImVec2(0, 10))),
 	field(mRotation, NotifyChange(&Transform::mHasChanged)),
 	field(mScale, NotifyChange(&Transform::mHasChanged))
 )

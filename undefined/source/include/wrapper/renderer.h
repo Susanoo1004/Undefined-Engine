@@ -293,7 +293,7 @@ public:
 	void EnableTest(Args... rendererTest);
 
 	/// <summary>
-	/// Index of the obejct selected
+	/// Index of the object selected
 	/// </summary>
 	int ObjectIndex = -1;
 };
