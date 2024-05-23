@@ -84,7 +84,7 @@ void Application::Update()
         mRenderer->BindFramebuffer(GL_FRAMEBUFFER, Interface::EditorViewports[i]->GetFBO_ID());
 
         mRenderer->EnableTest(GL_DEPTH_TEST);
-
+        
         mRenderer->SetClearColor(0,0,0);
         mRenderer->ClearBuffer();
         
@@ -92,11 +92,6 @@ void Application::Update()
 
         mRenderer->SetUniform(BaseShader->ID ,"vp", Interface::EditorViewports[i]->ViewportCamera->GetVP());
         mRenderer->SetUniform(BaseShader->ID ,"viewPos", Interface::EditorViewports[i]->ViewportCamera->Eye);
-
-        for (int j = 0; j < SceneManager::ActualScene->Objects.size(); j++)
-        {
-            mRenderer->SetUniform(BaseShader->ID, "EntityID", SceneManager::ActualScene->Objects[j]);
-        }
 
         SceneManager::Draw();
 

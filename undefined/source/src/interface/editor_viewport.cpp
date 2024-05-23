@@ -52,7 +52,6 @@ void EditorViewport::InitButtonTextures()
 
 void EditorViewport::ShowWindow()
 {
-
 	ImGui::Begin((std::string("Editor ##") + std::to_string(mID)).c_str(), 0, SceneGizmo.GizmoWindowFlags);
 
 
@@ -112,8 +111,8 @@ void EditorViewport::ShowWindow()
 	{
 		if (!ImGuizmo::IsOver())
 		{
-			int ObjectIndex = ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
-			Logger::Info("Pixel data = {}", ObjectIndex);
+			ServiceLocator::Get<Renderer>()->ReadPixels(GetFBO_ID(), 1, mouseX, mouseY);
+			Logger::Info("Pixel data = {}", ServiceLocator::Get<Renderer>()->ObjectIndex);
 		}
 	}
 

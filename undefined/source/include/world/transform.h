@@ -12,7 +12,6 @@
 class Transform
 {
 public:
-
 	UNDEFINED_ENGINE const Matrix4x4& LocalMatrix();
 	UNDEFINED_ENGINE void SetLocalMatrix(const Matrix4x4& matrix);
 	UNDEFINED_ENGINE const Matrix4x4& WorldMatrix();
@@ -72,7 +71,7 @@ private:
 };
 
 REFL_AUTO(type(Transform),
-	field(mPosition, NotifyChange(&Transform::mHasChanged), Spacing(ImVec2(0, 10)), Header()),
+	field(mPosition, NotifyChange(&Transform::mHasChanged), Spacing(ImVec2(0, 10))),
 	field(mRotation, NotifyChange(&Transform::mHasChanged)),
 	field(mScale, NotifyChange(&Transform::mHasChanged))
 )

@@ -76,16 +76,11 @@ void Renderer::BindTexture(int framebufferTarget, int attachement, unsigned int 
     glFramebufferTexture2D(framebufferTarget, attachement, type, ID, 0);
 }
 
-int Renderer::ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y)
+void Renderer::ReadPixels(unsigned int framebufferID, uint32_t attachmentIndex, int x, int y)
 {
-    if (ImGuizmo::IsOver())
-        return -1;
-
     glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
     glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
     glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &ObjectIndex);
-
-    return ObjectIndex;
 }
 
 void Renderer::BindFramebuffer(unsigned int target, unsigned int framebufferID)

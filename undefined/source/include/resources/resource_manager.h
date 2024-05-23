@@ -37,9 +37,12 @@ public:
 
 				for (auto kv : mResources) 
 				{
-					if (kv.second == r)
+					if (kv.first.find("assets") != kv.first.npos && kv.first.find("assets/missing_texture.jpg") == kv.first.npos)
 					{
-						resource.emplace(kv.first, res);
+						if (kv.second == r)
+						{
+							resource.emplace(kv.first, res);
+						}
 					}
 				}
 			}

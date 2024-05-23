@@ -72,7 +72,7 @@ void Transform::SetWorldMatrix(const Matrix4x4& matrix)
 {
 	mWorldTRS = matrix;
 
-	mPosition = mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3];
+	mPosition = Vector3(mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3]);
 	mRotation = mWorldTRS.ToQuaternion();
 	Matrix3x3 trans = Matrix4x4::Transpose(mWorldTRS);
 	mScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
