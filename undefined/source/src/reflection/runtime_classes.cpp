@@ -6,6 +6,8 @@
 #include "world/point_light.h"
 #include "world/spot_light.h"
 
+#include "audio/sound_source.h"
+
 #include "resources/model_renderer.h"
 #include <ranges>
 
@@ -60,4 +62,7 @@ void RuntimeClasses::AddAllClasses()
 
 	//Model
 	AddClass<ModelRenderer>();
+	
+	//Audio
+	AddClass<SoundSource>();
 }

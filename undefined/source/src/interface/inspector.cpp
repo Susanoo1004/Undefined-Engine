@@ -36,10 +36,14 @@ void Inspector::ShowWindow()
 		Object* obj = SceneManager::ActualScene->Objects[mRenderer->ObjectIndex];
 		Reflection::ReflectionObj<Object>(obj);
 
-        if (ImGui::Button("Add Component"))
+		if (ImGui::Button("Add Component"))
+		{
             ImGui::OpenPopup("component_popup");
-        ImGui::SameLine();
-        if (ImGui::BeginPopup("component_popup"))
+		}
+
+		ImGui::SameLine();
+        
+		if (ImGui::BeginPopup("component_popup"))
         {
 			for (int i = 0; i < RuntimeClasses::names.size(); i++)
 			{

@@ -14,6 +14,7 @@
 #include "wrapper/reflection.h"
 #include "resources/resource_manager.h"
 #include "resources/texture.h"
+#include "audio/sound_source.h"
 
 namespace Reflection
 {
@@ -80,7 +81,10 @@ namespace Reflection
 	void DisplayToolboxTypes(MemberT* obj, std::string mName);
 
 	template<typename T, typename MemberT, typename DescriptorT>
-	void DisplayOurTypes(std::shared_ptr<MemberT>* obj, std::string mName);
+	void DisplayOurTypes(MemberT* obj, std::string name);
+
+	template<typename T, typename MemberT, typename DescriptorT>
+	void DisplayOurTypesSharedPtr(std::shared_ptr<MemberT>* obj, std::string mName);
 
 	template<typename T, typename MemberT, typename DescriptorT>
 	void Attributes(std::string& mName);
@@ -315,9 +319,36 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string name)
 }
 
 template<typename T, typename MemberT, typename DescriptorT>
-void Reflection::DisplayOurTypes(std::shared_ptr<MemberT>* obj, std::string name)
+void Reflection::DisplayOurTypes(MemberT* obj, std::string name)
 {
-	//We check if MemberT (type of the variable we are reflecting) is the same as one of the math toolbox
+	if constexpr (std::is_same_v<SoundSource, MemberT>)
+	{
+		std::unordered_map<std::string, std::shared_ptr<MemberT>> resource = ResourceManager::GetType<MemberT>();
+
+		if (ImGui::Button(name.c_str()))
+		{
+			ImGui::OpenPopup("audio_popup");
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::BeginPopup("audio_popup"))
+		{
+			for (auto kv : resource)
+			{
+				if (ImGui::Selectable(kv.first.c_str()))
+				{
+					*obj = kv.second;
+				}
+			}
+		}
+	}
+}
+
+template<typename T, typename MemberT, typename DescriptorT>
+void Reflection::DisplayOurTypesSharedPtr(std::shared_ptr<MemberT>* obj, std::string name)
+{
+	//We check if MemberT (type of the variable we are reflecting) is the same as one of our ResourceTypes
 	if constexpr (std::is_same_v<Texture, MemberT>)
 	{
 		std::unordered_map<std::string, std::shared_ptr<MemberT>> resource = ResourceManager::GetType<MemberT>();
@@ -329,6 +360,30 @@ void Reflection::DisplayOurTypes(std::shared_ptr<MemberT>* obj, std::string name
 		ImGui::SameLine();
 
 		if (ImGui::BeginPopup("resource_popup"))
+		{
+			for (auto kv : resource)
+			{
+				if (ImGui::Selectable(kv.first.c_str()))
+				{
+					*obj = kv.second;
+				}
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+	if constexpr (std::is_same_v<Model, MemberT>)
+	{
+		std::unordered_map<std::string, std::shared_ptr<MemberT>> resource = ResourceManager::GetType<MemberT>();
+
+		if (ImGui::Button(name.c_str()))
+		{
+			ImGui::OpenPopup("model_popup");
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::BeginPopup("model_popup"))
 		{
 			for (auto kv : resource)
 			{
@@ -366,6 +421,7 @@ template<typename T, typename MemberT, typename DescriptorT>
 void Reflection::DisplayObj(MemberT* obj)
 {
 	ImGui::PushID(obj);
+
 	std::string name = DescriptorT::name.c_str();
 
 	Attributes<T, MemberT, DescriptorT>(name);
@@ -387,6 +443,10 @@ void Reflection::DisplayObj(MemberT* obj)
 	{
 		DisplayToolboxTypes<T, MemberT, DescriptorT>(obj, name);
 	}
+	else if constexpr (std::_Is_any_of_v<MemberT, SoundSource>)
+	{
+		DisplayOurTypes<T, MemberT, DescriptorT>(obj, name);
+	}
 	else if constexpr (Reflection::is_vector_v<MemberT>)
 	{
 		using ListT = typename MemberT::value_type;
@@ -404,7 +464,16 @@ void Reflection::DisplayObj(MemberT* obj)
 
 		if constexpr (std::_Is_any_of_v <MemberT, std::shared_ptr<Texture>>)
 		{
-			DisplayOurTypes<T, TypeT, DescriptorT>(obj, name);
+			DisplayOurTypesSharedPtr<T, TypeT, DescriptorT>(obj, name);
+		}
+
+		else if constexpr (std::_Is_any_of_v <MemberT, std::shared_ptr<Model>>)
+		{
+			if (obj->get() != nullptr)
+			{
+				DisplayObj<MemberT, TypeT, DescriptorT>(obj->get());
+			}
+			DisplayOurTypesSharedPtr<T, TypeT, DescriptorT>(obj, name);
 		}
 
 		else
@@ -442,7 +511,9 @@ void Reflection::DisplayObj(MemberT* obj)
 
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		ImGui::Text("%s", typeid(**obj).name());
+		std::string className = typeid(**obj).name();
+		className.erase(0, 6);
+		ImGui::Text("%s", className.c_str());
 		Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
 	}
 	//Recursivity if there's a reflectable type
