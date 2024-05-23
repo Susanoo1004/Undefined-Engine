@@ -166,6 +166,8 @@ private:
 	/// </summary>
 	uint64_t mUUID;
 
+	std::vector<uint64_t> mChildrenUUIDs;
+
 	/// <summary>
 	/// Boolean to know if the Object is enable
 	/// </summary>
@@ -187,7 +189,7 @@ REFL_AUTO(type(Object),
 	field(mUUID, HideInInspector()),
 	field(mIsEnable, DontDisplayName(), Callback(&Object::ChangeEnableStatus)),
 	field(Name, SameLine()),
-	//field(mChildren, HideInInspector()),
+	field(mChildrenUUIDs, HideInInspector()),
 	field(mTransform),
 	field(Components, Spacing(ImVec2(0, 30)))
 )

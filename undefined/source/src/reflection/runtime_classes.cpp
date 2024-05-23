@@ -6,6 +6,8 @@
 #include "world/point_light.h"
 #include "world/spot_light.h"
 
+#include "audio/sound_source.h"
+
 #include "resources/model_renderer.h"
 
 // TODO: Remove
@@ -77,7 +79,7 @@ void RuntimeClasses::AddAllClasses()
 
 	//Model
 	AddClass<ModelRenderer>();
-
-	// TODO: Remove
-	AddClass<Player>();
+	
+	//Audio
+	AddClass<SoundSource>();
 }

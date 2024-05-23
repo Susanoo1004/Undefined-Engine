@@ -58,6 +58,7 @@ void EditorViewport::ShowWindow()
 
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
+		ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(true);
 		Camera::CurrentCamera = ViewportCamera;
 	}
 
@@ -170,7 +171,7 @@ void EditorViewport::RescaleViewport()
 		ViewportCamera->SetPerspective(result);
 	}
 
-	mFramebuffer->RescaleFramebuffer((unsigned int)mWidth, (unsigned int)mHeight);
+	mFramebuffer->RescaleFramebuffer(mWidth, mHeight);
 
 	// TODO add to Renderer
 	glViewport(0, 0, (GLsizei)mWidth, (GLsizei)mHeight);

@@ -6,6 +6,7 @@
 class Audio : public Resource
 {
 public:
+	Audio();
 	Audio(const char* filename);
 	~Audio();
 	

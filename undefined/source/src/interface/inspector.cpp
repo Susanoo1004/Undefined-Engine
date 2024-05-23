@@ -20,15 +20,7 @@ void Inspector::ShowWindow()
 	
 	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
 	{
-		if (Camera::CurrentCamera != nullptr)
-		{
-			if (Camera::CurrentCamera != nullptr)
-			{
-				Camera::LastPos = Camera::CurrentCamera->Eye;
-				Camera::LastOrientation = Camera::CurrentCamera->LookAt;
-				Camera::CurrentCamera = nullptr;
-			}
-		}
+		ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(false);
 	}
 
 	if (mRenderer->ObjectIndex >= 0)
@@ -36,10 +28,14 @@ void Inspector::ShowWindow()
 		Object* obj = SceneManager::ActualScene->Objects[mRenderer->ObjectIndex];
 		Reflection::ReflectionObj<Object>(obj);
 
-        if (ImGui::Button("Add Component"))
+		if (ImGui::Button("Add Component"))
+		{
             ImGui::OpenPopup("component_popup");
-        ImGui::SameLine();
-        if (ImGui::BeginPopup("component_popup"))
+		}
+
+		ImGui::SameLine();
+        
+		if (ImGui::BeginPopup("component_popup"))
         {
 			for (int i = 0; i < RuntimeClasses::names.size(); i++)
 			{

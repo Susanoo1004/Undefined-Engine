@@ -5,6 +5,10 @@
 #include "engine_debug/logger.h"
 #include "audio/sound_buffer.h"
 
+Audio::Audio()
+{
+}
+
 Audio::Audio(const char* filename)
 {
 	mName = filename;

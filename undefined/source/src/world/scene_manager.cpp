@@ -54,8 +54,9 @@ void SceneManager::Start()
 		Logger::Error("No scene loaded");
 		return;
 	}
-	// save ActualScene
-	
+	// save ActualScene into temp scene (to restart)
+	SceneManager::SaveCurrentScene();
+
 	ActualScene->Start();
 }
 
@@ -73,6 +74,11 @@ void SceneManager::GlobalUpdate()
 		{
 			Time::FixedStep--;
 		}
+
+		for (Object* obj : ActualScene->Objects)
+		{
+			obj->mTransform.UpdateTransform();
+		}
 		return;
 	}
 
@@ -81,6 +87,11 @@ void SceneManager::GlobalUpdate()
 		while (Time::FixedStep >= 1)
 		{
 			Time::FixedStep--;
+		}
+
+		for (Object* obj : ActualScene->Objects)
+		{
+			obj->mTransform.UpdateTransform();
 		}
 		return;
 	}
@@ -93,6 +104,11 @@ void SceneManager::GlobalUpdate()
 
 	ActualScene->Update();
 	ActualScene->LateUpdate();
+
+	for (Object* obj : ActualScene->Objects)
+	{
+		obj->mTransform.UpdateTransform();
+	}
 }
 
 void SceneManager::Draw()
@@ -104,6 +120,7 @@ void SceneManager::Draw()
 	}
 
 	ActualScene->Draw();
+	ActualScene->PostDraw();
 }
 
 void SceneManager::SaveCurrentScene()
@@ -139,9 +156,10 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 		return false;
 	}
 
+	Object::mRoot->DetachChildren();
 	delete ActualScene;
 
-	ActualScene = new Scene(path.filename().generic_string());
+	ActualScene = new Scene(path.filename().string().erase(path.filename().string().size() - 6));
 
 	Json::Value root;
 	std::ifstream file(path);
@@ -150,15 +168,22 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 	std::vector<std::string> names = root.getMemberNames();
 	for (size_t i = 0; i < root.size(); i++)
 	{
-		Object* test = Reflection::ReadObj<Object>(root.get(names[i], Json::Value()));
-		ActualScene->Objects.push_back(test);
-		Logger::Debug("{}", test->GameTransform->Position);
+		Object* obj = Reflection::ReadObj<Object>(root.get(names[i], Json::Value()));
+		obj->mTransform.mHasChanged = true;
+		ActualScene->Objects.push_back(obj);
 	}
 
-	for (size_t i = 0; i < ActualScene->Objects.size(); i++)
+	for (Object* obj : ActualScene->Objects)
 	{
-		//set parents
-		ActualScene->Objects[i]->ResetPointerLink();
+		obj->ResetPointerLink();
+	}
+
+	for (Object* obj : ActualScene->Objects)
+	{
+		if (!obj->mParent)
+		{
+			obj->SetParent(nullptr);
+		}
 	}
 
 	file.close();
@@ -167,10 +192,8 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 
 void SceneManager::Reload()
 {
-	Logger::Debug("Reload scene");
 	//help
 	//load ActualScene
 
-	//SceneManager::SaveCurrentScene();
 	SceneManager::LoadScene("assets/scenes/test.scene");
 }

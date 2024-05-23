@@ -3,6 +3,8 @@
 
 #include "utils/flag.h"
 
+#include <reflection/attributes.h>
+
 /// <summary>
 /// Base Class for all our Resources
 /// </summary>
@@ -22,4 +24,10 @@ public:
 	/// </summary>
 	/// <returns>Return either true if it is valid or false</returns>
 	virtual bool IsValid();
+
+	std::string Name;
 };
+
+REFL_AUTO(type(Resource),
+	field(Name, HideInInspector())
+);

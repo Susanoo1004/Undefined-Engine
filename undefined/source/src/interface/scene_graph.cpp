@@ -23,12 +23,7 @@ void SceneGraph::DisplayWindow()
 
     if (ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
     {
-        if (Camera::CurrentCamera != nullptr)
-        {
-            Camera::LastPos = Camera::CurrentCamera->Eye;
-            Camera::LastOrientation = Camera::CurrentCamera->LookAt;
-            Camera::CurrentCamera = nullptr;
-        }
+        ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(false);
     }
 
     if (ImGui::CollapsingHeader(SceneManager::ActualScene->Name.c_str(),
@@ -39,6 +34,12 @@ void SceneGraph::DisplayWindow()
     DisplayActualScene();
 
     ImGui::End();
+}
+
+void SceneGraph::Delete()
+{
+    delete mRenamingObject;
+    delete mSelectedObject;
 }
 
 void SceneGraph::DisplayActualScene()
@@ -149,7 +150,7 @@ void SceneGraph::ClickSelectObject(Object* object)
         // Time for the travel time of the camera when double clicking to an object 
         mCamTravelTime = 0.4f;
         mLerpCam = true;
-        mBaseCamPos = Camera::CurrentCamera == nullptr ? Camera::LastPos : Camera::CurrentCamera->Eye;
+        mBaseCamPos = Camera::CurrentCamera->Eye;
     }
     if (mLerpCam)
     {

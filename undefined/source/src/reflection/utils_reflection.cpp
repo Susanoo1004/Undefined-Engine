@@ -15,8 +15,3 @@ void* Reflection::ReadValueWithName(Json::Value jsonObj, std::string name)
 {
 	return RuntimeClasses::ReadObj(jsonObj, name);
 }
-
-void* Reflection::CreateWithName(std::string name)
-{
-	return RuntimeClasses::CreateClass(name);
-}

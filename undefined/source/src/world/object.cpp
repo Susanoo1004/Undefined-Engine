@@ -1,5 +1,7 @@
 #include "world/object.h"
 
+#include "world/scene_manager.h"
+
 #include <random>
 
 static std::random_device RANDOM_DEVICE;
@@ -101,12 +103,14 @@ void Object::SetParent(Object* parent)
 
 		mParent = parent;
 		mParent->mChildren.emplace_back(this);
+		mParent->mChildrenUUIDs.emplace_back(mUUID);
 		mTransform.mParentTransform = &parent->mTransform;
 	}
 	else
 	{
 		mParent = mRoot;
 		mParent->mChildren.emplace_back(this);
+		mParent->mChildrenUUIDs.emplace_back(mUUID);
 		mTransform.mParentTransform = nullptr;
 	}
 }
@@ -123,6 +127,7 @@ void Object::DetachChildren()
 		(*it)->mParent = mRoot;
 	}
 	mChildren.clear();
+	mChildrenUUIDs.clear();
 }
 
 const Object* Object::GetChild(unsigned int index) const
@@ -157,6 +162,7 @@ void Object::DetachChild(unsigned int index)
 	mChildren[index]->mParent = mRoot;
 	mChildren[index]->mTransform.mParentTransform = nullptr;
 	mChildren.erase(mChildren.begin() + index);
+	mChildrenUUIDs.erase(mChildrenUUIDs.begin() + index);
 }
 
 void Object::DetachChild(std::string mName)
@@ -169,6 +175,7 @@ void Object::DetachChild(std::string mName)
 			child->mParent = mRoot;
 			child->mTransform.mParentTransform = nullptr;
 			mChildren.erase(mChildren.begin() + index);
+			mChildrenUUIDs.erase(mChildrenUUIDs.begin() + index);
 		}
 		index++;
 	}
@@ -189,6 +196,7 @@ void Object::DetachChild(Object* child)
 			currChild->mParent = mRoot;
 			currChild->mTransform.mParentTransform = nullptr;
 			mChildren.erase(mChildren.begin() + index);
+			mChildrenUUIDs.erase(mChildrenUUIDs.begin() + index);
 			break;
 		}
 		index++;
@@ -213,20 +221,34 @@ void Object::AtachChild(Object* child, unsigned int index)
 		findIndex++;
 	}
 	mChildren.erase(mChildren.begin() + findIndex, mChildren.begin() + findIndex + 1);
+	mChildrenUUIDs.erase(mChildrenUUIDs.begin() + findIndex, mChildrenUUIDs.begin() + findIndex + 1);
 	if (index > findIndex)
 	{
 		index--;
 	}
 	mChildren.insert(mChildren.begin() + index, child);
+	mChildrenUUIDs.insert(mChildrenUUIDs.begin() + index, child->mUUID);
 }
 
 void Object::ResetPointerLink()
 {
-	if (mParent)
+	for (Object* obj : SceneManager::ActualScene->Objects)
 	{
-		mTransform.mParentTransform = &mParent->mTransform;
-	}
+		if (obj->Parent)
+		{
+			continue;
+		}
 
+		for (uint64_t childUUID : mChildrenUUIDs)
+		{
+			if (obj->mUUID == childUUID)
+			{
+				obj->SetParent(this);
+				break;
+			}
+		}
+	}
+	
 	for (size_t i = 0; i < Components.size(); i++)
 	{
 		Components[i]->mObject = this;

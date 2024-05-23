@@ -14,7 +14,7 @@ PointLight::~PointLight()
 {
 }
 
-void PointLight::Update()
+void PointLight::Draw()
 {
 	mID = mGlobalID;
 	pShader->Use();
@@ -30,7 +30,7 @@ void PointLight::Update()
 	mGlobalID++;
 }
 
-void PointLight::LateUpdate()
+void PointLight::PostDraw()
 {
 	mGlobalID = 0;
 }

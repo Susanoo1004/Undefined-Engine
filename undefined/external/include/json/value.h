@@ -1,3 +1,5 @@
+#pragma warning(disable : 26812)
+
 // Copyright 2007-2010 Baptiste Lepilleur and The JsonCpp Authors
 // Distributed under MIT license, or public domain if desired and
 // recognized in your jurisdiction.

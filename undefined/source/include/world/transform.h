@@ -11,6 +11,7 @@
 class Transform
 {
 public:
+	void UpdateTransform();
 
 	UNDEFINED_ENGINE const Matrix4x4& LocalMatrix();
 	UNDEFINED_ENGINE void SetLocalMatrix(const Matrix4x4& matrix);
@@ -66,12 +67,13 @@ private:
 	Matrix4x4 mWorldTRS = Matrix4x4::TRS(Vector3(), Quaternion(), Vector3(1));
 	Matrix4x4 mLocalTRS = Matrix4x4::TRS(Vector3(), Quaternion(), Vector3(1));
 	friend class Object;
+	friend class SceneManager;
 	friend struct refl_impl::metadata::type_info__ <Transform>;
 	Transform* mParentTransform;
 };
 
 REFL_AUTO(type(Transform),
-	field(mPosition, NotifyChange(&Transform::mHasChanged), Spacing(ImVec2(0, 20))),
+	field(mPosition, NotifyChange(&Transform::mHasChanged), Spacing(ImVec2(0, 10)), Header()),
 	field(mRotation, NotifyChange(&Transform::mHasChanged)),
 	field(mScale, NotifyChange(&Transform::mHasChanged))
 )

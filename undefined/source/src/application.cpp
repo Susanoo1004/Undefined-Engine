@@ -65,8 +65,8 @@ void Application::Init()
 
     SceneManager::Init();
 
-    SceneManager::ActualScene->AddObject("poin")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }
-    ,1.0f, 0.09f, 0.032f);
+    SceneManager::ActualScene->AddObject("Point")->AddComponent<PointLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f }, 1.0f, 0.09f, 0.032f);
+    //SceneManager::ActualScene->AddObject("Point")->AddComponent<DirLight>(Vector3{ 0.4f, 0.4f, 0.4f }, Vector3{ 0.8f, 0.8f, 0.8f }, Vector3{ 0.5f, 0.5f, 0.5f });
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
@@ -122,8 +122,9 @@ void Application::Update()
         mSoundSource->Restart(source1, sound1);
     }
 
-    mSoundDevice->SetPosition(Camera::CurrentCamera == nullptr ? Camera::LastPos : Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);
-    mSoundDevice->SetOrientation(Camera::CurrentCamera == nullptr ? Camera::LastOrientation : Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->LookAt);
+    mSoundDevice->SetPosition(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);
+    mSoundDevice->SetOrientation(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->LookAt);
+
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
     {
         Interface::EditorViewports[i]->RescaleViewport();
@@ -165,9 +166,9 @@ void Application::Update()
 
 void Application::Clear()
 {
+    mRenderer->UnUseShader();
     SceneManager::Delete();
     delete Camera::CurrentCamera;
-    mRenderer->UnUseShader();
     ServiceLocator::CleanServiceLocator();
     ResourceManager::UnloadAll();
     Interface::Delete();

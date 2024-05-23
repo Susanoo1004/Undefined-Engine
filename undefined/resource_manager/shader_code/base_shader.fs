@@ -12,7 +12,8 @@ struct DirLight
     vec3 specular;
 };
 
-struct PointLight {
+struct PointLight 
+{
     vec3 position;
     
     float constant;
@@ -26,7 +27,8 @@ struct PointLight {
     bool isUsed;
 };
 
-struct SpotLight {
+struct SpotLight 
+{
     vec3 position;
     vec3 direction;
     float cutOff;
@@ -136,7 +138,7 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
     
-    //// dirlight
+    // dirlight
     for (int i = 0; i < NBR_OF_DIR_LIGHT; i++)
     {
          result += CalcDirLight(dirLights[i], norm, viewDir);
@@ -151,6 +153,7 @@ void main()
         }
     }
 
+    // point light
     for (int i = 0; i < NBR_OF_SPOT_LIGHT; i++)
     {
         if (spotLights[i].isUsed)
