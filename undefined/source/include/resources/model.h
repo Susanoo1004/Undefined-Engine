@@ -99,5 +99,6 @@ private:
     friend struct refl_impl::metadata::type_info__ <Model>;
 };
 
-REFL_AUTO(type(Model, bases<Resource>)
+REFL_AUTO(type(Model, bases<Resource>),
+field(mModel)
 );

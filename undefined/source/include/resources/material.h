@@ -33,5 +33,6 @@ public:
 	std::shared_ptr<Shader> MatShader;
 };
 
-REFL_AUTO(type(Material, bases<Resource>)
+REFL_AUTO(type(Material, bases<Resource>),
+	field(MatTex)
 	);

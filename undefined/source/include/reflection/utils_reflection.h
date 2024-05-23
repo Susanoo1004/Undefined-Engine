@@ -136,7 +136,7 @@ Json::Value Reflection::WriteValue(MemberT* val)
 			root[i] = WriteValue<ListT>(&(*val)[i]);
 		}
 	}
-	else if constexpr (is_shared_ptr_v<MemberT> && std::_Is_any_of_v<MemberT, std::shared_ptr<Model>>)
+	else if constexpr (is_shared_ptr_v<MemberT> && std::_Is_any_of_v<MemberT, std::shared_ptr<Model>, std::shared_ptr<Texture>>)
 	{
 		root = val->get()->Name;
 	}
@@ -218,6 +218,10 @@ MemberT Reflection::ReadValue(Json::Value jsonValue)
 			valueList[i] = ReadValue<ListT>(jsonValue[i]);
 		}
 		return valueList;
+	}
+	else if constexpr (is_shared_ptr_v<MemberT> && std::is_same_v<MemberT, std::shared_ptr<Model>>)
+	{
+		return ResourceManager::Get<Model>(jsonValue.asString());
 	}
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{

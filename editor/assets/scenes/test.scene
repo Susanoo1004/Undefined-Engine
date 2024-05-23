@@ -1,5 +1,43 @@
 {
-	"12576343282928061107" : 
+	"11922704594827888402" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : null,
+			"Name" : "Test Child",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 1.9668079614639282,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 11922704594827888402
+		}
+	},
+	"14662173516088134887" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -64,16 +102,79 @@
 					}
 				}
 			},
-			"mUUID" : 12576343282928061107
+			"mUUID" : 14662173516088134887
 		}
 	},
-	"16126359272524236640" : 
+	"6960637432393765720" : 
 	{
 		"Type" : "Object",
 		"Values" : 
 		{
-			"Components" : null,
-			"Name" : "Test Child",
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/viking_room.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "PikingRoom",
+			"mChildrenUUIDs" : 
+			[
+				11922704594827888402,
+				11922704594827888402,
+				11922704594827888402
+			],
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 1.9668079614639282,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 6960637432393765720
+		}
+	},
+	"7351854439810512682" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/cube.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "Empty",
 			"mChildrenUUIDs" : null,
 			"mIsEnable" : true,
 			"mTransform" : 
@@ -102,58 +203,7 @@
 					}
 				}
 			},
-			"mUUID" : 16126359272524236640
-		}
-	},
-	"2199683061016797958" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "ModelRenderer",
-					"Values" : 
-					{
-						"ModelObject" : "assets/viking_room.obj",
-						"mIsEnable" : true
-					}
-				}
-			],
-			"Name" : "PikingRoom",
-			"mChildrenUUIDs" : 
-			[
-				16126359272524236640
-			],
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"w" : 1.0,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 2199683061016797958
+			"mUUID" : 7351854439810512682
 		}
 	}
 }
