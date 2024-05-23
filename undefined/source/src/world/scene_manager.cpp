@@ -178,7 +178,7 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 {
 	if (!path.string().ends_with(".scene"))
 	{
-		Logger::Error("Can't load scene : {}", path.filename().string());
+		Logger::Error("Can't load scene : {}", path.generic_string());
 		return false;
 	}
 
@@ -187,14 +187,14 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 
 	if (!file.is_open())
 	{
-		Logger::Error("Can't load scene : {}", path.filename().string());
+		Logger::Error("Can't load scene : {}", path.generic_string());
 		return false;
 	}
 
 	Object::mRoot->DetachChildren();
 	delete ActualScene;
 
-	ActualScene = new Scene(path.filename().string().erase(path.filename().string().size() - 6));
+	ActualScene = new Scene(path.generic_string().erase(path.generic_string().size() - 6));
 	ActualScene->Path = path;
 
 	file >> root;

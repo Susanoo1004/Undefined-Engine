@@ -1,5 +1,5 @@
 {
-	"12082021843971552039" : 
+	"11040872884364677345" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -44,128 +44,10 @@
 					}
 				}
 			},
-			"mUUID" : 12082021843971552039
+			"mUUID" : 11040872884364677345
 		}
 	},
-	"14989158896436774624" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "ModelRenderer",
-					"Values" : 
-					{
-						"ModelObject" : "assets/sphere.obj",
-						"mIsEnable" : true
-					}
-				},
-				{
-					"Type" : "CapsuleCollider",
-					"Values" : 
-					{
-						"mHeight" : 1.0,
-						"mIsEnable" : true,
-						"mPos" : 
-						{
-							"x" : 0.0,
-							"y" : 1.0,
-							"z" : 0.0
-						},
-						"mRadius" : 1.0,
-						"mRot" : 
-						{
-							"w" : 1.0,
-							"x" : 0.0,
-							"y" : 0.0,
-							"z" : 0.0
-						}
-					}
-				}
-			],
-			"Name" : "Sphere",
-			"mChildrenUUIDs" : null,
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 3.7946739196777344,
-						"y" : 2.4765334129333496,
-						"z" : 0.013763426803052425
-					},
-					"mRotation" : 
-					{
-						"w" : 1.0,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 14989158896436774624
-		}
-	},
-	"15904292329349984515" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "ModelRenderer",
-					"Values" : 
-					{
-						"ModelObject" : "assets/viking_room.obj",
-						"mIsEnable" : true
-					}
-				}
-			],
-			"Name" : "PikingRoom",
-			"mChildrenUUIDs" : null,
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : -0.5,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"w" : 1.0,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
-					}
-				}
-			},
-			"mUUID" : 15904292329349984515
-		}
-	},
-	"17097212069994113348" : 
+	"11201159370938329867" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -230,10 +112,128 @@
 					}
 				}
 			},
-			"mUUID" : 17097212069994113348
+			"mUUID" : 11201159370938329867
 		}
 	},
-	"8145204423218403162" : 
+	"2027115876891179569" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/viking_room.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "PikingRoom",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : -0.5,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 2027115876891179569
+		}
+	},
+	"5111503503628597786" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/sphere.obj",
+						"mIsEnable" : true
+					}
+				},
+				{
+					"Type" : "CapsuleCollider",
+					"Values" : 
+					{
+						"mHeight" : 1.0,
+						"mIsEnable" : true,
+						"mPos" : 
+						{
+							"x" : 0.0,
+							"y" : 1.0,
+							"z" : 0.0
+						},
+						"mRadius" : 1.0,
+						"mRot" : 
+						{
+							"w" : 1.0,
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						}
+					}
+				}
+			],
+			"Name" : "Sphere",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : 1.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 1.0,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 1.0,
+						"y" : 1.0,
+						"z" : 1.0
+					}
+				}
+			},
+			"mUUID" : 5111503503628597786
+		}
+	},
+	"6183360229598348058" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -311,7 +311,7 @@
 					}
 				}
 			},
-			"mUUID" : 8145204423218403162
+			"mUUID" : 6183360229598348058
 		}
 	}
 }
