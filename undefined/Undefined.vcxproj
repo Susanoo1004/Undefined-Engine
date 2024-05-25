@@ -212,7 +212,6 @@
     <ClCompile Include="source\src\world\object.cpp" />
     <ClCompile Include="source\src\world\scene.cpp" />
     <ClCompile Include="source\src\world\scene_manager.cpp" />
-    <ClCompile Include="source\src\world\scene_serializer.cpp" />
     <ClCompile Include="source\src\world\spot_light.cpp" />
     <ClCompile Include="source\src\world\transform.cpp" />
     <ClCompile Include="source\src\wrapper\key_input.cpp" />
@@ -304,7 +303,6 @@
     <ClInclude Include="source\include\world\transform.h" />
     <ClInclude Include="source\include\world\object.h" />
     <ClInclude Include="source\include\world\scene.h" />
-    <ClInclude Include="source\include\world\scene_serializer.h" />
     <ClInclude Include="source\include\world\scene_manager.h" />
     <ClInclude Include="source\include\wrapper\key_input.h" />
     <ClInclude Include="source\include\wrapper\input_manager.h" />

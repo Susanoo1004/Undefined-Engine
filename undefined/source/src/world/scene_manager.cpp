@@ -8,6 +8,8 @@
 #include "wrapper/physics_system.h"
 #include "reflection/utils_reflection.h"
 
+#include "world/point_light.h"
+
 void SceneManager::Init()
 {
 	if (!Object::mRoot)
@@ -31,9 +33,11 @@ void SceneManager::Delete()
 
 Scene* SceneManager::CreateScene(const std::string& mName)
 {
-	Scene* newScene = new Scene(mName);
-	Scenes.push_back(newScene);
-	return newScene;
+	Object::mRoot->DetachChildren();
+	delete ActualScene;
+
+	ActualScene = new Scene(mName);
+	return ActualScene;
 }
 
 void SceneManager::SetPlay(bool play)
@@ -53,8 +57,9 @@ void SceneManager::Start()
 		Logger::Error("No scene loaded");
 		return;
 	}
-	// save ActualScene
-	
+	// save ActualScene into temp scene (to restart)
+	SceneManager::SaveTempScene();
+
 	ActualScene->Start();
 }
 
@@ -72,6 +77,11 @@ void SceneManager::GlobalUpdate()
 		{
 			Time::FixedStep--;
 		}
+
+		for (Object* obj : ActualScene->Objects)
+		{
+			obj->mTransform.UpdateTransform();
+		}
 		return;
 	}
 
@@ -80,6 +90,11 @@ void SceneManager::GlobalUpdate()
 		while (Time::FixedStep >= 1)
 		{
 			Time::FixedStep--;
+		}
+
+		for (Object* obj : ActualScene->Objects)
+		{
+			obj->mTransform.UpdateTransform();
 		}
 		return;
 	}
@@ -95,6 +110,11 @@ void SceneManager::GlobalUpdate()
 
 	ActualScene->Update();
 	ActualScene->LateUpdate();
+
+	for (Object* obj : ActualScene->Objects)
+	{
+		obj->mTransform.UpdateTransform();
+	}
 }
 
 void SceneManager::Draw()
@@ -109,6 +129,26 @@ void SceneManager::Draw()
 	ActualScene->PostDraw();
 }
 
+void SceneManager::SaveTempScene()
+{
+	if (!ActualScene)
+	{
+		return;
+	}
+
+	Json::Value root;
+
+	for (Object* obj : ActualScene->Objects)
+	{
+		root[std::to_string(obj->mUUID)] = Reflection::WriteObj(obj);
+	}
+
+	std::ofstream file("temp.scene");
+	file << root.toStyledString();
+
+	file.close();
+}
+
 void SceneManager::SaveCurrentScene()
 {
 	if (!ActualScene)
@@ -120,22 +160,15 @@ void SceneManager::SaveCurrentScene()
 
 	for (Object* obj : ActualScene->Objects)
 	{
-		root["GameObjects"][std::to_string(obj->mUUID)] = Reflection::WriteObj(obj);
-
-		int i = 0;
-		for (Component* comp : obj->Components)
-		{	
-			root["Components"][std::to_string(obj->mUUID)][i] = Reflection::WriteValueWithHash(comp, typeid(*comp).hash_code());
-			i++;
-		}
+		root[std::to_string(obj->mUUID)] = Reflection::WriteObj(obj);
 	}
 
-	std::ofstream file("assets/scenes/test.scene");
-	//if (!ActualScene->Path.string().ends_with(".scene"))
-	//{
-		//ActualScene->Path = "assets/" + ActualScene->Name + ".scene";
-	//}
-	//std::ofstream file(ActualScene->Path);
+	//std::ofstream file("assets/scenes/test.scene");
+	if (!ActualScene->Path.string().ends_with(".scene"))
+	{
+		ActualScene->Path = "assets/" + ActualScene->Name + ".scene";
+	}
+	std::ofstream file(ActualScene->Path);
 	file << root.toStyledString();
 
 	file.close();
@@ -145,20 +178,59 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 {
 	if (!path.string().ends_with(".scene"))
 	{
+		Logger::Error("Can't load scene : {}", path.generic_string());
 		return false;
 	}
 
 	Json::Value root;
 	std::ifstream file(path);
+
+	if (!file.is_open())
+	{
+		Logger::Error("Can't load scene : {}", path.generic_string());
+		return false;
+	}
+
+	Object::mRoot->DetachChildren();
+	delete ActualScene;
+
+	ActualScene = new Scene(path.generic_string().erase(path.generic_string().size() - 6));
+	ActualScene->Path = path;
+
 	file >> root;
 
+	std::vector<std::string> names = root.getMemberNames();
+	for (size_t i = 0; i < root.size(); i++)
+	{
+		Object* obj = Reflection::ReadObj<Object>(root.get(names[i], Json::Value()));
+		obj->mTransform.mHasChanged = true;
+		ActualScene->Objects.push_back(obj);
+	}
+
+	for (Object* obj : ActualScene->Objects)
+	{
+		obj->ResetPointerLink();
+	}
+
+	for (Object* obj : ActualScene->Objects)
+	{
+		if (!obj->mParent)
+		{
+			obj->SetParent(nullptr);
+		}
+	}
+
 	file.close();
-	return false;
+	return true;
 }
 
 void SceneManager::Reload()
 {
-	Logger::Debug("Reload scene");
-	//help
-	//load ActualScene
+	std::filesystem::path path = ActualScene->Path;
+	std::string name = ActualScene->Name;
+
+	SceneManager::LoadScene("temp.scene");
+
+	ActualScene->Path = path;
+	ActualScene->Name = name;
 }

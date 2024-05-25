@@ -26,6 +26,61 @@ void SceneGraph::DisplayWindow()
         ServiceLocator::Get<InputManager>()->GetKeyInput("editorCameraInput")->SetIsEnabled(false);
     }
 
+    if (ImGui::BeginPopup("LoadString"))
+    {
+        ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
+        char* newName = (char*)loadString.c_str();
+
+        ImGui::SetKeyboardFocusHere();
+        ImGui::PushItemWidth(ImGui::CalcTextSize(newName).x + 5);
+        if (ImGui::InputText("##load", (char*)newName, 256, flags))
+        {
+            loadString = newName;
+            if (!loadString.ends_with(".scene"))
+            {
+                loadString.append(".scene");
+            }
+            SceneManager::LoadScene(loadString);
+            loadString = "";
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    if (ImGui::BeginPopup("CreateString"))
+    {
+        ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
+        char* newName = (char*)loadString.c_str();
+
+        ImGui::SetKeyboardFocusHere();
+        ImGui::PushItemWidth(ImGui::CalcTextSize(newName).x + 5);
+        if (ImGui::InputText("##load", (char*)newName, 256, flags))
+        {
+            loadString = newName;
+            SceneManager::CreateScene(loadString);
+            loadString = "";
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    if (ImGui::Button("Create"))
+    {
+        ImGui::OpenPopup("CreateString");
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Save"))
+    {
+        SceneManager::SaveCurrentScene();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Load"))
+    {
+        ImGui::OpenPopup("LoadString");
+    }
+
+
+
     if (ImGui::CollapsingHeader(SceneManager::ActualScene->Name.c_str(),
         ImGuiTreeNodeFlags_SpanAvailWidth |
         ImGuiTreeNodeFlags_FramePadding |

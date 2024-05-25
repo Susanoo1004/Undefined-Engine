@@ -8,8 +8,6 @@
 #include "engine_debug/logger.h"
 #include "reflection/attributes.h"
 
-#include "world/dir_light.h"
-
 template<class Comp>
 concept ComponentType = std::is_base_of<Component, Comp>::value;
 
@@ -148,6 +146,8 @@ private:
 	void SetTransform(Transform newTransform) { mTransform = newTransform; };
 	void SetTransform(Transform* newTransform) { mTransform = *newTransform; };
 
+	void ResetPointerLink();
+
 	/// <summary>
 	/// Transform of the Object
 	/// </summary>
@@ -161,12 +161,12 @@ private:
 	/// </summary>
 	std::vector<Object*> mChildren;
 
-	DirLight test2;
-
 	/// <summary>
 	/// Universally Unique Identifier for the Object
 	/// </summary>
 	uint64_t mUUID;
+
+	std::vector<uint64_t> mChildrenUUIDs;
 
 	/// <summary>
 	/// Boolean to know if the Object is enable
@@ -189,7 +189,7 @@ REFL_AUTO(type(Object),
 	field(mUUID, HideInInspector()),
 	field(mIsEnable, DontDisplayName(), Callback(&Object::ChangeEnableStatus)),
 	field(Name, SameLine()),
-	//field(mChildren, HideInInspector()),
+	field(mChildrenUUIDs, HideInInspector()),
 	field(mTransform),
 	field(Components, Spacing(ImVec2(0, 30)))
 )

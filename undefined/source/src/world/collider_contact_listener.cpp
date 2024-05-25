@@ -36,12 +36,21 @@ void ColliderContactListener::OnContactPersisted(const JPH::Body& inBody1, const
 void ColliderContactListener::OnContactRemoved(const JPH::SubShapeIDPair& inSubShapePair)
 {
 	Logger::Info("A contact was removed"); 
-	Script* script = PhysicsSystem::GetColliderFromID(inSubShapePair.GetBody1ID().GetIndexAndSequenceNumber())->GameObject->GetComponent<Script>();
-
-	if (script)
+	Collider* collider = PhysicsSystem::GetColliderFromID(inSubShapePair.GetBody1ID().GetIndexAndSequenceNumber());
+	if (collider)
 	{
-		mOnCollisionExitScripts.push_back(script);
+		Script* script = collider->GameObject->GetComponent<Script>();
+
+		if (script)
+		{
+			mOnCollisionExitScripts.push_back(script);
+		}
 	}
+	else
+	{
+		Logger::Error("Collider not found");
+	}
+
 }
 
 void ColliderContactListener::CallOnColliderEnter()

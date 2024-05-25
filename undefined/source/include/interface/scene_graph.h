@@ -35,4 +35,7 @@ private:
 	static inline Vector3 mBaseCamPos = Vector3();
 	static inline bool mLerpCam = false;
 	static inline float mCamTravelTime = 0;
+
+	static inline std::string loadString = "";
+	static inline bool startLoad = false;
 };

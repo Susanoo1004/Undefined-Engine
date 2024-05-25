@@ -3,28 +3,31 @@
 
 #include "utils/flag.h"
 
-#include <refl.hpp>
+#include <reflection/attributes.h>
 
 /// <summary>
 /// Base Class for all our Resources
 /// </summary>
-class UNDEFINED_ENGINE Resource
+class Resource
 {
 public:
 	/// <summary>
 	/// Constructor of Resource
 	/// </summary>
-	Resource();
+	UNDEFINED_ENGINE Resource();
 	/// <summary>
 	/// Destructor of Resource (can be override)
 	/// </summary>
-	virtual ~Resource();
+	UNDEFINED_ENGINE virtual ~Resource();
 	/// <summary>
 	/// Check if the Resource is valid
 	/// </summary>
 	/// <returns>Return either true if it is valid or false</returns>
-	virtual bool IsValid();
+	UNDEFINED_ENGINE virtual bool IsValid();
+
+	std::string Name;
 };
 
-REFL_AUTO(type(Resource)
+REFL_AUTO(type(Resource),
+	field(Name, HideInInspector())
 );

@@ -6,6 +6,28 @@
 #include <toolbox/Calc.h>
 
 
+void Transform::UpdateTransform()
+{
+	if (mParentTransform)
+	{
+		mWorldTRS = mLocalTRS * mParentTransform->WorldMatrix();
+	}
+	else
+	{
+		mWorldTRS = mLocalTRS;
+	}
+
+	mPosition = { mWorldTRS[0][3], mWorldTRS[1][3], mWorldTRS[2][3] };
+	mRotation = mWorldTRS.ToQuaternion();
+	Matrix3x3 worldTrans = Matrix4x4::Transpose(mWorldTRS);
+	mScale = Vector3(worldTrans[0].Norm(), worldTrans[1].Norm(), worldTrans[2].Norm());
+
+	mLocalPosition = { mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3] };
+	mLocalRotation = mLocalTRS.ToQuaternion();
+	Matrix3x3 localTrans = Matrix4x4::Transpose(mLocalTRS);
+	mLocalScale = Vector3(localTrans[0].Norm(), localTrans[1].Norm(), localTrans[2].Norm());
+}
+
 const Matrix4x4& Transform::LocalMatrix()
 {
 	if (mHasChanged)
@@ -86,7 +108,7 @@ void Transform::SetWorldMatrix(const Matrix4x4& matrix)
 		mLocalTRS = mWorldTRS;
 	}
 
-	mLocalPosition = mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3];
+	mLocalPosition = Vector3(mLocalTRS[0][3], mLocalTRS[1][3], mLocalTRS[2][3]);
 	mLocalRotation = mLocalTRS.ToQuaternion();
 	trans = Matrix4x4::Transpose(mLocalTRS);
 	mLocalScale = Vector3(trans[0].Norm(), trans[1].Norm(), trans[2].Norm());
@@ -116,7 +138,7 @@ void Transform::SetPosition(Vector3 newPosition)
 
 Vector3 Transform::GetRotation()
 {
-	return mRotation.ToRotationMatrix().ToEuler(true);
+	return mRotation.ToEuler(true);
 }
 
 void Transform::SetRotation(const Vector3& newRotation)
@@ -126,7 +148,7 @@ void Transform::SetRotation(const Vector3& newRotation)
 
 Vector3 Transform::GetRotationRad()
 {
-	return mRotation.ToRotationMatrix().ToEuler();
+	return mRotation.ToEuler();
 }
 
 void Transform::SetRotationRad(Vector3 newRotationRad)
@@ -224,7 +246,7 @@ void Transform::SetLocalPosition(Vector3 newLocalPosition)
 
 Vector3 Transform::GetLocalRotation()
 {
-	return mLocalRotation.ToRotationMatrix().ToEuler(true);
+	return mLocalRotation.ToEuler(true);
 }
 
 void Transform::SetLocalRotation(Vector3 newLocalRotation)
@@ -237,7 +259,7 @@ void Transform::SetLocalRotation(Vector3 newLocalRotation)
 
 Vector3 Transform::GetLocalRotationRad()
 {
-	return mLocalRotation.ToRotationMatrix().ToEuler();
+	return mLocalRotation.ToEuler();
 }
 
 void Transform::SetLocalRotationRad(Vector3 newLocalRotationRad)

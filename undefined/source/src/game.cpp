@@ -27,7 +27,7 @@ void Game::Init()
 
     Object* player = SceneManager::ActualScene->AddObject("Player");
     player->GameTransform->Position = Vector3(0.0f, 0.0f, 0.0f);
-    player->GameTransform->Rotation = Vector3(0.0f, 90.0f, 90.0f);
+    //player->GameTransform->Rotation = Vector3(0.0f, 90.0f, 90.0f);
     player->GameTransform->Scale = Vector3(0.2f, 0.2f, 0.2f);
     std::shared_ptr<Model> mode = player->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/dog.obj");
     mode->SetTexture(0, ResourceManager::Get<Texture>("assets/dog.jpg"));

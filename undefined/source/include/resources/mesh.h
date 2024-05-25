@@ -51,5 +51,5 @@ public:
 	std::vector<unsigned int> Indices;
 };
 
-REFL_AUTO(type(Mesh)
+REFL_AUTO(type(Mesh, bases<Resource>)
 	);

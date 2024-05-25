@@ -46,7 +46,21 @@ namespace Reflection
 	template<typename T>
 	Json::Value WriteObj(T* obj);
 
-	//Json::Value WriteObjWithHash(void* val, size_t hash);
+	/// <summary>
+	/// Value we wish to read from Json Value
+	/// </summary>
+	/// <param name="jsonValue"> object we write </param>
+	template<typename MemberT>
+	MemberT ReadValue(Json::Value jsonValue);
+
+	void* ReadValueWithName(Json::Value jsonObj, std::string name);
+
+		/// <summary>
+	/// Object we wish to read from Json Value
+	/// </summary>
+	/// <param name="jsonObj"> object we write </param>
+	template<typename T>
+	T* ReadObj(Json::Value jsonObj);
 
 	/// <summary>
 	/// Object we wish to reflect
@@ -122,9 +136,13 @@ Json::Value Reflection::WriteValue(MemberT* val)
 			root[i] = WriteValue<ListT>(&(*val)[i]);
 		}
 	}
+	else if constexpr (is_shared_ptr_v<MemberT> && std::_Is_any_of_v<MemberT, std::shared_ptr<Model>, std::shared_ptr<Texture>>)
+	{
+		root = val->get()->Name;
+	}
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		Reflection::DisplayWithHash(*val, typeid(**val).hash_code());
+		root = Reflection::WriteValueWithHash(*val, typeid(**val).hash_code());
 	}
 	else if constexpr (Reflection::IsReflectable<MemberT>())
 	{
@@ -141,6 +159,11 @@ Json::Value Reflection::WriteObj(T* obj)
 
 	Json::Value root;
 
+	std::string type = typeid(T).name();
+	type.erase(0, 6);
+
+	root["Type"] = type;
+
 	//Lamba that loops for each element we reflect from a class
 	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
 	{
@@ -153,11 +176,94 @@ Json::Value Reflection::WriteObj(T* obj)
 			const char* name = DescriptorT::name.c_str();
 			MemberT value = DescriptorT::get(obj);
 
-			root[name] = WriteValue<MemberT>(&value);
+			root["Values"][name] = WriteValue<MemberT>(&value);
 		}
 	});
 
 	return root;
+}
+
+template<typename MemberT>
+MemberT Reflection::ReadValue(Json::Value jsonValue)
+{
+	if constexpr (std::_Is_any_of_v<MemberT, bool, std::string> || std::is_integral_v<MemberT> || std::is_floating_point_v<MemberT>)
+	{
+		return jsonValue.as<MemberT>();
+	}
+	else if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3, Vector2>)
+	{
+		MemberT value;
+		value.x = jsonValue.get("x", 0.0f).asFloat();
+		value.y = jsonValue.get("y", 0.0f).asFloat();
+		if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4, Vector3>)
+		{
+			value.z = jsonValue.get("z", 0.0f).asFloat();
+		}
+		if constexpr (std::_Is_any_of_v<MemberT, Quaternion, Vector4>)
+		{
+			value.w = jsonValue.get("w", 0.0f).asFloat();
+		}
+		return value;
+	}
+	else if constexpr (Reflection::is_vector_v<MemberT>)
+	{
+		using ListT = typename MemberT::value_type;
+
+		MemberT valueList;
+		valueList.resize(jsonValue.size());
+
+		//If it's a std::vector we reflect every element inside it
+		for (int i = 0; i < (int)jsonValue.size(); i++)
+		{
+			valueList[i] = ReadValue<ListT>(jsonValue[i]);
+		}
+		return valueList;
+	}
+	else if constexpr (is_shared_ptr_v<MemberT> && std::is_same_v<MemberT, std::shared_ptr<Model>>)
+	{
+		return ResourceManager::Get<Model>(jsonValue.asString());
+	}
+	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
+	{
+		std::string subJsonType = jsonValue.get("Type", std::string()).asString();
+		return static_cast<MemberT>(ReadValueWithName(jsonValue, subJsonType));
+	}
+	else if constexpr (Reflection::IsReflectable<MemberT>())
+	{
+		std::string subJsonType = jsonValue.get("Type", std::string()).asString();
+		if (subJsonType != ((std::string)(typeid(MemberT).name())).erase(0,6))
+		{
+			return MemberT();
+		}
+
+		return *ReadObj<MemberT>(jsonValue);
+	}
+}
+
+template <typename T>
+T* Reflection::ReadObj(Json::Value jsonObj)
+{
+	T* obj = new T();
+	constexpr Reflection::TypeDescriptor<T> descriptor = Reflection::Reflect<T>();
+
+	Json::Value jsonValues = jsonObj.get("Values", Json::Value());
+
+	//Lamba that loops for each element we reflect from a class
+	Reflection::ForEach(descriptor.members, [&]<typename DescriptorT>(const DescriptorT)
+	{
+		//We make sure that what we are trying to reflect isn't a function or a variable that has the attribute HideInInspector
+		if constexpr (!Reflection::IsFunction<DescriptorT>())
+		{
+			//MemberT is the type of the element we reflect
+			using MemberT = typename DescriptorT::value_type;
+
+			const char* name = DescriptorT::name.c_str();
+
+			DescriptorT::get(obj) = ReadValue<MemberT>(jsonValues.get(name, Json::Value()));
+		}
+	});
+
+	return obj;
 }
 
 template<typename T>
@@ -311,10 +417,10 @@ void Reflection::DisplayToolboxTypes(MemberT* obj, std::string mName)
 		Vector3 euler = obj->ToEuler();
 		ImGui::SliderAngle3(mName.c_str(), &euler.x, .1f);
 		Quaternion quat = Quaternion::GetRotationQuaternion(euler);
-		//obj->x = quat.x;
-		//obj->y = quat.y;
-		//obj->z = quat.z;
-		//obj->w = quat.w;
+		obj->x = quat.x;
+		obj->y = quat.y;
+		obj->z = quat.z;
+		obj->w = quat.w;
 	}
 }
 

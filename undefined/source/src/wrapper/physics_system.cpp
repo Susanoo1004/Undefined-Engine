@@ -44,9 +44,9 @@ void PhysicsSystem::Update()
 
 void PhysicsSystem::Terminate()
 {
-	delete TempAllocator;
-	delete JobSystem;
 	delete JoltPhysicsSystem;
+	delete JobSystem;
+	delete TempAllocator;
 
 	// Unregisters all types with the factory and cleans up the default material
 	JPH::UnregisterTypes();
@@ -92,22 +92,25 @@ unsigned int PhysicsSystem::CreateBox(const Vector3& pos, const Quaternion& rot,
 {
 	JPH::BodyCreationSettings settings(new JPH::BoxShape(ToJPH(scale/2)), ToJPH(pos), ToJPH(rot), is_static == true ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic, Layers::MOVING);
 
-	settings.mAllowSleeping = false;
+	//settings.mAllowSleeping = false;
 	return BodyInterface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
 }
 
-unsigned int PhysicsSystem::CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius)
+unsigned int PhysicsSystem::CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius, bool is_static)
 {
-	const JPH::CapsuleShapeSettings capsuleSettings(height, radius);
-	const JPH::ShapeSettings::ShapeResult result = capsuleSettings.Create();
+	
+	JPH::BodyCreationSettings settings(new JPH::CapsuleShape(height / 2, radius), ToJPH(pos), ToJPH(rot), is_static == true ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic, Layers::MOVING);
 
-	if (!result.IsValid())
-	{
-		Logger::Error("Couldn't create the capsule");
-		return JPH::BodyID::cInvalidBodyID;
-	}
+	//const JPH::CapsuleShapeSettings capsuleSettings(height, radius);
+	//const JPH::ShapeSettings::ShapeResult result = capsuleSettings.Create();
 
-	JPH::BodyCreationSettings settings(result.Get(), ToJPH(pos), ToJPH(rot), JPH::EMotionType::Dynamic, Layers::MOVING);
+	//if (!result.IsValid())
+	//{
+		//Logger::Error("Couldn't create the capsule");
+		//return JPH::BodyID::cInvalidBodyID;
+	//}
+
+	//JPH::BodyCreationSettings settings(result.Get(), ToJPH(pos), ToJPH(rot), JPH::EMotionType::Dynamic, Layers::MOVING);
 
 	return BodyInterface->CreateAndAddBody(settings, JPH::EActivation::Activate).GetIndexAndSequenceNumber();
 }
@@ -214,7 +217,11 @@ void PhysicsSystem::AddTorque(uint32_t bodyId, const Vector3& torque)
 void PhysicsSystem::DestroyBody(unsigned int body_ID)
 {
 	if (ColliderMap.find(body_ID) == ColliderMap.end())
+	{
+		Logger::Error("body {} wasn't destroyed properly", body_ID);
 		return;
+	}
+	Logger::Info("body {} was destroyed", body_ID);
 
 	BodyInterface->RemoveBody(JPH::BodyID(body_ID));
 	BodyInterface->DestroyBody(JPH::BodyID(body_ID));

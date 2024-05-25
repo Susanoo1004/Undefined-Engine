@@ -58,6 +58,8 @@
 #pragma pack(push)
 #pragma pack()
 
+#pragma warning (disable : 26812)
+
 /** \brief JSON (JavaScript Object Notation).
  */
 namespace Json {

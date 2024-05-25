@@ -12,6 +12,8 @@
 class Transform
 {
 public:
+	void UpdateTransform();
+
 	UNDEFINED_ENGINE const Matrix4x4& LocalMatrix();
 	UNDEFINED_ENGINE void SetLocalMatrix(const Matrix4x4& matrix);
 	UNDEFINED_ENGINE const Matrix4x4& WorldMatrix();
@@ -66,6 +68,7 @@ private:
 	Matrix4x4 mWorldTRS = Matrix4x4::TRS(Vector3(), Quaternion(), Vector3(1));
 	Matrix4x4 mLocalTRS = Matrix4x4::TRS(Vector3(), Quaternion(), Vector3(1));
 	friend class Object;
+	friend class SceneManager;
 	friend struct refl_impl::metadata::type_info__ <Transform>;
 	Transform* mParentTransform;
 };

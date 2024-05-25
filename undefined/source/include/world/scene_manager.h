@@ -24,6 +24,7 @@ public:
 	static void GlobalUpdate();
 	static void Draw();
 
+	static void SaveTempScene();
 	static void SaveCurrentScene();
 	static bool LoadScene(const std::filesystem::path& path);
 	static void Reload();

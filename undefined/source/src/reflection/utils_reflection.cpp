@@ -10,3 +10,8 @@ void Reflection::DisplayWithHash(void* obj, size_t hash)
 {
 	RuntimeClasses::Display(obj, hash);
 }
+
+void* Reflection::ReadValueWithName(Json::Value jsonObj, std::string name)
+{
+	return RuntimeClasses::ReadObj(jsonObj, name);
+}

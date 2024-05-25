@@ -42,7 +42,7 @@ public:
 	static Quaternion FromJPH(const JPH::Quat& q);
 
 	static unsigned int CreateBox(const Vector3& pos, const Quaternion& rot, const Vector3& scale, bool is_static);
-	static unsigned int CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius);
+	static unsigned int CreateCapsule(const Vector3& pos, const Quaternion& rot, float height, float radius, bool is_static);
 
 	static bool IsBodyActive(unsigned int bodyId);
 

@@ -44,6 +44,19 @@ Json::Value RuntimeClasses::WriteValue(void* val, size_t hash)
 	return JSON_USE_NULLREF;
 }
 
+void* RuntimeClasses::ReadObj(Json::Value jsonObj, std::string name)
+{
+	for (RuntimeClass c : mHashClasses | std::views::values)
+	{
+		if (c.className == name)
+		{
+			return c.read(jsonObj);
+		}
+	}
+	Logger::Error("Could not find className {}", name);
+	return nullptr;
+}
+
 void* RuntimeClasses::CreateClass(std::string name)
 {
 	for (RuntimeClass c : mHashClasses|std::views::values)

@@ -99,6 +99,6 @@ private:
     friend struct refl_impl::metadata::type_info__ <Model>;
 };
 
-REFL_AUTO(type(Model, bases<Resource>),
-    field(mModel)
+REFL_AUTO(type(Model, bases<Resource>)
+//field(mModel)
 );

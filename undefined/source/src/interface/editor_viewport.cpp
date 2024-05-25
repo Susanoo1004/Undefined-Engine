@@ -128,13 +128,12 @@ void EditorViewport::ShowWindow()
 	);
 
 	int objectIndex = ServiceLocator::Get<Renderer>()->ObjectIndex;
-	/*
+	
 	if (objectIndex >= 0 && !mIsGizmoUpdated && Camera::CurrentCamera == ViewportCamera)
 	{
 		SceneGizmo.DrawGizmos(ViewportCamera, SceneManager::ActualScene->Objects[ServiceLocator::Get<Renderer>()->ObjectIndex]->GameTransform);
 		mIsGizmoUpdated = true;
 	}
-	*/
 	
 
 	ImGui::End();
