@@ -161,6 +161,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\include\scripts\player_behaviour.cpp" />
     <ClCompile Include="source\src\game.cpp" />
     <ClCompile Include="source\src\editor.cpp" />
     <ClCompile Include="external\src\glad\glad.c" />
@@ -262,6 +263,7 @@
     <ClInclude Include="external\include\toolbox\Vector3.h" />
     <ClInclude Include="external\include\toolbox\Vector4.h" />
     <ClInclude Include="external\include\ts_queue\tsqueue.hpp" />
+    <ClInclude Include="source\include\scripts\player_behaviour.h" />
     <ClInclude Include="source\include\world\body_activation_listener.h" />
     <ClInclude Include="source\include\world\box_collider.h" />
     <ClInclude Include="source\include\world\broad_phase_layer_interface.h" />

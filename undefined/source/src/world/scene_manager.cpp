@@ -10,6 +10,8 @@
 
 #include "world/point_light.h"
 
+#include "scripts/player_behaviour.h"
+
 void SceneManager::Init()
 {
 	if (!Object::mRoot)
@@ -82,8 +84,15 @@ void SceneManager::GlobalUpdate()
 		{
 			obj->mTransform.UpdateTransform();
 		}
+
+		ServiceLocator::Get<InputManager>()->GetKeyInput("PlayerKeyInput")->SetIsEnabled(false);
+
 		return;
 	}
+
+	// Hardcoded here
+	ServiceLocator::Get<InputManager>()->GetKeyInput("PlayerKeyInput")->SetIsEnabled(true);
+	Camera::CurrentCamera->Eye = SceneManager::ActualScene->Objects[3]->GameTransform->Position + Vector3(0,0.2,0.2);
 
 	if (IsScenePaused /*&& !nextFrameButton*/)
 	{

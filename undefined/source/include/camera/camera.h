@@ -13,6 +13,7 @@
 class UNDEFINED_ENGINE Camera
 {
 public:
+    Camera();
     /// <summary>
     /// Constructor of Camera
     /// </summary>

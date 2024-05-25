@@ -70,6 +70,7 @@
     <ClCompile Include="source\src\world\spot_light.cpp" />
     <ClCompile Include="source\src\editor.cpp" />
     <ClCompile Include="source\src\game.cpp" />
+    <ClCompile Include="source\include\scripts\player_behaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="source\include\world\spot_light.h" />
     <ClInclude Include="source\include\editor.h" />
     <ClInclude Include="source\include\game.h" />
+    <ClInclude Include="source\include\scripts\player_behaviour.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="external\libs\glfw3.lib" />

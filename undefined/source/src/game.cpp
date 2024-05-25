@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include "scripts/player_behaviour.h"
+
 Game::Game()
 {
 }
@@ -27,17 +29,28 @@ void Game::Init()
 
     Object* player = SceneManager::ActualScene->AddObject("Player");
     player->GameTransform->Position = Vector3(0.0f, 0.0f, 0.0f);
+    player->GameTransform->Scale = Vector3(0.2f, 0.2f, 0.2f);
+    std::shared_ptr<Model> mode = player->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
+    player->AddComponent<PlayerBehaviour>();
+    //player->AddComponent<BoxCollider>(player->GameTransform->Position, player->GameTransform->RotationQuat, player->GameTransform->Scale);
+    
+    // player de cyril
+    /*
+    Object* player = SceneManager::ActualScene->AddObject("Player");
+    player->GameTransform->Position = Vector3(0.0f, 0.0f, 0.0f);
     //player->GameTransform->Rotation = Vector3(0.0f, 90.0f, 90.0f);
     player->GameTransform->Scale = Vector3(0.2f, 0.2f, 0.2f);
     std::shared_ptr<Model> mode = player->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/dog.obj");
     mode->SetTexture(0, ResourceManager::Get<Texture>("assets/dog.jpg"));
     player->AddComponent<BoxCollider>(player->GameTransform->Position, player->GameTransform->RotationQuat, player->GameTransform->Scale);
+    */
 
-
+    /*
     Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
     sphere->GameTransform->Position = Vector3(0, 1.f, 0);
     sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
     CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
+    */
 
     //SOUND
     mSoundDevice = SoundDevice::Get();
@@ -55,6 +68,7 @@ void Game::Init()
 void Game::Update()
 {
     SceneManager::GlobalUpdate();
+
     mSoundSource->SetPosition(source1, Vector3());
 
     if (mKeyInput->GetIsKeyDown(GLFW_KEY_X))
@@ -79,6 +93,7 @@ void Game::Update()
 
     mSoundDevice->SetPosition(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->Eye);
     mSoundDevice->SetOrientation(Interface::EditorViewports[0]->ViewportCamera->CurrentCamera->LookAt);
+
 }
 
 void Game::Terminate()

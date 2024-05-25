@@ -70,9 +70,9 @@ void Application::Update()
 
     Camera::ProcessInput();
 
+    mEditor.Update();
     mGame.Update();
 
-    mEditor.Update();
 
     // Draw loop for all editors
     for (int i = 0; i < Interface::EditorViewports.size(); i++)
