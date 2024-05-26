@@ -19,6 +19,11 @@ BoxCollider::BoxCollider(const Vector3& pos, const Quaternion& rot, const Vector
 	PhysicsSystem::ColliderMap.emplace(BodyID, this);
 }
 
+void BoxCollider::AddForce(const Vector3& force)
+{
+	PhysicsSystem::AddForce(BodyID, force);
+}
+
 void BoxCollider::Update()
 {
 	PhysicsSystem::SetBoxShape(BodyID, mSize);

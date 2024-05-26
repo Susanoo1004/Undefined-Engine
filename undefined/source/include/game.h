@@ -37,6 +37,7 @@ public:
 	uint32_t source2 = 0;
 	uint32_t sound1 = 0;
 	uint32_t sound2 = 0;
+	Object* player;
 
 	std::shared_ptr<KeyInput> mKeyInput = nullptr;
 };

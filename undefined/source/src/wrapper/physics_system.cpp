@@ -166,7 +166,10 @@ void PhysicsSystem::AddForce(unsigned int bodyId, const Vector3& force)
 	const JPH::BodyLockWrite lock(JoltPhysicsSystem->GetBodyLockInterface(), JPH::BodyID(bodyId));
 
 	if (!lock.Succeeded())
+	{
+		Logger::Debug("add force didn't worked");
 		return;
+	}
 
 	JPH::Body& body = lock.GetBody();
 

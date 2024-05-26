@@ -18,13 +18,14 @@ void Game::Init()
     floor->GameTransform->Position = Vector3(0, -2, 0);
     floor->GameTransform->Rotation = Vector3(0.0f, 0.0f, 0.0f);
     floor->GameTransform->Scale = Vector3(100.0f, 1.0f, 100.0f);
-    floor->AddComponent<BoxCollider>(floor->GameTransform->GetPosition(), floor->GameTransform->GetRotationQuat(), Vector3(100.0f, 2.0f, 100.0f), true);
+    floor->AddComponent<BoxCollider>(floor->GameTransform->Position, floor->GameTransform->RotationQuat, floor->GameTransform->Scale, true);
     std::shared_ptr<Model> floorModel = floor->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/ground.obj");
     floorModel->SetTexture(0, ResourceManager::Get<Texture>("assets/ground.png"));
 
 
     Object* object = SceneManager::ActualScene->AddObject("PikingRoom");
-    object->GameTransform->Position = Vector3(0, -0.5f, 0);
+    object->GameTransform->Position = Vector3(0, 10, 0);
+    object->GameTransform->Scale = Vector3(10, 10, 10);
     object->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/viking_room.obj");
 
     Object* player = SceneManager::ActualScene->AddObject("Player");
@@ -32,25 +33,8 @@ void Game::Init()
     player->GameTransform->Scale = Vector3(0.2f, 0.2f, 0.2f);
     std::shared_ptr<Model> mode = player->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
     player->AddComponent<PlayerBehaviour>();
-    //player->AddComponent<BoxCollider>(player->GameTransform->Position, player->GameTransform->RotationQuat, player->GameTransform->Scale);
-    
-    // player de cyril
-    /*
-    Object* player = SceneManager::ActualScene->AddObject("Player");
-    player->GameTransform->Position = Vector3(0.0f, 0.0f, 0.0f);
-    //player->GameTransform->Rotation = Vector3(0.0f, 90.0f, 90.0f);
-    player->GameTransform->Scale = Vector3(0.2f, 0.2f, 0.2f);
-    std::shared_ptr<Model> mode = player->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/dog.obj");
-    mode->SetTexture(0, ResourceManager::Get<Texture>("assets/dog.jpg"));
+    player->AddComponent<DirLight>();
     player->AddComponent<BoxCollider>(player->GameTransform->Position, player->GameTransform->RotationQuat, player->GameTransform->Scale);
-    */
-
-    /*
-    Object* sphere = SceneManager::ActualScene->AddObject("Sphere");
-    sphere->GameTransform->Position = Vector3(0, 1.f, 0);
-    sphere->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
-    CapsuleCollider* c = sphere->AddComponent<CapsuleCollider>(sphere->GameTransform->GetPosition(), sphere->GameTransform->GetRotationQuat(), 1, 1);
-    */
 
     //SOUND
     mSoundDevice = SoundDevice::Get();

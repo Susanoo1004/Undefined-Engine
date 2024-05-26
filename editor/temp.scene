@@ -1,86 +1,5 @@
 {
-	"10677040165880744492" : 
-	{
-		"Type" : "Object",
-		"Values" : 
-		{
-			"Components" : 
-			[
-				{
-					"Type" : "BoxCollider",
-					"Values" : 
-					{
-						"mIsEnable" : true,
-						"mIsStatic" : true,
-						"mPos" : 
-						{
-							"x" : 0.0,
-							"y" : -2.0,
-							"z" : 0.0
-						},
-						"mRot" : 
-						{
-							"w" : 1.0,
-							"x" : 0.0,
-							"y" : 0.0,
-							"z" : 0.0
-						},
-						"mScale" : 
-						{
-							"x" : 0.0,
-							"y" : 0.0,
-							"z" : 0.0
-						},
-						"mSize" : 
-						{
-							"x" : 100.0,
-							"y" : 2.0,
-							"z" : 100.0
-						}
-					}
-				},
-				{
-					"Type" : "ModelRenderer",
-					"Values" : 
-					{
-						"ModelObject" : "assets/ground.obj",
-						"mIsEnable" : true
-					}
-				}
-			],
-			"Name" : "Floor",
-			"mChildrenUUIDs" : null,
-			"mIsEnable" : true,
-			"mTransform" : 
-			{
-				"Type" : "Transform",
-				"Values" : 
-				{
-					"mPosition" : 
-					{
-						"x" : 0.0,
-						"y" : -2.0,
-						"z" : 0.0
-					},
-					"mRotation" : 
-					{
-						"w" : 7.1063351631164551,
-						"x" : 0.0,
-						"y" : 0.0,
-						"z" : 0.0
-					},
-					"mScale" : 
-					{
-						"x" : 100.0,
-						"y" : 1.0,
-						"z" : 100.0
-					}
-				}
-			},
-			"mUUID" : 10677040165880744492
-		}
-	},
-	"11307882464892368303" : 
+	"10101699244303849595" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -107,28 +26,28 @@
 					"mPosition" : 
 					{
 						"x" : 0.0,
-						"y" : -0.5,
+						"y" : 10.0,
 						"z" : 0.0
 					},
 					"mRotation" : 
 					{
-						"w" : 1.0,
+						"w" : 2.7838821411132812,
 						"x" : 0.0,
 						"y" : 0.0,
 						"z" : 0.0
 					},
 					"mScale" : 
 					{
-						"x" : 1.0,
-						"y" : 1.0,
-						"z" : 1.0
+						"x" : 10.0,
+						"y" : 10.0,
+						"z" : 10.0
 					}
 				}
 			},
-			"mUUID" : 11307882464892368303
+			"mUUID" : 10101699244303849595
 		}
 	},
-	"3845782631602501147" : 
+	"12983616947397989456" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -193,10 +112,91 @@
 					}
 				}
 			},
-			"mUUID" : 3845782631602501147
+			"mUUID" : 12983616947397989456
 		}
 	},
-	"5998997052351984255" : 
+	"1530052442993455195" : 
+	{
+		"Type" : "Object",
+		"Values" : 
+		{
+			"Components" : 
+			[
+				{
+					"Type" : "BoxCollider",
+					"Values" : 
+					{
+						"mIsEnable" : true,
+						"mIsStatic" : true,
+						"mPos" : 
+						{
+							"x" : 0.0,
+							"y" : -2.0,
+							"z" : 0.0
+						},
+						"mRot" : 
+						{
+							"w" : 1.0,
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mScale" : 
+						{
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mSize" : 
+						{
+							"x" : 100.0,
+							"y" : 1.0,
+							"z" : 100.0
+						}
+					}
+				},
+				{
+					"Type" : "ModelRenderer",
+					"Values" : 
+					{
+						"ModelObject" : "assets/ground.obj",
+						"mIsEnable" : true
+					}
+				}
+			],
+			"Name" : "Floor",
+			"mChildrenUUIDs" : null,
+			"mIsEnable" : true,
+			"mTransform" : 
+			{
+				"Type" : "Transform",
+				"Values" : 
+				{
+					"mPosition" : 
+					{
+						"x" : 0.0,
+						"y" : -2.0,
+						"z" : 0.0
+					},
+					"mRotation" : 
+					{
+						"w" : 7.1063351631164551,
+						"x" : 0.0,
+						"y" : 0.0,
+						"z" : 0.0
+					},
+					"mScale" : 
+					{
+						"x" : 100.0,
+						"y" : 1.0,
+						"z" : 100.0
+					}
+				}
+			},
+			"mUUID" : 1530052442993455195
+		}
+	},
+	"8594435445405729473" : 
 	{
 		"Type" : "Object",
 		"Values" : 
@@ -211,7 +211,71 @@
 						"mIsEnable" : true
 					}
 				},
-				1
+				1,
+				{
+					"Type" : "DirLight",
+					"Values" : 
+					{
+						"Ambient" : 
+						{
+							"x" : 0.40000000596046448,
+							"y" : 0.40000000596046448,
+							"z" : 0.40000000596046448
+						},
+						"Diffuse" : 
+						{
+							"x" : 0.80000001192092896,
+							"y" : 0.80000001192092896,
+							"z" : 0.80000001192092896
+						},
+						"Direction" : 
+						{
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"Specular" : 
+						{
+							"x" : 0.5,
+							"y" : 0.5,
+							"z" : 0.5
+						},
+						"mIsEnable" : true
+					}
+				},
+				{
+					"Type" : "BoxCollider",
+					"Values" : 
+					{
+						"mIsEnable" : true,
+						"mIsStatic" : false,
+						"mPos" : 
+						{
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mRot" : 
+						{
+							"w" : 1.0,
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mScale" : 
+						{
+							"x" : 0.0,
+							"y" : 0.0,
+							"z" : 0.0
+						},
+						"mSize" : 
+						{
+							"x" : 0.20000000298023224,
+							"y" : 0.20000000298023224,
+							"z" : 0.20000000298023224
+						}
+					}
+				}
 			],
 			"Name" : "Player",
 			"mChildrenUUIDs" : null,
@@ -242,7 +306,7 @@
 					}
 				}
 			},
-			"mUUID" : 5998997052351984255
+			"mUUID" : 8594435445405729473
 		}
 	}
 }

@@ -16,6 +16,8 @@ public:
 	BoxCollider();
 	BoxCollider(const Vector3& pos, const Quaternion& rot, const Vector3& scale, bool is_static = false);
 
+	void AddForce(const Vector3& force);
+
 	void Update();
 	virtual ~BoxCollider();
 
