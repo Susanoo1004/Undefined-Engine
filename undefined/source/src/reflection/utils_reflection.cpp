@@ -1,5 +1,6 @@
 #include "reflection/utils_reflection.h"
 #include "reflection/runtime_classes.h"
+#include "world/object.h"
 
 Json::Value Reflection::WriteValueWithHash(void* val, size_t hash)
 {

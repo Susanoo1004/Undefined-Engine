@@ -611,10 +611,22 @@ void Reflection::DisplayObj(MemberT* obj)
 
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		if (ImGui::CollapsingHeader(typeid(**obj).name(), ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader(typeid(**obj).name(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowOverlap))
 		{
-			Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
+			ImGui::SameLine();
+
+			if (ImGui::Button("Remove Component"))
+			{
+				Component* comp = static_cast<Component*>(*obj);
+				comp->GameObject->RemoveComponent(comp);
+			}
+
+			else
+			{
+				Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
+			}
 		}
+		
 	}
 	//Recursivity if there's a reflectable type
 	if constexpr (Reflection::IsReflectable<MemberT>())
