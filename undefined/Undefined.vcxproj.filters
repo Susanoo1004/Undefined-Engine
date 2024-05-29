@@ -70,7 +70,7 @@
     <ClCompile Include="source\src\world\spot_light.cpp" />
     <ClCompile Include="source\src\editor.cpp" />
     <ClCompile Include="source\src\game.cpp" />
-    <ClCompile Include="source\include\scripts\player_behaviour.cpp" />
+    <ClCompile Include="source\src\scritps\player_behaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\include\stb_image\stb_image.h" />
