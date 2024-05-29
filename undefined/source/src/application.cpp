@@ -58,8 +58,6 @@ void Application::Init()
     mGame.Init();
 
     Skybox::Setup();
-
-    BaseShader = ResourceManager::Get<Shader>("base_shader");
 }
 
 void Application::Update()

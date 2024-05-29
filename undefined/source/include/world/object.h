@@ -62,6 +62,7 @@ public:
 		return comp;
 	}
 	Component* AddComponent(Component* comp);
+	void RemoveComponent(Component* comp);
 
 	/// <summary>
 	/// Get a component

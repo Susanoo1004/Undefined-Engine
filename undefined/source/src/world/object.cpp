@@ -61,9 +61,32 @@ Component* Object::AddComponent(Component* comp)
 	comp->GameTransform = GameTransform;
 
 	Components.push_back(comp);
-	Logger::Info("Component {} added in object {}", typeid(comp).name(), Name);
+	Logger::Info("Component {} added in object {}", typeid(*comp).name(), Name);
 
 	return comp;
+}
+
+void Object::RemoveComponent(Component* comp)
+{
+	if (!comp)
+	{
+		Logger::Error("RemoveComponent(Component* comp) comp is nullptr");
+		return;
+	}
+
+	int index = 0;
+	for (Component* findComp : Components)
+	{
+		if (findComp == comp)
+		{
+			Components.erase(Components.begin() + index);
+			Logger::Info("Component {} removed in object {}", typeid(*comp).name(), Name);
+			delete comp;
+			return;
+		}
+		index++;
+	}
+	Logger::Warning("Component to remove not found in object {}", Name);
 }
 
 const Object* Object::GetParent() const
