@@ -180,6 +180,7 @@ private:
 	void ChangeEnableStatus();
 
 	friend class Application;
+	friend class Scene;
 	friend class SceneManager;
 	friend class SceneGraph;
 
