@@ -200,7 +200,7 @@ void SceneGraph::ClickSelectObject(Object* object)
             }
         }
     }
-    if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+    if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows))
     {
         // Time for the travel time of the camera when double clicking to an object 
         mCamTravelTime = 0.4f;

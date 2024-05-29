@@ -55,6 +55,9 @@ void Application::Init()
     ServiceLocator::SetupCallbacks();
 
     mEditor.Init();
+
+    BaseShader = ResourceManager::Get<Shader>("base_shader");
+
     mGame.Init();
 
     Skybox::Setup();
