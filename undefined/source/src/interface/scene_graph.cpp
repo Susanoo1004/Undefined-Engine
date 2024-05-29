@@ -301,6 +301,10 @@ bool SceneGraph::RightClickObject(Object* object)
             mRenamingObject = object;
             ImGui::CloseCurrentPopup();
         }
+        if (object->mUUID != Object::mRoot->mUUID && ImGui::Button("Remove Object"))
+        {
+            // rmv object here
+        }
         ImGui::EndPopup();
         return success;
     }
