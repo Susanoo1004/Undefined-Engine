@@ -146,6 +146,56 @@ void Logger::PrintEntry(LogEntry entry)
     }
 }
 
+void Logger::DisableEntry(LogLevel level)
+{
+    switch (level)
+    {
+    case LogLevel::DEBUG:
+        isDebugEnabled = false;
+        break;
+
+    case LogLevel::INFO:
+        isInfoEnabled = false;
+        break;
+
+    case LogLevel::WARNING:
+        isWarningEnabled = false;
+        break;
+
+    case LogLevel::ERROR:
+        isErrorEnabled = false;
+        break;
+
+    case LogLevel::FATALERROR:
+        break;
+    }
+}
+
+void Logger::EnableEntry(LogLevel level)
+{
+    switch (level)
+    {
+    case LogLevel::DEBUG:
+        isDebugEnabled = true;
+        break;
+
+    case LogLevel::INFO:
+        isInfoEnabled = true;
+        break;
+
+    case LogLevel::WARNING:
+        isWarningEnabled = true;
+        break;
+
+    case LogLevel::ERROR:
+        isErrorEnabled = true;
+        break;
+
+    case LogLevel::FATALERROR:
+        break;
+    }
+}
+
 void Logger::Stop()
 {
     mIsRunning = false;

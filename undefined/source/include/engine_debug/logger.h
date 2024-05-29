@@ -18,7 +18,7 @@ public:
 	UNDEFINED_ENGINE Logger();
 	UNDEFINED_ENGINE ~Logger();
 
-private:
+public:
 	/// <summary>
 	/// Enum where we put different level of warning/error
 	/// </summary>
@@ -31,6 +31,7 @@ private:
 		FATALERROR,
 	};
 
+private:
 	/// <summary>
 	/// Struct used to set the level, the string log and the time offset of the Entry
 	/// </summary>
@@ -50,9 +51,14 @@ public:
 	UNDEFINED_ENGINE static void Sync();
 	UNDEFINED_ENGINE static void Desync();
 
+	static void DisableEntry(LogLevel level);
+	static void EnableEntry(LogLevel level);
+
 	template<class... Types>
 	static void Debug(std::string string, Types... args)
 	{
+		if (!isDebugEnabled)
+			return;
 		constexpr std::size_t n = sizeof...(args);
 		size_t nFormat = 0;
 		std::string log;
@@ -83,6 +89,8 @@ public:
 	template<class... Types>
 	static void Info(std::string string, Types... args)
 	{
+		if (!isInfoEnabled)
+			return;
 		constexpr std::size_t n = sizeof...(args);
 		size_t nFormat = 0;
 		std::string log;
@@ -112,6 +120,8 @@ public:
 	template<class... Types>
 	static void Warning(std::string string, Types... args)
 	{
+		if (!isWarningEnabled)
+			return;
 		constexpr std::size_t n = sizeof...(args);
 		size_t nFormat = 0;
 		std::string log;
@@ -141,6 +151,8 @@ public:
 	template<class... Types>
 	static void Error(std::string string, Types... args)
 	{
+		if (!isErrorEnabled)
+			return;
 		constexpr std::size_t n = sizeof...(args);
 		size_t nFormat = 0;
 		std::string log;
@@ -204,6 +216,7 @@ private:
 	static void Start();
 	static void PrintEntry(LogEntry entry);
 
+
 	UNDEFINED_ENGINE static inline bool mIsRunning = true;
 	UNDEFINED_ENGINE static inline bool mIsSync = true;
 
@@ -212,4 +225,9 @@ private:
 	UNDEFINED_ENGINE static inline std::condition_variable mSleep;
 	UNDEFINED_ENGINE static inline std::thread mThread = std::thread(&Logger::Start);
 	UNDEFINED_ENGINE static inline TsQueue<LogEntry> mEntryList;
+
+	static inline bool isInfoEnabled = true;
+	static inline bool isDebugEnabled = true;
+	static inline bool isWarningEnabled = true;
+	static inline bool isErrorEnabled = true;
 };
