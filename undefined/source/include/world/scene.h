@@ -28,6 +28,8 @@ public:
 	UNDEFINED_ENGINE Object* AddObject(const Object& original, Vector3 position, Vector3 rotation, const std::string& mName = "Default");
 	UNDEFINED_ENGINE Object* AddObject(const Object& original, Vector3 position, Vector3 rotation, Object* parent, bool world = true, const std::string& mName = "Default");
 
+	UNDEFINED_ENGINE void RemoveObject(Object* object);
+
 	std::string Name = "Default";
 
 	std::filesystem::path Path;

@@ -243,3 +243,29 @@ Object* Scene::AddObject(Vector3 position, Vector3 rotation, Object* parent, boo
 	return obj;
 }
 
+UNDEFINED_ENGINE void Scene::RemoveObject(Object* object)
+{
+
+	if (!object)
+	{
+		Logger::Error("RemoveObject(Object* object) object is nullptr");
+		return;
+	}
+
+	int index = 0;
+	for (Object* findObj : Objects)
+	{
+		if (findObj == object)
+		{
+			Object::mRoot->DetachChild(object);
+			Objects.erase(Objects.begin() + index);
+			Logger::Info("Object \"{}\" removed", object->Name);
+			delete object;
+			Objects.shrink_to_fit();
+			return;
+		}
+		index++;
+	}
+	Logger::Warning("Object to remove not found in scene \"{}\"", Name);
+}
+

@@ -82,6 +82,7 @@ void Object::RemoveComponent(Component* comp)
 			Components.erase(Components.begin() + index);
 			Logger::Info("Component {} removed in object {}", typeid(*comp).name(), Name);
 			delete comp;
+			Components.shrink_to_fit();
 			return;
 		}
 		index++;
