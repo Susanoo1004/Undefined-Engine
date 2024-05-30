@@ -15,6 +15,7 @@
 #include "resources/resource_manager.h"
 #include "resources/texture.h"
 #include "audio/sound_source.h"
+#include "utils/utils.h"
 
 namespace Reflection
 {
@@ -611,11 +612,11 @@ void Reflection::DisplayObj(MemberT* obj)
 
 	else if constexpr (std::is_pointer_v<MemberT> && std::is_abstract_v<std::remove_pointer_t<MemberT>>)
 	{
-		if (ImGui::CollapsingHeader(typeid(**obj).name(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowOverlap))
+		// Remove "class" from typeid().name()
+		if (ImGui::CollapsingHeader(((std::string)typeid(**obj).name()).erase(0, 6).c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowOverlap))
 		{
-			ImGui::SameLine();
-
-			if (ImGui::Button("Remove Component"))
+			ImGui::SameLine(ImGui::GetWindowWidth() - 13*2.82f, 0.0f);
+			if (ImGui::ImageButton(Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/trash_can.png")->GetID()), ImVec2(13, 13), ImVec2(0.1f, 0.1f), ImVec2(0.9f, 0.9f)))
 			{
 				Component* comp = static_cast<Component*>(*obj);
 				comp->GameObject->RemoveComponent(comp);
@@ -624,6 +625,15 @@ void Reflection::DisplayObj(MemberT* obj)
 			else
 			{
 				Reflection::DisplayWithHash(*obj, typeid(**obj).hash_code());
+			}
+		}
+		else
+		{
+			ImGui::SameLine(ImGui::GetWindowWidth() - 13 * 2.82f, 0.0f);
+			if (ImGui::ImageButton(Utils::IntToPointer<ImTextureID>(ResourceManager::Get<Texture>("imgui/trash_can.png")->GetID()), ImVec2(13, 13), ImVec2(0.15f, 0.15f), ImVec2(0.85f, 0.85f),-1, ImVec4(0,0,0,0), ImVec4(1, 0, 0, 1)))
+			{
+				Component* comp = static_cast<Component*>(*obj);
+				comp->GameObject->RemoveComponent(comp);
 			}
 		}
 		

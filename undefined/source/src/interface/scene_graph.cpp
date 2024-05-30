@@ -303,7 +303,7 @@ bool SceneGraph::RightClickObject(Object* object)
         }
         if (object->mUUID != Object::mRoot->mUUID && ImGui::Button("Remove Object"))
         {
-            // rmv object here
+            SceneManager::ActualScene->RemoveObject(object);
         }
         ImGui::EndPopup();
         return success;
