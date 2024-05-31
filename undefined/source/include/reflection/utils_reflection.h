@@ -286,7 +286,7 @@ void Reflection::ReflectionObj(T* obj)
 				//If there's a change we put notify to true
 				if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>() || HasAttribute<DescriptorT, Callback<T>>())
 				{
-					const MemberT oldValue = DescriptorT::get(obj);
+  					const MemberT oldValue = DescriptorT::get(obj);
 					DisplayObj<T, MemberT, DescriptorT>(&DescriptorT::get(obj));
 
 					if constexpr (HasAttribute<DescriptorT, NotifyChange<T>>())

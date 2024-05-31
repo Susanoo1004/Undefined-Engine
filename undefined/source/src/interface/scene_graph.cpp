@@ -39,7 +39,7 @@ void SceneGraph::DisplayWindow()
         ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
 
         ImGui::SetKeyboardFocusHere();
-        ImGui::PushItemWidth(ImGui::CalcTextSize(newName).x + 5);
+        ImGui::PushItemWidth(10 + ImGui::CalcTextSize(newName).x);
         if (ImGui::InputText("##load", (char*)newName, 256, flags))
         {
             std::string path = "assets/scenes/";
@@ -48,8 +48,10 @@ void SceneGraph::DisplayWindow()
             {
                 path.append(".scene");
             }
+            ServiceLocator::Get<Renderer>()->ObjectIndex = -1;
             SceneManager::LoadScene(path);
             path = "";
+            loadString = "";
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -61,10 +63,11 @@ void SceneGraph::DisplayWindow()
         char* newName = (char*)loadString.c_str();
 
         ImGui::SetKeyboardFocusHere();
-        ImGui::PushItemWidth(ImGui::CalcTextSize(newName).x + 5);
+        ImGui::PushItemWidth(10 + ImGui::CalcTextSize(newName).x);
         if (ImGui::InputText("##load", (char*)newName, 256, flags))
         {
             loadString = newName;
+            ServiceLocator::Get<Renderer>()->ObjectIndex = -1;
             SceneManager::CreateScene(loadString);
             loadString = "";
             ImGui::CloseCurrentPopup();
