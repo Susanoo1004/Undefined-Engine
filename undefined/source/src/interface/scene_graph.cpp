@@ -6,7 +6,14 @@
 #include <algorithm>
 
 #include "world/scene_manager.h"
+
 #include "service_locator.h"
+
+#include "resources/model_renderer.h"
+#include "resources/resource_manager.h"
+
+#include "world/box_collider.h"
+#include "world/capsule_collider.h"
 
 #include "wrapper/time.h"
 
@@ -241,15 +248,8 @@ bool SceneGraph::RightClickObject(Object* object)
                 if (ImGui::MenuItem("Cube"))
                 {
                     Object* newObject = SceneManager::ActualScene->AddObject(object, "Cube");
-                    //Add Model and Collider
-                    ClickSelectObject(newObject);
-                    ImGui::CloseCurrentPopup();
-                    success = true;
-                }
-                if (ImGui::MenuItem("Capsule"))
-                {
-                    Object* newObject = SceneManager::ActualScene->AddObject(object, "Capsule");
-                    //Add Model and Collider
+                    //Add Model
+                    newObject->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/cube.obj");
                     ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
                     success = true;
@@ -257,7 +257,8 @@ bool SceneGraph::RightClickObject(Object* object)
                 if (ImGui::MenuItem("Sphere"))
                 {
                     Object* newObject = SceneManager::ActualScene->AddObject(object, "Sphere");
-                    //Add Model and Collider
+                    //Add Model
+                    newObject->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
                     ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
                     success = true;
@@ -271,14 +272,8 @@ bool SceneGraph::RightClickObject(Object* object)
                 {
                     Object* newObject = SceneManager::ActualScene->AddObject(object, "Cube");
                     //Add Model and Collider
-                    ClickSelectObject(newObject);
-                    ImGui::CloseCurrentPopup();
-                    success = true;
-                }
-                if (ImGui::MenuItem("Capsule"))
-                {
-                    Object* newObject = SceneManager::ActualScene->AddObject(object, "Capsule");
-                    //Add Model and Collider
+                    newObject->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/cube.obj");
+                    newObject->AddComponent<BoxCollider>(newObject->GameTransform->GetPosition(), newObject->GameTransform->GetRotationQuat(), newObject->GameTransform->Scale);
                     ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
                     success = true;
@@ -287,6 +282,8 @@ bool SceneGraph::RightClickObject(Object* object)
                 {
                     Object* newObject = SceneManager::ActualScene->AddObject(object, "Sphere");
                     //Add Model and Collider
+                    newObject->AddComponent<ModelRenderer>()->ModelObject = ResourceManager::Get<Model>("assets/sphere.obj");
+                    newObject->AddComponent<CapsuleCollider>(newObject->GameTransform->GetPosition(), newObject->GameTransform->GetRotationQuat(), 1, 1);
                     ClickSelectObject(newObject);
                     ImGui::CloseCurrentPopup();
                     success = true;
