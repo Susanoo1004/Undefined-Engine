@@ -2,132 +2,67 @@
 
 #include <filesystem>
 #include <imgui/imgui.h>
-#include <imgui/imgui_stdlib.h>
-
-#include "resources/resource_manager.h"
-#include "resources/texture.h"
 
 #include "utils/flag.h"
-#include "utils/utils.h"
 
-/// <summary>
-/// ContentBrowser Class 
-/// </summary>
 class ContentBrowser
 {
 	STATIC_CLASS(ContentBrowser)
 
 public:
-	/// <summary>
-	/// Update
-	/// </summary>
-	static void DisplayWindow();
-	
-protected:
-	/// <summary>
-	/// Center text for ImGui texts
-	/// </summary>
-	/// <param name="text">: Text to center</param>
-	static void TextCentered(const std::string& text);
+	//Update for the ContentBrowser
+	UNDEFINED_ENGINE static void DisplayWindow();
 
-	/// <summary>
-	/// Set the imageID and imageSize depending of the type of file we are displaying
-	/// </summary>
-	/// <param name="path">: Path of the image you want to set</param>
-	/// <param name="imageID">: Set the ID of the image on the one in parameter</param>
-	/// <param name="imageSize">: Set the size of the image on the one in parameter</param>
-	static void SetImageValues(const std::filesystem::path& path, ImTextureID& mImageID, ImVec2& mImageSize);
+private:
+	//Recursive function that displays the left side of the content browser who shows us every directory and file in a specific path
+	UNDEFINED_ENGINE static void DisplayDirectories(const std::filesystem::path& path);
 
-	/// <summary>
-	/// Display text on the screen depending of it's length
-	/// </summary>
-	/// <param name="filepath">: Filepath of the text displayed to center it in case we are renaming a file </param>
-	/// <param name="filename">: Get the string of the filename to get the size </param>
-	/// <param name="imageSize">: Size of the image</param>
-	static void DisplayText(const std::filesystem::path& mFilepath, const std::string& mFilename, ImVec2& mImageSize);
+	//Display the right side of the content browser who shows an image for a file/folder in a directory
+	UNDEFINED_ENGINE static void DisplayActualDirectory(const std::filesystem::path& currentPath);
 
-	/// <summary>
-	/// Handle every interaction a folder/file can have
-	/// </summary>
-	/// <param name="path">: Path that the user intracts with </param> 
-	/// <param name="isBackFolder">: Boolean value to know if it is the backfolder (by default : false)</param>
-	static void InteractionWithItems(const std::filesystem::path& path, bool mIsBackFolder = false);
+	//Center text for ImGui texts
+	UNDEFINED_ENGINE static void TextCentered(const std::string& text);
 
-	/// <summary>
-	/// Rename an item with a simple text
-	/// </summary>
-	static void RenameItem();
+	//Set the image for the file we want to load
+	UNDEFINED_ENGINE static void SetImageValues(const std::filesystem::path& path, ImTextureID& imageID, ImVec2& imageSize);
 
-	/// <summary>
-	/// Rename an item with a multiline text
-	/// </summary>
-	static void RenameItemMultiline();
+	//Print the text depending of it's lenght
+	UNDEFINED_ENGINE static void DisplayText(const std::filesystem::path& filepath, const std::string& filename, ImVec2& imageSize);
 
-	/// <summary>
-	/// Window that is displayed when we right click on something
-	/// </summary>
-	/// <param name="path">: Path of the current item on which we right clicked </param>
-	static void RightClickWindow(const std::filesystem::path& path);
+	//Handle every interaction a folder/file can have
+	UNDEFINED_ENGINE static void InteractionWithItems(const std::filesystem::path& path, bool isBackFolder = false);
 
-	/// <summary>
-	/// Return true if we double click
-	/// </summary>
-	/// <returns></returns>
-	static bool DoubleClick();
+	//Folder that put us to the parent path of the actual path
+	UNDEFINED_ENGINE static void GoBackFolder(const std::filesystem::path& path);
 
-	/// <summary>
-	/// Is folder open bool
-	/// </summary>
-	static inline bool pIsFolderOpen = false;
-	/// <summary>
-	/// Is the path we are in a directory
-	/// </summary>
-	static inline bool pIsDirectory = false;
-	/// <summary>
-	/// Is anythingHovered
-	/// </summary>
-	static inline bool pIsAnythingHovered = false;
-	/// <summary>
-	/// Is anything selected 
-	/// </summary>
-	static inline bool pIsAnythingSelected = false;
-	/// <summary>
-	/// Can ImGui pop
-	/// </summary>
-	static inline bool pCanPop = false;
+	//Load folders in a path and add them to an array
+	UNDEFINED_ENGINE static void LoadFolders(const std::filesystem::path& path);
 
-	/// <summary>
-	/// Initial path
-	/// </summary>
-	static inline std::filesystem::path pPath = std::filesystem::current_path().append("assets");
-	/// <summary>
-	/// Current path we are in
-	/// </summary>
-	static inline std::filesystem::path pCurrentPath = pPath;
-	/// <summary>
-	/// Hovered path
-	/// </summary>
-	static inline std::filesystem::path pHoveredPath = "";
-	/// <summary>
-	/// Selected path
-	/// </summary>
-	static inline std::filesystem::path pSelectedPath = "";
-	/// <summary>
-	/// Renaming path
-	/// </summary>
-	static inline std::filesystem::path pRenamingPath = "";
+	//Load files in a path and add them to an array
+	UNDEFINED_ENGINE static void LoadFiles(const std::filesystem::path& path);
 
-	static inline std::string pRenamingName = "";
+	//Rename an item in the content browser
+	UNDEFINED_ENGINE static void RenameItem();
 
-	/// <summary>
-	/// Back folder name
-	/// </summary>
-	static inline std::string pBackFolder = "BackFolder";
+	//Rename an item that has multiple lines
+	UNDEFINED_ENGINE static void RenameItemMultiline();
 
-	/// <summary>
-	/// Array of the current element in a path
-	/// </summary>
-	static inline std::vector<std::filesystem::directory_entry> pCurrPathArray;
+	//Window that pop when we right click
+	UNDEFINED_ENGINE static void RightClickWindow(const std::filesystem::path& path);
 
-	static inline int pClickCount;
+	UNDEFINED_ENGINE static inline bool mIsFolderOpen = false;
+	UNDEFINED_ENGINE static inline bool mIsDirectory = false;
+	UNDEFINED_ENGINE static inline bool mIsAnythingHovered = false;
+	UNDEFINED_ENGINE static inline bool mIsAnythingSelected = false;
+	UNDEFINED_ENGINE static inline bool mCanPop = false;
+
+	static inline std::filesystem::path mPath = std::filesystem::current_path().append("assets");
+	static inline std::filesystem::path mCurrentPath = mPath;
+	static inline std::filesystem::path mHoveredPath = "";
+	static inline std::filesystem::path mSelectedPath = "";
+	static inline std::filesystem::path mRenamingPath = "";
+
+	static inline std::string mBackFolder = "BackFolder";
+
+	static inline std::vector<std::filesystem::directory_entry> mCurrPathArray;
 };

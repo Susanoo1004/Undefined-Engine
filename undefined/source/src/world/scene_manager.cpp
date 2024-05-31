@@ -166,7 +166,7 @@ void SceneManager::SaveCurrentScene()
 	//std::ofstream file("assets/scenes/test.scene");
 	if (!ActualScene->Path.string().ends_with(".scene"))
 	{
-		ActualScene->Path = "assets/" + ActualScene->Name + ".scene";
+		ActualScene->Path = "assets/scenes/" + ActualScene->Name + ".scene";
 	}
 	std::ofstream file(ActualScene->Path);
 	file << root.toStyledString();
@@ -194,7 +194,9 @@ bool SceneManager::LoadScene(const std::filesystem::path& path)
 	Object::mRoot->DetachChildren();
 	delete ActualScene;
 
-	ActualScene = new Scene(path.generic_string().erase(path.generic_string().size() - 6));
+	std::string sceneName = path.string().erase(0, 14);
+	size_t offset = sceneName.find(".scene");
+	ActualScene = new Scene(sceneName.erase(offset, 6));
 	ActualScene->Path = path;
 
 	file >> root;

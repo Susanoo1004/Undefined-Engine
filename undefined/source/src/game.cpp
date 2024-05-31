@@ -41,7 +41,7 @@ void Game::Init()
     //SOUND
     mSoundDevice = SoundDevice::Get();
 
-    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/dog_barking.wav"));
+    sound1 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/mario.wav"));
     sound2 = SoundBuffer::Get()->AddSoundEffect(ResourceManager::Get<Audio>("audio/desert.wav"));
 
     mSoundSource = new SoundSource;

@@ -28,20 +28,21 @@ void SceneGraph::DisplayWindow()
 
     if (ImGui::BeginPopup("LoadString"))
     {
-        ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
         char* newName = (char*)loadString.c_str();
+        ImGuiInputTextFlags flags = ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
 
         ImGui::SetKeyboardFocusHere();
         ImGui::PushItemWidth(ImGui::CalcTextSize(newName).x + 5);
         if (ImGui::InputText("##load", (char*)newName, 256, flags))
         {
-            loadString = newName;
-            if (!loadString.ends_with(".scene"))
+            std::string path = "assets/scenes/";
+            path += newName;
+            if (!path.ends_with(".scene"))
             {
-                loadString.append(".scene");
+                path.append(".scene");
             }
-            SceneManager::LoadScene(loadString);
-            loadString = "";
+            SceneManager::LoadScene(path);
+            path = "";
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -78,8 +79,6 @@ void SceneGraph::DisplayWindow()
     {
         ImGui::OpenPopup("LoadString");
     }
-
-
 
     if (ImGui::CollapsingHeader(SceneManager::ActualScene->Name.c_str(),
         ImGuiTreeNodeFlags_SpanAvailWidth |
@@ -303,6 +302,7 @@ bool SceneGraph::RightClickObject(Object* object)
         }
         if (object->mUUID != Object::mRoot->mUUID && ImGui::Button("Remove Object"))
         {
+            ServiceLocator::Get<Renderer>()->ObjectIndex = -1;
             SceneManager::ActualScene->RemoveObject(object);
         }
         ImGui::EndPopup();

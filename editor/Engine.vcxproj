@@ -131,7 +131,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)bin\Debug-x64\Undefined_Engine\;</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)bin\$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll"</Command>
+      <Command>copy /Y "$(SolutionDir)bin\$(Configuration)-$(Platform)\Undefined_Engine\Undefined_Engine.dll" "$(SolutionDir)bin\$(Configuration)-$(Platform)\Editor\Undefined_Engine.dll" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
